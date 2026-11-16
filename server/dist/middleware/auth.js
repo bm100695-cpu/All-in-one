@@ -14,6 +14,8 @@ function generateToken(user) {
         email: user.email,
         name: user.name,
         role: user.role,
+        studentId: user.studentId,
+        targetExamId: user.targetExamId,
     }, JWT_SECRET, { expiresIn: '7d' });
 }
 function authenticate(req, res, next) {

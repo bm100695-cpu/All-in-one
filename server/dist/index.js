@@ -14,6 +14,9 @@ const analytics_routes_1 = __importDefault(require("./routes/analytics.routes"))
 const ai_routes_1 = __importDefault(require("./routes/ai.routes"));
 const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
 const monetization_routes_1 = __importDefault(require("./routes/monetization.routes"));
+const uptet_routes_1 = __importDefault(require("./routes/uptet.routes"));
+const supertet_routes_1 = __importDefault(require("./routes/supertet.routes"));
+const live_test_routes_1 = __importDefault(require("./routes/live_test.routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
@@ -34,7 +37,7 @@ app.use((req, _res, next) => {
 app.get('/health', (_req, res) => {
     res.json({
         status: 'healthy',
-        service: 'ExamVerse AI Engine',
+        service: 'All in One AI Engine',
         timestamp: new Date().toISOString(),
         version: '1.0.0',
         environment: process.env.NODE_ENV || 'development',
@@ -49,6 +52,9 @@ app.use('/api/analytics', analytics_routes_1.default);
 app.use('/api/ai', ai_routes_1.default);
 app.use('/api/admin', admin_routes_1.default);
 app.use('/api/monetization', monetization_routes_1.default);
+app.use('/api/uptet', uptet_routes_1.default);
+app.use('/api/super-tet', supertet_routes_1.default);
+app.use('/api/live-tests', live_test_routes_1.default);
 // 404 Handler
 app.use((_req, res) => {
     res.status(404).json({ error: 'Endpoint not found' });
@@ -62,6 +68,6 @@ app.use((err, _req, res, _next) => {
     });
 });
 app.listen(PORT, () => {
-    console.log(`🚀 ExamVerse AI Server running at http://localhost:${PORT}`);
+    console.log(`🚀 All in One AI Server running at http://localhost:${PORT}`);
     console.log(`📡 Health check accessible at http://localhost:${PORT}/health`);
 });

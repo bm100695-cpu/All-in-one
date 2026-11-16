@@ -28,6 +28,6 @@ async function main() {
     const activeCount = await prisma_1.prisma.test.count({
         where: { isPublished: true },
     });
-    console.log(`Active published tests in TutorNove Library: ${activeCount}`);
+    console.log(`Active published tests in All in One Library: ${activeCount}`);
 }
 main().catch(console.error).finally(() => prisma_1.prisma.$disconnect());

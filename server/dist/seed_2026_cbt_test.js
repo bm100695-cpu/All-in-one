@@ -1,6 +1,6 @@
 "use strict";
 /**
- * TutorNove JEE Main 2026 Flagship Full Mock Test Seeder
+ * All in One JEE Main 2026 Flagship Full Mock Test Seeder
  * Assembles exactly 75 verified, authentic questions:
  * - Physics: 20 MCQs (Sec A) + 5 Numerical (Sec B) = 25 Qs (100 Marks)
  * - Chemistry: 20 MCQs (Sec A) + 5 Numerical (Sec B) = 25 Qs (100 Marks)

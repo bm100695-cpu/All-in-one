@@ -42,7 +42,7 @@ router.post('/deep-explain', auth_1.authenticate, async (req, res) => {
             provenanceStatus: {
                 isOfficialPYQ: question.isPYQ,
                 source: question.sourceProvenance,
-                verifiedBy: question.reviewerName || 'ExamVerse Academic Board',
+                verifiedBy: question.reviewerName || 'All in One Academic Board',
                 verificationStatus: question.verificationStatus,
             },
         };
@@ -107,8 +107,8 @@ router.post('/generate-practice', auth_1.authenticate, async (req, res) => {
                 explanationHi: `चरण 1: सरल आवर्त गति में त्वरण का सूत्र: $a = \\omega^2 x$।\nचरण 2: कोणीय आवृत्ति $\\omega = 2\\pi / 2 = \\pi$ रेडियन/सेकंड।\nचरण 3: विस्थापन $x = A/2 = ${disp}$ सेमी पर:\n$a = \\pi^2 \\times ${disp} = 10 \\times ${disp} = ${accel}$ सेमी/सेकंड²।`,
                 difficulty,
                 isPYQ: false,
-                sourceProvenance: 'ExamVerse AI Verified Synthesizer (RAG over authorized NTA Physics syllabus)',
-                sourceLicense: 'ExamVerse Academic Synthetic Corpus',
+                sourceProvenance: 'All in One AI Verified Synthesizer (RAG over authorized NTA Physics syllabus)',
+                sourceLicense: 'All in One Academic Synthetic Corpus',
                 verificationStatus: 'UNDER_REVIEW', // Mandatory human review flag
                 isAIGenerated: true,
                 aiModelUsed: 'Curated Gemini Fine-tuned Generator v2.4',
@@ -176,7 +176,7 @@ router.post('/evaluate-descriptive', auth_1.authenticate, async (req, res) => {
                 percentage: Math.round((totalAwarded / 10) * 100),
                 criteria: criteriaScores,
                 actionableSuggestion: 'For competitive scoring, explicitly connect your conclusion to contemporary applications or practical edge cases.',
-                evaluatorModel: 'ExamVerse Pedagogical Evaluation Engine v2.4 (Rubric-Anchored)',
+                evaluatorModel: 'All in One Pedagogical Evaluation Engine v2.4 (Rubric-Anchored)',
             },
         });
     }

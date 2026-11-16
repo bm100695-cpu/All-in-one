@@ -24,7 +24,9 @@ import {
   AdminAttemptDetailResponse,
 } from './types';
 
-const API_BASE = '/api';
+const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL
+  ? `${String((import.meta as any).env.VITE_API_BASE_URL).replace(/\/+$/, '')}/api`
+  : '/api';
 
 export function getStoredToken(): string | null {
   return localStorage.getItem('examverse_token');

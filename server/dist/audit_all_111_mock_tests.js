@@ -1,6 +1,6 @@
 "use strict";
 /**
- * TutorNove Master PYQ Mock Test Library - End-to-End Validation Engine
+ * All in One Master PYQ Mock Test Library - End-to-End Validation Engine
  * Verifies that all 111 published mock tests:
  * 1. Have authentic questions linked (75 for 2025/2026, 90 for 2021-2024).
  * 2. Zero duplicate questions in any test paper.

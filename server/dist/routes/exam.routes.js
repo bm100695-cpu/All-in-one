@@ -55,13 +55,40 @@ router.get('/directory', async (req, res) => {
                 patternVersions: {
                     where: { isDefault: true },
                     include: {
-                        sections: true,
+                        sections: { orderBy: { order: 'asc' } },
+                    },
+                },
+                _count: {
+                    select: {
+                        tests: { where: { isPublished: true } },
+                        questions: { where: { isPublished: true } },
                     },
                 },
             },
-            orderBy: { totalVerifiedPYQs: 'desc' },
+            orderBy: [{ isComingSoon: 'asc' }, { totalVerifiedPYQs: 'desc' }],
         });
-        res.json({ exams });
+        const enriched = await Promise.all(exams.map(async (e) => {
+            let actualTestsCount = e._count.tests;
+            let actualQuestionsCount = e._count.questions;
+            if (e.slug === 'super-tet') {
+                const stCount = await prisma_1.prisma.superTetQuestion.count({ where: { isActive: true } });
+                actualQuestionsCount = Math.max(actualQuestionsCount, stCount);
+            }
+            let importantDates = {};
+            try {
+                importantDates = JSON.parse(e.importantDatesJson || '{}');
+            }
+            catch {
+                importantDates = {};
+            }
+            return {
+                ...e,
+                actualTestsCount,
+                actualQuestionsCount,
+                importantDates,
+            };
+        }));
+        res.json({ exams: enriched });
     }
     catch (error) {
         console.error('Error fetching exams:', error);
@@ -97,6 +124,8 @@ router.get('/:slug', async (req, res) => {
                         totalMarks: true,
                         totalQuestions: true,
                         pyqReference: true,
+                        accessLevel: true,
+                        isFeatured: true,
                     },
                 },
             },
@@ -105,13 +134,45 @@ router.get('/:slug', async (req, res) => {
             res.status(404).json({ error: 'Exam not found' });
             return;
         }
+        // Compute exact verified vs practice test counts + exam-specific pricing
+        const [actualVerifiedPYQCount, actualPracticeCount, plans] = await Promise.all([
+            exam.slug === 'super-tet'
+                ? prisma_1.prisma.superTetQuestion.count({ where: { isPYQ: true, isActive: true } })
+                : prisma_1.prisma.question.count({ where: { examId: exam.id, isPYQ: true, isPublished: true } }),
+            prisma_1.prisma.test.count({ where: { examId: exam.id, isPublished: true, sourceType: 'PATTERN_PRACTICE' } }),
+            prisma_1.prisma.subscriptionPlan.findMany({
+                where: {
+                    isPublished: true,
+                    OR: [{ examSlug: exam.slug }, { examSlug: null }],
+                },
+                orderBy: { displayOrder: 'asc' },
+            }),
+        ]);
+        let importantDates = {};
+        try {
+            importantDates = JSON.parse(exam.importantDatesJson || '{}');
+        }
+        catch {
+            importantDates = {};
+        }
         // Fetch verified provenance coverage audit
         const audit = await prisma_1.prisma.contentCoverageAudit.findFirst({
             where: { examId: exam.id },
             orderBy: { auditTimestamp: 'desc' },
         });
         res.json({
-            exam,
+            exam: {
+                ...exam,
+                patterns: exam.patternVersions,
+                importantDates,
+                actualVerifiedPYQCount,
+                actualTestsCount: exam.tests.length,
+                actualPracticeTestsCount: actualPracticeCount,
+                plans: plans.map((p) => ({
+                    ...p,
+                    features: JSON.parse(p.featuresJson || '[]'),
+                })),
+            },
             audit,
         });
     }

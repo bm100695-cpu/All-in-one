@@ -4,6 +4,55 @@ const express_1 = require("express");
 const prisma_1 = require("../prisma");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
+function resolveSubjectKey(sectionName, qSubject) {
+    const s = (qSubject || sectionName || 'General').toLowerCase();
+    if (s.includes('phys'))
+        return 'Physics';
+    if (s.includes('chem'))
+        return 'Chemistry';
+    if (s.includes('math'))
+        return 'Mathematics';
+    return qSubject || sectionName || 'General';
+}
+function getNumericalLimitBySubject(sections) {
+    const limits = {};
+    for (const sec of sections || []) {
+        const lower = (sec.name || '').toLowerCase();
+        const subj = resolveSubjectKey(sec.name);
+        if (lower.includes('section b') || lower.includes('numerical')) {
+            limits[subj] = sec.maxToAttempt;
+        }
+        else if ((sec.totalQuestions === 30 && sec.maxToAttempt === 25) && !limits[subj]) {
+            limits[subj] = 5;
+        }
+    }
+    return limits;
+}
+function isNumericalResponseCorrect(numericalVal, q, correctAnswers) {
+    if (correctAnswers.some((a) => String(a).toUpperCase() === 'BONUS'))
+        return true;
+    const tol = typeof q.numericalTolerance === 'number' && q.numericalTolerance > 0 ? q.numericalTolerance : 0.01;
+    if (q.numericalAnswer !== null && q.numericalAnswer !== undefined) {
+        if (Math.abs(numericalVal - q.numericalAnswer) <= tol)
+            return true;
+    }
+    // Support multi-value ("8 or 6") or range ("12 to 13") in correctAnswerJson
+    for (const raw of correctAnswers) {
+        const s = String(raw).trim().toLowerCase();
+        const rangeMatch = s.match(/^(\-?\d+(?:\.\d+)?)\s*(?:to|-)\s*(\-?\d+(?:\.\d+)?)$/);
+        if (rangeMatch) {
+            const lo = Math.min(Number(rangeMatch[1]), Number(rangeMatch[2]));
+            const hi = Math.max(Number(rangeMatch[1]), Number(rangeMatch[2]));
+            if (numericalVal >= lo - tol && numericalVal <= hi + tol)
+                return true;
+        }
+        for (const numStr of s.match(/\-?\d+(?:\.\d+)?/g) || []) {
+            if (Math.abs(numericalVal - Number(numStr)) <= tol)
+                return true;
+        }
+    }
+    return false;
+}
 // List tests for an exam
 router.get('/exam/:examId', async (req, res) => {
     try {
@@ -56,6 +105,11 @@ router.get('/:testId/info', async (req, res) => {
             res.status(404).json({ error: 'Test not found' });
             return;
         }
+        const questionCount = test.testQuestions ? test.testQuestions.length : (test._count?.testQuestions ?? 0);
+        if (questionCount === 0) {
+            res.status(400).json({ error: 'This test currently has zero questions loaded and cannot be started.' });
+            return;
+        }
         res.json({
             test: {
                 id: test.id,
@@ -106,14 +160,18 @@ router.post('/:testId/start', auth_1.authenticate, async (req, res) => {
                             select: {
                                 id: true,
                                 questionType: true,
+                                subject: true,
                                 contentEn: true,
                                 contentHi: true,
+                                diagramUrl: true,
+                                numericalTolerance: true,
                                 optionsJson: true,
                                 difficulty: true,
                                 isPYQ: true,
                                 pyqYear: true,
                                 pyqShift: true,
                                 sourceProvenance: true,
+                                verificationStatus: true,
                                 isAIGenerated: true,
                             },
                         },
@@ -124,6 +182,11 @@ router.post('/:testId/start', auth_1.authenticate, async (req, res) => {
         });
         if (!test) {
             res.status(404).json({ error: 'Test not found' });
+            return;
+        }
+        const questionCount = test.testQuestions ? test.testQuestions.length : (test._count?.testQuestions ?? 0);
+        if (questionCount === 0) {
+            res.status(400).json({ error: 'This test currently has zero questions loaded and cannot be started.' });
             return;
         }
         // Entitlement Check for PREMIUM tests (Phase 4: Backend-Controlled Access)
@@ -143,11 +206,14 @@ router.post('/:testId/start', auth_1.authenticate, async (req, res) => {
                 where: {
                     userId,
                     isActive: true,
-                    OR: [{ testId: null }, { testId: test.id }],
-                    OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+                    AND: [
+                        { OR: [{ testId: null }, { testId: test.id }] },
+                        { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+                    ],
                 },
             });
-            const isSubUnlimited = activeSub?.plan?.code === 'PREMIUM_MONTHLY_149';
+            const isSubUnlimited = Boolean(activeSub?.plan?.code === 'PREMIUM_MONTHLY_149' ||
+                (activeSub?.plan?.examSlug && activeSub.plan.examSlug === test.exam.slug));
             const hasSpecificEntitlement = Boolean(entitlement);
             if (!isSubUnlimited && !hasSpecificEntitlement) {
                 // Check if student has a Test Pack with remaining tests
@@ -221,14 +287,18 @@ router.post('/:testId/start', auth_1.authenticate, async (req, res) => {
                 marks: tq.marks,
                 negativeMarks: tq.negativeMarks,
                 questionType: tq.question.questionType,
+                subject: tq.question.subject,
                 contentEn: tq.question.contentEn,
                 contentHi: tq.question.contentHi,
+                diagramUrl: tq.question.diagramUrl,
+                numericalTolerance: tq.question.numericalTolerance,
                 options,
                 difficulty: tq.question.difficulty,
                 isPYQ: tq.question.isPYQ,
                 pyqYear: tq.question.pyqYear,
                 pyqShift: tq.question.pyqShift,
                 sourceProvenance: tq.question.sourceProvenance,
+                verificationStatus: tq.question.verificationStatus,
                 isAIGenerated: tq.question.isAIGenerated,
             };
         });
@@ -276,15 +346,51 @@ router.post('/attempts/:attemptId/autosave', auth_1.authenticate, async (req, re
         const userId = req.user.id;
         const attempt = await prisma_1.prisma.testAttempt.findFirst({
             where: { id: attemptId, userId, status: 'IN_PROGRESS' },
+            include: {
+                test: {
+                    include: {
+                        patternVersion: { include: { sections: true } },
+                        testQuestions: { include: { question: { select: { id: true, questionType: true, subject: true } } } },
+                    },
+                },
+            },
         });
         if (!attempt) {
             res.status(404).json({ error: 'Active test attempt not found' });
             return;
         }
+        // Backend enforcement: check numerical limit per subject (e.g., max 5 out of 10)
+        const respArr = Array.isArray(responses) ? responses : [];
+        const limits = getNumericalLimitBySubject(attempt.test?.patternVersion?.sections || []);
+        if (Object.keys(limits).length > 0) {
+            const tqMap = new Map(attempt.test.testQuestions.map((tq) => [tq.questionId, tq]));
+            const countsBySubj = {};
+            for (const r of respArr) {
+                const tq = tqMap.get(r?.questionId);
+                if (!tq || tq.question.questionType !== 'NUMERICAL')
+                    continue;
+                const hasVal = r.numericalValue !== undefined && r.numericalValue !== null && String(r.numericalValue).trim() !== '';
+                const isActiveStatus = r.status === 'ANSWERED' || r.status === 'ANSWERED_AND_MARKED' || hasVal;
+                if (hasVal && isActiveStatus) {
+                    const subj = resolveSubjectKey(tq.sectionName, tq.question.subject);
+                    countsBySubj[subj] = (countsBySubj[subj] || 0) + 1;
+                    const cap = limits[subj];
+                    if (cap && countsBySubj[subj] > cap) {
+                        res.status(400).json({
+                            error: 'NUMERICAL_LIMIT_EXCEEDED',
+                            subject: subj,
+                            limit: cap,
+                            message: `You can attempt only ${cap} numerical questions in this subject. Clear one of your existing numerical responses to answer another question.`,
+                        });
+                        return;
+                    }
+                }
+            }
+        }
         await prisma_1.prisma.testAttempt.update({
             where: { id: attemptId },
             data: {
-                responsesJson: JSON.stringify(responses || []),
+                responsesJson: JSON.stringify(respArr),
                 timeSpentSeconds: Number(timeSpentSeconds) || attempt.timeSpentSeconds,
             },
         });
@@ -310,6 +416,7 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
                             include: {
                                 question: true,
                             },
+                            orderBy: { questionNumber: 'asc' },
                         },
                         patternVersion: {
                             include: {
@@ -335,18 +442,23 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
         pattern.sections.forEach((sec) => {
             sectionRules.set(sec.name, sec);
         });
+        const numericalLimits = getNumericalLimitBySubject(pattern.sections);
+        const numericalAttemptedBySubj = {};
         let totalScore = 0.0;
         let totalCorrect = 0;
         let totalIncorrect = 0;
         let totalAttempted = 0;
         let totalUnattempted = 0;
         const sectionBreakdown = {};
+        const subjectBreakdown = {};
+        const sectionCountsSeen = {};
         const processedResponses = [];
         const mistakeEntriesToCreate = [];
         // Evaluate each question in the test
         for (const tq of test.testQuestions) {
             const q = tq.question;
             const secName = tq.sectionName;
+            const subjName = resolveSubjectKey(secName, q.subject);
             const secRule = sectionRules.get(secName);
             const marksPerCorrect = secRule ? secRule.marksPerCorrect : tq.marks;
             const negativeMarks = secRule ? secRule.negativeMarks : tq.negativeMarks;
@@ -354,7 +466,15 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
             if (!sectionBreakdown[secName]) {
                 sectionBreakdown[secName] = { score: 0, maxMarks: 0, correct: 0, wrong: 0, unattempted: 0 };
             }
-            sectionBreakdown[secName].maxMarks += marksPerCorrect;
+            if (!subjectBreakdown[subjName]) {
+                subjectBreakdown[subjName] = { score: 0, maxMarks: 0, mcqAttempted: 0, numericalAttempted: 0, correct: 0, incorrect: 0, unattempted: 0, accuracyPct: 0 };
+            }
+            sectionCountsSeen[secName] = (sectionCountsSeen[secName] || 0) + 1;
+            const secAttemptCap = secRule?.maxToAttempt ?? Number.MAX_SAFE_INTEGER;
+            if (sectionCountsSeen[secName] <= secAttemptCap) {
+                sectionBreakdown[secName].maxMarks += marksPerCorrect;
+                subjectBreakdown[subjName].maxMarks += marksPerCorrect;
+            }
             const userResp = responses.find((r) => r.questionId === q.id);
             const selectedOptions = userResp?.selectedOptionIds || [];
             const numericalVal = userResp?.numericalValue;
@@ -363,6 +483,7 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
             let isAttempted = false;
             let isCorrect = false;
             let marksAwarded = 0;
+            let excludedByLimit = false;
             // Parse correct answers
             let correctAnswers = [];
             try {
@@ -374,17 +495,30 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
             if (q.questionType === 'SINGLE_CHOICE' || q.questionType === 'MULTI_CHOICE') {
                 if (selectedOptions.length > 0) {
                     isAttempted = true;
-                    // Check if arrays match
-                    const sortedSelected = [...selectedOptions].sort();
-                    const sortedCorrect = [...correctAnswers].sort();
-                    isCorrect = JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect);
+                    if (correctAnswers.some((a) => String(a).toUpperCase() === 'BONUS')) {
+                        isCorrect = true;
+                    }
+                    else {
+                        const sortedSelected = [...selectedOptions].map((s) => s.toUpperCase()).sort();
+                        const sortedCorrect = [...correctAnswers].map((s) => s.toUpperCase()).sort();
+                        isCorrect = JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect);
+                    }
+                    subjectBreakdown[subjName].mcqAttempted++;
                 }
             }
             else if (q.questionType === 'NUMERICAL') {
-                if (numericalVal !== undefined && numericalVal !== null) {
-                    isAttempted = true;
-                    if (q.numericalAnswer !== null) {
-                        isCorrect = Math.abs(numericalVal - q.numericalAnswer) < 0.01;
+                if (numericalVal !== undefined && numericalVal !== null && !Number.isNaN(Number(numericalVal))) {
+                    const cap = numericalLimits[subjName] ?? Number.MAX_SAFE_INTEGER;
+                    const used = numericalAttemptedBySubj[subjName] || 0;
+                    if (used < cap) {
+                        numericalAttemptedBySubj[subjName] = used + 1;
+                        isAttempted = true;
+                        isCorrect = isNumericalResponseCorrect(Number(numericalVal), q, correctAnswers);
+                        subjectBreakdown[subjName].numericalAttempted++;
+                    }
+                    else {
+                        // Exceeds configured Section B attempt limit (e.g. >5 out of 10) - do not score
+                        excludedByLimit = true;
                     }
                 }
             }
@@ -394,11 +528,13 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
                     totalCorrect++;
                     marksAwarded = marksPerCorrect;
                     sectionBreakdown[secName].correct++;
+                    subjectBreakdown[subjName].correct++;
                 }
                 else {
                     totalIncorrect++;
                     marksAwarded = -negativeMarks;
                     sectionBreakdown[secName].wrong++;
+                    subjectBreakdown[subjName].incorrect++;
                     // Auto-queue mistake into persistent Mistake Journal
                     mistakeEntriesToCreate.push({
                         userId,
@@ -413,23 +549,33 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
             }
             else {
                 totalUnattempted++;
-                marksAwarded = -unattemptedPenalty;
+                marksAwarded = excludedByLimit ? 0 : -unattemptedPenalty;
                 sectionBreakdown[secName].unattempted++;
+                subjectBreakdown[subjName].unattempted++;
             }
             totalScore += marksAwarded;
             sectionBreakdown[secName].score += marksAwarded;
+            subjectBreakdown[subjName].score += marksAwarded;
             processedResponses.push({
                 questionId: q.id,
                 testQuestionId: tq.id,
                 sectionName: secName,
+                subjectName: subjName,
                 selectedOptionIds: selectedOptions,
                 numericalValue: numericalVal,
                 isAttempted,
                 isCorrect,
+                excludedByLimit,
                 marksAwarded,
                 timeSpentSec: timeSpent,
                 status: isAttempted ? 'ANSWERED' : status,
             });
+        }
+        for (const sKey of Object.keys(subjectBreakdown)) {
+            const sb = subjectBreakdown[sKey];
+            const att = sb.mcqAttempted + sb.numericalAttempted;
+            sb.score = Math.round(sb.score * 100) / 100;
+            sb.accuracyPct = att > 0 ? Math.round((sb.correct / att) * 1000) / 10 : 0;
         }
         const accuracyPct = totalAttempted > 0 ? (totalCorrect / totalAttempted) * 100 : 0.0;
         // Percentile only when valid comparison sample exists (>= 5 attempts)
@@ -463,6 +609,31 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
                 responsesJson: JSON.stringify(processedResponses),
             },
         });
+        // Sync score & stats with LiveTestAttempt if this attempt was part of a scheduled Live Mock Test
+        try {
+            const liveAttempt = await prisma_1.prisma.liveTestAttempt.findFirst({
+                where: { testAttemptId: attempt.id },
+            });
+            if (liveAttempt) {
+                await prisma_1.prisma.liveTestAttempt.update({
+                    where: { id: liveAttempt.id },
+                    data: {
+                        attemptStatus: 'SUBMITTED',
+                        submittedAt: new Date(),
+                        score: Math.round(totalScore * 100) / 100,
+                        accuracyPct: Math.round(accuracyPct * 10) / 10,
+                        totalAttempted,
+                        totalCorrect,
+                        totalIncorrect,
+                        timeSpentSeconds: Number(timeSpentSeconds) || 0,
+                        sectionScoresJson: JSON.stringify(sectionBreakdown),
+                    },
+                });
+            }
+        }
+        catch (liveSyncErr) {
+            console.warn('Live test attempt sync warning:', liveSyncErr);
+        }
         // Bulk create mistake entries if any
         for (const entry of mistakeEntriesToCreate) {
             await prisma_1.prisma.mistakeJournalEntry.upsert({
@@ -488,6 +659,7 @@ router.post('/attempts/:attemptId/submit', auth_1.authenticate, async (req, res)
             totalIncorrect,
             totalUnattempted,
             sectionBreakdown,
+            subjectBreakdown,
         });
     }
     catch (error) {
@@ -544,6 +716,38 @@ router.get('/attempts/:attemptId/review', auth_1.authenticate, async (req, res) 
         catch (e) {
             sectionScores = {};
         }
+        // Build subject-wise breakdown from graded responses & section scores
+        const subjectBreakdown = {};
+        for (const [secKey, secData] of Object.entries(sectionScores)) {
+            const subj = resolveSubjectKey(secKey);
+            if (!subjectBreakdown[subj]) {
+                subjectBreakdown[subj] = { score: 0, maxMarks: 0, mcqAttempted: 0, numericalAttempted: 0, correct: 0, incorrect: 0, unattempted: 0, accuracyPct: 0 };
+            }
+            subjectBreakdown[subj].score += Number(secData?.score || 0);
+            subjectBreakdown[subj].maxMarks += Number(secData?.maxMarks || 0);
+            subjectBreakdown[subj].correct += Number(secData?.correct || 0);
+            subjectBreakdown[subj].incorrect += Number(secData?.wrong || 0);
+            subjectBreakdown[subj].unattempted += Number(secData?.unattempted || 0);
+        }
+        for (const tq of attempt.test.testQuestions) {
+            const resp = responses.find((r) => r.questionId === tq.questionId);
+            const subj = resolveSubjectKey(tq.sectionName, tq.question?.subject);
+            if (!subjectBreakdown[subj]) {
+                subjectBreakdown[subj] = { score: 0, maxMarks: tq.marks, mcqAttempted: 0, numericalAttempted: 0, correct: 0, incorrect: 0, unattempted: 0, accuracyPct: 0 };
+            }
+            if (resp?.isAttempted) {
+                if (tq.question?.questionType === 'NUMERICAL')
+                    subjectBreakdown[subj].numericalAttempted++;
+                else
+                    subjectBreakdown[subj].mcqAttempted++;
+            }
+        }
+        for (const sKey of Object.keys(subjectBreakdown)) {
+            const sb = subjectBreakdown[sKey];
+            sb.score = Math.round(sb.score * 100) / 100;
+            const att = sb.mcqAttempted + sb.numericalAttempted;
+            sb.accuracyPct = att > 0 ? Math.round((sb.correct / att) * 1000) / 10 : 0;
+        }
         // Combine questions with student responses
         const reviewQuestions = attempt.test.testQuestions.map((tq) => {
             const q = tq.question;
@@ -569,8 +773,10 @@ router.get('/attempts/:attemptId/review', auth_1.authenticate, async (req, res) 
                 marks: tq.marks,
                 negativeMarks: tq.negativeMarks,
                 questionType: q.questionType,
+                subject: q.subject,
                 contentEn: q.contentEn,
                 contentHi: q.contentHi,
+                diagramUrl: q.diagramUrl,
                 options,
                 correctAnswers,
                 numericalAnswer: q.numericalAnswer,
@@ -610,6 +816,7 @@ router.get('/attempts/:attemptId/review', auth_1.authenticate, async (req, res) 
                 totalUnattempted: attempt.totalUnattempted,
                 timeSpentSeconds: attempt.timeSpentSeconds,
                 sectionScores,
+                subjectBreakdown,
             },
             test: {
                 id: attempt.test.id,

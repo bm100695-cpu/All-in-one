@@ -1,8 +1,8 @@
 "use strict";
 /**
- * TutorNove Master PYQ Database Sync Engine
+ * All in One Master PYQ Database Sync Engine
  * Imports ALL 110 official JEE Main previous-year question papers (2021 - 2025)
- * into TutorNove's database.
+ * into All in One's database.
  *
  * Features:
  * - Every single paper is created as an independent, individual mock test with its own "Launch CBT Exam" button.
@@ -27,7 +27,7 @@ const MONTH_NAMES = {
 };
 async function main() {
     console.log('='.repeat(70));
-    console.log('  TutorNove: Syncing ALL 110 JEE Main Official PYQ Papers (2021-2025)');
+    console.log('  All in One: Syncing ALL 110 JEE Main Official PYQ Papers (2021-2025)');
     console.log('='.repeat(70));
     // 1. Verify Exam and Pattern
     const jeeExam = await prisma_1.prisma.exam.findUnique({
@@ -168,7 +168,7 @@ async function main() {
                         sourceProvenance: `Official NTA JEE Main ${q.year} (${q.session}, ${q.date} ${q.shift})`,
                         sourceLicense: 'Official Public Record / Educational Use',
                         verificationStatus: 'VERIFIED',
-                        reviewerName: 'TutorNove Academic Review Board',
+                        reviewerName: 'All in One Academic Review Board',
                         reviewedAt: new Date(),
                         reviewerNotes: 'Reconciled with official NTA final answer key.',
                         duplicateCheckHash: qHash,

@@ -42,15 +42,23 @@ router.get('/config', (_req, res) => {
         activeGateway: 'Razorpay (Official Server-Verified)',
     });
 });
-// Get all published subscription plans
-router.get('/plans', async (_req, res) => {
+// Get all published subscription plans (optionally filtered by examSlug)
+router.get('/plans', async (req, res) => {
     try {
+        const { examSlug } = req.query;
+        const where = { isPublished: true };
+        if (examSlug && String(examSlug).trim() && String(examSlug) !== 'ALL') {
+            const cleanSlug = String(examSlug).trim().toLowerCase();
+            where.OR = [{ examSlug: cleanSlug }, { examSlug: null }];
+        }
         const plans = await prisma_1.prisma.subscriptionPlan.findMany({
-            where: { isPublished: true },
+            where,
             orderBy: { displayOrder: 'asc' },
         });
         const parsedPlans = plans.map((p) => ({
             ...p,
+            priceINR: p.price,
+            priceUSD: p.price === 0 ? 0 : Math.max(1, Math.round(p.price / 75)),
             features: JSON.parse(p.featuresJson || '[]'),
         }));
         res.json({ plans: parsedPlans });
@@ -58,6 +66,52 @@ router.get('/plans', async (_req, res) => {
     catch (error) {
         console.error('Error fetching plans:', error);
         res.status(500).json({ error: 'Failed to fetch subscription plans' });
+    }
+});
+// Validate a discount coupon code on the backend
+router.post('/validate-coupon', auth_1.authenticate, async (req, res) => {
+    try {
+        const { code, examSlug, planId } = req.body;
+        if (!code || typeof code !== 'string') {
+            res.status(400).json({ error: 'Coupon code is required.' });
+            return;
+        }
+        const coupon = await prisma_1.prisma.coupon.findUnique({
+            where: { code: code.trim().toUpperCase() },
+        });
+        if (!coupon || !coupon.isActive) {
+            res.status(404).json({ error: 'Invalid or inactive coupon code.' });
+            return;
+        }
+        if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+            res.status(400).json({ error: 'This coupon has expired.' });
+            return;
+        }
+        if (coupon.examSlug && examSlug && coupon.examSlug !== String(examSlug).toLowerCase()) {
+            res.status(400).json({ error: `Coupon "${coupon.code}" is valid only for ${coupon.examSlug.toUpperCase()} plans.` });
+            return;
+        }
+        let discountedPrice = undefined;
+        let originalPrice = undefined;
+        if (planId) {
+            const plan = await prisma_1.prisma.subscriptionPlan.findUnique({ where: { id: String(planId) } });
+            if (plan) {
+                originalPrice = plan.price;
+                discountedPrice = Math.max(1, Math.round(plan.price * (1 - coupon.discountPct / 100)));
+            }
+        }
+        res.json({
+            valid: true,
+            code: coupon.code,
+            discountPct: coupon.discountPct,
+            examSlug: coupon.examSlug,
+            originalPrice,
+            discountedPrice,
+        });
+    }
+    catch (error) {
+        console.error('Coupon validation error:', error);
+        res.status(500).json({ error: 'Failed to validate coupon' });
     }
 });
 // =========================================================================
@@ -118,7 +172,19 @@ router.get('/my-subscription', auth_1.authenticate, async (req, res) => {
                         features: JSON.parse(activeSub.plan.featuresJson || '[]'),
                     },
                 }
-                : null,
+                : {
+                    id: 'free_starter_fallback',
+                    userId,
+                    planId: effectivePlan?.id || '',
+                    status: 'ACTIVE',
+                    testsRemaining: null,
+                    plan: effectivePlan
+                        ? {
+                            ...effectivePlan,
+                            features: JSON.parse(effectivePlan.featuresJson || '[]'),
+                        }
+                        : null,
+                },
             effectivePlan: effectivePlan
                 ? {
                     ...effectivePlan,
@@ -141,11 +207,11 @@ router.get('/my-subscription', auth_1.authenticate, async (req, res) => {
 // Check access entitlement for a specific mock test
 router.get('/test-entitlement/:testId', auth_1.authenticate, async (req, res) => {
     try {
-        const { testId } = req.params;
+        const testId = req.params.testId;
         const userId = req.user.id;
         const test = await prisma_1.prisma.test.findUnique({
             where: { id: testId },
-            select: { id: true, title: true, accessLevel: true },
+            select: { id: true, title: true, accessLevel: true, exam: { select: { slug: true } } },
         });
         if (!test) {
             res.status(404).json({ error: 'Test not found' });
@@ -178,11 +244,13 @@ router.get('/test-entitlement/:testId', auth_1.authenticate, async (req, res) =>
             },
             include: { plan: true },
         });
-        if (activeSub && activeSub.plan.code === 'PREMIUM_MONTHLY_149') {
+        if (activeSub &&
+            (activeSub.plan.code === 'PREMIUM_MONTHLY_149' ||
+                (activeSub.plan.examSlug && activeSub.plan.examSlug === test.exam?.slug))) {
             res.json({
                 entitled: true,
                 accessLevel: 'PREMIUM',
-                reason: 'Active Premium Monthly All-Access Subscription',
+                reason: `Active ${activeSub.plan.name} Subscription`,
             });
             return;
         }
@@ -191,8 +259,10 @@ router.get('/test-entitlement/:testId', auth_1.authenticate, async (req, res) =>
             where: {
                 userId,
                 isActive: true,
-                OR: [{ testId: null }, { testId }],
-                OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+                AND: [
+                    { OR: [{ testId: null }, { testId }] },
+                    { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+                ],
             },
         });
         if (entitlement) {
@@ -229,18 +299,18 @@ router.get('/test-entitlement/:testId', auth_1.authenticate, async (req, res) =>
 // =========================================================================
 // 3. PAYMENT ORDER CREATION & VERIFICATION (RAZORPAY)
 // =========================================================================
-// Create Razorpay payment order
+// Create Razorpay payment order with backend coupon validation & original price snapshot
 router.post('/create-order', auth_1.authenticate, async (req, res) => {
     try {
-        const { planId } = req.body;
+        const { planId, planCode, couponCode, examSlug } = req.body;
         const userId = req.user.id;
-        if (!planId) {
-            res.status(400).json({ error: 'Plan ID is required.' });
+        if (!planId && !planCode) {
+            res.status(400).json({ error: 'Plan ID or Plan Code is required.' });
             return;
         }
-        const plan = await prisma_1.prisma.subscriptionPlan.findUnique({
-            where: { id: planId },
-        });
+        const plan = planId
+            ? await prisma_1.prisma.subscriptionPlan.findUnique({ where: { id: planId } })
+            : await prisma_1.prisma.subscriptionPlan.findUnique({ where: { code: planCode } });
         if (!plan || !plan.isPublished) {
             res.status(404).json({ error: 'Subscription plan not found or unavailable.' });
             return;
@@ -261,7 +331,24 @@ router.post('/create-order', auth_1.authenticate, async (req, res) => {
             });
             return;
         }
-        const amountInPaise = Math.round(plan.price * 100);
+        // Backend price & coupon validation + originalPrice snapshot
+        const originalPrice = plan.price;
+        let finalAmount = originalPrice;
+        let discountAmount = 0;
+        let verifiedCouponCode = null;
+        if (couponCode && typeof couponCode === 'string' && couponCode.trim()) {
+            const coupon = await prisma_1.prisma.coupon.findUnique({
+                where: { code: couponCode.trim().toUpperCase() },
+            });
+            if (coupon && coupon.isActive && (!coupon.expiresAt || coupon.expiresAt > new Date())) {
+                if (!coupon.examSlug || coupon.examSlug === (plan.examSlug || examSlug)) {
+                    discountAmount = Math.round((originalPrice * coupon.discountPct) / 100);
+                    finalAmount = Math.max(1, originalPrice - discountAmount);
+                    verifiedCouponCode = coupon.code;
+                }
+            }
+        }
+        const amountInPaise = Math.round(finalAmount * 100);
         const receipt = `rcpt_${Date.now()}_${userId.slice(-6)}`;
         let orderId = '';
         if (razorpayClient) {
@@ -273,6 +360,7 @@ router.post('/create-order', auth_1.authenticate, async (req, res) => {
                 notes: {
                     planId: plan.id,
                     planCode: plan.code,
+                    examSlug: plan.examSlug || examSlug || 'global',
                     userId,
                 },
             });
@@ -282,12 +370,16 @@ router.post('/create-order', auth_1.authenticate, async (req, res) => {
             // Standard fallback order ID for test environments
             orderId = `order_sim_${Date.now()}_${crypto_1.default.randomBytes(4).toString('hex')}`;
         }
-        // Persist Payment record in PENDING state
+        // Persist Payment record in PENDING state with original price snapshot
         const payment = await prisma_1.prisma.payment.create({
             data: {
                 userId,
                 planId: plan.id,
-                amount: plan.price,
+                examSlug: plan.examSlug || examSlug || null,
+                originalPrice,
+                discountAmount,
+                couponCode: verifiedCouponCode,
+                amount: finalAmount,
                 currency: plan.currency || 'INR',
                 status: 'PENDING',
                 orderId,
@@ -296,15 +388,21 @@ router.post('/create-order', auth_1.authenticate, async (req, res) => {
                     planName: plan.name,
                     planCode: plan.code,
                     durationDays: plan.durationDays,
+                    originalPrice,
+                    discountAmount,
+                    couponCode: verifiedCouponCode,
                 }),
             },
         });
         res.json({
             orderId,
-            amount: plan.price,
+            amount: finalAmount,
+            originalPrice,
+            discountAmount,
+            couponCode: verifiedCouponCode,
             amountPaise: amountInPaise,
             currency: plan.currency || 'INR',
-            keyId: isRazorpayLive ? RAZORPAY_KEY_ID : 'rzp_test_mock_tutor_nove',
+            keyId: isRazorpayLive ? RAZORPAY_KEY_ID : 'rzp_test_mock_all_in_one',
             planName: plan.name,
             planCode: plan.code,
             description: plan.description,
@@ -560,7 +658,7 @@ router.get('/referral/me', auth_1.authenticate, async (req, res) => {
         res.json({
             referralCode: user.referralCode,
             referralCredits: user.referralCredits,
-            referralLink: `https://tutornove.edu/?ref=${user.referralCode}`,
+            referralLink: `https://allinone.edu/?ref=${user.referralCode}`,
             successfulReferralsCount: referrals.length,
             referrals,
             creditRules: {
@@ -667,7 +765,19 @@ router.get('/admin/overview', auth_1.authenticate, (0, auth_1.requireRole)(['ADM
         const totalRevenue = successfulPayments.reduce((sum, p) => sum + p.amount, 0);
         const premiumStudentsCount = new Set(paidSubscriptions.map((s) => s.userId)).size;
         const freeStudentsCount = Math.max(0, totalStudents - premiumStudentsCount);
+        const refundedPaymentsCount = await prisma_1.prisma.payment.count({ where: { status: 'REFUNDED' } });
+        const metrics = {
+            totalRevenueINR: totalRevenue,
+            totalRevenueUSD: 0,
+            activePaidSubscriptions: paidSubscriptions.length,
+            totalStudents,
+            freeStudents: freeStudentsCount,
+            paidStudents: premiumStudentsCount,
+            successfulPayments: successfulPayments.length,
+            refundedPayments: refundedPaymentsCount,
+        };
         res.json({
+            metrics,
             totalStudents,
             freeStudentsCount,
             premiumStudentsCount,
@@ -676,6 +786,7 @@ router.get('/admin/overview', auth_1.authenticate, (0, auth_1.requireRole)(['ADM
             successfulTransactionsCount: successfulPayments.length,
             failedTransactionsCount: failedPayments,
             plans,
+            recentPayments: recentTransactions,
             recentTransactions,
             topTests: topTests.map((t) => ({
                 id: t.id,
