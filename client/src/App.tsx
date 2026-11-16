@@ -20,6 +20,7 @@ import { PricingModal } from './components/PricingModal';
 import { ReferralModal } from './components/ReferralModal';
 import { LegalModal } from './components/LegalModals';
 import { AdminLogin } from './components/AdminLogin';
+import { AdminRoute } from './components/AdminRoute';
 import { SelectExamPage } from './components/SelectExamPage';
 import { ExamPortalView } from './components/ExamPortalView';
 import { StudentLiveTests } from './components/StudentLiveTests';
@@ -642,26 +643,41 @@ export const App: React.FC = () => {
             )}
 
             {(activeTab === 'admin' || activeTab === 'control-center') && (
-              (currentUser?.role === 'ADMIN' || currentUser?.role === 'CONTENT_REVIEWER') ? (
+              <AdminRoute
+                currentUser={currentUser}
+                onRedirectToStudent={() => {
+                  if (currentUser?.targetExamId?.toLowerCase().includes('uptet')) {
+                    setActiveTab('uptet');
+                  } else if (currentUser) {
+                    setActiveTab('dashboard');
+                  } else {
+                    setActiveTab('landing');
+                  }
+                  window.location.hash = '';
+                }}
+                fallback={
+                  <AdminLogin
+                    onSuccess={(adminUser) => {
+                      setCurrentUser(adminUser);
+                      setActiveTab('control-center');
+                      window.location.hash = '/admin-portal-secure/dashboard';
+                      showToast(`Control Center session active: ${adminUser.name}`);
+                    }}
+                    onExit={() => {
+                      if (currentUser?.targetExamId?.toLowerCase().includes('uptet')) {
+                        setActiveTab('uptet');
+                      } else if (currentUser) {
+                        setActiveTab('dashboard');
+                      } else {
+                        setActiveTab('landing');
+                      }
+                      window.location.hash = '';
+                    }}
+                  />
+                }
+              >
                 <AdminPortal />
-              ) : (
-                <AdminLogin
-                  onSuccess={(adminUser) => {
-                    setCurrentUser(adminUser);
-                    setActiveTab('control-center');
-                    showToast(`Control Center session active: ${adminUser.name}`);
-                  }}
-                  onExit={() => {
-                    if (currentUser?.targetExamId?.toLowerCase().includes('uptet')) {
-                      setActiveTab('uptet');
-                    } else if (currentUser) {
-                      setActiveTab('dashboard');
-                    } else {
-                      setActiveTab('landing');
-                    }
-                  }}
-                />
-              )
+              </AdminRoute>
             )}
 
             {activeTab === 'landing' && (

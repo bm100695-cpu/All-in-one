@@ -194,17 +194,17 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Right Controls */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             
-            {/* If user has ADMIN role or is on client view, quick button to Control Center */}
+            {/* If user has ADMIN role, quick button to Control Center */}
             {!isAdminPage && (currentUser?.role === 'ADMIN' || currentUser?.role === 'CONTENT_REVIEWER') && (
               <button
                 onClick={() => {
-                  window.location.hash = '/control-center';
+                  window.location.hash = '/admin-portal-secure/dashboard';
                   handleNavClick('control-center');
                 }}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition shadow-xs cursor-pointer"
               >
                 <Shield className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="hidden sm:inline">Control Center</span>
+                <span className="hidden sm:inline">Admin</span>
               </button>
             )}
 
@@ -291,17 +291,19 @@ export const Header: React.FC<HeaderProps> = ({
                           <UserIcon className="w-3.5 h-3.5 text-slate-400" />
                           <span>Candidate Profile</span>
                         </button>
-                        <button
-                          onClick={() => {
-                            setRoleMenuOpen(false);
-                            window.location.hash = '/control-center';
-                            handleNavClick('control-center');
-                          }}
-                          className="w-full text-left px-3 py-1.5 rounded-lg text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer font-medium"
-                        >
-                          <Shield className="w-3.5 h-3.5 text-indigo-600" />
-                          <span>Control Center (Admin)</span>
-                        </button>
+                        {(currentUser.role === 'ADMIN' || currentUser.role === 'CONTENT_REVIEWER') && (
+                          <button
+                            onClick={() => {
+                              setRoleMenuOpen(false);
+                              window.location.hash = '/admin-portal-secure/dashboard';
+                              handleNavClick('control-center');
+                            }}
+                            className="w-full text-left px-3 py-1.5 rounded-lg text-xs text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 flex items-center gap-2 cursor-pointer font-semibold"
+                          >
+                            <Shield className="w-3.5 h-3.5 text-indigo-600" />
+                            <span>Control Center (Admin)</span>
+                          </button>
+                        )}
                       </div>
                       <div className="p-1 pt-1 border-t border-slate-100">
                         <button
@@ -413,17 +415,19 @@ export const Header: React.FC<HeaderProps> = ({
                   <UserIcon className="w-3.5 h-3.5 text-slate-500" />
                   <span>Candidate Profile</span>
                 </button>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    window.location.hash = '/control-center';
-                    handleNavClick('control-center');
-                  }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 rounded-lg border border-indigo-100"
-                >
-                  <Shield className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>Control Center (Admin)</span>
-                </button>
+                {(currentUser.role === 'ADMIN' || currentUser.role === 'CONTENT_REVIEWER') && (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      window.location.hash = '/admin-portal-secure/dashboard';
+                      handleNavClick('control-center');
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 rounded-lg border border-indigo-100"
+                  >
+                    <Shield className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Control Center (Admin)</span>
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
@@ -467,17 +471,6 @@ export const Header: React.FC<HeaderProps> = ({
                     Register
                   </button>
                 </div>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    window.location.hash = '/control-center';
-                    handleNavClick('control-center');
-                  }}
-                  className="w-full flex items-center justify-center gap-1.5 py-1.5 text-center text-xs font-semibold text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg border border-slate-200 cursor-pointer"
-                >
-                  <Shield className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Control Center (Admin)</span>
-                </button>
               </div>
             )}
           </div>

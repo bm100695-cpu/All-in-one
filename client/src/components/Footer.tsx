@@ -124,18 +124,6 @@ export const Footer: React.FC<FooterProps> = ({
                   <span>Help & Support</span>
                 </button>
               </li>
-              <li className="pt-1.5 border-t border-slate-100">
-                <button
-                  onClick={() => {
-                    window.location.hash = '/control-center';
-                    onNavigate('control-center');
-                  }}
-                  className="hover:text-indigo-600 text-slate-700 font-semibold transition-colors cursor-pointer text-left flex items-center gap-1.5"
-                >
-                  <Lock className="w-3.5 h-3.5 text-indigo-500" />
-                  <span>Control Center (Admin)</span>
-                </button>
-              </li>
             </ul>
           </div>
 
@@ -173,17 +161,6 @@ export const Footer: React.FC<FooterProps> = ({
               className="hover:text-slate-600 transition-colors cursor-pointer"
             >
               Refund Policy
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => {
-                window.location.hash = '/control-center';
-                onNavigate('control-center');
-              }}
-              className="hover:text-indigo-600 text-slate-500 font-medium transition-colors cursor-pointer flex items-center gap-1"
-            >
-              <Lock className="w-3 h-3 text-slate-400" />
-              <span>Control Center</span>
             </button>
           </div>
         </div>
