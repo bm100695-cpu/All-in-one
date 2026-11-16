@@ -645,6 +645,14 @@ export const App: React.FC = () => {
             {(activeTab === 'admin' || activeTab === 'control-center') && (
               <AdminRoute
                 currentUser={currentUser}
+                onSwitchToAdmin={() => {
+                  api.logout();
+                  setCurrentUser(null);
+                }}
+                onUserRefreshed={(refreshedUser) => {
+                  setCurrentUser(refreshedUser);
+                  showToast(`Admin access verified: ${refreshedUser.name}`);
+                }}
                 onRedirectToStudent={() => {
                   if (currentUser?.targetExamId?.toLowerCase().includes('uptet')) {
                     setActiveTab('uptet');
