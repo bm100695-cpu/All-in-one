@@ -1,0 +1,3012 @@
+{
+  "paperKey": "JEE_MAIN_2023_01_29_SHIFT_1",
+  "year": 2023,
+  "session": "Session 1 (Jan)",
+  "date": "2023-01-29",
+  "shift": "Shift 1",
+  "pdfFilename": "jee_main_2023_online-29th-january-morning-shift.pdf",
+  "totalQuestions": 90,
+  "needsVerificationCount": 0,
+  "questions": [
+    {
+      "originalQNum": 49,
+      "pageIndex": 12,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Two particles of equal mass ' ' move in a circle of radius ' ' under the action of their mutual\ngravitational attraction. The speed of each particle will be :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_1.webp",
+      "sourcePage": 13,
+      "yTop": 553.9904174804688,
+      "questionNumber": 1,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 50,
+      "pageIndex": 12,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Find the mutual inductance in the arrangement, when a small circular loop of wire of radius ' ' is\nplaced inside a large square loop of wire of side . The loops are coplanar and their\ncentres coincide :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_2.webp",
+      "sourcePage": 13,
+      "yTop": 460.99041748046875,
+      "questionNumber": 2,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 51,
+      "pageIndex": 13,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "In a cuboid of dimension , a charge is placed at the center of the surface ' ' having\narea of . The flux through the opposite surface to ' ' is given by",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_3.webp",
+      "sourcePage": 14,
+      "yTop": 762.4904174804688,
+      "questionNumber": 3,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 52,
+      "pageIndex": 13,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Surface tension of a soap bubble is . Work done to increase the radius of soap\nbubble from to will be:\nTake",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_4.webp",
+      "sourcePage": 14,
+      "yTop": 673.2404174804688,
+      "questionNumber": 4,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 53,
+      "pageIndex": 13,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Given below are two statements: One is labelled as Assertion A and the other is labelled as Reason\nR.\nAssertion A: If and represent the heat supplied to the system and the work done on the\nsystem respectively. Then according to the first law of thermodynamics .\nReason R: First law of thermodynamics is based on law of conservation of energy.\nIn the light of the above statements, choose the correct answer from the options given below:",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Both A and R are correct but R is not the correct explanation of A"
+        },
+        {
+          "id": "B",
+          "textEn": "Both A and R are correct and R is the correct explanation of A"
+        },
+        {
+          "id": "C",
+          "textEn": "A is correct but R is not correct"
+        },
+        {
+          "id": "D",
+          "textEn": "A is not correct but R is correct"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_5.webp",
+      "sourcePage": 14,
+      "yTop": 565.2404174804688,
+      "questionNumber": 5,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 54,
+      "pageIndex": 13,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The magnitude of magnetic induction at mid point due to current arrangement as shown in Fig\nwill be",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "0\n\nGET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_6.webp",
+      "sourcePage": 14,
+      "yTop": 346.99041748046875,
+      "questionNumber": 6,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 55,
+      "pageIndex": 14,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A stone is projected at angle to the horizontal. The ratio of kinetic energy of the stone at point of\nprojection to its kinetic energy at the highest point of flight will be -",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "1 : 4"
+        },
+        {
+          "id": "B",
+          "textEn": "1 : 2"
+        },
+        {
+          "id": "C",
+          "textEn": "4 : 3"
+        },
+        {
+          "id": "D",
+          "textEn": "4 : 1"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_7.webp",
+      "sourcePage": 15,
+      "yTop": 762.4904174804688,
+      "questionNumber": 7,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 56,
+      "pageIndex": 14,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A block of mass slides down the plane inclined at angle with an acceleration . The value of\ncoefficient of kinetic friction will be:",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_8.webp",
+      "sourcePage": 15,
+      "yTop": 673.9904174804688,
+      "questionNumber": 8,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 57,
+      "pageIndex": 14,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Match List I with List II :\nList I (Physical Quantity) List II (Dimensional Formula)\nA. Pressure gradient I.\nB. Energy density II.\nC. Electric Field III.\nD. Latent heat IV.\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "A-III, B-II, C-IV, D-I"
+        },
+        {
+          "id": "B",
+          "textEn": "A-III, B-II, C-I, D-IV"
+        },
+        {
+          "id": "C",
+          "textEn": "A-II, B-III, C-IV, D-I"
+        },
+        {
+          "id": "D",
+          "textEn": "A-II, B-III, C-I, D-IV"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_9.webp",
+      "sourcePage": 15,
+      "yTop": 583.2404174804688,
+      "questionNumber": 9,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 58,
+      "pageIndex": 14,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A car is moving on a horizontal curved road with radius 50 m. The approximate maximum speed of\ncar will be, if the coefficient of friction between tyres and road is 0.34. [take g = 10 ms ]",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "3.4 ms"
+        },
+        {
+          "id": "B",
+          "textEn": "13 ms"
+        },
+        {
+          "id": "C",
+          "textEn": "22.4 ms"
+        },
+        {
+          "id": "D",
+          "textEn": "17 ms"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_10.webp",
+      "sourcePage": 15,
+      "yTop": 351.49041748046875,
+      "questionNumber": 10,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 59,
+      "pageIndex": 14,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Which of the following are true?\nA. Speed of light in vacuum is dependent on the direction of propagation.\nB. Speed of light in a medium is independent of the wavelength of light.\nC. The speed of light is independent of the motion of the source.\nD. The speed of light in a medium is independent of intensity.\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "B and D only"
+        },
+        {
+          "id": "B",
+          "textEn": "B and C only"
+        },
+        {
+          "id": "C",
+          "textEn": "A and C only"
+        },
+        {
+          "id": "D",
+          "textEn": "C and D only\n\nGET IT ON"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_11.webp",
+      "sourcePage": 15,
+      "yTop": 262.99041748046875,
+      "questionNumber": 11,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 60,
+      "pageIndex": 15,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "In a Young's double slit experiment, two slits are illuminated with a light of wavelength . The\nline joining is perpendicular to as shown in the figure. If the first minimum is detected at\n, the value of slits separation 'a' will be:\nThe distance of screen from slits D = 5 cm",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "0.2 mm"
+        },
+        {
+          "id": "B",
+          "textEn": "0.5 mm"
+        },
+        {
+          "id": "C",
+          "textEn": "0.4 mm"
+        },
+        {
+          "id": "D",
+          "textEn": "0.1 mm\n\nGET IT ON"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_12.webp",
+      "sourcePage": 16,
+      "yTop": 762.4904174804688,
+      "questionNumber": 12,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 61,
+      "pageIndex": 16,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A single current carrying loop of wire carrying current I flowing in anticlockwise direction seen from\n+ve direction and lying in plane is shown in figure. The plot of component of magnetic field\n(By) at a distance ' ' (less than radius of the coil) and on plane vs coordinate looks like\n(A)\n(B)\n(C)\n\nGET IT ON",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_13.webp",
+      "sourcePage": 17,
+      "yTop": 762.4904174804688,
+      "questionNumber": 13,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 62,
+      "pageIndex": 17,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Which one of the following statement is not correct in the case of light emitting diodes?\nA. It is a heavily doped p-n junction.\nB. It emits light only when it is forward biased.\nC. It emits light only when it is reverse biased.\nD. The energy of the light emitted is equal to or slightly less than the energy gap of the\nsemiconductor used.\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "A"
+        },
+        {
+          "id": "B",
+          "textEn": "B"
+        },
+        {
+          "id": "C",
+          "textEn": "C and D"
+        },
+        {
+          "id": "D",
+          "textEn": "C"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_14.webp",
+      "sourcePage": 18,
+      "yTop": 645.4904174804688,
+      "questionNumber": 14,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 63,
+      "pageIndex": 17,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A bicycle tyre is filled with air having pressure of at . The approximate pressure of the\nair in the tyre when the temperature increases to is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "262 kPa"
+        },
+        {
+          "id": "B",
+          "textEn": "360 kPa"
+        },
+        {
+          "id": "C",
+          "textEn": "270 kPa"
+        },
+        {
+          "id": "D",
+          "textEn": "278 kPa"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_15.webp",
+      "sourcePage": 18,
+      "yTop": 460.24041748046875,
+      "questionNumber": 15,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 64,
+      "pageIndex": 17,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The threshold wavelength for photoelectric emission from a material is 5500 . Photoelectrons will\nbe emitted, when this material is illuminated with monochromatic radiation from a\nA. 75 W infra-red lamp\nB. 10 W infra-red lamp\nC. 75 W ultra-violet lamp\nD. 10 W ultra-violet lamp\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "C only"
+        },
+        {
+          "id": "B",
+          "textEn": "A and D only"
+        },
+        {
+          "id": "C",
+          "textEn": "C and D only"
+        },
+        {
+          "id": "D",
+          "textEn": "B and C only"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_16.webp",
+      "sourcePage": 18,
+      "yTop": 371.74041748046875,
+      "questionNumber": 16,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 65,
+      "pageIndex": 17,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Ratio of thermal energy released in two resistors R and 3R connected in parallel in an electric circuit\nis :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "1 : 1"
+        },
+        {
+          "id": "B",
+          "textEn": "1 : 27"
+        },
+        {
+          "id": "C",
+          "textEn": "1 : 3"
+        },
+        {
+          "id": "D",
+          "textEn": "3 : 1\n\nGET IT ON"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_17.webp",
+      "sourcePage": 18,
+      "yTop": 182.74041748046875,
+      "questionNumber": 17,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 86,
+      "pageIndex": 22,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "If a radioactive element having half-life of is undergoing beta decay, the fraction of\nradioactive element remains undecayed after . will be",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_18.webp",
+      "sourcePage": 23,
+      "yTop": 586.9904174804688,
+      "questionNumber": 18,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 87,
+      "pageIndex": 22,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A person observes two moving trains, 'A' reaching the station and 'B' leaving the station with equal\nspeed of . If both trains emit sounds with frequency , (Speed of sound: )\napproximate difference of frequencies heard by the person will be:",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "10 Hz"
+        },
+        {
+          "id": "B",
+          "textEn": "55 Hz"
+        },
+        {
+          "id": "C",
+          "textEn": "80 Hz"
+        },
+        {
+          "id": "D",
+          "textEn": "33 Hz"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_19.webp",
+      "sourcePage": 23,
+      "yTop": 497.74041748046875,
+      "questionNumber": 19,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 88,
+      "pageIndex": 22,
+      "subject": "Physics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "If the height of transmitting and receiving antennas are 80 m each, the maximum line of sight\ndistance will be:\nGiven : Earth's radius m",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "28 km"
+        },
+        {
+          "id": "B",
+          "textEn": "64 km"
+        },
+        {
+          "id": "C",
+          "textEn": "32 km"
+        },
+        {
+          "id": "D",
+          "textEn": "36 km"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_20.webp",
+      "sourcePage": 23,
+      "yTop": 394.24041748046875,
+      "questionNumber": 20,
+      "sectionName": "Physics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 66,
+      "pageIndex": 18,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Two simple harmonic waves having equal amplitudes of 8 cm and equal frequency of 10 Hz are\nmoving along the same direction. The resultant amplitude is also 8 cm. The phase difference\nbetween the individual waves is _________ degree.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "120"
+      ],
+      "numericalAnswer": 120.0,
+      "rawAnswerKey": "120",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_21.webp",
+      "sourcePage": 19,
+      "yTop": 762.4904174804688,
+      "questionNumber": 21,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 67,
+      "pageIndex": 18,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A solid sphere of mass 2 kg is making pure rolling on a horizontal surface with kinetic energy 2240\nJ. The velocity of centre of mass of the sphere will be _______ ms .",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "40"
+      ],
+      "numericalAnswer": 40.0,
+      "rawAnswerKey": "40",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_22.webp",
+      "sourcePage": 19,
+      "yTop": 679.2404174804688,
+      "questionNumber": 22,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 68,
+      "pageIndex": 18,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "In a metre bridge experiment the balance point is obtained if the gaps are closed by 2 and 3 . A\nshunt of X is added to 3 resistor to shift the balancing point by 22.5 cm. The value of X is\n___________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "2"
+      ],
+      "numericalAnswer": 2.0,
+      "rawAnswerKey": "2",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_23.webp",
+      "sourcePage": 19,
+      "yTop": 595.2404174804688,
+      "questionNumber": 23,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 69,
+      "pageIndex": 18,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A point charge is placed at origin. Another point charge is placed at cm.\nCharge of proton is . The proton is placed on axis so that the electrostatic force on the proton is\nzero. In this situation, the position of the proton from the origin is ___________ cm.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "24"
+      ],
+      "numericalAnswer": 24.0,
+      "rawAnswerKey": "24",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_24.webp",
+      "sourcePage": 19,
+      "yTop": 511.99041748046875,
+      "questionNumber": 24,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 70,
+      "pageIndex": 18,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "As shown in the figure, three identical polaroids P , P and P are placed one after another. The pass\naxis of P and P are inclined at angle of 60 and 90 with respect to axis of P . The source S has an\nintensity of 256 . The intensity of light at point O is ____________ .",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "24"
+      ],
+      "numericalAnswer": 24.0,
+      "rawAnswerKey": "24",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_25.webp",
+      "sourcePage": 19,
+      "yTop": 427.99041748046875,
+      "questionNumber": 25,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 71,
+      "pageIndex": 18,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A 0.4 kg mass takes 8s to reach ground when dropped from a certain height 'P' above surface of\nearth. The loss of potential energy in the last second of fall is __________ J.\n(Take g = 10 m/s ) \nGET IT ON",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "300"
+      ],
+      "numericalAnswer": 300.0,
+      "rawAnswerKey": "300",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_26.webp",
+      "sourcePage": 19,
+      "yTop": 244.99041748046875,
+      "questionNumber": 26,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 72,
+      "pageIndex": 19,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A certain elastic conducting material is stretched into a circular loop. It is placed with its plane\nperpendicular to a uniform magnetic field B = 0.8 T. When released the radius of the loop starts\nshrinking at a constant rate of 2 cms . The induced emf in the loop at an instant when the radius\nof the loop is 10 cm will be __________ mV.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "10"
+      ],
+      "numericalAnswer": 10.0,
+      "rawAnswerKey": "10",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_27.webp",
+      "sourcePage": 20,
+      "yTop": 762.4904174804688,
+      "questionNumber": 27,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 73,
+      "pageIndex": 19,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A tennis ball is dropped on to the floor from a height of 9.8 m. It rebounds to a height 5.0 m. Ball\ncomes in contact with the floor for 0.2s. The average acceleration during contact is ___________\nms .\n(Given g = 10 ms )\n\nThese questions are on topics no longer in the current syllabus. They are kept for practice, after everything else.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "120"
+      ],
+      "numericalAnswer": 120.0,
+      "rawAnswerKey": "120",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_28.webp",
+      "sourcePage": 20,
+      "yTop": 664.9904174804688,
+      "questionNumber": 28,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 89,
+      "pageIndex": 22,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A body cools from 60 C to 40 C in 6 minutes. If, temperature of surroundings is 10 C. Then, after\nthe next 6 minutes, its temperature will be ____________ C.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "28"
+      ],
+      "numericalAnswer": 28.0,
+      "rawAnswerKey": "28",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_29.webp",
+      "sourcePage": 23,
+      "yTop": 286.24041748046875,
+      "questionNumber": 29,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 90,
+      "pageIndex": 22,
+      "subject": "Physics",
+      "questionType": "NUMERICAL",
+      "contentEn": "A radioactive element X emits two -particles, one electron and two positrons. The product\nnucleus is represented by Y. The value of P is __________.\n\nGET IT ON",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "87"
+      ],
+      "numericalAnswer": 87.0,
+      "rawAnswerKey": "87",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_30.webp",
+      "sourcePage": 23,
+      "yTop": 202.99041748046875,
+      "questionNumber": 30,
+      "sectionName": "Physics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 1,
+      "pageIndex": 1,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The major product 'P' for the following sequence of reactions is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_31.webp",
+      "sourcePage": 2,
+      "yTop": 721.2404174804688,
+      "questionNumber": 31,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 2,
+      "pageIndex": 2,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The magnetic behaviour of and , respectively, are :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "paramagnetic, paramagnetic and diamagnetic"
+        },
+        {
+          "id": "B",
+          "textEn": "paramagnetic, diamagnetic and paramagnetic"
+        },
+        {
+          "id": "C",
+          "textEn": "diamagnetic, paramagnetic and diamagnetic"
+        },
+        {
+          "id": "D",
+          "textEn": "diamagnetic, diamagnetic and paramagnetic"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_32.webp",
+      "sourcePage": 3,
+      "yTop": 762.4904174804688,
+      "questionNumber": 32,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 3,
+      "pageIndex": 2,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Compound that will give positive Lassaigne's test for both nitrogen and halogen is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_33.webp",
+      "sourcePage": 3,
+      "yTop": 633.4904174804688,
+      "questionNumber": 33,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 4,
+      "pageIndex": 2,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Identify the correct order for the given property for following compounds.\nChoose the correct answer from the option given below :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "(A),"
+        },
+        {
+          "id": "B",
+          "textEn": "and (E) only (B) (A),"
+        },
+        {
+          "id": "C",
+          "textEn": "and"
+        },
+        {
+          "id": "D",
+          "textEn": "only\n(C) (A), (C) and (E) only (D) (B), (C) and (D) only"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_34.webp",
+      "sourcePage": 3,
+      "yTop": 550.2404174804688,
+      "questionNumber": 34,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 5,
+      "pageIndex": 2,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The bond dissociation energy is highest for",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Cl"
+        },
+        {
+          "id": "B",
+          "textEn": "I"
+        },
+        {
+          "id": "C",
+          "textEn": "Br"
+        },
+        {
+          "id": "D",
+          "textEn": "F"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_35.webp",
+      "sourcePage": 3,
+      "yTop": 258.49041748046875,
+      "questionNumber": 35,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 6,
+      "pageIndex": 2,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Number of cyclic tripeptides formed with 2 amino acids A and B is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "2"
+        },
+        {
+          "id": "B",
+          "textEn": "3"
+        },
+        {
+          "id": "C",
+          "textEn": "5"
+        },
+        {
+          "id": "D",
+          "textEn": "4\n\nGET IT ON"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_36.webp",
+      "sourcePage": 3,
+      "yTop": 174.49041748046875,
+      "questionNumber": 36,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 7,
+      "pageIndex": 3,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The shortest wavelength of hydrogen atom in Lyman series is . The longest wavelength in Balmer\nseries of He is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_37.webp",
+      "sourcePage": 4,
+      "yTop": 762.4904174804688,
+      "questionNumber": 37,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 8,
+      "pageIndex": 3,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Match List I with List II\nList I List II\nReaction Reagents",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Hofmann Degradation (I) ,"
+        },
+        {
+          "id": "B",
+          "textEn": "Clemmensen reduction (II)"
+        },
+        {
+          "id": "C",
+          "textEn": "Cannizzaro reaction (III)"
+        },
+        {
+          "id": "D",
+          "textEn": "Reimer-Tiemann Reaction (IV) Choose the correct answer from the options given below : (A) (A) - III, (B) - IV, (C) - I, (D) - II (B) (A) - II, (B) - IV, (C) - I, (D) - III (C) (A) - III, (B) - IV, (C) - II, (D) - I (D) (A) - II, (B) - I, (C) - III, (D) - IV"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_38.webp",
+      "sourcePage": 4,
+      "yTop": 673.9904174804688,
+      "questionNumber": 38,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 9,
+      "pageIndex": 3,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The increasing order of for the following phenols is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "2, 4 - Dinitrophenol"
+        },
+        {
+          "id": "B",
+          "textEn": "4 - Nitrophenol"
+        },
+        {
+          "id": "C",
+          "textEn": "2, 4, 5 - Trimethylphenol"
+        },
+        {
+          "id": "D",
+          "textEn": "Phenol (E) 3-Chlorophenol Choose the correct answer from the option given below : (A) (A), (E), (B), (D), (C) (B) (C), (E), (D), (B), (A) (C) (C), (D), (E), (B), (A) (D) (A), (B), (E), (D), (C)"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_39.webp",
+      "sourcePage": 4,
+      "yTop": 436.99041748046875,
+      "questionNumber": 39,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 10,
+      "pageIndex": 3,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Chiral complex from the following is :\nHere en = ethylene diamine",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_40.webp",
+      "sourcePage": 4,
+      "yTop": 227.74041748046875,
+      "questionNumber": 40,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 11,
+      "pageIndex": 4,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The standard electrode potential for V, Cr, Mn & Co are 0.26 V, 0.41 V, + 1.57 V and +\n1.97 V, respectively. The metal ions which can liberate from a dilute acid are :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "and"
+        },
+        {
+          "id": "B",
+          "textEn": "and"
+        },
+        {
+          "id": "C",
+          "textEn": "and"
+        },
+        {
+          "id": "D",
+          "textEn": "and"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_41.webp",
+      "sourcePage": 5,
+      "yTop": 762.4904174804688,
+      "questionNumber": 41,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 74,
+      "pageIndex": 19,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Match List I with List II.\nList I List II\nAntimicrobials Names",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Narrow Spectrum Antibiotic (I) Furacin"
+        },
+        {
+          "id": "B",
+          "textEn": "Antiseptic (II) Sulphur dioxide"
+        },
+        {
+          "id": "C",
+          "textEn": "Disinfectants (III) Penicillin G"
+        },
+        {
+          "id": "D",
+          "textEn": "Broad spectrum antibiotic (IV) Chloramphenicol Choose the correct answer from the options given below : (A) (A) - III, (B) - I, (C) - II, (D) - IV (B) (A) - II, (B) - I, (C) - IV, (D) - III (C) (A) - I, (B) - II, (C) - IV, (D) - III (D) (A) - III, (B) - I, (C) - IV, (D) - II GET IT ON"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_42.webp",
+      "sourcePage": 20,
+      "yTop": 504.49041748046875,
+      "questionNumber": 42,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 75,
+      "pageIndex": 20,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The correct order of hydration enthalpies is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "K"
+        },
+        {
+          "id": "B",
+          "textEn": "Rb"
+        },
+        {
+          "id": "C",
+          "textEn": "Mg"
+        },
+        {
+          "id": "D",
+          "textEn": "Cs (E) Ca Choose the correct answer from the options given below : (A) E > C > A > B > D (B) C > A > E > B > D (C) C > E > A > D > B (D) C > E > A > B > D"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_43.webp",
+      "sourcePage": 21,
+      "yTop": 762.4904174804688,
+      "questionNumber": 43,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 76,
+      "pageIndex": 20,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Correct statement about smog is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "NO is present in classical smog"
+        },
+        {
+          "id": "B",
+          "textEn": "Both NO and SO are present in classical smog"
+        },
+        {
+          "id": "C",
+          "textEn": "Photochemical smog has high concentration of oxidizing agents"
+        },
+        {
+          "id": "D",
+          "textEn": "Classical smog also has high concentration of oxidizing agents"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_44.webp",
+      "sourcePage": 21,
+      "yTop": 553.9904174804688,
+      "questionNumber": 44,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 77,
+      "pageIndex": 20,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "During the borax bead test with , a blue green colour of the bead was observed in oxidising\nflame due to the formation of :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "CuO"
+        },
+        {
+          "id": "B",
+          "textEn": "Cu(BO"
+        },
+        {
+          "id": "C",
+          "textEn": "Cu B"
+        },
+        {
+          "id": "D",
+          "textEn": "Cu"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_45.webp",
+      "sourcePage": 21,
+      "yTop": 424.99041748046875,
+      "questionNumber": 45,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 78,
+      "pageIndex": 20,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Which of the given compounds can enhance the efficiency of hydrogen storage tank?",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "SiH"
+        },
+        {
+          "id": "B",
+          "textEn": "Li/P"
+        },
+        {
+          "id": "C",
+          "textEn": "NaNi"
+        },
+        {
+          "id": "D",
+          "textEn": "Di-isobutylaluminium hydride"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_46.webp",
+      "sourcePage": 21,
+      "yTop": 336.49041748046875,
+      "questionNumber": 46,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 79,
+      "pageIndex": 20,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "\"A\" obtained by Ostwald's method involving air oxidation of NH , upon further air oxidation produces\n\"B\", \"B\" on hydration forms an oxoacid of Nitrogen along with evolution of \"A\". The oxoacid also\nproduces \"A\" and gives positive brown ring test.\nIdentify A and B, respectively :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_47.webp",
+      "sourcePage": 21,
+      "yTop": 244.24041748046875,
+      "questionNumber": 47,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 80,
+      "pageIndex": 21,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Which of the following salt solutions would coagulate the colloid solution formed when is\nadded to solution, at the fastest rate?",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "10 mL of 0.15 mol dm CaCl"
+        },
+        {
+          "id": "B",
+          "textEn": "10 mL of 0.2 mol dm AlCl"
+        },
+        {
+          "id": "C",
+          "textEn": "10 mL of 0.1 mol dm Na SO"
+        },
+        {
+          "id": "D",
+          "textEn": "10 mL of 0.1 mol dm Ca (PO )"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_48.webp",
+      "sourcePage": 22,
+      "yTop": 762.4904174804688,
+      "questionNumber": 48,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 81,
+      "pageIndex": 21,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "For 1 mol of gas, the plot of pV vs. p is shown below. p is the pressure and V is the volume of the\ngas\nWhat is the value of compressibility factor at point A ?",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_49.webp",
+      "sourcePage": 22,
+      "yTop": 655.2404174804688,
+      "questionNumber": 49,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 82,
+      "pageIndex": 21,
+      "subject": "Chemistry",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The reaction representing the Mond process for metal refining is _________.",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_50.webp",
+      "sourcePage": 22,
+      "yTop": 367.99041748046875,
+      "questionNumber": 50,
+      "sectionName": "Chemistry - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 12,
+      "pageIndex": 4,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "Following chromatogram was developed by adsorption of compound 'A' on a 6 cm TLC glass plate.\nRetardation factor of the compound 'A' is _________ .",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "6"
+      ],
+      "numericalAnswer": 6.0,
+      "rawAnswerKey": "6",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_51.webp",
+      "sourcePage": 5,
+      "yTop": 655.2404174804688,
+      "questionNumber": 51,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 13,
+      "pageIndex": 4,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "Millimoles of calcium hydroxide required to produce 100 mL of the aqueous solution of pH 12 is\n. The value of is ___________ (Nearest integer).\nAssume complete dissociation. \nGET IT ON",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "5"
+      ],
+      "numericalAnswer": 5.0,
+      "rawAnswerKey": "5",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_52.webp",
+      "sourcePage": 5,
+      "yTop": 429.49041748046875,
+      "questionNumber": 52,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 14,
+      "pageIndex": 5,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "For certain chemical reaction , the rate of formation of product is plotted against the time as\nshown in the figure. The number of statement/s from the following is ___________.\n(A) Over all order of this reaction is one.\n(B) Order of this reaction can't be determined.\n(C) In region I and III, the reaction is of first and zero order respectively.\n(D) In region-II, the reaction is of first order.\n(E) In region-II, the order of reaction is in the range of 0.1 to 0.9.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "1"
+      ],
+      "numericalAnswer": 1.0,
+      "rawAnswerKey": "1",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_53.webp",
+      "sourcePage": 6,
+      "yTop": 762.4904174804688,
+      "questionNumber": 53,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 15,
+      "pageIndex": 5,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "The number of molecules or ions from the following, which do not have odd number of electrons are\n_________.\n(A) NO\n(B) ICl\n(C) BrF\n(D) ClO\n(E) NO\n(F) NO\n\nGET IT ON",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "3"
+      ],
+      "numericalAnswer": 3.0,
+      "rawAnswerKey": "3",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_54.webp",
+      "sourcePage": 6,
+      "yTop": 435.49041748046875,
+      "questionNumber": 54,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 16,
+      "pageIndex": 6,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "Following figure shows dependence of molar conductance of two electrolytes on concentration.\nis the limiting molar conductivity.\nThe number of statement(s) from the following is ___________\n(A) for electrolyte A is obtained by extrapolation\n(B) For electrolyte B, vs graph is a straight line with intercept equal to\n(C) At infinite dilution, the value of degree of dissociation approaches zero for electrolyte B.\n(D) for any electrolyte A and B can be calculated using for individual ions",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "2"
+      ],
+      "numericalAnswer": 2.0,
+      "rawAnswerKey": "2",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_55.webp",
+      "sourcePage": 7,
+      "yTop": 762.4904174804688,
+      "questionNumber": 55,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 17,
+      "pageIndex": 6,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "Solid Lead nitrate is dissolved in 1 litre of water. The solution was found to boil at 100.15 C. When\n0.2 mol of NaCl is added to the resulting solution, it was observed that the solution froze at C.\nThe solubility product of PbCl formed is __________ 10 at 298 K. (Nearest integer)\nGiven : K kg mol and K kg mol . Assume molality to be equal to molarity in all\ncases.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "13"
+      ],
+      "numericalAnswer": 13.0,
+      "rawAnswerKey": "13",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_56.webp",
+      "sourcePage": 7,
+      "yTop": 417.49041748046875,
+      "questionNumber": 56,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 18,
+      "pageIndex": 6,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "Water decomposes at 2300 K\nThe percent of water decomposing at 2300 K and 1 bar is ___________ (Nearest integer).\nEquilibrium constant for the reaction is at 2300 K.\n\nGET IT ON",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "2"
+      ],
+      "numericalAnswer": 2.0,
+      "rawAnswerKey": "2",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_57.webp",
+      "sourcePage": 7,
+      "yTop": 300.49041748046875,
+      "questionNumber": 57,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 19,
+      "pageIndex": 7,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "Consider the following reaction approaching equilibrium at 27 C and 1 atm pressure\nThe standard Gibb's energy change at 27 C is ( ) ___________ kJ mol (Nearest integer).\n(Given : and )",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "6"
+      ],
+      "numericalAnswer": 6.0,
+      "rawAnswerKey": "6",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_58.webp",
+      "sourcePage": 8,
+      "yTop": 762.4904174804688,
+      "questionNumber": 58,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 20,
+      "pageIndex": 7,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "The sum of bridging carbonyls in and is ____________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "0"
+      ],
+      "numericalAnswer": 0.0,
+      "rawAnswerKey": "0",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_59.webp",
+      "sourcePage": 8,
+      "yTop": 640.2404174804688,
+      "questionNumber": 59,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 21,
+      "pageIndex": 7,
+      "subject": "Chemistry",
+      "questionType": "NUMERICAL",
+      "contentEn": "17 mg of a hydrocarbon (M.F. ) takes up 8.40 mL of the H gas measured at 0 C and 760 mm\nof Hg. Ozonolysis of the same hydrocarbon yields\nThe number of double bond/s present in the hydrocarbon is ___________.\n\nMathematics 27 questions",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "3"
+      ],
+      "numericalAnswer": 3.0,
+      "rawAnswerKey": "3",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_60.webp",
+      "sourcePage": 8,
+      "yTop": 556.2404174804688,
+      "questionNumber": 60,
+      "sectionName": "Chemistry - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 22,
+      "pageIndex": 7,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let be a real number. Let be the roots of the equation and be the\nroots of the equation . Then and are the roots of the equation",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_61.webp",
+      "sourcePage": 8,
+      "yTop": 387.49041748046875,
+      "questionNumber": 61,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 23,
+      "pageIndex": 7,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let and be the two points on the line such that and are symmetric with respect to\nthe origin. Suppose is a point on such that is an equilateral triangle. Then, the\narea of the is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_62.webp",
+      "sourcePage": 8,
+      "yTop": 279.49041748046875,
+      "questionNumber": 62,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 24,
+      "pageIndex": 8,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Three rotten apples are mixed accidently with seven good apples and four apples are drawn one by\none without replacement. Let the random variable X denote the number of rotten apples. If and\nrepresent mean and variance of X, respectively, then is equal to :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "20"
+        },
+        {
+          "id": "B",
+          "textEn": "30"
+        },
+        {
+          "id": "C",
+          "textEn": "250"
+        },
+        {
+          "id": "D",
+          "textEn": "25"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_63.webp",
+      "sourcePage": 9,
+      "yTop": 762.4904174804688,
+      "questionNumber": 63,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 25,
+      "pageIndex": 8,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let and . If\n, then is equal to",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_64.webp",
+      "sourcePage": 9,
+      "yTop": 658.9904174804688,
+      "questionNumber": 64,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 26,
+      "pageIndex": 8,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Fifteen football players of a club-team are given 15 T-shirts with their names written on the\nbackside. If the players pick up the T-shirts randomly, then the probability that at least 3 players pick\nthe correct T-shirt is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "0.08"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_65.webp",
+      "sourcePage": 9,
+      "yTop": 559.2404174804688,
+      "questionNumber": 65,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 27,
+      "pageIndex": 8,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let the tangents at the points and on the circle ,\nintersect at the point . Then the radius of the circle, whose centre is and the line joining and\nis its tangent, is equal to :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_66.webp",
+      "sourcePage": 9,
+      "yTop": 455.74041748046875,
+      "questionNumber": 66,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 28,
+      "pageIndex": 8,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let be a function which\nsatisfies . then is equal to",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_67.webp",
+      "sourcePage": 9,
+      "yTop": 351.49041748046875,
+      "questionNumber": 67,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 29,
+      "pageIndex": 8,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let and be real numbers. Consider a 3 3 matrix A such that . If ,\nthen",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_68.webp",
+      "sourcePage": 9,
+      "yTop": 232.24041748046875,
+      "questionNumber": 68,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 30,
+      "pageIndex": 9,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "A light ray emits from the origin making an angle 30 with the positive -axis. After getting reflected\nby the line , if this ray intersects -axis at Q, then the abscissa of Q is :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_69.webp",
+      "sourcePage": 10,
+      "yTop": 762.4904174804688,
+      "questionNumber": 69,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 31,
+      "pageIndex": 9,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "For two non-zero complex numbers and , if and , then which of\nthe following are possible?\nA. and\nB. and\nC. and\nD. and\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "A and C"
+        },
+        {
+          "id": "B",
+          "textEn": "A and B"
+        },
+        {
+          "id": "C",
+          "textEn": "B and D"
+        },
+        {
+          "id": "D",
+          "textEn": "B and C"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "D"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "D",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_70.webp",
+      "sourcePage": 10,
+      "yTop": 639.4904174804688,
+      "questionNumber": 70,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 32,
+      "pageIndex": 9,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let be the solution of the differential equation . Then\nis equal to",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "0"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_71.webp",
+      "sourcePage": 10,
+      "yTop": 453.49041748046875,
+      "questionNumber": 71,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 33,
+      "pageIndex": 9,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let be the area of the region . Then\nis equal to",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_72.webp",
+      "sourcePage": 10,
+      "yTop": 360.49041748046875,
+      "questionNumber": 72,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 34,
+      "pageIndex": 9,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "The domain of is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_73.webp",
+      "sourcePage": 10,
+      "yTop": 268.24041748046875,
+      "questionNumber": 73,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 35,
+      "pageIndex": 10,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let be a function such that . Then",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "is many-one in"
+        },
+        {
+          "id": "B",
+          "textEn": "is one-one in"
+        },
+        {
+          "id": "C",
+          "textEn": "is one-one in but not in"
+        },
+        {
+          "id": "D",
+          "textEn": "is many-one in"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_74.webp",
+      "sourcePage": 11,
+      "yTop": 762.4904174804688,
+      "questionNumber": 74,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 36,
+      "pageIndex": 10,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let denote the greatest integer . Consider the function . Then the\nvalue of the integral is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_75.webp",
+      "sourcePage": 11,
+      "yTop": 632.7404174804688,
+      "questionNumber": 75,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 37,
+      "pageIndex": 10,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let and\n.\nThen the ratio of the area of A to the area of B is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "B"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "B",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_76.webp",
+      "sourcePage": 11,
+      "yTop": 530.7404174804688,
+      "questionNumber": 76,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 38,
+      "pageIndex": 10,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Consider the following system of equations\nfor some . Then which of the following is NOT correct.",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "It has a solution for all and"
+        },
+        {
+          "id": "B",
+          "textEn": "It has no solution if and"
+        },
+        {
+          "id": "C",
+          "textEn": "It has no solution for and for all"
+        },
+        {
+          "id": "D",
+          "textEn": "It has no solution for and for all"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_77.webp",
+      "sourcePage": 11,
+      "yTop": 399.49041748046875,
+      "questionNumber": 77,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 39,
+      "pageIndex": 10,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "If the vectors , and are coplanar and the\nprojection of on the vector is units, then the sum of all possible values of is equal to :",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "24"
+        },
+        {
+          "id": "B",
+          "textEn": "0"
+        },
+        {
+          "id": "C",
+          "textEn": "18"
+        },
+        {
+          "id": "D",
+          "textEn": "6\n\n.\nGET IT ON"
+        }
+      ],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_78.webp",
+      "sourcePage": 11,
+      "yTop": 192.49041748046875,
+      "questionNumber": 78,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 40,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "Let be a root of the equation and\nThen , where denotes greatest integer function, is",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "2"
+        },
+        {
+          "id": "B",
+          "textEn": "1"
+        },
+        {
+          "id": "C",
+          "textEn": "0"
+        },
+        {
+          "id": "D",
+          "textEn": "Option D (Refer to official question figure)"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "C"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "C",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_79.webp",
+      "sourcePage": 12,
+      "yTop": 762.4904174804688,
+      "questionNumber": 79,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 83,
+      "pageIndex": 21,
+      "subject": "Mathematics",
+      "questionType": "SINGLE_CHOICE",
+      "contentEn": "If and are three propositions, then which of the following combination of truth values of\nand makes the logical expression false?",
+      "options": [
+        {
+          "id": "A",
+          "textEn": "Option A (Refer to official question figure)"
+        },
+        {
+          "id": "B",
+          "textEn": "Option B (Refer to official question figure)"
+        },
+        {
+          "id": "C",
+          "textEn": "Option C (Refer to official question figure)"
+        },
+        {
+          "id": "D",
+          "textEn": "GET IT ON"
+        }
+      ],
+      "hadVisualOptions": true,
+      "correctAnswer": [
+        "A"
+      ],
+      "numericalAnswer": null,
+      "rawAnswerKey": "A",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_80.webp",
+      "sourcePage": 22,
+      "yTop": 227.74041748046875,
+      "questionNumber": 80,
+      "sectionName": "Mathematics - Section A",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 41,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Let be a of increasing positive numbers. If the product of fourth and sixth terms is\n9 and the sum of fifth and seventh terms is 24, then is equal to __________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "60"
+      ],
+      "numericalAnswer": 60.0,
+      "rawAnswerKey": "60",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_81.webp",
+      "sourcePage": 12,
+      "yTop": 645.4904174804688,
+      "questionNumber": 81,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 42,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Suppose is a function satisfying for all and . If\n, then is equal to __________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "10"
+      ],
+      "numericalAnswer": 10.0,
+      "rawAnswerKey": "10",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_82.webp",
+      "sourcePage": 12,
+      "yTop": 561.4904174804688,
+      "questionNumber": 82,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 43,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Let the coefficients of three consecutive terms in the binomial expansion of be in the ratio\n2 : 5 : 8. Then the coefficient of the term, which is in the middle of those three terms, is __________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "1120"
+      ],
+      "numericalAnswer": 1120.0,
+      "rawAnswerKey": "1120",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_83.webp",
+      "sourcePage": 12,
+      "yTop": 478.24041748046875,
+      "questionNumber": 83,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 44,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "If the co-efficient of in and the co-efficient of in are equal, then\nis equal to ___________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "1"
+      ],
+      "numericalAnswer": 1.0,
+      "rawAnswerKey": "1",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_84.webp",
+      "sourcePage": 12,
+      "yTop": 394.24041748046875,
+      "questionNumber": 84,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 45,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "If all the six digit numbers with are arranged in\nthe increasing order, then the sum of the digits in the number is _____________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "32"
+      ],
+      "numericalAnswer": 32.0,
+      "rawAnswerKey": "32",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_85.webp",
+      "sourcePage": 12,
+      "yTop": 310.99041748046875,
+      "questionNumber": 85,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 46,
+      "pageIndex": 11,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Let be a differentiable function that satisfies the relation\n. If , then is equal to ___________.\n\nGET IT ON",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "3"
+      ],
+      "numericalAnswer": 3.0,
+      "rawAnswerKey": "3",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_86.webp",
+      "sourcePage": 12,
+      "yTop": 226.99041748046875,
+      "questionNumber": 86,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 47,
+      "pageIndex": 12,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Five digit numbers are formed using the digits 1, 2, 3, 5, 7 with repetitions and are written in\ndescending order with serial numbers. For example, the number 77777 has serial number 1. Then\nthe serial number of 35337 is ____________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "1436"
+      ],
+      "numericalAnswer": 1436.0,
+      "rawAnswerKey": "1436",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_87.webp",
+      "sourcePage": 13,
+      "yTop": 762.4904174804688,
+      "questionNumber": 87,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 48,
+      "pageIndex": 12,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Let the co-ordinates of one vertex of be and the other two vertices lie on the line\n. For , if the area of is 21 sq. units and the line segment has\nlength units, then is equal to ___________. \nPhysics 25 questions",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "9"
+      ],
+      "numericalAnswer": 9.0,
+      "rawAnswerKey": "9",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_88.webp",
+      "sourcePage": 13,
+      "yTop": 679.2404174804688,
+      "questionNumber": 88,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 84,
+      "pageIndex": 22,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Let the equation of the plane P containing the line be and\nthe distance of the plane from the point (1, 27, 7) be . Then is equal to __________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "355"
+      ],
+      "numericalAnswer": 355.0,
+      "rawAnswerKey": "355",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_89.webp",
+      "sourcePage": 23,
+      "yTop": 762.4904174804688,
+      "questionNumber": 89,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    },
+    {
+      "originalQNum": 85,
+      "pageIndex": 22,
+      "subject": "Mathematics",
+      "questionType": "NUMERICAL",
+      "contentEn": "Let , and be three non-zero non-coplanar vectors. Let the position vectors of four points\nand be and respectively. If and are\ncoplanar, then is equal to __________.",
+      "options": [],
+      "hadVisualOptions": false,
+      "correctAnswer": [
+        "2"
+      ],
+      "numericalAnswer": 2.0,
+      "rawAnswerKey": "2",
+      "verificationStatus": "VERIFIED",
+      "diagramUrl": "/pyq-crops/JEE_MAIN_2023_01_29_SHIFT_1/q_seq_90.webp",
+      "sourcePage": 23,
+      "yTop": 679.2404174804688,
+      "questionNumber": 90,
+      "sectionName": "Mathematics - Section B",
+      "marks": 4,
+      "negativeMarks": 1
+    }
+  ]
+}

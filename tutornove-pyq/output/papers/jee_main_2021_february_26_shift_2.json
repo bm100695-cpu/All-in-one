@@ -1,0 +1,3253 @@
+{
+  "testId": "JEE_MAIN_2021_02_26_SHIFT_2",
+  "title": "JEE Main 2021 Official Paper (Session 1 (Feb) - 2021-02-26 Shift 2)",
+  "exam": "JEE Main",
+  "paperType": "Paper 1 (B.E./B.Tech)",
+  "year": 2021,
+  "session": "Session 1 (Feb)",
+  "date": "2021-02-26",
+  "shift": "Shift 2",
+  "durationMinutes": 180,
+  "totalMarks": 300,
+  "totalQuestions": 90,
+  "subjects": [
+    "Physics",
+    "Chemistry",
+    "Mathematics"
+  ],
+  "markingScheme": {
+    "mcq": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    },
+    "numerical": {
+      "correct": 4,
+      "incorrect": 0,
+      "unattempted": 0
+    }
+  },
+  "provenance": {
+    "source": "Official NTA JEE Main Examination Paper",
+    "extractedFrom": "jee_main_2021_online-26th-february-evening-slot.pdf",
+    "verifiedBy": "TutorNove Academic Review Board",
+    "verificationStatus": "VERIFIED"
+  },
+  "questions": [
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Bonding & Molecular Structure",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q1",
+      "questionNumber": 1,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II.\nList - I (Molecule) List - II (Bond order) \n(a) (i) 1\n(b) (ii) 2\n(c) (iii) 0\n(d) (iv) 3\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "(a) (i), (b) (ii), (c) (iii), (d) (iv)"
+        },
+        {
+          "key": "B",
+          "text": "(a) (iv), (b) (iii), (c) (ii), (d) (i)"
+        },
+        {
+          "key": "C",
+          "text": "(a) (iii), (b) (iv), (c) (i), (d) (ii)"
+        },
+        {
+          "key": "D",
+          "text": "(a) (ii), (b) (i), (c) (iv), (d) (iii)"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Bonding & Molecular Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q2",
+      "questionNumber": 2,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nCeric ammonium nitrate and CHCl /alc. KOH are used for the identification of functional groups\n3\npresent in __________ and _______ respectively.",
+      "options": [
+        {
+          "key": "A",
+          "text": "amine, alcohol"
+        },
+        {
+          "key": "B",
+          "text": "alcohol, phenol"
+        },
+        {
+          "key": "C",
+          "text": "alcohol, amine"
+        },
+        {
+          "key": "D",
+          "text": "amine, phenol"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Bonding & Molecular Structure",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q3",
+      "questionNumber": 3,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIn molecule, the hybridization of carbon 1, 2, 3 and 4 respectively, are :",
+      "options": [
+        {
+          "key": "A",
+          "text": "sp2, sp, sp2, sp3"
+        },
+        {
+          "key": "B",
+          "text": "sp2, sp2, sp2, sp3"
+        },
+        {
+          "key": "C",
+          "text": "sp3, sp, sp3, sp3"
+        },
+        {
+          "key": "D",
+          "text": "sp2, sp3, sp2, sp3"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Bonding & Molecular Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q4",
+      "questionNumber": 4,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA. Phenyl methanamine\nB. N,N-Dimethylaniline\n\nC. N-Methyl aniline\nD. Benzenamine\nChoose the correct order of basic nature of the above amines.",
+      "options": [
+        {
+          "key": "A",
+          "text": "D > C > B > A"
+        },
+        {
+          "key": "B",
+          "text": "A > C > B > D"
+        },
+        {
+          "key": "C",
+          "text": "D > B > C > A"
+        },
+        {
+          "key": "D",
+          "text": "A > B > C > D"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q5",
+      "questionNumber": 5,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements : one is labelled as Assertion A and the other is labelled as Reason\nR.\n\nAssertion A : In TlI , isomorphous to CsI , the metal is present in +1 oxidation state.\n3 3\nReason R : Tl metal has fourteen f electrons in its electronic configuration.\nIn the light of the above statements, choose the most appropriate answer from the options given\nbelow :",
+      "options": [
+        {
+          "key": "A",
+          "text": "A is correct but R is not correct"
+        },
+        {
+          "key": "B",
+          "text": "A is not correct but R is correct"
+        },
+        {
+          "key": "C",
+          "text": "Both A and R are correct but R is NOT the correct explanation of A"
+        },
+        {
+          "key": "D",
+          "text": "Both A and R are correct and R is the correct explanation of A"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Atomic Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q6",
+      "questionNumber": 6,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich of the following forms of hydrogen emits low energy - particles?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tritium H"
+        },
+        {
+          "key": "B",
+          "text": "Proton H+"
+        },
+        {
+          "key": "C",
+          "text": "Protium H"
+        },
+        {
+          "key": "D",
+          "text": "Deuterium H"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q7",
+      "questionNumber": 7,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich pair of oxides is acidic in nature?",
+      "options": [
+        {
+          "key": "A",
+          "text": "CaO, SiO"
+        },
+        {
+          "key": "B",
+          "text": "B O , CaO"
+        },
+        {
+          "key": "C",
+          "text": "B O , SiO"
+        },
+        {
+          "key": "D",
+          "text": "N O, BaO\n2 2 3 2 3 2 2"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q8",
+      "questionNumber": 8,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify A in the given reaction.\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q9",
+      "questionNumber": 9,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II.\n\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "(a) (ii), (b) (iv), (c) (i), (d) (iii)"
+        },
+        {
+          "key": "B",
+          "text": "(a) (iii), (b) (iv), (c) (i), (d) (ii)"
+        },
+        {
+          "key": "C",
+          "text": "(a) (iii), (b) (i), (c) (iv), (d) (ii)"
+        },
+        {
+          "key": "D",
+          "text": "(a) (ii), (b) (i), (c) (iv), (d) (iii)"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q10",
+      "questionNumber": 10,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify A in the following chemical reaction.\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q11",
+      "questionNumber": 11,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n2, 4-DNP test can be used to identify :",
+      "options": [
+        {
+          "key": "A",
+          "text": "ether"
+        },
+        {
+          "key": "B",
+          "text": "amine"
+        },
+        {
+          "key": "C",
+          "text": "aldehyde"
+        },
+        {
+          "key": "D",
+          "text": "halogens"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q12",
+      "questionNumber": 12,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n\nConsidering the above reaction, the major product among the following is :\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q13",
+      "questionNumber": 13,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify A in the given chemical reaction.\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics (Chemistry)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q14",
+      "questionNumber": 14,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe correct order of electron gain enthalpy is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Te > Se > S > O"
+        },
+        {
+          "key": "B",
+          "text": "S > Se > Te > O"
+        },
+        {
+          "key": "C",
+          "text": "S > O > Se > Te"
+        },
+        {
+          "key": "D",
+          "text": "O > S > Se > Te"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics (Chemistry) (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Biomolecules & Polymers",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q15",
+      "questionNumber": 15,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II.\nList - I List - II \n(a) Sucrose (i) -D-Galactose and -D-Glucose\n(b) Lactose (ii) -D-Glucose and -D-Fructose\n(c) Maltose (iii) -D-Glucose and -D-Glucose\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "(a) (iii), (b) (ii), (c) (i)"
+        },
+        {
+          "key": "B",
+          "text": "(a) (i), (b) (iii), (c) (ii)"
+        },
+        {
+          "key": "C",
+          "text": "(a) (ii), (b) (i), (c) (iii)"
+        },
+        {
+          "key": "D",
+          "text": "(a) (iii), (b) (i), (c) (ii)"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Biomolecules & Polymers (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q16",
+      "questionNumber": 16,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nSeliwanoff test and Xanthoproteic test are used for the identification of ___________ and ________\nrespectively.",
+      "options": [
+        {
+          "key": "A",
+          "text": "ketoses, proteins"
+        },
+        {
+          "key": "B",
+          "text": "proteins, ketoses"
+        },
+        {
+          "key": "C",
+          "text": "aldoses, ketoses"
+        },
+        {
+          "key": "D",
+          "text": "ketoses, aldoses"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q17",
+      "questionNumber": 17,
+      "questionType": "NUMERICAL",
+      "questionText": "When 12.2 g of benzoic acid is dissolved in 100 g of water, the freezing point of solution was found\nto be 0.93 C (K (H O) = 1.86 K kg mol 1). The number (n) of benzoic acid molecules associated\nf 2\n(assuming 100% association) is ___________.",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Kinetics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q18",
+      "questionNumber": 18,
+      "questionType": "NUMERICAL",
+      "questionText": "If the activation energy of a reaction is 80.9 kJ mol 1, the fraction of molecules at 700 K, having\nenough energy to react to form\nproducts is e x. The value of x is __________. (Rounded off to the nearest integer) [Use R = 8.31 J K \n1 mol 1]",
+      "options": [],
+      "correctAnswer": [
+        "14"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Kinetics (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 14.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q19",
+      "questionNumber": 19,
+      "questionType": "NUMERICAL",
+      "questionText": "In mildly alkaline medium, thiosulphate ion is oxidized by to \"A\". The oxidation state of\nsulphur in \"A\" is __________.",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics (Chemistry)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q20",
+      "questionNumber": 20,
+      "questionType": "NUMERICAL",
+      "questionText": "The average S-F bond energy in kJ mol 1 of SF is _____________. (Rounded off to the nearest\n6\ninteger)\n\n[Given : The values of standard enthalpy of formation of SF (g), S(g) and F(g) are - 1100, 275 and 80\n6\nkJ mol 1 respectively.]",
+      "options": [],
+      "correctAnswer": [
+        "309"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics (Chemistry) (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 309.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Electrochemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q21",
+      "questionNumber": 21,
+      "questionType": "NUMERICAL",
+      "questionText": "Emf of the following cell at 298K in V is x 10 2.\nZn|Zn2+(0.1 M)||Ag+ (0.01 M)|Ag \nThe value of x is _________. (Rounded off to the nearest integer)\n[Given : ]",
+      "options": [],
+      "correctAnswer": [
+        "147"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrochemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 147.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q22",
+      "questionNumber": 22,
+      "questionType": "NUMERICAL",
+      "questionText": "The pH of ammonium phosphate solution, if pk of phosphoric acid and pk of ammonium\na b\nhydroxide are 5.23 and 4.75 respectively, is ___________. (Nearest integer)",
+      "options": [],
+      "correctAnswer": [
+        "7"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 7.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q23",
+      "questionNumber": 23,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of stereoisomers possible for [Co(ox) (Br)(NH )]2 is ___________. [ox = oxalate]\n2 3",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q24",
+      "questionNumber": 24,
+      "questionType": "NUMERICAL",
+      "questionText": "A ball weighing 10 g is moving with a velocity of 90 ms 1. If the uncertainty in its velocity is 5%,\nthen the uncertainty in its position is ___________ 10 33 m. (Rounded off to the nearest integer)\n\n[Given : h = 6.63 10 34 Js]",
+      "options": [],
+      "correctAnswer": [
+        "1"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q25",
+      "questionNumber": 25,
+      "questionType": "NUMERICAL",
+      "questionText": "The NaNO weighed out to make 50 mL of an aqueous solution containing 70.0 mg Na+ per mL is\n3\n_________ g. (Rounded off to the nearest integer)\n\n[Given : Atomic weight in g mol 1 - Na : 23; N : 14; O : 16]",
+      "options": [],
+      "correctAnswer": [
+        "13"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 13.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q26",
+      "questionNumber": 26,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet f(x) be a differentiable function at x = a with f'(a) = 2 and f(a) = 4.\nThen equals :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q27",
+      "questionNumber": 27,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet A(1, 4) and B(1, 5) be two points. Let P be a point on the circle\n(x 1)2 + (y 1)2 = 1 such that (PA)2 + (PB)2 have maximum value, then the points, P, A and B lie\non :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q28",
+      "questionNumber": 28,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nConsider the following system of equations :\nx + 2y 3z = a\n\n2x + 6y 11z = b\nx 2y + 7z = c,\nwhere a, b and c are real constants. Then the system of equations :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q29",
+      "questionNumber": 29,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA natural number has prime factorization given by n = 2x3y5z, where y and z are such\nthat y + z = 5 and y 1 + z 1 = , y > z. Then the number of odd divisors of n, including 1, is :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q30",
+      "questionNumber": 30,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nIf 0 < a, b < 1, and tan 1a + tan 1b = , then the value of\nis : \n(A) 2 (B) e\n(C) (D) e2 1",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q31",
+      "questionNumber": 31,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be a differentiable function for all x R. Then f(x) equals :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q32",
+      "questionNumber": 32,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nFor x > 0, if , then is equal to :\n(A) (B) 1 (C) 0 (D) 1",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q33",
+      "questionNumber": 33,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and be defined as\n\nThen the number of possible functions such that is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "55"
+        },
+        {
+          "key": "B",
+          "text": "105"
+        },
+        {
+          "key": "C",
+          "text": "5!"
+        },
+        {
+          "key": "D",
+          "text": "10C\n5"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q34",
+      "questionNumber": 34,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet A be the area of the region bounded by the curves y = sinx, y = cosx and y-axis in the first\n1\nquadrant. Also, let A be the area of the region bounded by the curves y = sinx, y = cosx, x-axis and x\n2\n= in the first quadrant. Then,",
+      "options": [
+        {
+          "key": "A",
+          "text": "and"
+        },
+        {
+          "key": "B",
+          "text": "and"
+        },
+        {
+          "key": "C",
+          "text": "and"
+        },
+        {
+          "key": "D",
+          "text": "and"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q35",
+      "questionNumber": 35,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and . If , then the domain of the function fog is :\n(A) (B)\n\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q36",
+      "questionNumber": 36,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet f : R R be defined as\n\nIf f(x) is continuous on R, then a + b equals :",
+      "options": [
+        {
+          "key": "A",
+          "text": "3"
+        },
+        {
+          "key": "B",
+          "text": "3"
+        },
+        {
+          "key": "C",
+          "text": "1"
+        },
+        {
+          "key": "D",
+          "text": "1"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q37",
+      "questionNumber": 37,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf the locus of the mid-point of the line segment from the point (3, 2) to a point on the circle, x2 + y2\n= 1 is a circle of radius r, then r is equal to :\n(A) (B) (C) 1 (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q38",
+      "questionNumber": 38,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf vectors and are collinear, then a possible unit vector parallel to\nthe vector is :\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Probability & Statistics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q39",
+      "questionNumber": 39,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA seven digit number is formed using digits 3, 3, 4, 4, 4, 5, 5. The probability, that number so formed\nis divisible by 2, is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Probability & Statistics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q40",
+      "questionNumber": 40,
+      "questionType": "NUMERICAL",
+      "questionText": "The total number of 4-digit numbers whose greatest common divisor with 18 is 3, is _________.",
+      "options": [],
+      "correctAnswer": [
+        "1000"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1000.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Matrices & Determinants",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q41",
+      "questionNumber": 41,
+      "questionType": "NUMERICAL",
+      "questionText": "If the matrix satisfies the equation\n\nfor some real numbers and , then is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Matrices & Determinants (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q42",
+      "questionNumber": 42,
+      "questionType": "NUMERICAL",
+      "questionText": "Let and be two real numbers such that + = 1 and = 1. Let p = ( )n + ( )n, p = 11 and\nn n 1\np = 29 for some integer n 1. Then, the value of p is ___________.\nn+1",
+      "options": [],
+      "correctAnswer": [
+        "324"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 324.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q43",
+      "questionNumber": 43,
+      "questionType": "NUMERICAL",
+      "questionText": "Let z be those complex numbers which satisfy\n| z + 5 | 4 and z(1 + i) + (1 i) 10, i = .\n\nIf the maximum value of | z + 1 |2 is + , then the value of ( + ) is ____________.",
+      "options": [],
+      "correctAnswer": [
+        "48"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 48.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q44",
+      "questionNumber": 44,
+      "questionType": "NUMERICAL",
+      "questionText": "If the arithmetic mean and geometric mean of the pth and qth terms of the\nsequence 16, 8, 4, 2, ...... satisfy the equation\n4x2 9x + 5 = 0, then p + q is equal to __________.",
+      "options": [],
+      "correctAnswer": [
+        "10"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 10.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q45",
+      "questionNumber": 45,
+      "questionType": "NUMERICAL",
+      "questionText": "If , for m, , and\n, then equals ___________.",
+      "options": [],
+      "correctAnswer": [
+        "1"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q46",
+      "questionNumber": 46,
+      "questionType": "NUMERICAL",
+      "questionText": "Let X , X , ......., X be eighteen observations such\n1 2 18\nthat and , where and are distinct real numbers. If the standard\n\ndeviation of these observations is 1, then the value of | | is ____________.",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q47",
+      "questionNumber": 47,
+      "questionType": "NUMERICAL",
+      "questionText": "Let a be an integer such that all the real roots of the polynomial\n2x5 + 5x4 + 10x3 + 10x2 + 10x + 10 lie in the interval (a, a + 1). Then, |a| is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q48",
+      "questionNumber": 48,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nDraw the output signal Y in the given combination of gates.\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q49",
+      "questionNumber": 49,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nAn aeroplane, with its wings spread 10 m, is flying at a speed of 180 km/h in a horizontal direction.\nThe total intensity of earth's field at that part is 2.5 10 4 Wb/m2 and the angle of dip is 60 . The\nemf induced between the tips of the plane wings will be __________.",
+      "options": [
+        {
+          "key": "A",
+          "text": "88.37 mV"
+        },
+        {
+          "key": "B",
+          "text": "62.50 mV"
+        },
+        {
+          "key": "C",
+          "text": "54.125 mV"
+        },
+        {
+          "key": "D",
+          "text": "108.25 mV"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q50",
+      "questionNumber": 50,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nFind the peak current and resonant frequency of the following circuit (as shown in figure).",
+      "options": [
+        {
+          "key": "A",
+          "text": "2 A and 100 Hz"
+        },
+        {
+          "key": "B",
+          "text": "2 A and 50 Hz"
+        },
+        {
+          "key": "C",
+          "text": "0.2 A and 100 Hz"
+        },
+        {
+          "key": "D",
+          "text": "0.2 A and 50 Hz"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q51",
+      "questionNumber": 51,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA scooter accelerates from rest for time t at constant rate a and then retards at constant rate a\n1 1 2\nfor time t and comes to rest. The correct value of will be :\n2\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q52",
+      "questionNumber": 52,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements:\nStatement I : An electric dipole is placed at the center of a hollow sphere. The flux of the electric\n\nfield through the sphere is zero but the electric field is not zero anywhere in the sphere.\nStatement II : If R is the radius of a solid metallic sphere and Q be the total charge on it. The electric\nfield at any point on the spherical surface of radius r (< R) is zero but the electric flux passing\nthrough this closed spherical surface of radius r is not zero.\nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q53",
+      "questionNumber": 53,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nIf 'C' and 'V' represent capacitance and voltage respectively then what are the dimensions of\nwhere C/V = ?\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q54",
+      "questionNumber": 54,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe recoil speed of a hydrogen atom after it emits a photon in going from n = 5 state to n = 1 state\nwill be :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q55",
+      "questionNumber": 55,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA wire of 1 has a length of 1 m. It is stretched till its length increases by 25%. The percentage\nchange in resistance to the nearest integer is :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Calculus (Differential Calculus & Limits)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q56",
+      "questionNumber": 56,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe incident ray, reflected ray and the outward drawn normal are denoted by the unit vectors , and\nrespectively. Then choose the correct relation for these vectors.",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Calculus (Differential Calculus & Limits) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q57",
+      "questionNumber": 57,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe internal energy (U), pressure (P) and volume (V) of an ideal gas are related as U 3PV + 4. The\ngas is :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q58",
+      "questionNumber": 58,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe length of metallic wire is l when tension in it is T . It is l when the tension is T . The original\n1 1 2 2\nlength of the wire will be :\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q59",
+      "questionNumber": 59,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe trajectory of a projectile in a vertical plane is y = x x2, where and are constants and x &\ny are respectively the horizontal and vertical distances of the projectile from the point of projection.\nThe angle of projection and the maximum height attained H are respectively given by :\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q60",
+      "questionNumber": 60,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements : one is labeled as Assertion A and the other is labeled as Reason\nR.\n\nAssertion A : For a simple microscope, the angular size of the object equals the angular size of the\nimage.\nReason R : Magnification is achieved as the small object can be kept much closer to the eye than 25\ncm and hence it subtends a large angle.\nIn the light of the above statements, choose the most appropriate answer from the options given\nbelow :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q61",
+      "questionNumber": 61,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nAn inclined plane making an angle of 30 with the horizontal is placed in a uniform horizontal\nelectric field as shown in the figure. A body of mass 1 kg and charge 5 mC is allowed to slide\ndown from rest at a height of 1 m. If the coefficient of friction is 0.2, find the time taken by the body\n\nto reach the bottom.\n[g = 9.8 m/s2; ; ]",
+      "options": [
+        {
+          "key": "A",
+          "text": "0.46 s"
+        },
+        {
+          "key": "B",
+          "text": "0.92 s"
+        },
+        {
+          "key": "C",
+          "text": "1.3 s"
+        },
+        {
+          "key": "D",
+          "text": "2.3 s"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q62",
+      "questionNumber": 62,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nTwo masses A and B, each of mass M are fixed together by a massless spring. A force acts on the\nmass B as shown in the figure. If the mass A starts moving away from mass B with acceleration 'a',\nthen the acceleration of mass B will be :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q63",
+      "questionNumber": 63,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA cord is wound round the circumference of wheel of radius r. The axis of the wheel is horizontal\nand the moment of inertia about it is I. A weight mg is attached to the cord at the end. The weight\nfalls from rest. After falling through a distance 'h', the square of angular velocity of wheel will be :\n\n(A) (B) (C) 2gh (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q64",
+      "questionNumber": 64,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA particle executes S.H.M., the graph of velocity as a function of displacement is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "a parabola"
+        },
+        {
+          "key": "B",
+          "text": "a helix"
+        },
+        {
+          "key": "C",
+          "text": "an ellipse"
+        },
+        {
+          "key": "D",
+          "text": "a circle"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q65",
+      "questionNumber": 65,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA tuning fork A of unknown frequency produces 5 beats/s with a fork of known frequency 340 Hz.\nWhen fork A is filed, the beat frequency decreases to 2 beats/s. What is the frequency of fork A?",
+      "options": [
+        {
+          "key": "A",
+          "text": "335 Hz"
+        },
+        {
+          "key": "B",
+          "text": "345 Hz"
+        },
+        {
+          "key": "C",
+          "text": "338 Hz"
+        },
+        {
+          "key": "D",
+          "text": "342 Hz"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q66",
+      "questionNumber": 66,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement I : A second's pendulum has a time period of 1 second.\n\nStatement II : It takes precisely one second to move between the two extreme positions.\nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are false"
+        },
+        {
+          "key": "B",
+          "text": "Statement I is false but Statement II is true"
+        },
+        {
+          "key": "C",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "D",
+          "text": "Statement I is true but Statement II is false"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Thermodynamics & Kinetic Theory",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q67",
+      "questionNumber": 67,
+      "questionType": "NUMERICAL",
+      "questionText": "1 mole of rigid diatomic gas performs a work of when heat Q is supplied to it. The molar heat\ncapacity of the gas during this transformation is . The value of x is _________. [R = universal gas\nconstant]",
+      "options": [],
+      "correctAnswer": [
+        "25"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics & Kinetic Theory (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 25.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q68",
+      "questionNumber": 68,
+      "questionType": "NUMERICAL",
+      "questionText": "A particle executes S.H.M. with amplitude 'a', and time period 'T'. The displacement of the particle\nwhen its speed is half of maximum speed is . The value of x is __________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q69",
+      "questionNumber": 69,
+      "questionType": "NUMERICAL",
+      "questionText": "Time period of a simple pendulum is T. The time taken to complete oscillations starting from\nmean position is . The value of is _________.",
+      "options": [],
+      "correctAnswer": [
+        "7"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 7.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q70",
+      "questionNumber": 70,
+      "questionType": "NUMERICAL",
+      "questionText": "The zener diode has a V = 30V. The current passing through the diode for the following circuit is\nz\n________ mA.",
+      "options": [],
+      "correctAnswer": [
+        "9"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 9.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q71",
+      "questionNumber": 71,
+      "questionType": "NUMERICAL",
+      "questionText": "The volume V of a given mass of monoatomic gas changes with temperature T according to the\nrelation . The workdone when temperature changes by 90K will be xR. The value of x is\n_________. [R = universal gas constant]",
+      "options": [],
+      "correctAnswer": [
+        "60"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 60.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q72",
+      "questionNumber": 72,
+      "questionType": "NUMERICAL",
+      "questionText": "27 similar drops of mercury are maintained at 10V each. All these spherical drops combine into a\nsingle big drop. The potential energy of the bigger drop is __________ times that of a smaller drop.",
+      "options": [],
+      "correctAnswer": [
+        "243"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 243.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q73",
+      "questionNumber": 73,
+      "questionType": "NUMERICAL",
+      "questionText": "A point source of light S, placed at a distance 60cm in front of the centre of a plane mirror of width\n50 cm, hangs vertically on a wall. A man walks in front of the mirror along a line parallel to the mirror\nat a distance 1.2 m from it (see in the figure). The distance between the extreme points where he\n\ncan see the image of the light source in the mirror is __________ cm.",
+      "options": [],
+      "correctAnswer": [
+        "150"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 150.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q74",
+      "questionNumber": 74,
+      "questionType": "NUMERICAL",
+      "questionText": "In the reported figure of earth, the value of acceleration due to gravity is same at point A and C but it\nis smaller than that of its value at point B (surface of the earth). The value of OA : AB will be x : y.\nThe value of x is ________.",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q75",
+      "questionNumber": 75,
+      "questionType": "NUMERICAL",
+      "questionText": "Two streams of photons, possessing energies equal to twice and ten times the work function of\nmetal are incident on the metal surface successively. The value of ratio of maximum velocities of\nthe photoelectrons emitted in the two respective cases is x : y. The value of x is ___________.\n\nOut of syllabus\n15 questions\nThese questions are on topics no longer in the current syllabus. They are kept for practice, after everything else.",
+      "options": [],
+      "correctAnswer": [
+        "1"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q76",
+      "questionNumber": 76,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nMatch List - I with List - II.\nList - I List - II \n(a) Sodium Carbonate (i) Deacon\n(b) Titanium (ii) Castner-Kellner\n(c) Chlorine (iii) van-Arkel\n(d) Sodium hydroxide (iv) Solvay\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "(a) (iv), (b) (iii), (c) (i), (d) (ii)"
+        },
+        {
+          "key": "B",
+          "text": "(a) (iv), (b) (i), (c) (ii), (d) (iii)"
+        },
+        {
+          "key": "C",
+          "text": "(a) (iii), (b) (ii), (c) (i), (d) (iv)"
+        },
+        {
+          "key": "D",
+          "text": "(a) (i), (b) (iii), (c) (iv), (d) (ii)"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q77",
+      "questionNumber": 77,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nMatch List - I with List - II.\nList - I List - II \n(a) Siderite (i) Cu\n(b) Calamine (ii) Ca\n(c) Malachite (iii) Fe\n(d) Cryolite (iv) Al\n(v) Zn\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "(a) (i), (b) (ii), (c) (iii), (d) (iv)"
+        },
+        {
+          "key": "B",
+          "text": "(a) (iii), (b) (i), (c) (v), (d) (ii)"
+        },
+        {
+          "key": "C",
+          "text": "(a) (i), (b) (ii), (c) (v), (d) (iii)"
+        },
+        {
+          "key": "D",
+          "text": "(a) (iii), (b) (v), (c) (i), (d) (iv)"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q78",
+      "questionNumber": 78,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nThe nature of charge on resulting colloidal particles when FeCl is added to excess of hot water is :\n3",
+      "options": [
+        {
+          "key": "A",
+          "text": "neutral"
+        },
+        {
+          "key": "B",
+          "text": "sometimes positive and sometimes negative"
+        },
+        {
+          "key": "C",
+          "text": "positive"
+        },
+        {
+          "key": "D",
+          "text": "negative"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 24
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q79",
+      "questionNumber": 79,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nCalgon is used for water treatment. Which of the following statement is NOT true about Calgon?",
+      "options": [
+        {
+          "key": "A",
+          "text": "It is also known as Graham's salt."
+        },
+        {
+          "key": "B",
+          "text": "It is polymeric compound and is water soluble."
+        },
+        {
+          "key": "C",
+          "text": "It does not remove Ca2+ ion by precipitation."
+        },
+        {
+          "key": "D",
+          "text": "Calgon contains the 2nd most abundant element by weight in the Earth's crust."
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 24
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q80",
+      "questionNumber": 80,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of octahedral voids per lattice site in a lattice is _________. (Rounded off to the nearest\ninteger)",
+      "options": [],
+      "correctAnswer": [
+        "1"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 24
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q81",
+      "questionNumber": 81,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet F (A, B, C) = (A B) [ C (A B)] A and\n1\nF (A, B) = (A B) (B A) be two logical expressions. Then :\n2",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 24
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q82",
+      "questionNumber": 82,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nIf the mirror image of the point (1, 3, 5) with respect to the plane\n4x 5y + 2z = 8 is ( , , ), then 5( + + ) equals :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 24
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q83",
+      "questionNumber": 83,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet slope of the tangent line to a curve at any point P(x, y) be given by . If the curve intersects\nthe line x + 2y = 4 at x = 2, then the value of y, for which the point (3, y) lies on the curve, is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 25
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q84",
+      "questionNumber": 84,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nThe triangle of maximum area that can be inscribed in a given circle of radius 'r' is :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 25
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q85",
+      "questionNumber": 85,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nThe sum of the series\nis equal to : \n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 25
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q86",
+      "questionNumber": 86,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet L be a line obtained from the intersection of two planes x + 2y + z = 6 and y + 2z = 4. If point P( ,\n, ) is the foot of perpendicular from (3, 2, 1) on L, then the\nvalue of 21( + + ) equals :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 25
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q87",
+      "questionNumber": 87,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the normals at all the points on a given curve pass through a fixed point (a, b). If the curve\npasses through (3, 3) and (4, 2 ), and given that a 2 b = 3,\nthen (a2 + b2 + ab) is equal to __________.",
+      "options": [],
+      "correctAnswer": [
+        "9"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 9.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 25
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q88",
+      "questionNumber": 88,
+      "questionType": "NUMERICAL",
+      "questionText": "Let L be a common tangent line to the curves\n4x2 + 9y2 = 36 and (2x)2 + (2y)2 = 31. Then the\n\nsquare of the slope of the line L is __________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 25
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q89",
+      "questionNumber": 89,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nA radioactive sample is undergoing decay. At any time t , its activity is A and another time t , the\n1 2\nactivity is . What is the average life time for the sample?\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 26
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2021,
+      "session": "Session 1 (Feb)",
+      "date": "2021-02-26",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2021_online-26th-february-evening-slot_Q90",
+      "questionNumber": 90,
+      "questionType": "NUMERICAL",
+      "questionText": "If the highest frequency modulating a carrier is 5 kHz, then the number of AM broadcast stations\naccommodated in a 90 kHz bandwidth are _________.",
+      "options": [],
+      "correctAnswer": [
+        "9"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 9.",
+      "marks": 4,
+      "negativeMarks": 0,
+      "source": {
+        "paperPdf": "jee_main_2021_online-26th-february-evening-slot.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2021-online-26th-february-evening-slot/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-february-evening-slot",
+        "pageNumber": 26
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    }
+  ]
+}

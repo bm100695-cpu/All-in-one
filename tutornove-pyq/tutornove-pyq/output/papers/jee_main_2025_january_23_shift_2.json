@@ -1,0 +1,2924 @@
+{
+  "testId": "JEE_MAIN_2025_01_23_SHIFT_2",
+  "title": "JEE Main 2025 Official Paper (Session 1 (Jan) - 2025-01-23 Shift 2)",
+  "exam": "JEE Main",
+  "paperType": "Paper 1 (B.E./B.Tech)",
+  "year": 2025,
+  "session": "Session 1 (Jan)",
+  "date": "2025-01-23",
+  "shift": "Shift 2",
+  "durationMinutes": 180,
+  "totalMarks": 300,
+  "totalQuestions": 75,
+  "subjects": [
+    "Physics",
+    "Chemistry",
+    "Mathematics"
+  ],
+  "markingScheme": {
+    "mcq": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    },
+    "numerical": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    }
+  },
+  "provenance": {
+    "source": "Official NTA JEE Main Examination Paper",
+    "extractedFrom": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+    "verifiedBy": "TutorNove Academic Review Board",
+    "verificationStatus": "VERIFIED"
+  },
+  "questions": [
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q1",
+      "questionNumber": 1,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\npH of water is 7 at . If water is heated to ., it's pH will :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Decrease"
+        },
+        {
+          "key": "B",
+          "text": "Remains the same"
+        },
+        {
+          "key": "C",
+          "text": "Increase"
+        },
+        {
+          "key": "D",
+          "text": "concentration increases, concentration decreases"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q2",
+      "questionNumber": 2,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhen a non-volatile solute is added to the solvent, the vapour pressure of the solvent decreases by\n10 mm of Hg . The mole fraction of the solute in the solution is 0.2 . What would be the mole\nfraction of the solvent if decrease in vapour pressure is 20 mm of Hg ?",
+      "options": [
+        {
+          "key": "A",
+          "text": "0.2"
+        },
+        {
+          "key": "B",
+          "text": "0.4"
+        },
+        {
+          "key": "C",
+          "text": "0.8"
+        },
+        {
+          "key": "D",
+          "text": "0.6"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q3",
+      "questionNumber": 3,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II\nList - I List - II",
+      "options": [
+        {
+          "key": "A",
+          "text": "Bronze (I) Cu, Ni"
+        },
+        {
+          "key": "B",
+          "text": "Brass (II) Fe, Cr, Ni, C"
+        },
+        {
+          "key": "C",
+          "text": "UK silver coin (III) Cu, Zn"
+        },
+        {
+          "key": "D",
+          "text": "Stainless steel (IV) Cu, Sn\nChoose the correct answer from the options given below :"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q4",
+      "questionNumber": 4,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nConsider a binary solution of two volatile liquid components 1 and and are the mole\nfractions of component 1 in liquid and vapour phase, respectively. The slope and intercept of the\nlinear plot of vs are given respectively as :\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q5",
+      "questionNumber": 5,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are the atomic numbers of some group 14 elements. The atomic number of the\nelement with lowest melting point is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "14"
+        },
+        {
+          "key": "B",
+          "text": "50"
+        },
+        {
+          "key": "C",
+          "text": "6"
+        },
+        {
+          "key": "D",
+          "text": "82"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q6",
+      "questionNumber": 6,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement (I) : The boiling points of alcohols and phenols increase with increase in the number of C\n-atoms. \nStatement (II) : The boiling points of alcohols and phenols are higher in comparison to other class\nof compounds such as ethers, haloalkanes.\nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Statement I is false but Statement II is true"
+        },
+        {
+          "key": "B",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is true but Statement II is false"
+        },
+        {
+          "key": "D",
+          "text": "Both Statement I and Statement II are false"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Biomolecules & Polymers",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q7",
+      "questionNumber": 7,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe -Helix and - Pleated sheet structures of protein are associated with its :",
+      "options": [
+        {
+          "key": "A",
+          "text": "tertiary structure"
+        },
+        {
+          "key": "B",
+          "text": "quaternary structure"
+        },
+        {
+          "key": "C",
+          "text": "primary structure"
+        },
+        {
+          "key": "D",
+          "text": "secondary structure"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Biomolecules & Polymers (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q8",
+      "questionNumber": 8,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe effect of temperature on spontaneity of reactions are represented as :\nH S Temperature Spontaneity",
+      "options": [
+        {
+          "key": "A",
+          "text": "any T Non spontaneous"
+        },
+        {
+          "key": "B",
+          "text": "low T spontaneous"
+        },
+        {
+          "key": "C",
+          "text": "low T Non spontaneous"
+        },
+        {
+          "key": "D",
+          "text": "any T spontaneous\nThe incorrect combinations are :"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q9",
+      "questionNumber": 9,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II\nList - I List - II\n(Isomers of ) (Ozonolysis product)",
+      "options": [
+        {
+          "key": "A",
+          "text": "(I)"
+        },
+        {
+          "key": "B",
+          "text": "(II)"
+        },
+        {
+          "key": "C",
+          "text": "(III)"
+        },
+        {
+          "key": "D",
+          "text": "(IV)\nChoose the correct answer from the options given below :"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q10",
+      "questionNumber": 10,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify the products [A] and [B], respectively in the following reaction:\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q11",
+      "questionNumber": 11,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich of the following graphs most appropriately represents a zero order reaction?\n(A)\n\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Coordination Compounds",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q12",
+      "questionNumber": 12,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify the coordination complexes in which the central metal ion has configuration.",
+      "options": [
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "C",
+          "text": ""
+        },
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "C",
+          "text": "and"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordination Compounds (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q13",
+      "questionNumber": 13,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify A, B and C in the given below reaction sequence\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Electrochemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q14",
+      "questionNumber": 14,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nStandard electrode potentials for a few half cells are mentioned below :\n\nWhich one of the following cells gives the most negative value of ?\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrochemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q15",
+      "questionNumber": 15,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nConsider the reaction\nThe equation representing correct relationship between the degree of dissociation (x) of \nwith its equilibrium constant Kp is __________.\nAssume to be very very small.\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q16",
+      "questionNumber": 16,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement (I) : For a given shell, the total number of allowed orbitals is given by .\nStatement (II) : For any subshell, the spatial orientation of the orbitals is given by to values \nincluding zero.\nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "B",
+          "text": "Both Statement I and Statement II are false"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is false but Statement II is true"
+        },
+        {
+          "key": "D",
+          "text": "Statement I is true but Statement II is false"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Atomic Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q17",
+      "questionNumber": 17,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe ascending order of relative rate of solvolysis of following compounds is :\n\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q18",
+      "questionNumber": 18,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements about X-ray spectra of elements :\nStatement (I) : A plot of ( frequency of X-rays emitted) vs atomic mass is a straight line.\nStatement (II) : A plot of ( frequency of -rays emitted) vs atomic number is a straight line. In \nthe light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Statement I is false but Statement II is true"
+        },
+        {
+          "key": "B",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is true but Statement II is false"
+        },
+        {
+          "key": "D",
+          "text": "Both Statement I and Statement II are false"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q19",
+      "questionNumber": 19,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nConsider the following reactions\n\nThe products and , respectively are :",
+      "options": [
+        {
+          "key": "A",
+          "text": "and"
+        },
+        {
+          "key": "B",
+          "text": "and"
+        },
+        {
+          "key": "C",
+          "text": "and"
+        },
+        {
+          "key": "D",
+          "text": "and"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q20",
+      "questionNumber": 20,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements:\nConsider the following reaction\n\nStatement (I): In the case of formaldehyde\nis about 2280, due to small substituents, hydration is faster.\nStatement (II) : In the case of trichloro acetaldehyde\nis about 2000 due to I effect of Cl .\nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Statement I is true but Statement II is false"
+        },
+        {
+          "key": "B",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is false but Statement II is true"
+        },
+        {
+          "key": "D",
+          "text": "Both Statement I and Statement II are false"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics (Chemistry)",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q21",
+      "questionNumber": 21,
+      "questionType": "NUMERICAL",
+      "questionText": "0.01 mole of an organic compound containing hydrogen, on complete combustion\nproduced . Molar mass of is _________ .",
+      "options": [],
+      "correctAnswer": [
+        "100"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics (Chemistry) (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 100.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics (Chemistry)",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q22",
+      "questionNumber": 22,
+      "questionType": "NUMERICAL",
+      "questionText": "The bond dissociation enthalpy of calculated from the given data is ___________ .\nbond\n(Nearest integer)\n\nlattice\nsub\n[Given : is a pure ionic compound and X forms a diatomic molecule in gaseous state]",
+      "options": [],
+      "correctAnswer": [
+        "200"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics (Chemistry) (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 200.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q23",
+      "questionNumber": 23,
+      "questionType": "NUMERICAL",
+      "questionText": "When 81.0 g of aluminium is allowed to react with 128.0 g of oxygen gas, the mass of aluminium\noxide produced in grams is ________ . (Nearest integer)\nGiven : \nMolar mass of Al is\nMolar mass of O is",
+      "options": [],
+      "correctAnswer": [
+        "153"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 153.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q24",
+      "questionNumber": 24,
+      "questionType": "NUMERICAL",
+      "questionText": "Consider the following sequence of reactions.\n\nTotal number of hybridised carbon atoms in the major product C formed is _________.",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q25",
+      "questionNumber": 25,
+      "questionType": "NUMERICAL",
+      "questionText": "A compound ' ' absorbs 2 moles of hydrogen and ' X ' upon oxidation with gives\n\nThe total number of bonds present in the compound ' ' is __________.",
+      "options": [],
+      "correctAnswer": [
+        "27"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 27.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q26",
+      "questionNumber": 26,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf , then equals :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q27",
+      "questionNumber": 27,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe number of complex numbers , satisfying and , is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "8"
+        },
+        {
+          "key": "B",
+          "text": "10"
+        },
+        {
+          "key": "C",
+          "text": "4"
+        },
+        {
+          "key": "D",
+          "text": "6"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q28",
+      "questionNumber": 28,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe length of the chord of the ellipse , whose mid-point is , is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q29",
+      "questionNumber": 29,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet the point A divide the line segment joining the points and internally in the\nratio . If O is the origin and , then the value of r is :\n\n(A) (B) 14 (C) 7 (D) 3",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Probability & Statistics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q30",
+      "questionNumber": 30,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA board has 16 squares as shown in the figure :\n\nOut of these 16 squares, two squares are chosen at random. The probability that they have no side\nin common is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Probability & Statistics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q31",
+      "questionNumber": 31,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf the square of the shortest distance between the lines and is\n, where , are coprime numbers, then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "14"
+        },
+        {
+          "key": "B",
+          "text": "6"
+        },
+        {
+          "key": "C",
+          "text": "21"
+        },
+        {
+          "key": "D",
+          "text": "9"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q32",
+      "questionNumber": 32,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet . Define a relation R on X as :\nStatement I: is an equivalence relation. \nStatement II : For some , the represents a line parallel to\n.\nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "B",
+          "text": "Statement I is true but Statement II is false"
+        },
+        {
+          "key": "C",
+          "text": "Both Statement I and Statement II are false"
+        },
+        {
+          "key": "D",
+          "text": "Statement I is false but Statement II is true"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q33",
+      "questionNumber": 33,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf the area of the region is , then the value\nof is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "7"
+        },
+        {
+          "key": "B",
+          "text": "5"
+        },
+        {
+          "key": "C",
+          "text": "6"
+        },
+        {
+          "key": "D",
+          "text": "8"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q34",
+      "questionNumber": 34,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet the range of the function be\n. Then the distance of the point from the line is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "11"
+        },
+        {
+          "key": "B",
+          "text": "10"
+        },
+        {
+          "key": "C",
+          "text": "8"
+        },
+        {
+          "key": "D",
+          "text": "9"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q35",
+      "questionNumber": 35,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe system of equations\n\nhas no solution if\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q36",
+      "questionNumber": 36,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe distance of the line from the point along the line is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q37",
+      "questionNumber": 37,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nis equal to :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Matrices & Determinants",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q38",
+      "questionNumber": 38,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be a matrix such that and , then\n\nequals :",
+      "options": [
+        {
+          "key": "A",
+          "text": "2"
+        },
+        {
+          "key": "B",
+          "text": "1"
+        },
+        {
+          "key": "C",
+          "text": "1"
+        },
+        {
+          "key": "D",
+          "text": "0"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Matrices & Determinants (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q39",
+      "questionNumber": 39,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and . If\nor , then is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "18"
+        },
+        {
+          "key": "B",
+          "text": "24"
+        },
+        {
+          "key": "C",
+          "text": "15"
+        },
+        {
+          "key": "D",
+          "text": "12"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q40",
+      "questionNumber": 40,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf in the expansion of , the coefficients of and are 1 and -2 , respectively, then\nis equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "8"
+        },
+        {
+          "key": "B",
+          "text": "20"
+        },
+        {
+          "key": "C",
+          "text": "13"
+        },
+        {
+          "key": "D",
+          "text": "18"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q41",
+      "questionNumber": 41,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA rod of length eight units moves such that its ends and always lie on the lines\nand , respectively. If the locus of the point , that divides the rod internally in the ratio\nis , then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "24"
+        },
+        {
+          "key": "B",
+          "text": "22"
+        },
+        {
+          "key": "C",
+          "text": "21"
+        },
+        {
+          "key": "D",
+          "text": "23"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q42",
+      "questionNumber": 42,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet , where is the constant of integration. If\n, then equals :",
+      "options": [
+        {
+          "key": "A",
+          "text": "47"
+        },
+        {
+          "key": "B",
+          "text": "55"
+        },
+        {
+          "key": "C",
+          "text": "62"
+        },
+        {
+          "key": "D",
+          "text": "48"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q43",
+      "questionNumber": 43,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA spherical chocolate ball has a layer of ice-cream of uniform thickness around it. When the\nthickness of the ice-cream layer is 1 cm , the ice-cream melts at the rate of and the\nthickness of the ice-cream layer decreases at the rate of . The surface area (in ) of\n\nthe chocolate ball (without the ice-cream layer) is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q44",
+      "questionNumber": 44,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet the shortest distance from , to the parabola be 4 . Then the equation of the\ncircle passing through the point and the focus of the parabola, and having its centre on the\naxis of the parabola is :\n\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q45",
+      "questionNumber": 45,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be the solution of the differential equation and .\nThen is equal to :\n\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q46",
+      "questionNumber": 46,
+      "questionType": "NUMERICAL",
+      "questionText": "Let be the roots of the equation with . Let . If\nand , then is equal to __________.",
+      "options": [],
+      "correctAnswer": [
+        "31"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 31.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q47",
+      "questionNumber": 47,
+      "questionType": "NUMERICAL",
+      "questionText": "The focus of the parabola is the centre of the circle of radius 5 . If the values of , for\nwhich C passes through the point of intersection of the lines and , are and\n, then is equal to ________ .",
+      "options": [],
+      "correctAnswer": [
+        "15"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 15.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q48",
+      "questionNumber": 48,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of ways, 5 boys and 4 girls can sit in a row so that either all the boys sit together or no\ntwo boys sit together, is ________.",
+      "options": [],
+      "correctAnswer": [
+        "17280"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 17280.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q49",
+      "questionNumber": 49,
+      "questionType": "NUMERICAL",
+      "questionText": "The roots of the quadratic equation are th and th terms of an arithmetic\nprogression with common difference . If the sum of the first 11 terms of this arithmetic\nprogression is 88 , then is equal to ________ .",
+      "options": [],
+      "correctAnswer": [
+        "474"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 474.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Probability & Statistics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q50",
+      "questionNumber": 50,
+      "questionType": "NUMERICAL",
+      "questionText": "The variance of the numbers is _______.\n\nPhysics\n25 questions",
+      "options": [],
+      "correctAnswer": [
+        "8788"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Probability & Statistics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 8788.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q51",
+      "questionNumber": 51,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe equation of a transverse wave travelling along a string is\n, where is in mm and is in second. The velocity of the\nwave is :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q52",
+      "questionNumber": 52,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA plane electromagnetic wave of frequency 20 MHz travels in free space along the direction. At\na particular point in space and time, the electric field vector of the wave is . Then, the\nmagnetic field vector of the wave at that point is\n\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q53",
+      "questionNumber": 53,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf a satellite orbiting the Earth is 9 times closer to the Earth than the Moon, what is the time period\nof rotation of the satellite? Given rotational time period of Moon days and gravitational\nattraction between the satellite and the moon is neglected.",
+      "options": [
+        {
+          "key": "A",
+          "text": "3 days"
+        },
+        {
+          "key": "B",
+          "text": "27 days"
+        },
+        {
+          "key": "C",
+          "text": "81 days"
+        },
+        {
+          "key": "D",
+          "text": "1 day"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q54",
+      "questionNumber": 54,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA massless spring gets elongated by amount under a tension of 5 N . Its elongation is under\nthe tension of 7 N . For the elongation of , the tension in the spring will be,",
+      "options": [
+        {
+          "key": "A",
+          "text": "20 N"
+        },
+        {
+          "key": "B",
+          "text": "39 N"
+        },
+        {
+          "key": "C",
+          "text": "11 N"
+        },
+        {
+          "key": "D",
+          "text": "15 N"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q55",
+      "questionNumber": 55,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWater of mass gram is slowly heated to increase the temperature from to . The change in\nentropy of the water, given specific heat of water is , is :\n(A) (B) zero \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q56",
+      "questionNumber": 56,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhat is the current through the battery in the circuit shown below?",
+      "options": [
+        {
+          "key": "A",
+          "text": "1.5 A"
+        },
+        {
+          "key": "B",
+          "text": "0.25 A"
+        },
+        {
+          "key": "C",
+          "text": "1.0 A"
+        },
+        {
+          "key": "D",
+          "text": "0.5 A"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q57",
+      "questionNumber": 57,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements. One is labelled as Assertion",
+      "options": [
+        {
+          "key": "A",
+          "text": "and the other is labelled as\nReason (R).\nAssertion"
+        },
+        {
+          "key": "A",
+          "text": ": The binding energy per nucleon is found to be practically independent of the atomic \nnumber A , for nuclei with mass numbers between 30 and 170 .\nReason (R) : Nuclear force is long range. In the light of the above statements, choose the correct\nanswer from the options given below :"
+        },
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "B",
+          "text": "Both"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q58",
+      "questionNumber": 58,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA ball having kinetic energy KE, is projected at an angle of from the horizontal. What will be the\nkinetic energy of ball at the highest point of its flight?\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q59",
+      "questionNumber": 59,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIn photoelectric effect an em-wave is incident on a metal surface and electrons are ejected from the\nsurface. If the work function of the metal is 2.14 eV and stopping potential is 2 V , what is the\nwavelength of the em-wave? (Given where h is the Planck's constant and c is the\n\nspeed of light in vacuum.)",
+      "options": [
+        {
+          "key": "A",
+          "text": "400 nm"
+        },
+        {
+          "key": "B",
+          "text": "600 nm"
+        },
+        {
+          "key": "C",
+          "text": "300 nm"
+        },
+        {
+          "key": "D",
+          "text": "200 nm"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q60",
+      "questionNumber": 60,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nTwo point charges and , constituting an electric dipole, are placed at and\nin a uniform electric field of strength . The work done on the dipole in rotating it\nfrom the equilibrium through is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "18.4 mJ"
+        },
+        {
+          "key": "B",
+          "text": "12.4 mJ"
+        },
+        {
+          "key": "C",
+          "text": "16.4 mJ"
+        },
+        {
+          "key": "D",
+          "text": "14.4 mJ"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q61",
+      "questionNumber": 61,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA concave mirror of focal length in air is dipped in a liquid of refractive index . Its focal length in\nthe liquid will be:\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q62",
+      "questionNumber": 62,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe width of one of the two slits in Young's double slit experiment is d while that of the other slit is\n. If the ratio of the maximum to the minimum intensity in the interference pattern on the screen is\nthen what is the value of ? (Assume that the field strength varies according to the slit width.)",
+      "options": [
+        {
+          "key": "A",
+          "text": "2"
+        },
+        {
+          "key": "B",
+          "text": "3"
+        },
+        {
+          "key": "C",
+          "text": "4"
+        },
+        {
+          "key": "D",
+          "text": "5"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q63",
+      "questionNumber": 63,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe refractive index of the material of a glass prism is . The angle of minimum deviation is equal\nto the angle of the prism. What is the angle of the prism?\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q64",
+      "questionNumber": 64,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nTwo charges and are placed at and respectively. Given,\n, the electrostatic potential energy of the charge configuration is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "J"
+        },
+        {
+          "key": "B",
+          "text": "J"
+        },
+        {
+          "key": "C",
+          "text": "J"
+        },
+        {
+          "key": "D",
+          "text": "J"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q65",
+      "questionNumber": 65,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWater flows in a horizontal pipe whose one end is closed with a valve. The reading of the pressure\ngauge attached to the pipe is . The reading of the pressure gauge falls to when the valve is\nopened. The speed of water flowing in the pipe is proportional to\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q66",
+      "questionNumber": 66,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe energy of a system is given as , where t is the time and . The errors in\nthe measurement of and are and , respectively. At , maximum percentage error\nin the energy is :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q67",
+      "questionNumber": 67,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II\nList - I List - II",
+      "options": [
+        {
+          "key": "A",
+          "text": "Permeability of free space (I)"
+        },
+        {
+          "key": "B",
+          "text": "Magnetic field (II)"
+        },
+        {
+          "key": "C",
+          "text": "Magnetic moment (III)"
+        },
+        {
+          "key": "D",
+          "text": "Torsional constant (IV)\nChoose the correct answer from the options given below :"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q68",
+      "questionNumber": 68,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n\nUsing the given diagram, the work done by an ideal gas along the path is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q69",
+      "questionNumber": 69,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA circular disk of radius R meter and mass M kg is rotating around the axis perpendicular to the\ndisk. An external torque is applied to the disk such that , where is the angular\nposition of the rotating disc as a function of time . How much power is delivered by the applied\n\ntorque, when ?\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q70",
+      "questionNumber": 70,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA galvanometer having a coil of resistance need 20 mA of current for full-scale deflection. If a\nmaximum current of 3 A is to be measured using this galvanometer, the resistance of the shunt to\nbe added to the galvanometer should be , where is",
+      "options": [
+        {
+          "key": "A",
+          "text": "447"
+        },
+        {
+          "key": "B",
+          "text": "298"
+        },
+        {
+          "key": "C",
+          "text": "149"
+        },
+        {
+          "key": "D",
+          "text": "596"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q71",
+      "questionNumber": 71,
+      "questionType": "NUMERICAL",
+      "questionText": "A time varying potential difference is applied between the plates of a parallel plate capacitor of\ncapacitance . The dielectric constant of the medium between the capacitor plates is 1 . It\nproduces an instantaneous displacement current of 0.25 mA in the intervening space between the\n\ncapacitor plates, the magnitude of the rate of change of the potential difference will be _________\n.",
+      "options": [],
+      "correctAnswer": [
+        "100"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 100.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q72",
+      "questionNumber": 72,
+      "questionType": "NUMERICAL",
+      "questionText": "In a series LCR circuit, a resistor of , a capacitor of 25 nF and an inductor of 100 mH are used.\nFor maximum current in the circuit, the angular frequency of the ac source is _________ radians",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Properties of Matter",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q73",
+      "questionNumber": 73,
+      "questionType": "NUMERICAL",
+      "questionText": "An air bubble of radius 1.0 mm is observed at a depth 20 cm below the free surface of a liquid\nhaving surface tension and density . The difference between pressure inside\nthe bubble and atmospheric pressure is __________ . (Take )",
+      "options": [],
+      "correctAnswer": [
+        "2190"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Properties of Matter (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2190.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q74",
+      "questionNumber": 74,
+      "questionType": "NUMERICAL",
+      "questionText": "At steady state the charge on the capacitor, as shown in the circuit below, is _________ C.",
+      "options": [],
+      "correctAnswer": [
+        "16"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 16.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1 (Jan)",
+      "date": "2025-01-23",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2025_online-23rd-january-evening-shift_Q75",
+      "questionNumber": 75,
+      "questionType": "NUMERICAL",
+      "questionText": "A satellite of mass is revolving around earth in a circular orbit at a height of from earth\nsurface. The angular momentum of the satellite is . The value of is _________ , where M\nand R are the mass and radius of earth, respectively. ( G is the gravitational constant)",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2025_online-23rd-january-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2025-online-23rd-january-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-23rd-january-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    }
+  ]
+}

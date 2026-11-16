@@ -1,0 +1,21 @@
+{
+  "total_questions": 20,
+  "year_distribution": {
+    "2021": 4,
+    "2022": 3,
+    "2023": 3,
+    "2024": 4,
+    "2025": 6
+  },
+  "verified_questions": 20,
+  "pending_verification": 0,
+  "is_published_count": 0,
+  "output_files": [
+    "jee-main-2021.json",
+    "jee-main-2022.json",
+    "jee-main-2023.json",
+    "jee-main-2024.json",
+    "jee-main-2025.json",
+    "jee-main-all-2021-2025.json"
+  ]
+}

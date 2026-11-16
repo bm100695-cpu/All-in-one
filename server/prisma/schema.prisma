@@ -1,0 +1,666 @@
+// Prisma schema for ExamVerse AI
+// Supports SQLite for rapid local dev and PostgreSQL for production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  passwordHash    String?
+  name            String
+  role            String        @default("STUDENT") // STUDENT, ADMIN, CONTENT_REVIEWER, INSTITUTION_ADMIN
+  avatar          String?
+  targetExamId    String?
+  examSelectedAt  DateTime?
+  googleId        String?       @unique
+  authProvider    String        @default("local") // local, google
+  studentId       String?       @unique
+  referralCode    String?       @unique
+  referredById    String?
+  referralCredits Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  attempts     TestAttempt[]
+  mistakes     MistakeJournalEntry[]
+  reviews      QuestionReview[]
+  subscriptions Subscription[]
+  payments     Payment[]
+  entitlements Entitlement[]
+  referralsMade Referral[]   @relation("Referrer")
+  referralReceived Referral? @relation("ReferredUser")
+  superTetBookmarks SuperTetBookmark[]
+  liveRegistrations LiveTestRegistration[]
+  liveAttempts      LiveTestAttempt[]
+}
+
+model ExamCategory {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  code         String   @unique
+  description  String
+  icon         String
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  exams        Exam[]
+}
+
+model Exam {
+  id                         String              @id @default(cuid())
+  slug                       String              @unique
+  title                      String
+  shortName                  String
+  conductingBody             String
+  officialWebsite            String
+  description                String
+  eligibilitySummary         String
+  verifiedSyllabusCoveragePct Float               @default(0.0)
+  totalVerifiedPYQs          Int                 @default(0)
+  categoryId                 String
+  status                     String              @default("ACTIVE") // ACTIVE, DRAFT, ARCHIVED
+  isComingSoon               Boolean             @default(false)
+  portalHeadline             String?
+  latestNotification         String?
+  notificationDate           String?
+  importantDatesJson         String?             @default("{}")
+  officialNoticeUrl          String?
+  accentColor                String              @default("#1D4ED8")
+  createdAt                  DateTime            @default(now())
+  updatedAt                  DateTime            @updatedAt
+
+  category                   ExamCategory        @relation(fields: [categoryId], references: [id])
+  patternVersions            ExamPatternVersion[]
+  syllabusNodes              SyllabusNode[]
+  questions                  Question[]
+  tests                      Test[]
+  attempts                   TestAttempt[]
+  examYears                  ExamYear[]
+  liveSchedules              LiveTestSchedule[]
+}
+
+model ExamYear {
+  id                    String    @id @default(cuid())
+  examId                String
+  cycleYear             Int
+  actualExamDate        String    // e.g. "January 23, 2022" or "NOT_CONDUCTED"
+  examinationConducted  Boolean   @default(true)
+  verificationStatus    String    // VERIFIED_OFFICIAL, NOT_CONDUCTED, PATTERN_PRACTICE
+  officialSource        String    // e.g. "UP Regulatory Authority, Prayagraj (PNP)"
+  paper1Available       Boolean   @default(false)
+  paper2MathAvailable   Boolean   @default(false)
+  paper2SocialAvailable Boolean   @default(false)
+  notes                 String?
+  createdAt             DateTime  @default(now())
+
+  exam                  Exam      @relation(fields: [examId], references: [id], onDelete: Cascade)
+  tests                 Test[]
+}
+
+model ExamPatternVersion {
+  id                   String        @id @default(cuid())
+  examId               String
+  versionName          String
+  effectiveFrom        DateTime
+  effectiveTo          DateTime?
+  durationMinutes      Int
+  totalMarks           Float
+  totalQuestions       Int
+  questionsToAttempt   Int
+  sectionalTimers      Boolean       @default(false)
+  questionShuffling    Boolean       @default(true)
+  languagesAllowed     String        @default("[\"en\",\"hi\"]") // JSON array string
+  submissionRules      String        @default("{}") // JSON
+  isDefault            Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+
+  exam                 Exam          @relation(fields: [examId], references: [id], onDelete: Cascade)
+  sections             ExamSection[]
+  tests                Test[]
+}
+
+model ExamSection {
+  id                 String             @id @default(cuid())
+  patternVersionId   String
+  name               String
+  order              Int                @default(1)
+  durationMinutes    Int?
+  totalQuestions     Int
+  maxToAttempt       Int
+  questionType       String             @default("MCQ_SINGLE") // MCQ_SINGLE, MCQ_MULTIPLE, NUMERICAL, DESCRIPTIVE
+  marksPerCorrect    Float              @default(4.0)
+  negativeMarks      Float              @default(1.0)
+  unattemptedPenalty Float              @default(0.0)
+
+  patternVersion     ExamPatternVersion @relation(fields: [patternVersionId], references: [id], onDelete: Cascade)
+  questions          Question[]
+}
+
+model SyllabusNode {
+  id                     String         @id @default(cuid())
+  examId                 String
+  parentId               String?
+  level                  String         // SUBJECT, UNIT, CHAPTER, TOPIC
+  title                  String
+  code                   String
+  weightagePct           Float          @default(0.0)
+  officialNotificationRef String?
+
+  exam                   Exam           @relation(fields: [examId], references: [id], onDelete: Cascade)
+  parent                 SyllabusNode?  @relation("SyllabusHierarchy", fields: [parentId], references: [id])
+  children               SyllabusNode[] @relation("SyllabusHierarchy")
+  questions              Question[]
+}
+
+model Question {
+  id                 String           @id @default(cuid())
+  examId             String
+  sectionId          String?
+  syllabusNodeId     String?
+  questionType       String           @default("SINGLE_CHOICE") // SINGLE_CHOICE, MULTI_CHOICE, NUMERICAL, DESCRIPTIVE
+  contentEn          String
+  contentHi          String?
+  optionsJson        String           @default("[]") // JSON: [{ id, textEn, textHi }]
+  correctAnswerJson  String           // JSON: ["A"] or { "value": 42.5, "tolerance": 0.1 } or rubric
+  numericalAnswer    Float?
+  numericalTolerance Float?           @default(0.01)
+  diagramUrl         String?
+  explanationEn      String
+  explanationHi      String?
+  difficulty         String           @default("MEDIUM") // EASY, MEDIUM, HARD
+  isPYQ              Boolean          @default(false)
+  pyqYear            String?
+  pyqShift           String?
+  pyqPaper           String?
+  sourceProvenance   String           // e.g. "Official NTA JEE Main 2024 Archive"
+  sourceLicense      String           // e.g. "Educational Fair Use / Verified Public Domain"
+  verificationStatus String           @default("VERIFIED") // DRAFT, UNDER_REVIEW, VERIFIED, REJECTED
+  reviewerName       String?
+  reviewedAt         DateTime?
+  reviewerNotes      String?
+  isAIGenerated      Boolean          @default(false)
+  aiModelUsed        String?
+  duplicateCheckHash String?
+  isPublished        Boolean          @default(false)
+  originalQuestionNumber Int?
+  officialAnswer     String?
+  tutorNoveAnswer    String?
+  subject            String?
+  topic              String?
+  sourcePage         Int?
+  sourceReference    String?
+  isTranslation      Boolean          @default(false)
+  translationLabel   String?          // e.g. "TutorNove English Translation"
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  exam               Exam             @relation(fields: [examId], references: [id], onDelete: Cascade)
+  section            ExamSection?     @relation(fields: [sectionId], references: [id])
+  syllabusNode       SyllabusNode?    @relation(fields: [syllabusNodeId], references: [id])
+  testQuestions      TestQuestion[]
+  mistakeEntries     MistakeJournalEntry[]
+  reviews            QuestionReview[]
+  auditLogs          QuestionAuditLog[]
+}
+
+model QuestionAuditLog {
+  id                  String    @id @default(cuid())
+  questionId          String
+  paperTitle          String?
+  issueType           String    // INCOMPLETE_STEM, MISSING_OPTIONS, MISCLASSIFIED_TYPE, MISSING_DIAGRAM, INVALID_ANSWER_KEY, ADMIN_MANUAL_EDIT
+  previousContentEn   String
+  previousOptionsJson String?
+  previousAnswerJson  String?
+  previousType        String?
+  newContentEn        String?
+  newType             String?
+  correctedBy         String    @default("SYSTEM_PDF_AUDITOR")
+  changeSummary       String
+  createdAt           DateTime  @default(now())
+
+  question            Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model QuestionReview {
+  id             String    @id @default(cuid())
+  questionId     String
+  reviewerId     String
+  action         String    // APPROVED, REJECTED, CHANGES_REQUESTED
+  comments       String
+  provenanceCheck Boolean  @default(true)
+  rubricVerified Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+
+  question       Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  reviewer       User      @relation(fields: [reviewerId], references: [id])
+}
+
+model Test {
+  id               String              @id @default(cuid())
+  title            String
+  examId           String
+  patternVersionId String
+  type             String              @default("FULL_MOCK") // FULL_MOCK, PREVIOUS_YEAR_PAPER, SECTIONAL_PRACTICE, AI_DIAGNOSTIC
+  durationMinutes  Int
+  totalMarks       Float
+  totalQuestions   Int
+  instructionsEn   String
+  instructionsHi   String?
+  pyqReference     String?
+  accessLevel      String              @default("FREE") // FREE, PREMIUM
+  isFeatured       Boolean             @default(false)
+  isPublished      Boolean             @default(true)
+  examYearId       String?
+  cycleYear        Int?
+  actualExamDate   String?
+  paperType        String?             // "PAPER_1", "PAPER_2_MATH_SCIENCE", "PAPER_2_SOCIAL_STUDIES"
+  optionalSubject  String?             // "NONE", "MATH_SCIENCE", "SOCIAL_STUDIES"
+  sourceType       String?             // "VERIFIED_PYQ", "PATTERN_PRACTICE"
+  verificationStatus String?           // "VERIFIED_OFFICIAL", "TUTORNOVE_PRACTICE", "INCOMPLETE_SOURCE"
+  originalPdfUrl   String?
+  answerKeyUrl     String?
+  answerKeyStatus  String?             // "OFFICIAL_KEY_VERIFIED", "TUTORNOVE_VERIFIED", "NOT_INDEPENDENTLY_VERIFIED"
+  isBilingual      Boolean             @default(true)
+  totalAvailableQuestions Int?
+  createdAt        DateTime            @default(now())
+
+  exam             Exam                @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examYear         ExamYear?           @relation(fields: [examYearId], references: [id])
+  patternVersion   ExamPatternVersion  @relation(fields: [patternVersionId], references: [id])
+  testQuestions    TestQuestion[]
+  attempts         TestAttempt[]
+  entitlements     Entitlement[]
+  liveSchedules    LiveTestSchedule[]
+}
+
+model TestQuestion {
+  id             String    @id @default(cuid())
+  testId         String
+  questionId     String
+  sectionName    String
+  questionNumber Int
+  marks          Float     @default(4.0)
+  negativeMarks  Float     @default(1.0)
+
+  test           Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
+  question       Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model TestAttempt {
+  id               String                @id @default(cuid())
+  userId           String
+  testId           String
+  examId           String
+  startedAt        DateTime              @default(now())
+  submittedAt      DateTime?
+  status           String                @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, TIMED_OUT, ABANDONED
+  totalScore       Float                 @default(0.0)
+  totalMarks       Float                 @default(0.0)
+  accuracyPct      Float                 @default(0.0)
+  percentile       Float?                // Only populated when valid comparison sample exists
+  totalAttempted   Int                   @default(0)
+  totalCorrect     Int                   @default(0)
+  totalIncorrect   Int                   @default(0)
+  totalUnattempted Int                   @default(0)
+  timeSpentSeconds Int                   @default(0)
+  sectionScoresJson String               @default("{}") // JSON
+  responsesJson    String                @default("[]") // JSON
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test             Test                  @relation(fields: [testId], references: [id], onDelete: Cascade)
+  exam             Exam                  @relation(fields: [examId], references: [id], onDelete: Cascade)
+  mistakes         MistakeJournalEntry[]
+  liveAttempts     LiveTestAttempt[]
+}
+
+model MistakeJournalEntry {
+  id             String       @id @default(cuid())
+  userId         String
+  questionId     String
+  testAttemptId  String?
+  mistakeTag     String       // CONCEPTUAL_GAP, CALCULATION_ERROR, SILLY_MISTAKE, MISREAD_QUESTION, RAN_OUT_OF_TIME, BLIND_GUESS
+  userNotes      String?
+  revisionStatus String       @default("NEEDS_ATTENTION") // NEEDS_ATTENTION, REVISING, MASTERED
+  reviewCount    Int          @default(0)
+  lastReviewedAt DateTime?
+  nextReviewDue  DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question       Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  attempt        TestAttempt? @relation(fields: [testAttemptId], references: [id])
+}
+
+model ContentCoverageAudit {
+  id                   String   @id @default(cuid())
+  examId               String
+  totalSyllabusTopics  Int
+  coveredSyllabusTopics Int
+  verifiedPYQCount     Int
+  pendingReviewCount   Int
+  auditTimestamp       DateTime @default(now())
+  auditorNotes         String
+}
+
+model SubscriptionPlan {
+  id              String         @id @default(cuid())
+  code            String         @unique // FREE, TEST_PACK_99, PREMIUM_MONTHLY_149, UPTET_PACK_79, etc.
+  examSlug        String?        // null = platform-wide; or specific exam slug e.g. 'jee-main', 'uptet', 'super-tet', 'neet-ug'
+  name            String
+  description     String
+  price           Float          @default(0.0)
+  currency        String         @default("INR")
+  billingInterval String         @default("ONCE") // ONCE, MONTHLY, YEARLY
+  durationDays    Int            @default(0) // 0 for lifetime/free, 30 for monthly, 365 for annual
+  testAccessLimit Int            @default(0) // 0 for unlimited eligible, 5 for test pack
+  featuresJson    String         @default("[]") // JSON array of string features
+  badge           String?        // e.g. "Most Popular", "Best Value"
+  isPublished     Boolean        @default(true)
+  displayOrder    Int            @default(0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  subscriptions   Subscription[]
+  payments        Payment[]
+}
+
+model Coupon {
+  id              String         @id @default(cuid())
+  code            String         @unique
+  discountPct     Int            // 10 to 90
+  examSlug        String?        // null = valid on all exams, or specific exam
+  isActive        Boolean        @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime       @default(now())
+}
+
+model Subscription {
+  id              String           @id @default(cuid())
+  userId          String
+  planId          String
+  status          String           @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
+  startDate       DateTime         @default(now())
+  endDate         DateTime?        // null for lifetime free
+  paymentId       String?
+  testsRemaining  Int?             // For pack plans, e.g. 5
+  autoRenew       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan            SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  payment         Payment?         @relation(fields: [paymentId], references: [id])
+}
+
+model Payment {
+  id              String           @id @default(cuid())
+  userId          String
+  planId          String?
+  examSlug        String?
+  originalPrice   Float?
+  discountAmount  Float            @default(0.0)
+  couponCode      String?
+  amount          Float
+  currency        String           @default("INR")
+  status          String           @default("PENDING") // PENDING, SUCCESS, FAILED, REFUNDED
+  orderId         String           @unique // Razorpay Order ID (e.g. order_xxx)
+  paymentId       String?          @unique // Razorpay Payment ID (e.g. pay_xxx)
+  signature       String?
+  method          String?          // upi, card, netbanking, wallet
+  receipt         String
+  notesJson       String           @default("{}")
+  errorMessage    String?
+  refundId        String?
+  refundAmount    Float?
+  refundReason    String?
+  refundStatus    String?
+  refundedAt      DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan            SubscriptionPlan? @relation(fields: [planId], references: [id])
+  subscriptions   Subscription[]
+}
+
+model Entitlement {
+  id              String           @id @default(cuid())
+  userId          String
+  testId          String?          // null = global test access, or specific testId
+  planCode        String           // FREE, TEST_PACK_99, PREMIUM_MONTHLY_149, REFERRAL_CREDIT
+  source          String           @default("SUBSCRIPTION") // SUBSCRIPTION, TEST_PACK, REFERRAL_CREDIT, ADMIN_GRANT
+  expiresAt       DateTime?
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test            Test?            @relation(fields: [testId], references: [id], onDelete: Cascade)
+}
+
+model Referral {
+  id              String           @id @default(cuid())
+  referrerId      String
+  referredUserId  String           @unique
+  referralCode    String
+  status          String           @default("COMPLETED") // PENDING, COMPLETED, REWARDED, INVALID
+  rewardCredits   Int              @default(1)
+  createdAt       DateTime         @default(now())
+
+  referrer        User             @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUser    User             @relation("ReferredUser", fields: [referredUserId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================================
+// SUPER TET (2012–2025) ARCHIVE & QUESTION BANK MODELS
+// ============================================================================
+
+model SuperTetExam {
+  id                  String             @id @default(cuid())
+  examName            String
+  examYear            Int
+  examDate            String             // e.g. "January 6, 2019", "May 27, 2018", "NO_EXAM_CONDUCTED"
+  notificationDate    String?            // e.g. "December 1, 2018" or "Official notice unavailable"
+  applicationDates    String?
+  conductingAuthority String             @default("Examination Regulatory Authority (PNP), Prayagraj, UP")
+  notificationSource  String?
+  paperSource         String?
+  answerKeySource     String?
+  expectedQuestions   Int                @default(0) // Official exam total e.g. 150
+  totalQuestions      Int                @default(0) // Actual verified imported count
+  totalMarks          Float              @default(0)
+  duration            Int                @default(0) // Minutes
+  markingScheme       String             @default("{}") // JSON: { marksPerCorrect, negativeMarks, questionFormat, cutoffGeneral, cutoffReserved }
+  subjectDistribution String             @default("{}") // JSON map of subject -> count
+  verificationStatus  String             // VERIFIED_OFFICIAL_PYQ, VERIFIED_PAPER_KEY_PENDING, AUTHENTIC_SOURCE_VERIFICATION_PENDING, PRACTICE_QUESTIONS_ONLY, NO_CONFIRMED_EXAM_RECORD
+  isPracticePaper     Boolean            @default(false)
+  isPublished         Boolean            @default(true)
+  linkedTestId        String?            // Links to Test.id in CBT engine
+  instructionsEn      String?
+  instructionsHi      String?
+  notes               String?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  questions           SuperTetQuestion[]
+
+  @@unique([examYear, isPracticePaper])
+  @@index([examYear])
+  @@index([verificationStatus])
+}
+
+model SuperTetQuestion {
+  id                  String             @id @default(cuid())
+  superTetExamId      String
+  examYear            Int
+  questionNumber      Int
+  subject             String
+  topic               String
+  questionHindi       String
+  questionEnglish     String
+  optionsJson         String             @default("[]") // JSON: [{ id: "A", textHi, textEn }]
+  correctAnswer       String             // "A", "B", "C", "D", "PENDING", "DISPUTED"
+  answerKeyStatus     String             @default("VERIFIED") // VERIFIED, REVISED_KEY, DISPUTED, PENDING
+  answerKeySource     String?
+  answerKeyVerifiedAt String?
+  explanationHindi    String
+  explanationEnglish  String
+  difficulty          String             @default("MEDIUM") // EASY, MEDIUM, HARD
+  sourceUrl           String?
+  sourceType          String             @default("OFFICIAL_PYQ") // OFFICIAL_PYQ, TUTORNOVE_PRACTICE
+  verificationStatus  String             @default("VERIFIED_OFFICIAL") // VERIFIED_OFFICIAL, ANSWER_KEY_PENDING, VERIFICATION_PENDING, TUTORNOVE_PRACTICE
+  languageType        String             @default("BILINGUAL_ORIGINAL") // BILINGUAL_ORIGINAL, HINDI_ORIGINAL_TN_TRANSLATION, ENGLISH_ORIGINAL_TN_TRANSLATION
+  isPYQ               Boolean            @default(true)
+  isActive            Boolean            @default(true)
+  revisionHistoryJson String             @default("[]") // Preserves answer key revisions without deleting history
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  exam                SuperTetExam       @relation(fields: [superTetExamId], references: [id], onDelete: Cascade)
+  bookmarks           SuperTetBookmark[]
+
+  @@unique([superTetExamId, questionNumber])
+  @@index([examYear])
+  @@index([superTetExamId])
+  @@index([subject])
+  @@index([questionNumber])
+  @@index([verificationStatus])
+}
+
+model SuperTetBookmark {
+  id          String           @id @default(cuid())
+  userId      String
+  questionId  String
+  notes       String?
+  createdAt   DateTime         @default(now())
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question    SuperTetQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+}
+
+// ============================================================================
+// WEEKLY LIVE MOCK TEST SCHEDULING & MANAGEMENT SYSTEM
+// ============================================================================
+
+model LiveTestSchedule {
+  id                      String                 @id @default(cuid())
+  examId                  String
+  testId                  String
+  title                   String
+  description             String?
+  instructions            String?
+  date                    String                 // YYYY-MM-DD format
+  startAt                 DateTime               // Exact UTC timestamp for scheduled start
+  endAt                   DateTime               // Scheduled end timestamp
+  durationMinutes         Int                    // Test duration in minutes
+  registrationOpenAt      DateTime
+  registrationCloseAt     DateTime
+  timezone                String                 @default("Asia/Kolkata")
+  maxCapacity             Int?                   // Null for unlimited
+  isPaid                  Boolean                @default(false)
+  price                   Float                  @default(0.0)
+  targetAudience          String                 @default("ALL") // ALL, TARGET_EXAM_ONLY, PREMIUM_ONLY
+  visibility              String                 @default("PUBLIC") // PUBLIC, UNLISTED, PRIVATE
+  status                  String                 @default("SCHEDULED") // DRAFT, SCHEDULED, PUBLISHED, REGISTRATION_OPEN, REGISTRATION_CLOSED, LIVE_NOW, CONCLUDED, CANCELLED, RESCHEDULED
+  lateEntryAllowed        Boolean                @default(true)
+  lateEntryMinutes        Int                    @default(15) // Allowed window after start
+  allowEarlySubmission    Boolean                @default(true)
+  allowDisconnectionResume Boolean               @default(true)
+  resultPublishType       String                 @default("IMMEDIATE") // IMMEDIATE, SCHEDULED, MANUAL
+  resultPublishAt         DateTime?
+  isResultsPublished      Boolean                @default(false)
+  isLeaderboardEnabled    Boolean                @default(true)
+  cancellationReason      String?
+  recurringSeriesId       String?                // Series ID for recurring weekly rules
+  lockedQuestionsSnapshot String?                // Locked question-set snapshot at publish
+  createdBy               String?
+  updatedBy               String?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+
+  exam                    Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
+  test                    Test                   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  registrations           LiveTestRegistration[]
+  attempts                LiveTestAttempt[]
+
+  @@index([examId])
+  @@index([testId])
+  @@index([date])
+  @@index([startAt])
+  @@index([status])
+}
+
+model LiveTestRegistration {
+  id                 String           @id @default(cuid())
+  scheduleId         String
+  studentId          String
+  paymentStatus      String           @default("FREE") // FREE, PAID, PENDING, REFUNDED
+  paymentId          String?
+  amountPaid         Float            @default(0.0)
+  registrationStatus String           @default("CONFIRMED") // CONFIRMED, CANCELLED, WAITLISTED
+  registeredAt       DateTime         @default(now())
+
+  schedule           LiveTestSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  student            User             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, studentId])
+  @@index([scheduleId])
+  @@index([studentId])
+  @@index([registrationStatus])
+}
+
+model LiveTestAttempt {
+  id                   String           @id @default(cuid())
+  scheduleId           String
+  studentId            String
+  testAttemptId        String?
+  startedAt            DateTime         @default(now())
+  submittedAt          DateTime?
+  timeSpentSeconds     Int              @default(0)
+  lateMinutesUsed      Int              @default(0)
+  attemptStatus        String           @default("IN_PROGRESS") // IN_PROGRESS, SUBMITTED, TIMED_OUT, DISQUALIFIED, ABANDONED
+  score                Float            @default(0.0)
+  accuracyPct          Float            @default(0.0)
+  totalAttempted       Int              @default(0)
+  totalCorrect         Int              @default(0)
+  totalIncorrect       Int              @default(0)
+  rank                 Int?
+  percentile           Float?
+  sectionScoresJson    String           @default("{}")
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+
+  schedule             LiveTestSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  student              User             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  testAttempt          TestAttempt?     @relation(fields: [testAttemptId], references: [id])
+
+  @@unique([scheduleId, studentId])
+  @@index([scheduleId])
+  @@index([studentId])
+  @@index([attemptStatus])
+}
+
+model LiveTestNotification {
+  id         String    @id @default(cuid())
+  scheduleId String?
+  userId     String?   // Null for public/broadcast
+  title      String
+  message    String
+  type       String    // NEW_SCHEDULE, REGISTRATION_CONFIRMED, STARTING_SOON, LIVE_NOW, RESCHEDULED, CANCELLED, RESULTS_OUT
+  isRead     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+
+  @@index([scheduleId])
+  @@index([userId])
+}

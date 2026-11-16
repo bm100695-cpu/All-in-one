@@ -1,0 +1,28 @@
+{
+  "total_papers_discovered": 110,
+  "total_papers_completed": 110,
+  "total_papers_unavailable": 0,
+  "total_questions_extracted": 9660,
+  "subject_distribution": {
+    "Chemistry": 3220,
+    "Mathematics": 3220,
+    "Physics": 3220
+  },
+  "year_distribution": {
+    "2021": 2340,
+    "2022": 2160,
+    "2023": 2160,
+    "2024": 1800,
+    "2025": 1200
+  },
+  "verified_answers_count": 9647,
+  "pending_verification_count": 13,
+  "generated_files": [
+    "output/jee_main_2021.json",
+    "output/jee_main_2022.json",
+    "output/jee_main_2023.json",
+    "output/jee_main_2024.json",
+    "output/jee_main_2025.json",
+    "output/jee_main_all_2021_2025.json"
+  ]
+}

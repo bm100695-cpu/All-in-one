@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #172033;
+    background-color: #F8FAFC;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #F8FAFC;
+    color: #172033;
+    @apply antialiased font-sans min-h-screen selection:bg-blue-600 selection:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #172033;
+    @apply tracking-tight font-semibold;
+  }
+
+  /* Tabular numbers for timers and counters */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Official CBT Question Palette Buttons */
+.palette-btn {
+  @apply w-8 h-8 rounded text-xs font-semibold transition-colors duration-150 flex items-center justify-center border relative select-none cursor-pointer;
+}
+
+.palette-btn-not-visited {
+  @apply bg-white text-slate-600 border-slate-200 hover:bg-slate-100;
+}
+
+.palette-btn-not-answered {
+  @apply bg-red-600 text-white border-red-700 hover:bg-red-700;
+}
+
+.palette-btn-answered {
+  @apply bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700;
+}
+
+.palette-btn-review {
+  @apply bg-purple-600 text-white border-purple-700 hover:bg-purple-700;
+}
+
+.palette-btn-answered-review {
+  @apply bg-purple-600 text-white border-purple-700 hover:bg-purple-700;
+}
+
+/* Custom Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}

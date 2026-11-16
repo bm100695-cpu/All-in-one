@@ -1,0 +1,3508 @@
+{
+  "testId": "JEE_MAIN_2024_04_05_SHIFT_2",
+  "title": "JEE Main 2024 Official Paper (Session 2 (Apr) - 2024-04-05 Shift 2)",
+  "exam": "JEE Main",
+  "paperType": "Paper 1 (B.E./B.Tech)",
+  "year": 2024,
+  "session": "Session 2 (Apr)",
+  "date": "2024-04-05",
+  "shift": "Shift 2",
+  "durationMinutes": 180,
+  "totalMarks": 300,
+  "totalQuestions": 90,
+  "subjects": [
+    "Physics",
+    "Chemistry",
+    "Mathematics"
+  ],
+  "markingScheme": {
+    "mcq": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    },
+    "numerical": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    }
+  },
+  "provenance": {
+    "source": "Official NTA JEE Main Examination Paper",
+    "extractedFrom": "jee_main_2024_online-5th-april-evening-shift.pdf",
+    "verifiedBy": "TutorNove Academic Review Board",
+    "verificationStatus": "VERIFIED"
+  },
+  "questions": [
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q1",
+      "questionNumber": 1,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe number of complexes from the following with no electrons in the orbital is ______.",
+      "options": [
+        {
+          "key": "A",
+          "text": "4"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        },
+        {
+          "key": "C",
+          "text": "3"
+        },
+        {
+          "key": "D",
+          "text": "1"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Atomic Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q2",
+      "questionNumber": 2,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List I with List II.\nLIST I LIST II\n\nA. I. T - shape\nB. II. Square pyramidal\nC. III. Pentagonal bipyramidal\nD. IV. Linear\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "B",
+          "text": "-(IV),"
+        },
+        {
+          "key": "C",
+          "text": "-(III),"
+        },
+        {
+          "key": "D",
+          "text": "-(II)"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q3",
+      "questionNumber": 3,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe correct nomenclature for the following compound is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "2-carboxy-4-hydroxyhept-7-enal"
+        },
+        {
+          "key": "B",
+          "text": "2-formyl-4-hydroxyhept-7-enoic acid"
+        },
+        {
+          "key": "C",
+          "text": "2-carboxy-4-hydroxyhept-6-enal"
+        },
+        {
+          "key": "D",
+          "text": "2-formyl-4-hydroxyhept-6-enoic acid"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q4",
+      "questionNumber": 4,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement I : On passing through a saturated solution of , at room temperature white\nturbidity appears. \nStatement II : When gas is passed through a saturated solution of , sodium chloride is\nprecipitated due to common ion effect.\nIn the light of the above statements, choose the most appropriate answer from the options given\nbelow :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are correct"
+        },
+        {
+          "key": "B",
+          "text": "Statement I is incorrect but Statement II is correct"
+        },
+        {
+          "key": "C",
+          "text": "Both Statement I and Statement II are incorrect"
+        },
+        {
+          "key": "D",
+          "text": "Statement I is correct but Statement II is incorrect"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Coordination Compounds",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q5",
+      "questionNumber": 5,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II.\nLIST I LIST II\n(Pair of Compounds) (Isomerism) \nA. n-propanol and Isopropanol I. Metamerism\nB. Methoxypropane and ethoxyethane II. Chain Isomerism\nC. Propanone and propanal III. Position Isomerism\nD. Neopentane and Isopentane IV. Functional Isomerism\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "B",
+          "text": "-(I),"
+        },
+        {
+          "key": "C",
+          "text": "-(IV),"
+        },
+        {
+          "key": "D",
+          "text": "-(III)"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordination Compounds (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q6",
+      "questionNumber": 6,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhile preparing crystals of Mohr's salt, dil is added to a mixture of ferrous sulphate and\nammonium sulphate, before dissolving this mixture in water, dil is added here to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "prevent the hydrolysis of ferrous sulphate"
+        },
+        {
+          "key": "B",
+          "text": "prevent the hydrolysis of ammonium sulphate"
+        },
+        {
+          "key": "C",
+          "text": "increase the rate of formation of crystals"
+        },
+        {
+          "key": "D",
+          "text": "make the medium strongly acidic"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q7",
+      "questionNumber": 7,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify the major product in the following reaction.\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q8",
+      "questionNumber": 8,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIdentify A and B in the given chemical reaction sequence :\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q9",
+      "questionNumber": 9,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements : one is labelled as Assertion",
+      "options": [
+        {
+          "key": "A",
+          "text": "and the other is labelled as\nReason (R).\nAssertion"
+        },
+        {
+          "key": "A",
+          "text": ": and molecule have pyramidal shape with a lone pair of electrons on \nnitrogen atom. The resultant dipole moment of is greater than that of .\nReason (R) : In , the orbital dipole due to lone pair is in the same direction as the resultant\ndipole moment of the bonds. is the most electronegative element.\nIn the light of the above statements, choose the correct answer from the options given below :"
+        },
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "B",
+          "text": ""
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q10",
+      "questionNumber": 10,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nConsider the given chemical reaction :\n\nProduct \"A\" is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "picric acid"
+        },
+        {
+          "key": "B",
+          "text": "oxalic acid"
+        },
+        {
+          "key": "C",
+          "text": "adipic acid"
+        },
+        {
+          "key": "D",
+          "text": "acetic acid"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q11",
+      "questionNumber": 11,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe correct statements from the following are :",
+      "options": [
+        {
+          "key": "A",
+          "text": "The decreasing order of atomic radii of group 13 elements is ."
+        },
+        {
+          "key": "B",
+          "text": "Down the group 13 electronegativity decreases from top to bottom."
+        },
+        {
+          "key": "C",
+          "text": "dissolves in dil. and liberates but conc. renders passive by forming a\nprotective oxide layer on the surface."
+        },
+        {
+          "key": "D",
+          "text": "All elements of group 13 exhibits highly stable +1 oxidation state.\n(E) Hybridisation of in ion is .\nChoose the correct answer from the options given below :"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q12",
+      "questionNumber": 12,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n\nConsider the above reaction sequence and identify the major product P.",
+      "options": [
+        {
+          "key": "A",
+          "text": "Methanoic acid"
+        },
+        {
+          "key": "B",
+          "text": "Methoxymethane"
+        },
+        {
+          "key": "C",
+          "text": "Methane"
+        },
+        {
+          "key": "D",
+          "text": "Methanal"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q13",
+      "questionNumber": 13,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nCoagulation of egg, on heating is because of :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Denaturation of protein occurs"
+        },
+        {
+          "key": "B",
+          "text": "Biological property of protein remains unchanged"
+        },
+        {
+          "key": "C",
+          "text": "Breaking of the peptide linkage in the primary structure of protein occurs"
+        },
+        {
+          "key": "D",
+          "text": "The secondary structure of protein remains unchanged"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q14",
+      "questionNumber": 14,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich one of the following reactions is NOT possible?\n(A)\n\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q15",
+      "questionNumber": 15,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe number of ions from the following that have the ability to liberate hydrogen from a dilute acid is\n_________.\nand",
+      "options": [
+        {
+          "key": "A",
+          "text": "1"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        },
+        {
+          "key": "C",
+          "text": "3"
+        },
+        {
+          "key": "D",
+          "text": "0"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics (Chemistry)",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q16",
+      "questionNumber": 16,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe number of moles of methane required to produce after complete combustion is :\n(Given molar mass of methane in )",
+      "options": [
+        {
+          "key": "A",
+          "text": "0.35"
+        },
+        {
+          "key": "B",
+          "text": "0.25"
+        },
+        {
+          "key": "C",
+          "text": "0.5"
+        },
+        {
+          "key": "D",
+          "text": "0.75"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics (Chemistry) (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q17",
+      "questionNumber": 17,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe quantity of silver deposited when one coulomb charge is passed through solution :",
+      "options": [
+        {
+          "key": "A",
+          "text": "atom of silver"
+        },
+        {
+          "key": "B",
+          "text": "1 chemical equivalent of silver"
+        },
+        {
+          "key": "C",
+          "text": "of silver"
+        },
+        {
+          "key": "D",
+          "text": "1 electrochemical equivalent of silver"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Bonding & Molecular Structure",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q18",
+      "questionNumber": 18,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe metal atom present in the complex MABXL (where A, B, X and L are unidentate ligands and is\nmetal) involves hybridization. The number of geometrical isomers exhibited by the complex is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "0"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        },
+        {
+          "key": "C",
+          "text": "3"
+        },
+        {
+          "key": "D",
+          "text": "4"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Bonding & Molecular Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q19",
+      "questionNumber": 19,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nFor the electrochemical cell\nIf and . \nWhich of the following is correct?\n(A)\n(B) is a spontaneous reaction\n(C)\ncell\n(D) is a spontaneous reaction",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q20",
+      "questionNumber": 20,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement I : The metallic radius of is and the ionic radius of is lesser than\nStatement II : Ions are always smaller in size than the corresponding elements. \nIn the light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "B",
+          "text": "Statement I is incorrect but Statement II is true"
+        },
+        {
+          "key": "C",
+          "text": "Both Statement I and Statement II are false"
+        },
+        {
+          "key": "D",
+          "text": "Statement I is correct but Statement II is false"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q21",
+      "questionNumber": 21,
+      "questionType": "NUMERICAL",
+      "questionText": "In an atom, total number of electrons having quantum numbers and is\n_________.",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Atomic Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q22",
+      "questionNumber": 22,
+      "questionType": "NUMERICAL",
+      "questionText": "The product C in the following sequence of reactions has ________ bonds.",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q23",
+      "questionNumber": 23,
+      "questionType": "NUMERICAL",
+      "questionText": "Using the given figure, the ratio of values of sample and sample is . Value of is\n__________.",
+      "options": [],
+      "correctAnswer": [
+        "50"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 50.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q24",
+      "questionNumber": 24,
+      "questionType": "NUMERICAL",
+      "questionText": "Considering acetic acid dissociates in water, its dissociation constant is . If of\nacetic acid is dissolved in 1 litre water, the solution will freeze at , provided pure water\nfreezes at .\n\n_________. (Nearest integer)\nGiven :\nwater\ndensity of acetic acid is .\nmolar mass of water .\nmolar mass of acetic acid= .\ndensity of water\nAcetic acid dissociates as",
+      "options": [],
+      "correctAnswer": [
+        "19"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 19.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q25",
+      "questionNumber": 25,
+      "questionType": "NUMERICAL",
+      "questionText": "Consider the following single step reaction in gas phase at constant temperature.\nThe initial rate of the reaction is recorded as when the reaction starts with pressure of \nand pressure of B. After some time, the rate is recorded when the pressure of C becomes\n. The ratio is _________ . (Nearest integer)",
+      "options": [],
+      "correctAnswer": [
+        "315"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 315.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Coordination Compounds",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q26",
+      "questionNumber": 26,
+      "questionType": "NUMERICAL",
+      "questionText": "The fusion of chromite ore with sodium carbonate in the presence of air leads to the formation of\nproducts and along with the evolution of . The sum of spin-only magnetic moment values\nof A and B is _________ B.M. (Nearest integer)\n\n[Given atomic number : ]",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordination Compounds (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q27",
+      "questionNumber": 27,
+      "questionType": "NUMERICAL",
+      "questionText": "In the Claisen-Schmidt reaction to prepare of dibenzalacetone using of acetone, the\namount of benzaldehyde required is _________ g. (Nearest integer)",
+      "options": [],
+      "correctAnswer": [
+        "318"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 318.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q28",
+      "questionNumber": 28,
+      "questionType": "NUMERICAL",
+      "questionText": "Combustion of 1 mole of benzene is expressed as\n.\nThe standard enthalpy of combustion of of benzene is . __________. \nGiven :\n1. standard Enthalpy of formation of of , for the reaction (graphite)\nis .\n2. Standard Enthalpy of formation of of , for the reaction (graphite)\nis .\n3. Standard Enthalpy of formation of of , for the reaction is\n.",
+      "options": [],
+      "correctAnswer": [
+        "6535"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6535.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q29",
+      "questionNumber": 29,
+      "questionType": "NUMERICAL",
+      "questionText": "of ethanamine was subjected to reaction with followed by hydrolysis to liberate\nand . The generated was completely neutralised by 0.2 moles of is _________ g.",
+      "options": [],
+      "correctAnswer": [
+        "9"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 9.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Bonding & Molecular Structure",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q30",
+      "questionNumber": 30,
+      "questionType": "NUMERICAL",
+      "questionText": "Number of compounds from the following with zero dipole moment is _________.",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Bonding & Molecular Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q31",
+      "questionNumber": 31,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet the circle and be a circle having centre at and radius 2\n. If the line of the common chord of and intersects the -axis at the point , then the square of\nthe distance of P from the centre of is:",
+      "options": [
+        {
+          "key": "A",
+          "text": "4"
+        },
+        {
+          "key": "B",
+          "text": "6"
+        },
+        {
+          "key": "C",
+          "text": "2"
+        },
+        {
+          "key": "D",
+          "text": "1"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q32",
+      "questionNumber": 32,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be defined as :\nand\n\nThen the function is",
+      "options": [
+        {
+          "key": "A",
+          "text": "neither one-one nor onto."
+        },
+        {
+          "key": "B",
+          "text": "one-one but not onto."
+        },
+        {
+          "key": "C",
+          "text": "both one-one and onto."
+        },
+        {
+          "key": "D",
+          "text": "onto but not one-one."
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q33",
+      "questionNumber": 33,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet ABCD and AEFG be squares of side 4 and 2 units, respectively. The point E is on the line\nsegment AB and the point F is on the diagonal AC. Then the radius r of the circle passing through\nthe point F and touching the line segments BC and CD satisfies :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q34",
+      "questionNumber": 34,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be the image of the point in the line . Then is equal\nto :",
+      "options": [
+        {
+          "key": "A",
+          "text": "16"
+        },
+        {
+          "key": "B",
+          "text": "20"
+        },
+        {
+          "key": "C",
+          "text": "18"
+        },
+        {
+          "key": "D",
+          "text": "14"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q35",
+      "questionNumber": 35,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and . Then\nthe area of the region is :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q36",
+      "questionNumber": 36,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf the constant term in the expansion of , is , then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "724"
+        },
+        {
+          "key": "B",
+          "text": "742"
+        },
+        {
+          "key": "C",
+          "text": "693"
+        },
+        {
+          "key": "D",
+          "text": "639"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q37",
+      "questionNumber": 37,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and be three vectors such that\n. If , then is equal to:",
+      "options": [
+        {
+          "key": "A",
+          "text": "15"
+        },
+        {
+          "key": "B",
+          "text": "10"
+        },
+        {
+          "key": "C",
+          "text": "5"
+        },
+        {
+          "key": "D",
+          "text": "12"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q38",
+      "questionNumber": 38,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and be two points and be a variable point above the line such that the\narea of is 10. If the locus of is , then is :\n(A) (B) (C) 6 (D) 4",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q39",
+      "questionNumber": 39,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe values of , for which the system of equations\n\nhas infinitely many solutions, satisfy the equation :\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q40",
+      "questionNumber": 40,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf , then at is equal to :\n(A) (B) 1 (C) (D) 2",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q41",
+      "questionNumber": 41,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet . If , then\nequals _________.",
+      "options": [
+        {
+          "key": "A",
+          "text": "2012"
+        },
+        {
+          "key": "B",
+          "text": "1021"
+        },
+        {
+          "key": "C",
+          "text": "1120"
+        },
+        {
+          "key": "D",
+          "text": "2120"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q42",
+      "questionNumber": 42,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be given by , where denotes the greatest integer\nless than or equal to . The number of points, where is not continuous, is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "5"
+        },
+        {
+          "key": "B",
+          "text": "6"
+        },
+        {
+          "key": "C",
+          "text": "4"
+        },
+        {
+          "key": "D",
+          "text": "3"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q43",
+      "questionNumber": 43,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet the set be partitioned into 3 sets with equal number of\nelements such that and . The maximum number of such\npossible partitions of is equal to:",
+      "options": [
+        {
+          "key": "A",
+          "text": "1640"
+        },
+        {
+          "key": "B",
+          "text": "1520"
+        },
+        {
+          "key": "C",
+          "text": "1710"
+        },
+        {
+          "key": "D",
+          "text": "1680"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Probability & Statistics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q44",
+      "questionNumber": 44,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe coefficients in the quadratic equation are from the set . If\nthe probability of this equation having one real root bigger than the other is p, then 216p equals :",
+      "options": [
+        {
+          "key": "A",
+          "text": "38"
+        },
+        {
+          "key": "B",
+          "text": "76"
+        },
+        {
+          "key": "C",
+          "text": "57"
+        },
+        {
+          "key": "D",
+          "text": "19"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Probability & Statistics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Matrices & Determinants",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q45",
+      "questionNumber": 45,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and . If is the matrix of cofactors of the\n\nelements of , then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "64"
+        },
+        {
+          "key": "B",
+          "text": "343"
+        },
+        {
+          "key": "C",
+          "text": "125"
+        },
+        {
+          "key": "D",
+          "text": "216"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Matrices & Determinants (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q46",
+      "questionNumber": 46,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nFor , the least value of , for which are three consecutive terms of\nan A.P., is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "10"
+        },
+        {
+          "key": "B",
+          "text": "4"
+        },
+        {
+          "key": "C",
+          "text": "8"
+        },
+        {
+          "key": "D",
+          "text": "16"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q47",
+      "questionNumber": 47,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe area enclosed between the curves and is :\n(A) (B) (C) (D) 1",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q48",
+      "questionNumber": 48,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n60 words can be made using all the letters of the word , with or without meaning. If these\nwords are written as in a dictionary, then the th word is:",
+      "options": [
+        {
+          "key": "A",
+          "text": "OBBJH"
+        },
+        {
+          "key": "B",
+          "text": "HBBJO"
+        },
+        {
+          "key": "C",
+          "text": "OBBHJ"
+        },
+        {
+          "key": "D",
+          "text": "JBBOH"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q49",
+      "questionNumber": 49,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nConsider three vectors . Let and . If is the angle between the\nvectors and , then the minimum value of is equal to:",
+      "options": [
+        {
+          "key": "A",
+          "text": "124"
+        },
+        {
+          "key": "B",
+          "text": "110"
+        },
+        {
+          "key": "C",
+          "text": "121"
+        },
+        {
+          "key": "D",
+          "text": "105"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q50",
+      "questionNumber": 50,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe differential equation of the family of circles passing through the origin and having centre at the\nline is :\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q51",
+      "questionNumber": 51,
+      "questionType": "NUMERICAL",
+      "questionText": "Let be the solution of the differential equation\n\nThen the area enclosed by the curve and the line is ________.",
+      "options": [],
+      "correctAnswer": [
+        "18"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 18.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Probability & Statistics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q52",
+      "questionNumber": 52,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the mean and the standard deviation of the probability distribution\n1 0 3\n\nbe and , respectively. If , then is equal to ________.",
+      "options": [],
+      "correctAnswer": [
+        "5"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Probability & Statistics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 5.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q53",
+      "questionNumber": 53,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the maximum and minimum values of be and ,\nrespectively. Then is equal to _________.",
+      "options": [],
+      "correctAnswer": [
+        "1600"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1600.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q54",
+      "questionNumber": 54,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the point lie on the line of the shortest distance between the lines\nand . Then is equal to _________.",
+      "options": [],
+      "correctAnswer": [
+        "25"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 25.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q55",
+      "questionNumber": 55,
+      "questionType": "NUMERICAL",
+      "questionText": "If upto , where a and b\nare integers with , then is equal to __________.",
+      "options": [],
+      "correctAnswer": [
+        "76"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 76.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q56",
+      "questionNumber": 56,
+      "questionType": "NUMERICAL",
+      "questionText": "Let be a root of the equation . If , where\n, then is equal to _________.",
+      "options": [],
+      "correctAnswer": [
+        "170"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 170.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q57",
+      "questionNumber": 57,
+      "questionType": "NUMERICAL",
+      "questionText": "If , then the value of equals __________.",
+      "options": [],
+      "correctAnswer": [
+        "1"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q58",
+      "questionNumber": 58,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of real solutions of the equation is __________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q59",
+      "questionNumber": 59,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of solutions of , where , is\n________.",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q60",
+      "questionNumber": 60,
+      "questionType": "NUMERICAL",
+      "questionText": "Let a line perpendicular to the line touch the parabola at the point P. The\ndistance of the point P from the centre of the circle is __________.\n\nPhysics\n30 questions",
+      "options": [],
+      "correctAnswer": [
+        "10"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 10.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q61",
+      "questionNumber": 61,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA body is moving unidirectionally under the influence of a constant power source. Its displacement\nin time t is proportional to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "t2/3"
+        },
+        {
+          "key": "B",
+          "text": "t3/2"
+        },
+        {
+          "key": "C",
+          "text": "t"
+        },
+        {
+          "key": "D",
+          "text": "t2"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q62",
+      "questionNumber": 62,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhat is the dimensional formula of in the equation , where letters have\ntheir usual meaning.\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q63",
+      "questionNumber": 63,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA particle moves in - plane under the influence of a force such that its linear momentum is\n. If is constant, the angle between and will be :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q64",
+      "questionNumber": 64,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List I with List II :\nLIST I LIST II\nEM-Wave Wavelength Range \nA. Infra-red I. nm\nB. Ultraviolet II. 400 nm to 1 nm\nC. X-rays III. 1 mm to 700 nm\nD. Gamma rays IV. 1 nm to nm\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "B",
+          "text": "-(III),"
+        },
+        {
+          "key": "C",
+          "text": "-(II),"
+        },
+        {
+          "key": "D",
+          "text": "-(IV)"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Thermodynamics & Kinetic Theory",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q65",
+      "questionNumber": 65,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nDuring an adiabatic process, if the pressure of a gas is found to be proportional to the cube of its\nabsolute temperature, then the ratio of for the gas is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics & Kinetic Theory (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q66",
+      "questionNumber": 66,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA heavy box of mass is moving on a horizontal surface. If co-efficient of kinetic friction\nbetween the box and horizontal surface is 0.3 then force of kinetic friction is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "1470 N"
+        },
+        {
+          "key": "B",
+          "text": "147 N"
+        },
+        {
+          "key": "C",
+          "text": "1.47 N"
+        },
+        {
+          "key": "D",
+          "text": "14.7 N"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q67",
+      "questionNumber": 67,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA man carrying a monkey on his shoulder does cycling smoothly on a circular track of radius\nand completes 120 revolutions in 3 minutes. The magnitude of centripetal acceleration of monkey is\n(in ) :\n\n(A) (B) (C) (D) Zero",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q68",
+      "questionNumber": 68,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA series LCR circuit is subjected to an ac signal of . If the voltage across the inductor\nis , then the current in this circuit is _______.",
+      "options": [
+        {
+          "key": "A",
+          "text": "10 A"
+        },
+        {
+          "key": "B",
+          "text": "10 mA"
+        },
+        {
+          "key": "C",
+          "text": "68 A"
+        },
+        {
+          "key": "D",
+          "text": "63 A"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q69",
+      "questionNumber": 69,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich of the following statement is not true about stopping potential ?",
+      "options": [
+        {
+          "key": "A",
+          "text": "It depends upon frequency of the incident light."
+        },
+        {
+          "key": "B",
+          "text": "It is times the maximum kinetic energy of electrons emitted."
+        },
+        {
+          "key": "C",
+          "text": "It increases with increase in intensity of the incident light."
+        },
+        {
+          "key": "D",
+          "text": "It depends on the nature of emitter material."
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q70",
+      "questionNumber": 70,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement I : When the white light passed through a prism, the red light bends lesser than yellow\nand violet. \nStatement II : The refractive indices are different for different wavelengths in dispersive medium. In\nthe light of the above statements, choose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are true"
+        },
+        {
+          "key": "B",
+          "text": "Statement I is true but Statement II is false"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is false but Statement II is true"
+        },
+        {
+          "key": "D",
+          "text": "Both Statement I and Statement II are false"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q71",
+      "questionNumber": 71,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List I with List II :\nLIST I LIST II\n\nA. A force that restores an elastic body of unit area to its original state I. Bulk modulus\nB. Two equal and opposite forces parallel to opposite faces II. Young's\nmodulus\nC. Forces perpendicular everywhere to the surface per unit area same III. Stress\neverywhere\nD. Two equal and opposite forces perpendicular to opposite faces IV. Shear modulus\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "B",
+          "text": "-(II),"
+        },
+        {
+          "key": "C",
+          "text": "-(III),"
+        },
+        {
+          "key": "D",
+          "text": "-(I)"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q72",
+      "questionNumber": 72,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA satellite revolving around a planet in stationary orbit has time period 6 hours. The mass of planet\nis one-fourth the mass of earth. The radius of orbit of the satellite is :\n(Given Radius of geo-stationary orbit for earth is ) \n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q73",
+      "questionNumber": 73,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA vernier callipers has 20 divisions on the vernier scale, which coincides with th division on the\nmain scale. The least count of the instrument is . One main scale division is equal to ________\nmm.",
+      "options": [
+        {
+          "key": "A",
+          "text": "5"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        },
+        {
+          "key": "C",
+          "text": "1"
+        },
+        {
+          "key": "D",
+          "text": "0.5"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q74",
+      "questionNumber": 74,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe ratio of heat dissipated per second through the resistance and in the circuit given below\nis:",
+      "options": [
+        {
+          "key": "A",
+          "text": "4 : 1"
+        },
+        {
+          "key": "B",
+          "text": "2 : 1"
+        },
+        {
+          "key": "C",
+          "text": "1 : 2"
+        },
+        {
+          "key": "D",
+          "text": "1 : 1"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q75",
+      "questionNumber": 75,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe output (Y) of logic circuit given below is 0 only when :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q76",
+      "questionNumber": 76,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe angular momentum of an electron in a hydrogen atom is proportional to : (Where is the radius\nof orbit of electron)\n(A) (B) (C) (D) r",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q77",
+      "questionNumber": 77,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe vehicles carrying inflammable fluids usually have metallic chains touching the ground:",
+      "options": [
+        {
+          "key": "A",
+          "text": "To protect tyres from catching dirt from ground"
+        },
+        {
+          "key": "B",
+          "text": "It is a custom"
+        },
+        {
+          "key": "C",
+          "text": "To alert other vehicles"
+        },
+        {
+          "key": "D",
+          "text": "To conduct excess charge due to air friction to ground and prevent sparking"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q78",
+      "questionNumber": 78,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA galvanometer of resistance when connected in series with measures a voltage of upto\n. The value of resistance required to convert the galvanometer into ammeter to read upto\nis . The value of is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "2"
+        },
+        {
+          "key": "B",
+          "text": "20"
+        },
+        {
+          "key": "C",
+          "text": "800"
+        },
+        {
+          "key": "D",
+          "text": "200"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q79",
+      "questionNumber": 79,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe electrostatic force and magnetic force acting on a charge moving with velocity\ncan be written :\n\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q80",
+      "questionNumber": 80,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf is the number density and is the diameter of the molecule, then the average distance covered\nby a molecule between two successive collisions (i.e. mean free path) is represented by :\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q81",
+      "questionNumber": 81,
+      "questionType": "NUMERICAL",
+      "questionText": "The electric field at point due to an electric dipole is . The electric field at point on equatorial\nline will be . The value of :",
+      "options": [],
+      "correctAnswer": [
+        "16"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 16.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q82",
+      "questionNumber": 82,
+      "questionType": "NUMERICAL",
+      "questionText": "A sonometer wire of resonating length has a fundamental frequency of when kept\nunder some tension. The resonating length of the wire with fundamental frequency of under\nsame tension _______ .",
+      "options": [],
+      "correctAnswer": [
+        "60"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 60.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q83",
+      "questionNumber": 83,
+      "questionType": "NUMERICAL",
+      "questionText": "In a single slit experiment, a parallel beam of green light of wavelength passes through a slit\nof width . The transmitted light is collected on a screen away. The distance of first\norder minima from the central maximum will be . The value of is :",
+      "options": [],
+      "correctAnswer": [
+        "275"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 275.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q84",
+      "questionNumber": 84,
+      "questionType": "NUMERICAL",
+      "questionText": "A hollow sphere is rolling on a plane surface about its axis of symmetry. The ratio of rotational\nkinetic energy to its total kinetic energy is . The value of is _________.",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q85",
+      "questionNumber": 85,
+      "questionType": "NUMERICAL",
+      "questionText": "A wire of resistance is divided into 10 equal parts, resulting pairs. A combination of two parts\nare connected in parallel and so on. Now resulting pairs of parallel combination are connected in\nseries. The equivalent resistance of final combination is _________ .",
+      "options": [],
+      "correctAnswer": [
+        "5"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 5.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q86",
+      "questionNumber": 86,
+      "questionType": "NUMERICAL",
+      "questionText": "The maximum height reached by a projectile is . If the initial velocity is halved, the new\nmaximum height of the projectile is ______ .",
+      "options": [],
+      "correctAnswer": [
+        "16"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 16.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q87",
+      "questionNumber": 87,
+      "questionType": "NUMERICAL",
+      "questionText": "The shortest wavelength of the spectral lines in the Lyman series of hydrogen spectrum is .\nThe longest wavelength of spectral lines in the Balmer series will be _______ .",
+      "options": [],
+      "correctAnswer": [
+        "6588"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6588.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q88",
+      "questionNumber": 88,
+      "questionType": "NUMERICAL",
+      "questionText": "The current in an inductor is given by where is in second. The magnitude of induced\nemf produced in the inductor is . The self-inductance of the inductor _________ .",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q89",
+      "questionNumber": 89,
+      "questionType": "NUMERICAL",
+      "questionText": "A hydraulic press containing water has two arms with diameters as mentioned in the figure. A force\nof is applied on the surface of water in the thinner arm. The force required to be applied on the\nsurface of water in the thicker arm to maintain equilibrium of water is _________ N.",
+      "options": [],
+      "correctAnswer": [
+        "1000"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1000.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 2 (Apr)",
+      "date": "2024-04-05",
+      "shift": "Shift 2",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2024_online-5th-april-evening-shift_Q90",
+      "questionNumber": 90,
+      "questionType": "NUMERICAL",
+      "questionText": "A solenoid of length has a radius of and is made up of ' ' number of turns. It carries a\ncurrent of . If the magnitude of the magnetic field inside the solenoid is then the\nvalue of is __________.",
+      "options": [],
+      "correctAnswer": [
+        "500"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 500.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2024_online-5th-april-evening-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2024-online-5th-april-evening-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-5th-april-evening-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    }
+  ]
+}

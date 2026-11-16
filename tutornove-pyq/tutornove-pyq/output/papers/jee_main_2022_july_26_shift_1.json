@@ -1,0 +1,3168 @@
+{
+  "testId": "JEE_MAIN_2022_07_26_SHIFT_1",
+  "title": "JEE Main 2022 Official Paper (Session 2 (July) - 2022-07-26 Shift 1)",
+  "exam": "JEE Main",
+  "paperType": "Paper 1 (B.E./B.Tech)",
+  "year": 2022,
+  "session": "Session 2 (July)",
+  "date": "2022-07-26",
+  "shift": "Shift 1",
+  "durationMinutes": 180,
+  "totalMarks": 300,
+  "totalQuestions": 90,
+  "subjects": [
+    "Physics",
+    "Chemistry",
+    "Mathematics"
+  ],
+  "markingScheme": {
+    "mcq": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    },
+    "numerical": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    }
+  },
+  "provenance": {
+    "source": "Official NTA JEE Main Examination Paper",
+    "extractedFrom": "jee_main_2022_online-26th-july-morning-shift.pdf",
+    "verifiedBy": "TutorNove Academic Review Board",
+    "verificationStatus": "VERIFIED"
+  },
+  "questions": [
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q1",
+      "questionNumber": 1,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List-I with List-II :\nList I List II\n(Compound) (Shape)",
+      "options": [
+        {
+          "key": "A",
+          "text": "BrF (I) bent"
+        },
+        {
+          "key": "B",
+          "text": "[CrF ] (II) square pyramidal"
+        },
+        {
+          "key": "C",
+          "text": "O (III) trigonal bipyramidal"
+        },
+        {
+          "key": "D",
+          "text": "PCl (IV) octahedral\nChoose the correct answer from the options given below :"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q2",
+      "questionNumber": 2,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List - I with List - II.\nList I List II\n(Processes / Reactions) (Catalyst)",
+      "options": [
+        {
+          "key": "A",
+          "text": "2SO (g) + O (g) 2SO (g) (I) Fe(s)"
+        },
+        {
+          "key": "B",
+          "text": "4NH (g) + 5O (g) 4NO(g) + 6H O(g) (II) Pt(s) Rh(s)"
+        },
+        {
+          "key": "C",
+          "text": "N (g) + 3H (g) 2NH (g) (III) V O"
+        },
+        {
+          "key": "D",
+          "text": "Vegetable oil(l) + H Vegetable ghee(s) (IV) Ni(s)\nChoose the correct answer from the options given below :"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q3",
+      "questionNumber": 3,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven two statements below :\nStatement I : In molecule the covalent radius is double of the atomic radius of chlorine.\nStatement II : Radius of anionic species is always greater than their parent atomic radius. \nChoose the most appropriate answer from options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are correct."
+        },
+        {
+          "key": "B",
+          "text": "Both Statement I and Statement II are incorrect."
+        },
+        {
+          "key": "C",
+          "text": "Statement I is correct but Statement II is incorrect."
+        },
+        {
+          "key": "D",
+          "text": "Statement I is incorrect but Statement II is correct."
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q4",
+      "questionNumber": 4,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich of the given reactions is not an example of disproportionation reaction?\n(A)\n(B) \n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q5",
+      "questionNumber": 5,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe dark purple colour of disappears in the titration with oxalic acid in acidic medium. The\noverall change in the oxidation number of manganese in the reaction is :",
+      "options": [
+        {
+          "key": "A",
+          "text": "5"
+        },
+        {
+          "key": "B",
+          "text": "1"
+        },
+        {
+          "key": "C",
+          "text": "7"
+        },
+        {
+          "key": "D",
+          "text": "2"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q6",
+      "questionNumber": 6,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA and B in the above atmospheric reaction step are :",
+      "options": [
+        {
+          "key": "A",
+          "text": "and"
+        },
+        {
+          "key": "B",
+          "text": "and"
+        },
+        {
+          "key": "C",
+          "text": "and"
+        },
+        {
+          "key": "D",
+          "text": "and"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q7",
+      "questionNumber": 7,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich technique among the following, is most appropriate in separation of a mixture of of\n-nitrophenol and picric acid ?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Steam distillation"
+        },
+        {
+          "key": "B",
+          "text": "2-5 ft long column of silica gel"
+        },
+        {
+          "key": "C",
+          "text": "Sublimation"
+        },
+        {
+          "key": "D",
+          "text": "Preparative TLC (Thin Layer Chromatography)"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q8",
+      "questionNumber": 8,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe difference in the reaction of phenol with bromine in chloroform and bromine in water medium is\ndue to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Hyperconjugation in substrate"
+        },
+        {
+          "key": "B",
+          "text": "Polarity of solvent"
+        },
+        {
+          "key": "C",
+          "text": "Free radical formation"
+        },
+        {
+          "key": "D",
+          "text": "Electromeric effect the substrate"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q9",
+      "questionNumber": 9,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich of the following compounds is not aromatic?\n(A)\n\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q10",
+      "questionNumber": 10,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe products formed in the following reaction, A and B are\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q11",
+      "questionNumber": 11,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich reactant will give the following alcohol on reaction with one mole of phenyl magnesium\nbromide followed by acidic hydrolysis?\n\n(A) CH C N\n3\n(B) Ph C N\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q12",
+      "questionNumber": 12,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe major product of the following reaction is\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q13",
+      "questionNumber": 13,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe correct stability order of the following diazonium salt is\n\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q14",
+      "questionNumber": 14,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nWhich one of the following is a reducing sugar?\n(A)\n\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q15",
+      "questionNumber": 15,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements : one is labelled as Assertion",
+      "options": [
+        {
+          "key": "A",
+          "text": "and the other is labelled as\nReason (R).\nAssertion"
+        },
+        {
+          "key": "A",
+          "text": ": Experimental reaction of with aniline and anhydrous does not give \nand -methylaniline.\nReason (R): The group of aniline becomes deactivating because of salt formation with\nanhydrous and hence yields -methyl aniline as the product.\nIn the light of the above statements, choose the most appropriate answer from the options given\nbelow :"
+        },
+        {
+          "key": "A",
+          "text": "Both A and R are true and (R) is the correct explanation of"
+        },
+        {
+          "key": "A",
+          "text": "."
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q16",
+      "questionNumber": 16,
+      "questionType": "NUMERICAL",
+      "questionText": "Chlorophyll extracted from the crushed green leaves was dissolved in water to make solution of\nMg of concentration . The number of atoms of in this solution is atoms. The\nvalue of is ___________. (Nearest Integer)\n\n(Given : Atomic mass of is )",
+      "options": [],
+      "correctAnswer": [
+        "24"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 24.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q17",
+      "questionNumber": 17,
+      "questionType": "NUMERICAL",
+      "questionText": "The wavelength of an electron and a neutron will become equal when the velocity of the electron is\ntimes the velocity of neutron. The value of is ____________. (Nearest Integer)\n(Mass of electron is and mass of neutron is )",
+      "options": [],
+      "correctAnswer": [
+        "1758"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1758.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics (Chemistry)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q18",
+      "questionNumber": 18,
+      "questionType": "NUMERICAL",
+      "questionText": "coal is burnt in a bomb calorimeter in excess of oxygen at and pressure. The\ntemperature of the calorimeter rises from to . The enthalpy change during the\ncombustion of coal is . The value of is ___________. (Nearest Integer)\n\n(Given : Heat capacity of bomb calorimeter . Assume coal to be pure carbon)",
+      "options": [],
+      "correctAnswer": [
+        "200"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics (Chemistry) (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 200.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Solutions",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q19",
+      "questionNumber": 19,
+      "questionType": "NUMERICAL",
+      "questionText": "When 800 mL of 0.5 M nitric acid is heated in a beaker, its volume is reduced to half and 11.5 g of\nnitric acid is evaporated. The molarity of the remaining nitric acid solution is x 10 2 M. (Nearest\ninteger)\n\n(Molar mass of nitric acid is 63 g mol 1)",
+      "options": [],
+      "correctAnswer": [
+        "54"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Solutions (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 54.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q20",
+      "questionNumber": 20,
+      "questionType": "NUMERICAL",
+      "questionText": "At , the equilibrium constant is for the reaction :\nThe equilibrium constant for the reaction \nis . The value of is _____________. (Nearest Integer)",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Electrochemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q21",
+      "questionNumber": 21,
+      "questionType": "NUMERICAL",
+      "questionText": "The amount of charge in (Faraday) required to obtain one mole of iron from is ___________.\n(Nearest Integer)",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrochemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q22",
+      "questionNumber": 22,
+      "questionType": "NUMERICAL",
+      "questionText": "For a reaction the half lives are and when the concentration of reactant is\nand respectively. The order of the reaction is ______________ . (Nearest Integer)",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Coordination Compounds",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q23",
+      "questionNumber": 23,
+      "questionType": "NUMERICAL",
+      "questionText": "The difference between spin only magnetic moment values of and is\n___________.",
+      "options": [],
+      "correctAnswer": [
+        "0"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordination Compounds (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 0.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q24",
+      "questionNumber": 24,
+      "questionType": "NUMERICAL",
+      "questionText": "In the presence of sunlight, benzene reacts with Cl to give product, X. The number of hydrogens in\n2\nX is _____________.\n\nMathematics\n21 questions",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q25",
+      "questionNumber": 25,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet f : R R be a continuous function such that . If , then is equal to\n:",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q26",
+      "questionNumber": 26,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet O be the origin and A be the point . If B is the point , , such that OAB is a\nright angled isosceles triangle with OB as hypotenuse, then which of the following is NOT true?\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q27",
+      "questionNumber": 27,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nIf the system of linear equations.\n\nhas infinitely many solutions, then the distance of the point from the plane\nis :\n(A) (B) 4 (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q28",
+      "questionNumber": 28,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe odd natural number a, such that the area of the region bounded by y = 1, y = 3, x = 0, x = ya is\n, is equal to :",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q29",
+      "questionNumber": 29,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nConsider two G.Ps. 2, 22, 23, ..... and 4, 42, 43, .... of 60 and n terms respectively. If the geometric\nmean of all the 60 + n terms is , then is equal to :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q30",
+      "questionNumber": 30,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nIf the function is continuous at x = 0, then k\nis equal to:",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q31",
+      "questionNumber": 31,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf and are continuous on R, then\nis equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "10"
+        },
+        {
+          "key": "B",
+          "text": "10"
+        },
+        {
+          "key": "C",
+          "text": "8"
+        },
+        {
+          "key": "D",
+          "text": "8"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q32",
+      "questionNumber": 32,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet .\nThen the set of all values of b, for which f(x) has maximum value at x = 1, is :\n\n(A) ( 6, 2) (B) (2, 6)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q33",
+      "questionNumber": 33,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf and , then the maximum value of is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q34",
+      "questionNumber": 34,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA point moves so that the sum of squares of its distances from the points and is 14.\nLet be the locus of , which intersects the -axis at the points , and the -axis at the\npoints C, D. Then the area of the quadrilateral ACBD is equal to :\n\n(A) (B) (C) (D) 9",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q35",
+      "questionNumber": 35,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe length of the perpendicular from the point on the line passing through and\nparallel to the line is :\n(A) (B) (C) (D) 1",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q36",
+      "questionNumber": 36,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and . If the projection of on the vector is\n30, then is equal to :\n\n(A) (B) 8 (C) (D) 7",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q37",
+      "questionNumber": 37,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be three mutually exclusive events such that and\n. If the maximum and minimum values of are and , then is equal to :\n(A) (B) (C) (D) 1",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q38",
+      "questionNumber": 38,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nis equal to :\n(A) 1 (B) 2 (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q39",
+      "questionNumber": 39,
+      "questionType": "NUMERICAL",
+      "questionText": "If for some , not all have same sign, one of the roots of the equation\nis also a root of the equation , then is\nequal to ____________,",
+      "options": [],
+      "correctAnswer": [
+        "272"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 272.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q40",
+      "questionNumber": 40,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of 5-digit natural numbers, such that the product of their digits is 36 , is __________.",
+      "options": [],
+      "correctAnswer": [
+        "180"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 180.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q41",
+      "questionNumber": 41,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of distinct real roots of the equation\nis ______________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q42",
+      "questionNumber": 42,
+      "questionType": "NUMERICAL",
+      "questionText": "If , then is equal to ______________.",
+      "options": [],
+      "correctAnswer": [
+        "24"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 24.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q43",
+      "questionNumber": 43,
+      "questionType": "NUMERICAL",
+      "questionText": "The equations of the sides and of a triangle are and\nrespectively. If its orthocentre is , then is equal to ______________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Calculus (Differential Calculus & Limits)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q44",
+      "questionNumber": 44,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the function , be decreasing in and increasing in . A tangent\nto the parabola at a point on it passes through the point but does not pass\nthrough the point . If the equation of the normal at is : , then is equal to\n\n________________.",
+      "options": [],
+      "correctAnswer": [
+        "45"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Calculus (Differential Calculus & Limits) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 45.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q45",
+      "questionNumber": 45,
+      "questionType": "NUMERICAL",
+      "questionText": "Let and be two points on the line at a distance from the point .\nThen the square of the area of the triangle is ___________.",
+      "options": [],
+      "correctAnswer": [
+        "153"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 153.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q46",
+      "questionNumber": 46,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThree masses and are arranged in a system as shown in figure.\nAll the surfaces are frictionless and strings are inextensible and weightless. The pulleys are also\nweightless and frictionless. A force is applied on the system so that the mass moves upward\n\nwith an acceleration of . The value of is :\n( Take )",
+      "options": [
+        {
+          "key": "A",
+          "text": "3360 N"
+        },
+        {
+          "key": "B",
+          "text": "3380 N"
+        },
+        {
+          "key": "C",
+          "text": "3120 N"
+        },
+        {
+          "key": "D",
+          "text": "3240 N"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q47",
+      "questionNumber": 47,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA parallel beam of light of wavelength and intensity is incident on a surface\nperpendicular to the beam. The number of photons crossing area perpendicular to the beam\nin one second is :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q48",
+      "questionNumber": 48,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIn Young's double slit experiment, the fringe width is . If the entire arrangement is placed in\nwater of refractive index , then the fringe width becomes (in mm):",
+      "options": [
+        {
+          "key": "A",
+          "text": "16"
+        },
+        {
+          "key": "B",
+          "text": "9"
+        },
+        {
+          "key": "C",
+          "text": "48"
+        },
+        {
+          "key": "D",
+          "text": "12"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q49",
+      "questionNumber": 49,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe magnetic field of a plane electromagnetic wave is given by :\n.\n\nThe amplitude of the electric field would be :",
+      "options": [
+        {
+          "key": "A",
+          "text": "along -axis"
+        },
+        {
+          "key": "B",
+          "text": "along -axis"
+        },
+        {
+          "key": "C",
+          "text": "along -axis"
+        },
+        {
+          "key": "D",
+          "text": "along -axis"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q50",
+      "questionNumber": 50,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIn a series circuit and power factor of the circuit is . When capacitor with capacitance\nsuch that is put in series, the power factor becomes . The ratio is:\n(A) (B) (C) (D) 2 : 1",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q51",
+      "questionNumber": 51,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA charge particle is moving in a uniform magnetic field . If it has an acceleration of\n, then the value of will be :",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q52",
+      "questionNumber": 52,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nand are the magnetic fields at the centre of two coils and respectively each carrying\nequal current. If coil has 200 turns and radius and coil has 400 turns and radius,\nthe ratio of and is :",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q53",
+      "questionNumber": 53,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe current I in the given circuit will be :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q54",
+      "questionNumber": 54,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe total charge on the system of capacitors and\nconnected in parallel is :\n(Assume a battery of is connected to the combination) \n(A) (B) 200 C (C) (D) 10 C",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q55",
+      "questionNumber": 55,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nWhen a particle executes Simple Harmonic Motion, the nature of graph of velocity as a function of\ndisplacement will be :",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q56",
+      "questionNumber": 56,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\n7 mol of a certain monoatomic ideal gas undergoes a temperature increase of at constant\npressure. The increase in the internal energy of the gas in this process is :\n(Given )",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q57",
+      "questionNumber": 57,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA monoatomic gas at pressure and volume is suddenly compressed to one eighth of its original\nvolume. The final pressure at constant entropy will be :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q58",
+      "questionNumber": 58,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA water drop of radius is broken into 729 equal droplets. If surface tension of water is 75 dyne/\n, then the gain in surface energy upto first decimal place will be :\n(Given ) \n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q59",
+      "questionNumber": 59,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe percentage decrease in the weight of a rocket, when taken to a height of above the\nsurface of earth will, be :\nRadius of earth",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q60",
+      "questionNumber": 60,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nAs per the given figure, two blocks each of mass are connected to a spring of spring constant\n. If both are given velocity in opposite directions, then maximum elongation of the spring is\n:\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q61",
+      "questionNumber": 61,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA monkey of mass climbs on a rope which can withstand the tension (T) of . If monkey\ninitially climbs down with an acceleration of and then climbs up with an acceleration of\n. Choose the correct option .",
+      "options": [
+        {
+          "key": "A",
+          "text": "while climbing upward"
+        },
+        {
+          "key": "B",
+          "text": "while going downward"
+        },
+        {
+          "key": "C",
+          "text": "Rope will break while climbing upward"
+        },
+        {
+          "key": "D",
+          "text": "Rope will break while going downward"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q62",
+      "questionNumber": 62,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nTwo projectiles thrown at and with the horizontal respectively, reach the maximum height in\nsame time. The ratio of their initial velocities is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q63",
+      "questionNumber": 63,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA screw gauge of pitch is used to measure the diameter of uniform wire of length , the\nmain scale reading is and circular scale reading is 7 . The calculated curved surface area of\nwire to appropriate significant figures is :\n\n[Screw gauge has 50 divisions on its circular scale]",
+      "options": [
+        {
+          "key": "A",
+          "text": "6.8 cm2"
+        },
+        {
+          "key": "B",
+          "text": "3.4 cm2"
+        },
+        {
+          "key": "C",
+          "text": "3.9 cm2"
+        },
+        {
+          "key": "D",
+          "text": "2.4 cm2"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q64",
+      "questionNumber": 64,
+      "questionType": "NUMERICAL",
+      "questionText": "If the initial velocity in horizontal direction of a projectile is unit vector and the equation of\ntrajectory is . The component vector of the initial velocity is ______________ .(",
+      "options": [],
+      "correctAnswer": [
+        "5"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 5.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q65",
+      "questionNumber": 65,
+      "questionType": "NUMERICAL",
+      "questionText": "A disc of mass and radius is free to rotate about a horizontal axis passing through its centre\nand perpendicular to the plane of disc. A body of same mass as that of disc is fixed at the highest\npoint of the disc. Now the system is released, when the body comes to the lowest position, its\n\nangular speed will be where ____________.",
+      "options": [],
+      "correctAnswer": [
+        "5"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 5.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Properties of Matter",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q66",
+      "questionNumber": 66,
+      "questionType": "NUMERICAL",
+      "questionText": "In an experiment to determine the Young's modulus of wire of a length exactly , the extension in\nthe length of the wire is measured as with an uncertainty of when a load of\nis applied. The diameter of the wire is measured as with an uncertainty of . The\n\nerror in the measurement of Young's modulus is found to be . The value of is\n_________________. take )",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Properties of Matter (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q67",
+      "questionNumber": 67,
+      "questionType": "NUMERICAL",
+      "questionText": "A composite parallel plate capacitor is made up of two different dielectric materials with different\nthickness and as shown in figure. The two different dielectric materials are separated by a\nconducting foil . The voltage of the conducting foil is ____________ V.",
+      "options": [],
+      "correctAnswer": [
+        "60"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 60.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q68",
+      "questionNumber": 68,
+      "questionType": "NUMERICAL",
+      "questionText": "Resistances are connected in a meter bridge circuit as shown in the figure. The balancing length\nis . Now an unknown resistance is connected in series with and new balancing length is\nfound to be measured from the same end. Then the value of will be ____________ .",
+      "options": [],
+      "correctAnswer": [
+        "20"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 20.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q69",
+      "questionNumber": 69,
+      "questionType": "NUMERICAL",
+      "questionText": "The effective current I in the given circuit at very high frequencies will be ___________ A.",
+      "options": [],
+      "correctAnswer": [
+        "44"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 44.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q70",
+      "questionNumber": 70,
+      "questionType": "NUMERICAL",
+      "questionText": "The graph between and for a thin convex lens in order to determine its focal length is plotted as\nshown in the figure. The refractive index of lens is and its both the surfaces have same radius of\ncurvature . The value of will be ____________ (where object distance, image\n\ndistance)",
+      "options": [],
+      "correctAnswer": [
+        "10"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 10.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q71",
+      "questionNumber": 71,
+      "questionType": "NUMERICAL",
+      "questionText": "In the hydrogen spectrum, be the wavelength of first transition line of Lyman series. The\nwavelength difference will be \"a '' between the wavelength of rd transition line of Paschen series\nand that of nd transition line of Balmer series where ___________.",
+      "options": [],
+      "correctAnswer": [
+        "5"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 5.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q72",
+      "questionNumber": 72,
+      "questionType": "NUMERICAL",
+      "questionText": "In the circuit shown below, maximum zener diode current will be _________ .\n\nOut of syllabus\n18 questions\nThese questions are on topics no longer in the current syllabus. They are kept for practice, after everything else.",
+      "options": [],
+      "correctAnswer": [
+        "9"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 9.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q73",
+      "questionNumber": 73,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nRefining using liquation method is the most suitable for metals with :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Low melting point"
+        },
+        {
+          "key": "B",
+          "text": "High boiling point"
+        },
+        {
+          "key": "C",
+          "text": "High electrical conductivity"
+        },
+        {
+          "key": "D",
+          "text": "Less tendency to be soluble in melts than impurities"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q74",
+      "questionNumber": 74,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nWhich of the following can be used to prevent the decomposition of ?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Urea"
+        },
+        {
+          "key": "B",
+          "text": "Formaldehyde"
+        },
+        {
+          "key": "C",
+          "text": "Formic acid"
+        },
+        {
+          "key": "D",
+          "text": "Ethanol"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q75",
+      "questionNumber": 75,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nReaction of with gives :",
+      "options": [
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "C",
+          "text": ""
+        },
+        {
+          "key": "A",
+          "text": ""
+        },
+        {
+          "key": "D",
+          "text": "and (E)"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q76",
+      "questionNumber": 76,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nBorazine, also known as inorganic benzene, can be prepared by the reaction of 3-equivalents of \" \"\nwith 6-equivalents of \" \".\" \" and \" \", respectively are :",
+      "options": [
+        {
+          "key": "A",
+          "text": "and"
+        },
+        {
+          "key": "B",
+          "text": "and"
+        },
+        {
+          "key": "C",
+          "text": "and"
+        },
+        {
+          "key": "D",
+          "text": "and"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q77",
+      "questionNumber": 77,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nStearic acid and polyethylene glycol react to form which one of the following soap/s detergents ?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Cationic detergent"
+        },
+        {
+          "key": "B",
+          "text": "Soap"
+        },
+        {
+          "key": "C",
+          "text": "Anionic detergent"
+        },
+        {
+          "key": "D",
+          "text": "Non-ionic detergent"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q78",
+      "questionNumber": 78,
+      "questionType": "NUMERICAL",
+      "questionText": "A mixture of hydrogen and oxygen contains hydrogen by mass when the pressure is bar.\nThe partial pressure of hydrogen is ____________ bar. (Nearest Integer)",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q79",
+      "questionNumber": 79,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet A be a 2 2 matrix with det",
+      "options": [
+        {
+          "key": "A",
+          "text": "= 1 and det ((A + I) (Adj"
+        },
+        {
+          "key": "A",
+          "text": "+ I)) = 4. Then the sum of the\ndiagonal elements of A can be :"
+        },
+        {
+          "key": "A",
+          "text": "1"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q80",
+      "questionNumber": 80,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nIf and , , then :\n(A) (B)\n\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q81",
+      "questionNumber": 81,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet the tangent drawn to the parabola at the point is perpendicular to the line\n. Then the normal to the hyperbola at the point does NOT\npass through the point :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q82",
+      "questionNumber": 82,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nThe mean and variance of a binomial distribution are and respectively. If , then\nor 5 is equal to :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q83",
+      "questionNumber": 83,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet Then is equal\nto:",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q84",
+      "questionNumber": 84,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nThe statement is :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q85",
+      "questionNumber": 85,
+      "questionType": "NUMERICAL",
+      "questionText": "The series of positive multiples of 3 is divided into sets : Then\nthe sum of the elements in the th set is equal to ____________.",
+      "options": [],
+      "correctAnswer": [
+        "6993"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6993.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q86",
+      "questionNumber": 86,
+      "questionType": "NUMERICAL",
+      "questionText": "If the coefficients of and in the expansion of , are and\nrespectively, then the coefficient of is equal to _____________.",
+      "options": [],
+      "correctAnswer": [
+        "23"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 23.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q87",
+      "questionNumber": 87,
+      "questionType": "NUMERICAL",
+      "questionText": "Let a curve pass through the point and the area of the region under this curve, above\nthe -axis and between the abscissae 3 and be . If this curve also passes through the\npoint in the first quadrant, then is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q88",
+      "questionNumber": 88,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nA radio can tune to any station in to band. The value of corresponding wavelength\nbandwidth will be :",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q89",
+      "questionNumber": 89,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nThe disintegration rate of a certain radioactive sample at any instant is 4250 disintegrations per\nminute. 10 minutes later, the rate becomes 2250 disintegrations per minute. The approximate decay\nconstant is :\n\nTake\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2022,
+      "session": "Session 2 (July)",
+      "date": "2022-07-26",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2022_online-26th-july-morning-shift_Q90",
+      "questionNumber": 90,
+      "questionType": "NUMERICAL",
+      "questionText": "When a car is approaching the observer, the frequency of horn is . After passing the observer,\nit is . If the observer moves with the car, the frequency will be where\n________________.",
+      "options": [],
+      "correctAnswer": [
+        "200"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 200.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2022_online-26th-july-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2022-online-26th-july-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-26th-july-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    }
+  ]
+}

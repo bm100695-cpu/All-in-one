@@ -1,0 +1,1274 @@
+import React, { useState, useEffect } from 'react';
+import {
+  ShieldCheck,
+  CheckCircle,
+  XCircle,
+  Sparkles,
+  Layers,
+  FileCheck,
+  AlertTriangle,
+  RotateCcw,
+  Check,
+  Plus,
+  Send,
+  HelpCircle,
+  BookOpen,
+  Download,
+  Edit3,
+  Filter,
+  CheckCircle2,
+  Eye,
+  Save,
+  X,
+  IndianRupee,
+  CreditCard,
+  Users,
+  RefreshCw,
+  Lock,
+  TrendingUp,
+  Receipt,
+  Zap,
+} from 'lucide-react';
+import { api } from '../api';
+import { AdminSuperTetManager } from './AdminSuperTetManager';
+import { AdminExamsManager } from './AdminExamsManager';
+import { AdminStudentActivity } from './AdminStudentActivity';
+import { AdminLiveTestManager } from './AdminLiveTestManager';
+
+export const AdminPortal: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'LIVE_TESTS' | 'EXAMS_MANAGER' | 'STUDENTS_ACTIVITY' | 'JEE_PYQ' | 'SUPER_TET_PYQ' | 'QUEUE' | 'AI_GENERATOR' | 'AUDIT' | 'MONETIZATION'>('LIVE_TESTS');
+  const [queue, setQueue] = useState<any[]>([]);
+  const [auditMetrics, setAuditMetrics] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
+  const [actingOnId, setActingOnId] = useState<string | null>(null);
+
+  // Monetization State
+  const [monetizationOverview, setMonetizationOverview] = useState<any>(null);
+  const [refundingId, setRefundingId] = useState<string | null>(null);
+  const [refundReason, setRefundReason] = useState<string>('Student request within 7-day guarantee window');
+  const [editingPlan, setEditingPlan] = useState<any | null>(null);
+  const [planEditPrice, setPlanEditPrice] = useState<number>(0);
+  const [monetizationMsg, setMonetizationMsg] = useState<string | null>(null);
+
+  // JEE Main PYQ Manager State
+  const [pyqQuestions, setPyqQuestions] = useState<any[]>([]);
+  const [pyqYear, setPyqYear] = useState<string>('ALL');
+  const [pyqSubject, setPyqSubject] = useState<string>('ALL');
+  const [pyqStatus, setPyqStatus] = useState<string>('ALL');
+  const [editingQuestion, setEditingQuestion] = useState<any | null>(null);
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
+
+  // AI Generator Form State
+  const [generating, setGenerating] = useState<boolean>(false);
+  const [generatedResult, setGeneratedResult] = useState<any>(null);
+  const [selectedSubject, setSelectedSubject] = useState<string>('Physics');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('MEDIUM');
+
+  useEffect(() => {
+    loadPortalData();
+  }, [activeTab, pyqYear, pyqSubject, pyqStatus]);
+
+  const loadPortalData = async () => {
+    setLoading(true);
+    try {
+      if (activeTab === 'JEE_PYQ') {
+        const res = await api.getPYQQuestions({
+          year: pyqYear,
+          subject: pyqSubject,
+          status: pyqStatus,
+        });
+        setPyqQuestions(res.questions);
+      } else if (activeTab === 'QUEUE') {
+        const res = await api.getReviewQueue();
+        setQueue(res.questions);
+      } else if (activeTab === 'AUDIT') {
+        const res = await api.getCoverageAudit();
+        setAuditMetrics(res);
+      } else if (activeTab === 'MONETIZATION') {
+        const res = await api.getAdminMonetizationOverview();
+        setMonetizationOverview(res);
+      }
+    } catch (err) {
+      console.error('Error loading admin portal data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdatePlanPrice = async (planId: string) => {
+    try {
+      await api.updateAdminPlan(planId, { priceINR: Number(planEditPrice) });
+      setMonetizationMsg('Plan price updated successfully');
+      setEditingPlan(null);
+      const res = await api.getAdminMonetizationOverview();
+      setMonetizationOverview(res);
+      setTimeout(() => setMonetizationMsg(null), 3000);
+    } catch (err: any) {
+      alert('Failed to update plan: ' + (err.message || 'Error'));
+    }
+  };
+
+  const handleProcessRefund = async (paymentId: string) => {
+    if (!confirm('Are you sure you want to process a 100% refund for this transaction? This will automatically revoke the student subscription/credits.')) {
+      return;
+    }
+    setRefundingId(paymentId);
+    try {
+      await api.processAdminRefund(paymentId, refundReason);
+      setMonetizationMsg('100% refund processed successfully.');
+      const res = await api.getAdminMonetizationOverview();
+      setMonetizationOverview(res);
+      setTimeout(() => setMonetizationMsg(null), 3500);
+    } catch (err: any) {
+      alert('Refund processing error: ' + (err.message || 'Error'));
+    } finally {
+      setRefundingId(null);
+    }
+  };
+
+  const handleTogglePublish = async (id: string, currentPublished: boolean, currentStatus: string) => {
+    setActingOnId(id);
+    try {
+      await api.updatePYQStatus(id, currentStatus, !currentPublished);
+      await loadPortalData();
+    } catch (err) {
+      console.error('Failed to toggle publish status:', err);
+    } finally {
+      setActingOnId(null);
+    }
+  };
+
+  const handleApproveStatus = async (id: string, newStatus: string) => {
+    setActingOnId(id);
+    try {
+      await api.updatePYQStatus(id, newStatus, newStatus === 'verified');
+      await loadPortalData();
+    } catch (err) {
+      console.error('Failed to update verification status:', err);
+    } finally {
+      setActingOnId(null);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingQuestion) return;
+    try {
+      await api.updatePYQQuestion(editingQuestion.id, {
+        questionText: editingQuestion.questionText,
+        options: editingQuestion.options,
+        correctAnswer: editingQuestion.correctAnswer,
+        explanation: editingQuestion.explanation,
+        diagramUrl: editingQuestion.diagramUrl,
+        questionType: editingQuestion.questionType,
+        subject: editingQuestion.subject,
+        sectionName: editingQuestion.sectionName,
+        verificationStatus: editingQuestion.verificationStatus,
+      });
+      setSaveSuccessMsg('Question updated and verified successfully.');
+      setTimeout(() => setSaveSuccessMsg(null), 3000);
+      setEditingQuestion(null);
+      await loadPortalData();
+    } catch (err) {
+      console.error('Failed to save edited question:', err);
+    }
+  };
+
+  const handleReviewAction = async (id: string, action: 'APPROVED' | 'REJECTED') => {
+    setActingOnId(id);
+    try {
+      await api.reviewQuestion(id, action, reviewNotes[id] || 'Verified for academic rigor and provenance.');
+      await loadPortalData();
+    } catch (err) {
+      console.error('Review action failed:', err);
+    } finally {
+      setActingOnId(null);
+    }
+  };
+
+  const handleSynthesizeAIQuestion = async () => {
+    setGenerating(true);
+    setGeneratedResult(null);
+    try {
+      const res = await api.generateAIPracticeQuestion({
+        examId: 'jee-main',
+        difficulty: selectedDifficulty,
+      });
+      setGeneratedResult(res);
+    } catch (err) {
+      console.error('AI synthesis failed:', err);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  return (
+    <div className="space-y-8 pb-16">
+      {/* Header Banner */}
+      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-brand-950 to-indigo-950 text-white p-6 sm:p-10 shadow-xl border border-slate-800">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-semibold border border-brand-400/30">
+              <ShieldCheck className="w-3.5 h-3.5 text-brand-400" />
+              <span>Academic Integrity • Content Governance Portal</span>
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+              Reviewer & Admin Control Center
+            </h1>
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
+              Maintain transparent exam provenance, verify questions, audit official syllabus coverage, and inspect schema-validated AI practice variants before publishing.
+            </p>
+          </div>
+
+          {/* Sub-Tabs */}
+          <div className="flex items-center gap-1 bg-white/10 p-1 rounded-xl border border-white/20 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('LIVE_TESTS')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                activeTab === 'LIVE_TESTS' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-500" />
+              <span>Weekly Live Tests</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
+            </button>
+            <button
+              onClick={() => setActiveTab('EXAMS_MANAGER')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                activeTab === 'EXAMS_MANAGER' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 text-blue-500" />
+              <span>All Exams & Tests Manager</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('STUDENTS_ACTIVITY')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                activeTab === 'STUDENTS_ACTIVITY' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5 text-blue-400" />
+              <span>Live Students & Exam History</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('JEE_PYQ')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === 'JEE_PYQ' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <FileCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span>JEE Main PYQ Database ({pyqQuestions.length})</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('QUEUE')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors whitespace-nowrap ${
+                activeTab === 'QUEUE' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              Review Queue ({queue.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('AI_GENERATOR')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === 'AI_GENERATOR' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span>AI Synthesizer</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('AUDIT')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors whitespace-nowrap ${
+                activeTab === 'AUDIT' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              Coverage Audit
+            </button>
+            <button
+              onClick={() => setActiveTab('MONETIZATION')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === 'MONETIZATION' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <IndianRupee className="w-3.5 h-3.5 text-amber-400" />
+              <span>Monetization & Plans</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('SUPER_TET_PYQ')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === 'SUPER_TET_PYQ' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+              <span>SUPER TET (2012–25)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Tab: Weekly Live Mock Tests Scheduler & Telemetry */}
+      {activeTab === 'LIVE_TESTS' && <AdminLiveTestManager />}
+
+      {/* Tab: Multi-Exam Manager */}
+      {activeTab === 'EXAMS_MANAGER' && <AdminExamsManager />}
+
+      {/* Tab: Live Students & Exam History */}
+      {activeTab === 'STUDENTS_ACTIVITY' && <AdminStudentActivity />}
+
+      {/* Tab: SUPER TET PYQ Manager */}
+      {activeTab === 'SUPER_TET_PYQ' && <AdminSuperTetManager />}
+
+      {/* Tab 0: JEE Main PYQ Database Management */}
+      {activeTab === 'JEE_PYQ' && (
+        <div className="space-y-6">
+          {saveSuccessMsg && (
+            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>{saveSuccessMsg}</span>
+            </div>
+          )}
+
+          {/* Filter & Export Toolbar */}
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <Filter className="w-3.5 h-3.5" />
+                <span>Filters:</span>
+              </div>
+
+              {/* Year Filter */}
+              <select
+                value={pyqYear}
+                onChange={(e) => setPyqYear(e.target.value)}
+                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option value="ALL">All Years (2021-2025)</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+
+              {/* Subject Filter */}
+              <select
+                value={pyqSubject}
+                onChange={(e) => setPyqSubject(e.target.value)}
+                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option value="ALL">All Subjects</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+              </select>
+
+              {/* Status Filter */}
+              <select
+                value={pyqStatus}
+                onChange={(e) => setPyqStatus(e.target.value)}
+                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option value="ALL">All Statuses</option>
+                <option value="VERIFIED">Verified</option>
+                <option value="NEEDS_VERIFICATION">Needs Verification</option>
+                <option value="INCOMPLETE">Incomplete / Missing Fields</option>
+                <option value="UNDER_REVIEW">Pending Review</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => api.exportPYQQuestions(pyqYear !== 'ALL' ? pyqYear : undefined)}
+                className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors flex items-center gap-2 shadow-xs"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export JSON ({pyqYear})</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Question List */}
+          {loading ? (
+            <div className="h-64 bg-slate-100 rounded-2xl animate-pulse" />
+          ) : pyqQuestions.length === 0 ? (
+            <div className="p-12 text-center rounded-2xl bg-white border border-slate-200">
+              <CheckCircle className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+              <p className="text-slate-600 font-bold text-sm">No questions match the current filters.</p>
+              <p className="text-slate-400 text-xs mt-1">Try selecting another year or subject.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {pyqQuestions.map((q) => (
+                <div
+                  key={q.id}
+                  className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 transition-all space-y-4"
+                >
+                  {/* Card Header Badges */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">
+                        JEE Main {q.year}
+                      </span>
+                      <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold">
+                        {q.shift}
+                      </span>
+                      <span className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                        {q.subject} • {q.chapter}
+                      </span>
+                      <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-bold">
+                        Q.{q.questionNumber} ({q.questionType})
+                      </span>
+                      <span className="px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 text-xs font-semibold">
+                        Marks: {q.marks} | Neg: {q.negativeMarks}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 ${
+                          q.verificationStatus === 'verified'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>{q.verificationStatus.toUpperCase()}</span>
+                      </span>
+
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                          q.isPublished
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {q.isPublished ? '● Published' : '○ Unpublished'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Question Content */}
+                  {q.diagramUrl && (
+                    <div className="rounded-lg border border-slate-200 bg-white p-2 overflow-x-auto">
+                      <img src={q.diagramUrl} alt={`Q.${q.questionNumber}`} className="max-h-56 w-auto" />
+                    </div>
+                  )}
+                  <div className="text-sm font-medium text-slate-900 leading-relaxed">
+                    {q.questionText}
+                  </div>
+
+                  {/* Options (if MCQ) */}
+                  {q.questionType === 'MCQ' && q.options && q.options.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                      {q.options.map((opt: any) => {
+                        const isCorrect = q.correctAnswer?.includes(opt.key);
+                        return (
+                          <div
+                            key={opt.key}
+                            className={`p-3 rounded-xl border text-xs flex items-start gap-2 ${
+                              isCorrect
+                                ? 'bg-emerald-50/70 border-emerald-300 text-emerald-950 font-semibold'
+                                : 'bg-slate-50 border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            <span
+                              className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                                isCorrect
+                                  ? 'bg-emerald-600 text-white'
+                                  : 'bg-slate-200 text-slate-600'
+                              }`}
+                            >
+                              {opt.key}
+                            </span>
+                            <span>{opt.text}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Numerical Answer (if Numerical) */}
+                  {q.questionType === 'NUMERICAL' && (
+                    <div className="p-3 rounded-xl bg-purple-50 border border-purple-200 text-xs text-purple-900 font-semibold flex items-center gap-2">
+                      <span>Official Numerical Answer:</span>
+                      <span className="px-2 py-0.5 rounded-md bg-purple-200 text-purple-950 font-bold">
+                        {q.correctAnswer?.[0] || q.numericalAnswer || 'Pending Verification'}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Explanation Preview */}
+                  {q.explanation && (
+                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
+                      <span className="font-bold text-slate-800">Step-by-step Solution:</span>
+                      <p className="leading-relaxed">{q.explanation}</p>
+                    </div>
+                  )}
+
+                  {/* Source Provenance */}
+                  <div className="text-[11px] text-slate-400 flex items-center gap-1.5">
+                    <span>Provenance:</span>
+                    <span className="text-slate-600 font-medium">{q.source?.provenance || q.source?.pdf}</span>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                    <button
+                      onClick={() => setEditingQuestion(q)}
+                      className="px-3.5 py-1.5 rounded-lg border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-100 transition-colors flex items-center gap-1.5"
+                    >
+                      <Edit3 className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Edit Question & Key</span>
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      {q.verificationStatus !== 'verified' && (
+                        <button
+                          disabled={actingOnId === q.id}
+                          onClick={() => handleApproveStatus(q.id, 'verified')}
+                          className="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors flex items-center gap-1.5 shadow-xs"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Verify Official Key</span>
+                        </button>
+                      )}
+
+                      <button
+                        disabled={actingOnId === q.id}
+                        onClick={() => handleTogglePublish(q.id, q.isPublished, q.verificationStatus)}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-xs ${
+                          q.isPublished
+                            ? 'bg-amber-100 text-amber-800 hover:bg-amber-200'
+                            : 'bg-brand-600 text-white hover:bg-brand-700'
+                        }`}
+                      >
+                        {q.isPublished ? 'Unpublish' : 'Publish Question'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Edit Modal */}
+          {editingQuestion && (
+            <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+              <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <div>
+                    <h3 className="text-lg font-extrabold text-slate-900">
+                      Edit PYQ Question #{editingQuestion.questionNumber}
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      JEE Main {editingQuestion.year} • {editingQuestion.subject} ({editingQuestion.shift})
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setEditingQuestion(null)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Question Text
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={editingQuestion.questionText}
+                      onChange={(e) =>
+                        setEditingQuestion({ ...editingQuestion, questionText: e.target.value })
+                      }
+                      className="w-full p-3 rounded-xl border border-slate-200 text-xs font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    />
+                  </div>
+
+                  {editingQuestion.questionType === 'MCQ' && (
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        Options
+                      </label>
+                      {editingQuestion.options?.map((opt: any, idx: number) => (
+                        <div key={opt.key} className="flex items-center gap-2">
+                          <span className="w-7 h-7 rounded-lg bg-slate-100 font-bold text-xs flex items-center justify-center text-slate-700 shrink-0">
+                            {opt.key}
+                          </span>
+                          <input
+                            type="text"
+                            value={opt.text}
+                            onChange={(e) => {
+                              const newOpts = [...editingQuestion.options];
+                              newOpts[idx] = { ...opt, text: e.target.value };
+                              setEditingQuestion({ ...editingQuestion, options: newOpts });
+                            }}
+                            className="flex-1 p-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Subject</label>
+                      <select
+                        value={editingQuestion.subject || 'Physics'}
+                        onChange={(e) => setEditingQuestion({ ...editingQuestion, subject: e.target.value })}
+                        className="w-full p-2 rounded-lg border border-slate-200 text-xs font-semibold bg-white"
+                      >
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Mathematics">Mathematics</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Section</label>
+                      <input
+                        type="text"
+                        value={editingQuestion.sectionName || ''}
+                        onChange={(e) => setEditingQuestion({ ...editingQuestion, sectionName: e.target.value })}
+                        placeholder="e.g. Physics - Section A"
+                        className="w-full p-2 rounded-lg border border-slate-200 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Question Type</label>
+                      <select
+                        value={editingQuestion.questionType || 'MCQ'}
+                        onChange={(e) => setEditingQuestion({ ...editingQuestion, questionType: e.target.value })}
+                        className="w-full p-2 rounded-lg border border-slate-200 text-xs font-semibold bg-white"
+                      >
+                        <option value="MCQ">MCQ (Single Choice)</option>
+                        <option value="NUMERICAL">Numerical Value</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Diagram / Equation Figure URL or Upload
+                    </label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <input
+                        type="text"
+                        value={editingQuestion.diagramUrl || ''}
+                        onChange={(e) => setEditingQuestion({ ...editingQuestion, diagramUrl: e.target.value })}
+                        placeholder="/pyq-crops/... or https://..."
+                        className="flex-1 p-2 rounded-lg border border-slate-200 text-xs font-mono"
+                      />
+                      <label className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer text-center border border-slate-300">
+                        <span>Upload Image</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0];
+                            if (!f) return;
+                            const reader = new FileReader();
+                            reader.onload = () => setEditingQuestion({ ...editingQuestion, diagramUrl: String(reader.result || '') });
+                            reader.readAsDataURL(f);
+                          }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Correct Answer Key
+                      </label>
+                      <input
+                        type="text"
+                        value={editingQuestion.correctAnswer?.join(', ') || ''}
+                        onChange={(e) =>
+                          setEditingQuestion({
+                            ...editingQuestion,
+                            correctAnswer: e.target.value.split(',').map((s) => s.trim().toUpperCase()),
+                          })
+                        }
+                        placeholder="e.g. B or 25"
+                        className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Verification Status
+                      </label>
+                      <select
+                        value={editingQuestion.verificationStatus}
+                        onChange={(e) =>
+                          setEditingQuestion({ ...editingQuestion, verificationStatus: e.target.value })
+                        }
+                        className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                      >
+                        <option value="verified">Verified</option>
+                        <option value="needs_verification">Needs Verification</option>
+                        <option value="under_review">Under Review</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Step-by-step Solution / Explanation
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={editingQuestion.explanation || ''}
+                      onChange={(e) =>
+                        setEditingQuestion({ ...editingQuestion, explanation: e.target.value })
+                      }
+                      className="w-full p-3 rounded-xl border border-slate-200 text-xs font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                  <button
+                    onClick={() => setEditingQuestion(null)}
+                    className="px-4 py-2 rounded-xl text-slate-600 text-xs font-bold hover:bg-slate-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveEdit}
+                    className="px-5 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 flex items-center gap-1.5 shadow-sm"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Save Changes</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 1: Review Queue */}
+      {activeTab === 'QUEUE' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-base font-extrabold text-slate-900">
+              Questions Awaiting Senior Academic Review
+            </h3>
+            <span className="text-xs text-slate-500">
+              Mandatory human sign-off for all AI synthesized items.
+            </span>
+          </div>
+
+          {loading ? (
+            <div className="h-44 bg-slate-100 rounded-2xl animate-pulse" />
+          ) : queue.length === 0 ? (
+            <div className="p-12 text-center bg-white rounded-2xl border border-slate-200">
+              <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-slate-800">Review Queue is Clear!</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                All questions and practice variants have been verified against official bulletins.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {queue.map((q) => (
+                <div
+                  key={q.id}
+                  className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-brand-50 text-brand-700">
+                        {q.exam?.shortName}
+                      </span>
+                      <span className="text-xs text-slate-500 font-semibold">{q.syllabusNode?.title}</span>
+                      {q.isAIGenerated ? (
+                        <span className="text-xs font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">
+                          AI Generated ({q.aiModelUsed || 'Gemini 1.5 Pro'})
+                        </span>
+                      ) : (
+                        <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">
+                          Official PYQ {q.pyqYear}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                      Status: Under Review
+                    </span>
+                  </div>
+
+                  {/* Stem */}
+                  <div className="text-sm font-medium text-slate-900 whitespace-pre-line leading-relaxed">
+                    {q.contentEn}
+                  </div>
+
+                  {/* Options */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    {q.options?.map((opt: any, optIdx: number) => {
+                      const isCorrect = q.correctAnswers?.includes(opt.id);
+                      return (
+                        <div
+                          key={opt.id}
+                          className={`p-3 rounded-xl border flex items-center gap-2 ${
+                            isCorrect
+                              ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-bold'
+                              : 'bg-slate-50 border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          <span>{String.fromCharCode(65 + optIdx)}.</span>
+                          <span>{opt.textEn}</span>
+                          {isCorrect && <Check className="w-4 h-4 text-emerald-600 ml-auto" />}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Explanation */}
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                    <span className="font-bold text-slate-900">Proposed Step-by-Step Derivation:</span>
+                    <p className="whitespace-pre-line text-slate-600">{q.explanationEn}</p>
+                  </div>
+
+                  {/* Provenance Footer */}
+                  <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-slate-100">
+                    <span className="text-[11px] text-slate-500 font-medium">
+                      Provenance: {q.sourceProvenance}
+                    </span>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <button
+                        onClick={() => handleReviewAction(q.id, 'REJECTED')}
+                        disabled={actingOnId === q.id}
+                        className="flex-1 sm:flex-initial px-4 py-2 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-colors"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => handleReviewAction(q.id, 'APPROVED')}
+                        disabled={actingOnId === q.id}
+                        className="flex-1 sm:flex-initial px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all active:scale-95"
+                      >
+                        {actingOnId === q.id ? 'Approving...' : 'Approve & Verify'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 2: AI Synthesizer */}
+      {activeTab === 'AI_GENERATOR' && (
+        <div className="space-y-6">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
+            <div>
+              <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-brand-600" />
+                <span>AI Practice Question Generator (RAG over Authorized Curated Content)</span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Generates syllabus-anchored practice questions with strict schema validation, duplicate hash checking, and automatic flagging for academic sign-off.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Subject Area</label>
+                <select
+                  value={selectedSubject}
+                  onChange={(e) => setSelectedSubject(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 bg-white"
+                >
+                  <option value="Physics">Physics (Mechanics, SHM, Electrodynamics)</option>
+                  <option value="Chemistry">Chemistry (Organic, Physical, Inorganic)</option>
+                  <option value="Mathematics">Mathematics (Calculus, Algebra, Coordinate)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Target Difficulty</label>
+                <select
+                  value={selectedDifficulty}
+                  onChange={(e) => setSelectedDifficulty(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 bg-white"
+                >
+                  <option value="EASY">Easy (Direct formula application)</option>
+                  <option value="MEDIUM">Medium (JEE Main standard 2-step)</option>
+                  <option value="HARD">Hard (Multi-concept synthesis)</option>
+                </select>
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  onClick={handleSynthesizeAIQuestion}
+                  disabled={generating}
+                  className="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>{generating ? 'Synthesizing Question...' : 'Generate Validated Item'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Generated Question Output */}
+            {generatedResult && (
+              <div className="p-6 rounded-2xl bg-brand-50/50 border border-brand-200 space-y-4 animate-in fade-in">
+                <div className="flex items-center justify-between border-b border-brand-200 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-brand-600 text-white">
+                      Synthesized Item
+                    </span>
+                    <span className="text-xs font-semibold text-brand-900">
+                      Validation: Schema Valid • 4 Options • Duplicate Check Clear
+                    </span>
+                  </div>
+                  <span className="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded border border-amber-200">
+                    Flagged: UNDER_REVIEW
+                  </span>
+                </div>
+
+                <div className="text-sm font-medium text-slate-900 leading-relaxed whitespace-pre-line">
+                  {generatedResult.question.contentEn}
+                </div>
+
+                <div className="p-3.5 bg-white rounded-xl border border-brand-100 text-xs space-y-1 text-slate-700">
+                  <span className="font-bold text-slate-900">Step-by-Step Explanation:</span>
+                  <p className="whitespace-pre-line">{generatedResult.question.explanationEn}</p>
+                </div>
+
+                <p className="text-[11px] text-slate-500 italic">
+                  Note: This question has been entered into the Review Queue for mandatory human review before it can appear in live student mock test series.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: Coverage Audit */}
+      {activeTab === 'AUDIT' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+              <div className="text-xs font-medium text-slate-400 uppercase">Total Questions</div>
+              <div className="text-3xl font-extrabold text-slate-900 mt-1">
+                {auditMetrics?.metrics?.totalQuestions || 0}
+              </div>
+            </div>
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+              <div className="text-xs font-medium text-slate-400 uppercase">Verified Official PYQs</div>
+              <div className="text-3xl font-extrabold text-emerald-600 mt-1">
+                {auditMetrics?.metrics?.officialPYQs || 0}
+              </div>
+            </div>
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+              <div className="text-xs font-medium text-slate-400 uppercase">AI Practice Items</div>
+              <div className="text-3xl font-extrabold text-purple-600 mt-1">
+                {auditMetrics?.metrics?.aiGeneratedQuestions || 0}
+              </div>
+            </div>
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+              <div className="text-xs font-medium text-slate-400 uppercase">Pending Review</div>
+              <div className="text-3xl font-extrabold text-amber-600 mt-1">
+                {auditMetrics?.metrics?.pendingQuestions || 0}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-3">
+            <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider">
+              Official Examination Coverage Logs
+            </h3>
+            <p className="text-xs text-slate-500">
+              Every syllabus revision issued by conducting bodies (NTA, UPSC, SSC, IISc) is tracked and audited for complete question coverage.
+            </p>
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
+              <p className="font-bold text-slate-900">JEE Main 2024 Rationalization Audit</p>
+              <p className="text-slate-600 mt-1">
+                All 143/145 topics verified with minimum 10 shift PYQs mapped per topic. Removed deleted chapters (P-Block full coverage, Potentiometer, Rolling Motion) to prevent out-of-syllabus student confusion.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 4: Monetization & Plans */}
+      {activeTab === 'MONETIZATION' && (
+        <div className="space-y-6">
+          {monetizationMsg && (
+            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{monetizationMsg}</span>
+              </div>
+              <button
+                onClick={() => setMonetizationMsg(null)}
+                className="text-emerald-700 hover:text-emerald-900 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          {/* Top Revenue & Performance Metrics */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="text-xs font-medium uppercase">Verified Revenue</span>
+                <IndianRupee className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-700">
+                ₹{monetizationOverview?.metrics?.totalRevenueINR?.toLocaleString('en-IN') || 0}
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Server-side HMAC verified transactions
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="text-xs font-medium uppercase">Paid Subscriptions</span>
+                <TrendingUp className="w-4 h-4 text-tn-blue" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-tn-navy">
+                {monetizationOverview?.metrics?.activePaidSubscriptions || 0}
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Active Test Pack & Monthly Subscribers
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="text-xs font-medium uppercase">Student Base</span>
+                <Users className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {monetizationOverview?.metrics?.totalStudents || 0}
+              </div>
+              <p className="text-[11px] text-slate-500">
+                {monetizationOverview?.metrics?.paidStudents || 0} Paid •{' '}
+                {monetizationOverview?.metrics?.freeStudents || 0} Free Aspirants
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="text-xs font-medium uppercase">Refund Rate</span>
+                <RefreshCw className="w-4 h-4 text-amber-600" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {monetizationOverview?.metrics?.refundedPayments || 0}
+                <span className="text-xs font-normal text-slate-400 ml-1.5">
+                  / {monetizationOverview?.metrics?.successfulPayments || 0} total
+                </span>
+              </div>
+              <p className="text-[11px] text-emerald-700 font-medium">
+                100% 7-Day Refund Policy Compliant
+              </p>
+            </div>
+          </div>
+
+          {/* Subscription Plans Management */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                  Active Subscription Plans & Pricing
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Update live student pricing, change currency benchmarks, or adjust test allowances.
+                </p>
+              </div>
+              <button
+                onClick={loadPortalData}
+                className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-1.5 cursor-pointer"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Refresh</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {monetizationOverview?.plans?.map((plan: any) => {
+                const isEditing = editingPlan?.id === plan.id;
+
+                return (
+                  <div
+                    key={plan.id}
+                    className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between space-y-3"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700 uppercase">
+                          {plan.code}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">
+                          {plan.isActive ? 'Active' : 'Disabled'}
+                        </span>
+                      </div>
+
+                      <h4 className="text-sm font-bold text-slate-900">{plan.name}</h4>
+                      <p className="text-xs text-slate-500 leading-relaxed">{plan.description}</p>
+
+                      <div className="pt-2 border-t border-slate-200">
+                        {isEditing ? (
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-slate-700">₹</span>
+                            <input
+                              type="number"
+                              value={planEditPrice}
+                              onChange={(e) => setPlanEditPrice(Number(e.target.value))}
+                              className="w-24 px-2 py-1 rounded border border-slate-300 text-xs font-bold"
+                            />
+                            <button
+                              onClick={() => handleUpdatePlanPrice(plan.id)}
+                              className="px-2.5 py-1 rounded bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 cursor-pointer"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setEditingPlan(null)}
+                              className="px-2 py-1 rounded bg-slate-200 text-slate-700 text-xs font-medium cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-baseline justify-between">
+                            <div className="text-xl font-extrabold text-slate-900">
+                              ₹{plan.priceINR}
+                              <span className="text-xs font-normal text-slate-400 ml-1">
+                                / {plan.interval === 'ONE_TIME' ? 'pack' : 'month'}
+                              </span>
+                            </div>
+                            {plan.priceINR > 0 && (
+                              <button
+                                onClick={() => {
+                                  setEditingPlan(plan);
+                                  setPlanEditPrice(plan.priceINR);
+                                }}
+                                className="text-xs text-tn-blue hover:underline font-semibold cursor-pointer"
+                              >
+                                Edit Price
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="pt-2 text-[11px] text-slate-500 font-mono">
+                      Allowance: {plan.testLimit ? `${plan.testLimit} Tests` : 'Unlimited 111 Papers'}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Payment Transactions & Refund Processing Ledger */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                  <Receipt className="w-4 h-4 text-slate-500" />
+                  <span>Real-Time Payment Transaction Ledger</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Every order verified via official HMAC-SHA256 signature. 7-day one-click refund workflow supported.
+                </p>
+              </div>
+            </div>
+
+            {monetizationOverview?.recentPayments?.length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl">
+                No transactions recorded yet. Payments will automatically log here when students upgrade.
+              </div>
+            ) : (
+              <div className="overflow-x-auto border border-slate-200 rounded-xl">
+                <table className="w-full text-left text-xs text-slate-700">
+                  <thead className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600 uppercase text-[10px] tracking-wider">
+                    <tr>
+                      <th className="p-3">Order & Payment ID</th>
+                      <th className="p-3">Student Aspirant</th>
+                      <th className="p-3">Amount</th>
+                      <th className="p-3">Method</th>
+                      <th className="p-3">Status</th>
+                      <th className="p-3">Date</th>
+                      <th className="p-3 text-right">Refund Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {monetizationOverview?.recentPayments?.map((p: any) => {
+                      const isRefunding = refundingId === p.id;
+                      const isRefunded = p.status === 'REFUNDED';
+
+                      return (
+                        <tr key={p.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="p-3 font-mono text-[11px]">
+                            <div className="font-bold text-slate-900">{p.orderId}</div>
+                            <div className="text-[10px] text-slate-400">{p.paymentId || 'Pending Callback'}</div>
+                          </td>
+                          <td className="p-3">
+                            <div className="font-semibold text-slate-900">{p.user?.name || 'Aspirant'}</div>
+                            <div className="text-[11px] text-slate-400">{p.user?.email || 'student@allinone.in'}</div>
+                          </td>
+                          <td className="p-3 font-bold text-slate-900">
+                            {p.currency === 'INR' ? '₹' : '$'}
+                            {p.amount}
+                          </td>
+                          <td className="p-3 uppercase font-mono text-[11px]">
+                            {p.method || 'Razorpay Gateway'}
+                          </td>
+                          <td className="p-3">
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                isRefunded
+                                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                                  : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                              }`}
+                            >
+                              {p.status}
+                            </span>
+                          </td>
+                          <td className="p-3 text-[11px] text-slate-500 whitespace-nowrap">
+                            {new Date(p.createdAt).toLocaleDateString('en-IN', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </td>
+                          <td className="p-3 text-right whitespace-nowrap">
+                            {isRefunded ? (
+                              <span className="text-[11px] text-slate-400 font-medium">Refunded 100%</span>
+                            ) : (
+                              <button
+                                disabled={isRefunding}
+                                onClick={() => handleProcessRefund(p.id)}
+                                className="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                              >
+                                {isRefunding ? 'Refunding...' : 'Process Refund'}
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

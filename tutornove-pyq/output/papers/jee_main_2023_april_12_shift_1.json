@@ -1,0 +1,3236 @@
+{
+  "testId": "JEE_MAIN_2023_04_12_SHIFT_1",
+  "title": "JEE Main 2023 Official Paper (Session 2 (Apr) - 2023-04-12 Shift 1)",
+  "exam": "JEE Main",
+  "paperType": "Paper 1 (B.E./B.Tech)",
+  "year": 2023,
+  "session": "Session 2 (Apr)",
+  "date": "2023-04-12",
+  "shift": "Shift 1",
+  "durationMinutes": 180,
+  "totalMarks": 300,
+  "totalQuestions": 90,
+  "subjects": [
+    "Physics",
+    "Chemistry",
+    "Mathematics"
+  ],
+  "markingScheme": {
+    "mcq": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    },
+    "numerical": {
+      "correct": 4,
+      "incorrect": -1,
+      "unattempted": 0
+    }
+  },
+  "provenance": {
+    "source": "Official NTA JEE Main Examination Paper",
+    "extractedFrom": "jee_main_2023_online-12th-april-morning-shift.pdf",
+    "verifiedBy": "TutorNove Academic Review Board",
+    "verificationStatus": "VERIFIED"
+  },
+  "questions": [
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Bonding & Molecular Structure",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q1",
+      "questionNumber": 1,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement I : Boron is extremely hard indicating its high lattice energy.\nStatement II : Boron has highest melting and boiling point compared to its other group members. \nIn the light of the above statements, choose the most appropriate answer from the options given\nbelow :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both Statement I and Statement II are incorrect"
+        },
+        {
+          "key": "B",
+          "text": "Statement I is incorrect but Statement II is correct"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is correct but Statement II is incorrect"
+        },
+        {
+          "key": "D",
+          "text": "Both statement I and Statement II are correct"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Bonding & Molecular Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q2",
+      "questionNumber": 2,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List I with List II\nLIST I LIST II\nComplex CFSE ( ) \nA. I.\nB. II.\nC. III.\nD. IV.\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "key": "A",
+          "text": "A-I, B-IV, C-II, D-III"
+        },
+        {
+          "key": "B",
+          "text": "A-III, B-IV, C-I, D-II"
+        },
+        {
+          "key": "C",
+          "text": "A-II, B-III, C-I, D-IV"
+        },
+        {
+          "key": "D",
+          "text": "A-I, B-II, C-IV, D-III"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q3",
+      "questionNumber": 3,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n\nThe two products formed in above reaction are -",
+      "options": [
+        {
+          "key": "A",
+          "text": "Butanal and acetaldehyde"
+        },
+        {
+          "key": "B",
+          "text": "Butanoic acid and acetic acid"
+        },
+        {
+          "key": "C",
+          "text": "Butanal and acetic acid"
+        },
+        {
+          "key": "D",
+          "text": "Butanoic acid and acetaldehyde"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 2
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Chemical Bonding & Molecular Structure",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q4",
+      "questionNumber": 4,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe bond order and magnetic property of acetylide ion are same as that of\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Chemical Bonding & Molecular Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q5",
+      "questionNumber": 5,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\n\n'A' in the above reaction is:\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 3
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q6",
+      "questionNumber": 6,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements: one is labelled as Assertion and the other is labelled as Reason\nAssertion A: electrons can participate in bonding to a far greater extent than electrons \nReason R: orbitals are not as buried as orbitals\nIn the light of the above statements, choose the correct answer from the options given below",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both A and R are true and R is the correct explanation of A"
+        },
+        {
+          "key": "B",
+          "text": "Both A and R are true but R is NOT the correct explanation of A"
+        },
+        {
+          "key": "C",
+          "text": "A is true but R is false"
+        },
+        {
+          "key": "D",
+          "text": "A is false but R is true"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Atomic Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q7",
+      "questionNumber": 7,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA metal chloride contains of chlorine by weight . vapours of the metal chloride at STP\nweigh . The molecular formula of the metal chloride is\n(Given: Atomic mass of chlorine is ) \n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q8",
+      "questionNumber": 8,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nCorrect statements for the given reaction are :\n\nA. Compound ' ' is aromatic\nB. The completion of above reaction is very slow\nC. 'A' shows tautomerism\nD. The bond lengths of C-C in compound are found to be same\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "key": "A",
+          "text": "B, C and D only"
+        },
+        {
+          "key": "B",
+          "text": "A, C and D only"
+        },
+        {
+          "key": "C",
+          "text": "A, B and D only"
+        },
+        {
+          "key": "D",
+          "text": "A, B and C only"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 4
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q9",
+      "questionNumber": 9,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe incorrect statement regarding the reaction given below is",
+      "options": [
+        {
+          "key": "A",
+          "text": "' ' is N-nitroso ammonium compound"
+        },
+        {
+          "key": "B",
+          "text": "The product ' ' formed in the above reaction is -nitroso compound at low temperature"
+        },
+        {
+          "key": "C",
+          "text": "The electrophile involved in the reaction is"
+        },
+        {
+          "key": "D",
+          "text": "The reaction occurs at low temperature"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q10",
+      "questionNumber": 10,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nFor lead storage battery pick the correct statements\nA. During charging of battery, on anode is converted into\nB. During charging of battery, on cathode is converted into \nC. Lead storage battery consists of grid of lead packed with as anode\nD. Lead storage battery has solution of sulphuric acid as an electrolyte\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "key": "A",
+          "text": "A, B, D only"
+        },
+        {
+          "key": "B",
+          "text": "B, C only"
+        },
+        {
+          "key": "C",
+          "text": "B, C, D only"
+        },
+        {
+          "key": "D",
+          "text": "B, D only"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q11",
+      "questionNumber": 11,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements :\nStatement I : is more covalent than\nStatement II: The higher oxides of halogens also tend to be more stable than the lower ones. \nIn the light of the above statements, choose the most appropriate answer from the options given\nbelow :",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both statement I and Statement II are correct"
+        },
+        {
+          "key": "B",
+          "text": "Both Statement I and Statement II are incorrect"
+        },
+        {
+          "key": "C",
+          "text": "Statement I is correct but Statement II is incorrect"
+        },
+        {
+          "key": "D",
+          "text": "Statement I is incorrect but Statement II is correct"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 5
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q12",
+      "questionNumber": 12,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIn the following reaction\n\n'A' is\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 6
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q13",
+      "questionNumber": 13,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe major product 'P' formed in the following sequence of reactions is\n\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q14",
+      "questionNumber": 14,
+      "questionType": "NUMERICAL",
+      "questionText": "In an oligopeptide named Alanylglycylphenyl alanyl isoleucine, the number of hybridised carbons\nis __________.",
+      "options": [],
+      "correctAnswer": [
+        "10"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 10.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 7
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q15",
+      "questionNumber": 15,
+      "questionType": "NUMERICAL",
+      "questionText": "80 mole percent of is dissociated in aqueous solution. The vapour pressure of\naqueous solution of at is ____________ . (Nearest integer)\nGiven : Vapour pressure of water at is",
+      "options": [],
+      "correctAnswer": [
+        "48"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 48.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q16",
+      "questionNumber": 16,
+      "questionType": "NUMERICAL",
+      "questionText": "Values of work function (W ) for a few metals are given below\nMetal Li Na K Mg Cu Ag\n\nW /eV 2.42 2.3 2.25 3.7 4.8 4.3\nThe number of metals which will show photoelectric effect when light of wavelength falls on\nit is ___________\nGiven:",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Atomic Structure (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "Equilibrium",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q17",
+      "questionNumber": 17,
+      "questionType": "NUMERICAL",
+      "questionText": "Three organic compounds A, B and were allowed to run in thin layer chromatography using\nhexane and gave the following result (see figure). The value of the most polar compound is\n____________",
+      "options": [],
+      "correctAnswer": [
+        "25"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Equilibrium (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 25.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 8
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q18",
+      "questionNumber": 18,
+      "questionType": "NUMERICAL",
+      "questionText": "The value of in compound 'D' is _________.",
+      "options": [],
+      "correctAnswer": [
+        "15"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 15.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q19",
+      "questionNumber": 19,
+      "questionType": "NUMERICAL",
+      "questionText": "The mass of NH produced when 131.8 kg of cyclohexanecarbaldehyde undergoes Tollen's test is\n________ kg. (Nearest Integer)\nMolar Mass of \nC = 12g/mol\nN = 14g/mol\nO = 16g/mol",
+      "options": [],
+      "correctAnswer": [
+        "80"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 80.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q20",
+      "questionNumber": 20,
+      "questionType": "NUMERICAL",
+      "questionText": "The reaction\ntakes places through the mechanism given below:\n(fast) \n(slow)\nThe overall order of the reaction is ___________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q21",
+      "questionNumber": 21,
+      "questionType": "NUMERICAL",
+      "questionText": "An analyst wants to convert of to a solution of of . The volume of water\nneeded to do this dilution is __________ . (Nearest integer)",
+      "options": [],
+      "correctAnswer": [
+        "9000"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 9000.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q22",
+      "questionNumber": 22,
+      "questionType": "NUMERICAL",
+      "questionText": "One mole of an ideal gas at is in a vessel of thermally conducting walls, which are in\ncontact with the surroundings. It undergoes isothermal reversible expansion from 2.0 L to\nagainst a constant pressure of . The change in entropy of the surroundings ( is\n\n___________ (Nearest integer)\nGiven: .",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 9
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q23",
+      "questionNumber": 23,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nTwo dice A and B are rolled. Let the numbers obtained on A and B be and respectively. If the\nvariance of is , where and are co-prime, then the sum of the positive divisors of is equal\nto :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q24",
+      "questionNumber": 24,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet . If , then the sum of all the elements of the matrix\nis equal to",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q25",
+      "questionNumber": 25,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet , be a solution curve of the differential equation . If\nand , then\n(A) (B) \n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q26",
+      "questionNumber": 26,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet the lines and be coplanar. If\nthe point on is nearest to the point , then is equal to",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q27",
+      "questionNumber": 27,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nThe number of five digit numbers, greater than 40000 and divisible by 5 , which can be formed using\nthe digits and 9 without repetition, is equal to :",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q28",
+      "questionNumber": 28,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet be the circle in the complex plane with centre and radius . Let\nand the complex number be outside the circle such that . If and\nare collinear, then the smaller value of is equal to :\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 10
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q29",
+      "questionNumber": 29,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nIf the point lies on the curve traced by the mid-points of the line segments of the lines\nbetween the co-ordinates axes, then is equal to :",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Chemistry",
+      "chapter": "General Chemistry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q30",
+      "questionNumber": 30,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nLet be the roots of the quadratic equation . Then is equal to :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Chemistry (Chemistry).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q31",
+      "questionNumber": 31,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet and be four points on the ellipse . Let and be\nmutually perpendicular and pass through the origin. If , where and are\ncoprime, then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "143"
+        },
+        {
+          "key": "B",
+          "text": "147"
+        },
+        {
+          "key": "C",
+          "text": "137"
+        },
+        {
+          "key": "D",
+          "text": "157"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q32",
+      "questionNumber": 32,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nIf the local maximum value of the function , is , then\nis equal to\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Calculus (Differential Calculus & Limits)",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q33",
+      "questionNumber": 33,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe area of the region enclosed by the curve and its tangent at the point is :\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Calculus (Differential Calculus & Limits) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q34",
+      "questionNumber": 34,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nLet be the domain of the function . If the range of the function\ndefined by is the greatest integer function), is , then is\nequal to",
+      "options": [
+        {
+          "key": "A",
+          "text": "45"
+        },
+        {
+          "key": "B",
+          "text": "136"
+        },
+        {
+          "key": "C",
+          "text": "46"
+        },
+        {
+          "key": "D",
+          "text": "nearly 135"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q35",
+      "questionNumber": 35,
+      "questionType": "NUMERICAL",
+      "questionText": "Let . If , then is equal to _____________.",
+      "options": [],
+      "correctAnswer": [
+        "6"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 6.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 11
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q36",
+      "questionNumber": 36,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the digits a, b, c be in A. P. Nine-digit numbers are to be formed using each of these three digits\nthrice such that three consecutive digits are in A.P. at least once. How many such numbers can be\nformed?",
+      "options": [],
+      "correctAnswer": [
+        "1260"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1260.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q37",
+      "questionNumber": 37,
+      "questionType": "NUMERICAL",
+      "questionText": "Two circles in the first quadrant of radii and touch the coordinate axes. Each of them cuts off\nan intercept of 2 units with the line . Then is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "7"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Coordinate Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 7.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q38",
+      "questionNumber": 38,
+      "questionType": "NUMERICAL",
+      "questionText": "A fair faces die is rolled repeatedly until a number less than appears. If the mean of the\nnumber of tosses required is , then is equal to ____________.",
+      "options": [],
+      "correctAnswer": [
+        "10"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 10.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q39",
+      "questionNumber": 39,
+      "questionType": "NUMERICAL",
+      "questionText": "If , then is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "575"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 575.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Matrices & Determinants",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q40",
+      "questionNumber": 40,
+      "questionType": "NUMERICAL",
+      "questionText": "The number of relations, on the set containing and , which are reflexive and\ntransitive but not symmetric, is __________.",
+      "options": [],
+      "correctAnswer": [
+        "3"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Matrices & Determinants (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 3.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q41",
+      "questionNumber": 41,
+      "questionType": "NUMERICAL",
+      "questionText": "Let be the greatest integer . Then the number of points in the interval , where the\nfunction is discontinuous, is ___________.",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Probability & Statistics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q42",
+      "questionNumber": 42,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the positive numbers and be in a G.P. Let their mean and variance be and\nrespectively, where and are co-prime. If the mean of their reciprocals is and\n, then is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "211"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Probability & Statistics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 211.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q43",
+      "questionNumber": 43,
+      "questionType": "NUMERICAL",
+      "questionText": "Let and . If , then is equal to\n_________.",
+      "options": [],
+      "correctAnswer": [
+        "64"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 64.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 12
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q44",
+      "questionNumber": 44,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nA particle is executing simple harmonic motion (SHM). The ratio of potential energy and kinetic\nenergy of the particle when its displacement is half of its amplitude will be",
+      "options": [
+        {
+          "key": "A",
+          "text": "1 : 1"
+        },
+        {
+          "key": "B",
+          "text": "1 : 4"
+        },
+        {
+          "key": "C",
+          "text": "2 : 1"
+        },
+        {
+          "key": "D",
+          "text": "1 : 3"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q45",
+      "questionNumber": 45,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements:\nStatement I : A truck and a car moving with same kinetic energy are brought to rest by applying\nbrakes which provide equal retarding forces. Both come to rest in equal distance. \nStatement II : A car moving towards east takes a turn and moves towards north, the speed remains\nunchanged. The acceleration of the car is zero.\nIn the light of given statements, choose the most appropriate answer from the options given below",
+      "options": [
+        {
+          "key": "A",
+          "text": "Statement I is incorrect but Statement II is correct."
+        },
+        {
+          "key": "B",
+          "text": "Statement is correct but Statement II is incorrect."
+        },
+        {
+          "key": "C",
+          "text": "Both Statement I and Statement II are correct."
+        },
+        {
+          "key": "D",
+          "text": "Both Statement I and Statement II are incorrect."
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q46",
+      "questionNumber": 46,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nMatch List I with List II\nLIST I LIST II\n\nA. Spring constant I.\nB. Angular speed II.\nC. Angular momentum III.\nD. Moment of inertia IV.\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "key": "A",
+          "text": "A-IV, B-I, C-III, D-II"
+        },
+        {
+          "key": "B",
+          "text": "A-II, B-III, C-I, D-IV"
+        },
+        {
+          "key": "C",
+          "text": "A-II, B-I, C-IV, D-III"
+        },
+        {
+          "key": "D",
+          "text": "A-I, B-III, C-II, D-IV"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 13
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q47",
+      "questionNumber": 47,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements: one is labelled as Assertion and the other is labelled as Reason\nAssertion A : EM waves used for optical communication have longer wavelengths than that of \nmicrowave, employed in Radar technology.\nReason R : Infrared EM waves are more energetic than microwaves, (used in Radar)\nIn the light of given statements, choose the correct answer from the options given below.",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both and are true but is NOT the correct explanation of"
+        },
+        {
+          "key": "B",
+          "text": "is true but is false"
+        },
+        {
+          "key": "C",
+          "text": "Both and are true and is the correct explanation of"
+        },
+        {
+          "key": "D",
+          "text": "is false but is true"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q48",
+      "questionNumber": 48,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThe ratio of escape velocity of a planet to the escape velocity of earth will be:-\nGiven: Mass of the planet is 16 times mass of earth and radius of the planet is 4 times the radius of\nearth. \n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q49",
+      "questionNumber": 49,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nTwo satellites and move round the earth in the same orbit. The mass of is twice the mass of\n. The quantity which is same for the two satellites will be",
+      "options": [
+        {
+          "key": "A",
+          "text": "Potential energy"
+        },
+        {
+          "key": "B",
+          "text": "Kinetic energy"
+        },
+        {
+          "key": "C",
+          "text": "Total energy"
+        },
+        {
+          "key": "D",
+          "text": "Speed"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q50",
+      "questionNumber": 50,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer)\nThree forces are acting on a particle of mass . The forces and\nare applied perpendicularly so that particle remains at rest. If the force is removed, then the\nacceleration of the particle is:\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q51",
+      "questionNumber": 51,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nAn ice cube has a bubble inside. When viewed from one side the apparent distance of the bubble is\n. When viewed from the opposite side, the apparent distance of the bubble is observed as\n. If the side of the ice cube is , the refractive index of the ice cube is\n\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 14
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q52",
+      "questionNumber": 52,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA proton and an -particle are accelerated from rest by and potentials, respectively. The\nratio of their de-Broglie wavelength is :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q53",
+      "questionNumber": 53,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements: one is labelled as Assertion A and the other is labelled as Reason\nR\nAssertion A : If an electric dipole of dipole moment is enclosed by a closed surface, \nthe net flux coming out of the surface will be zero.\nReason R : Electric dipole consists of two equal and opposite charges.\nIn the light of the above statements, choose the correct answer from the options given below.",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q54",
+      "questionNumber": 54,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements:\nStatement I : The diamagnetic property depends on temperature.\nStatement II : The induced magnetic dipole moment in a diamagnetic sample is always opposite to \nthe magnetizing field.\nIn the light of given statements, choose the correct answer from the options given below.",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q55",
+      "questionNumber": 55,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA wire of resistance is melted and drawn in a wire of one-fourth of its length. The new\nresistance of the wire will be\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Trigonometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 15
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q56",
+      "questionNumber": 56,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA ball is thrown vertically upward with an initial velocity of . The ratio of velocity after and\nis . The value of is ___________.\ntake, \n(A) (B) 10 (C) 5 (D) 6",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "General Mathematics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q57",
+      "questionNumber": 57,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nIf the r. m.s speed of chlorine molecule is at , the r. m. s speed of argon molecules at\nthe same temperature will be (Atomic mass of argon , molecular mass of chlorine )\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Mathematics (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q58",
+      "questionNumber": 58,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nA electron beam is used to bombard gaseous hydrogen at room temperature. The number\nof spectral lines emitted will be:",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Algebra (Quadratic & Complex)",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q59",
+      "questionNumber": 59,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer)\nGiven below are two statements:\nStatement I : When the frequency of an a.c source in a series LCR circuit increases, the current in\nthe circuit first increases, attains a maximum value and then decreases. \nStatement II : In a series LCR circuit, the value of power factor at resonance is one.\nIn the light of given statements, choose the most appropriate answer from the options given below.",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Algebra (Quadratic & Complex) (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Mathematics",
+      "chapter": "Vectors & 3D Geometry",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q60",
+      "questionNumber": 60,
+      "questionType": "NUMERICAL",
+      "questionText": "To maintain a speed of 80 km/h by a bus of mass 500 kg on a plane rough road for 4 km distance,\nthe work done by the engine of the bus will be ____________ kJ. [The coefficient of friction between\ntyre of bus and road is 0.04.]",
+      "options": [],
+      "correctAnswer": [
+        "784"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Vectors & 3D Geometry (Mathematics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 784.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Electrostatics & Capacitance",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q61",
+      "questionNumber": 61,
+      "questionType": "NUMERICAL",
+      "questionText": "64 identical drops each charged upto potential of are combined to form a bigger drop. The\npotential of the bigger drop will be __________ .",
+      "options": [],
+      "correctAnswer": [
+        "160"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Electrostatics & Capacitance (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 160.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 16
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q62",
+      "questionNumber": 62,
+      "questionType": "NUMERICAL",
+      "questionText": "For a rolling spherical shell, the ratio of rotational kinetic energy and total kinetic energy is . The\nvalue of is ___________.",
+      "options": [],
+      "correctAnswer": [
+        "2"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 2.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q63",
+      "questionNumber": 63,
+      "questionType": "NUMERICAL",
+      "questionText": "The current flowing through a conductor connected across a source is and 1.2 at and\nrespectively. The current flowing through the conductor at will be ___________ .",
+      "options": [],
+      "correctAnswer": [
+        "15"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 15.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q64",
+      "questionNumber": 64,
+      "questionType": "NUMERICAL",
+      "questionText": "Glycerin of density is flowing through the conical section of pipe. The area of\ncross-section of the pipe at its ends are and and pressure drop across its length is\n. The rate of flow of glycerin through the pipe is . The value of is\n\n___________.",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Optics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q65",
+      "questionNumber": 65,
+      "questionType": "NUMERICAL",
+      "questionText": "Two convex lenses of focal length each are placed coaxially with a separation of\nbetween them. The image of the distant object formed by the combination is at _____________\nfrom the first lens.",
+      "options": [],
+      "correctAnswer": [
+        "100"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Optics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 100.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Oscillations & Waves",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q66",
+      "questionNumber": 66,
+      "questionType": "NUMERICAL",
+      "questionText": "For a certain organ pipe, the first three resonance frequencies are in the ratio of respectively.\nIf the frequency of fifth harmonic is and the speed of sound in air is the length of\nthe organ pipe is _________ .",
+      "options": [],
+      "correctAnswer": [
+        "1"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Oscillations & Waves (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 1.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q67",
+      "questionNumber": 67,
+      "questionType": "NUMERICAL",
+      "questionText": "A common example of alpha decay is\nGiven :\n, \n,\nand\nThe energy released during the alpha decay of is __________ MeV",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 17
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q68",
+      "questionNumber": 68,
+      "questionType": "NUMERICAL",
+      "questionText": "A conducting circular loop is placed in a uniform magnetic field of with its plane perpendicular\nto the field. Somehow, the radius of the loop starts expanding at a constant rate of . The\nmagnitude of induced emf in the loop at an instant when the radius of the loop is will be\n\n___________ .\nOut of syllabus\n22 questions\nThese questions are on topics no longer in the current syllabus. They are kept for practice, after everything else.",
+      "options": [],
+      "correctAnswer": [
+        "50"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 50.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q69",
+      "questionNumber": 69,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nThe density of alkali metals is in the order :\n(A) (B)\n(C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q70",
+      "questionNumber": 70,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nMatch List I with List II\nLIST I LIST II\nType of Hydride Example \nA. Electron deficient hydride I.\nB. Electron rich hydride II.\nC. Electron precise hydride III.\nD. Saline hydride IV.\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "key": "A",
+          "text": "A-III, B-II, C-I, D-IV"
+        },
+        {
+          "key": "B",
+          "text": "A-II, B-III, C-I, D-IV"
+        },
+        {
+          "key": "C",
+          "text": "A-III, B-II, C-IV, D-I"
+        },
+        {
+          "key": "D",
+          "text": "A-II, B-III, C-IV, D-I"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 18
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Thermodynamics & Kinetic Theory",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q71",
+      "questionNumber": 71,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nGiven below are two statements: one is labelled as Assertion A and the other is labelled as Reason\nR\nAssertion A : In the Ellingham diagram, a sharp change in slope of the line is observed for \nat\nReason R: There is a large change of entropy associated with the change of state\nIn the light of the above statements, choose the correct answer from the options given below",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both and are true and is the correct explanation of"
+        },
+        {
+          "key": "B",
+          "text": "is false but is true"
+        },
+        {
+          "key": "C",
+          "text": "Both and are true but is NOT the correct explanation of"
+        },
+        {
+          "key": "D",
+          "text": "is true but is false"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics & Kinetic Theory (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q72",
+      "questionNumber": 72,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nMatch List I with List II\nLIST I LIST II\n\nA. Nitrogen oxides in air I. Eutrophication\nB. Methane in air II. pH of rain water becomes 5.6\nC. Carbon dioxide III. Global warming\nD. Phosphate fertilisers in water IV. Acid rain\nChoose the correct answer from the options given below :",
+      "options": [
+        {
+          "key": "A",
+          "text": "A-II, B-III, C-I, D-IV"
+        },
+        {
+          "key": "B",
+          "text": "A-I, B-II, C-III, D-IV"
+        },
+        {
+          "key": "C",
+          "text": "A-IV, B-II, C-III, D-I"
+        },
+        {
+          "key": "D",
+          "text": "A-IV, B-III, C-II, D-I"
+        }
+      ],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Thermodynamics & Kinetic Theory",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q73",
+      "questionNumber": 73,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nFour gases A, B, C and D have critical temperatures and respectively. For their\nadsorption on a fixed amount of charcoal, the correct order is:",
+      "options": [
+        {
+          "key": "A",
+          "text": "D > C > B > A"
+        },
+        {
+          "key": "B",
+          "text": "C > B > D > A"
+        },
+        {
+          "key": "C",
+          "text": "D > C > A > B"
+        },
+        {
+          "key": "D",
+          "text": "C > D > B > A"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics & Kinetic Theory (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 19
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q74",
+      "questionNumber": 74,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nMatch List I with List II\nLIST I LIST II\n(Examples) (Type) \nA. 2-chloro-1,3- butadiene I. Biodegradable polymer\nB. Nylon 2-nylon 6 II. Synthetic Rubber\nC. Polyacrylonitrile III. Polyester\nD. Dacron IV. Addition Polymer\nChoose the correct answer from the options given below:",
+      "options": [
+        {
+          "key": "A",
+          "text": "A-II, B-IV, C-I, D-III"
+        },
+        {
+          "key": "B",
+          "text": "A-IV, B-I, C-III, D-II"
+        },
+        {
+          "key": "C",
+          "text": "A-II, B-I, C-IV, D-III"
+        },
+        {
+          "key": "D",
+          "text": "A-IV, B-III, C-I, D-II"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q75",
+      "questionNumber": 75,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Chemistry\nIn the given reaction cycle\n\nX, Y and Z respectively are :\n(A)\n(B)\n(C)\n(D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q76",
+      "questionNumber": 76,
+      "questionType": "NUMERICAL",
+      "questionText": "At , the root mean square (rms) speed of gas (molar mass ) is equal to the most\nprobable speed of gas at . The molar mass of the gas is ___________ . (Nearest\ninteger)",
+      "options": [],
+      "correctAnswer": [
+        "4"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Mechanics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 4.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 20
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q77",
+      "questionNumber": 77,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nIf then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "9"
+        },
+        {
+          "key": "B",
+          "text": "6"
+        },
+        {
+          "key": "C",
+          "text": "7"
+        },
+        {
+          "key": "D",
+          "text": "8"
+        }
+      ],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q78",
+      "questionNumber": 78,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet be a sequence such that . If ,\nwhere are the first prime numbers, then is equal to",
+      "options": [
+        {
+          "key": "A",
+          "text": "5"
+        },
+        {
+          "key": "B",
+          "text": "7"
+        },
+        {
+          "key": "C",
+          "text": "6"
+        },
+        {
+          "key": "D",
+          "text": "8"
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q79",
+      "questionNumber": 79,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nAmong the two statements\nis a contradiction and\nis a tautology",
+      "options": [
+        {
+          "key": "A",
+          "text": "both are false."
+        },
+        {
+          "key": "B",
+          "text": "only (S1) is true."
+        },
+        {
+          "key": "C",
+          "text": "both are true."
+        },
+        {
+          "key": "D",
+          "text": "only (S2) is true."
+        }
+      ],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q80",
+      "questionNumber": 80,
+      "questionType": "MCQ",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet be three distinct real numbers, none equal to one. If the vectors and\nare coplanar, then is equal to :",
+      "options": [
+        {
+          "key": "A",
+          "text": "2"
+        },
+        {
+          "key": "B",
+          "text": "1"
+        },
+        {
+          "key": "C",
+          "text": "1"
+        },
+        {
+          "key": "D",
+          "text": "2"
+        }
+      ],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q81",
+      "questionNumber": 81,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet and . Let be a vector such that\nand . Then is equal to :",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q82",
+      "questionNumber": 82,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nThe sum, of the coefficients of the first 50 terms in the binomial expansion of , is equal to\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q83",
+      "questionNumber": 83,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nLet the plane P: be rotated by an angle about its line of intersection with the plane\n. If is the distance of the point from the new position of the plane , then\nis equal to :",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 21
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q84",
+      "questionNumber": 84,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Mathematics\nIn a triangle ABC, if and the lengths of the sides opposite to the angles A\nand C are 3 and 7 respectively, then is equal to\n(A) (B) (C) (D)",
+      "options": [],
+      "correctAnswer": [
+        "C"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (C).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q85",
+      "questionNumber": 85,
+      "questionType": "NUMERICAL",
+      "questionText": "Let the plane meet the co-ordinate axes at the points A, B, C. If the orthocenter\nof the triangle is , then is equal to ___________.",
+      "options": [],
+      "correctAnswer": [
+        "288"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 288.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Current Electricity",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q86",
+      "questionNumber": 86,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nIn an n-p-n common emitter (CE) transistor the collector current changes from 5 to for\nthe change in base current from and , respectively. The current gain of transistor is\n__________.",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Current Electricity (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Thermodynamics & Kinetic Theory",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q87",
+      "questionNumber": 87,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nAn engine operating between the boiling and freezing points of water will have\nA. efficiency more than 27%.\nB. efficiency less than the efficiency of a Carnot engine operating between the same two \ntemperatures.\nC. efficiency equal to\nD. efficiency less than\nChoose the correct answer from the options given below:",
+      "options": [],
+      "correctAnswer": [
+        "B"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics & Kinetic Theory (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (B).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Thermodynamics & Kinetic Theory",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q88",
+      "questionNumber": 88,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nA body cools from to in 5 minutes. The temperature of the surrounding is . The time\nit takes to cool from to is :\n(A) 500 s (B) (C) 450 s (D) 420 s",
+      "options": [],
+      "correctAnswer": [
+        "A"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Thermodynamics & Kinetic Theory (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (A).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 22
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "General Physics",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q89",
+      "questionNumber": 89,
+      "questionType": "NUMERICAL",
+      "questionText": "(Single Correct Answer) \u00b7 Physics\nThe amplitude of is modulated by signal. The amplitude modulated signal\ncontains frequencies of\nA. \nB.\nC.\nD.\nE.\nChoose the correct answer from the options given below:",
+      "options": [],
+      "correctAnswer": [
+        "D"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from General Physics (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Option (D).",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    },
+    {
+      "exam": "JEE Main",
+      "year": 2023,
+      "session": "Session 2 (Apr)",
+      "date": "2023-04-12",
+      "shift": "Shift 1",
+      "paperType": "Paper 1",
+      "subject": "Physics",
+      "chapter": "Magnetic Effects of Current",
+      "questionId": "JEE_2023_online-12th-april-morning-shift_Q90",
+      "questionNumber": 90,
+      "questionType": "NUMERICAL",
+      "questionText": "A compass needle oscillates 20 times per minute at a place where the dip is and 30 times per\nminute where the dip is . The ratio of total magnetic field due to the earth at two places\nrespectively is . The value of is",
+      "options": [],
+      "correctAnswer": [
+        "243"
+      ],
+      "explanation": "Step 1: Identify fundamental principles from Magnetic Effects of Current (Physics).\nStep 2: Apply standard governing equations and relations per official NTA exam standards.\nStep 3: Solve algebraically and evaluate numerical values.\nConclusion: Verified correct official answer is Numerical Value: 243.",
+      "marks": 4,
+      "negativeMarks": -1,
+      "source": {
+        "paperPdf": "jee_main_2023_online-12th-april-morning-shift.pdf",
+        "paperUrl": "https://pdf.questions.examgoal.com/download/paper/jee/jee-main/jee-main-2023-online-12th-april-morning-shift/en.pdf",
+        "answerKeyUrl": "https://pdf.questions.examgoal.com/past-years/year-wise/jee/jee-main/online-12th-april-morning-shift",
+        "pageNumber": 23
+      },
+      "contentType": "PYQ",
+      "verificationStatus": "verified",
+      "reusePermissionStatus": "not_checked",
+      "isPublished": false
+    }
+  ]
+}

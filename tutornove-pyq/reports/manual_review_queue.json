@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-11-07T18:15:00.000Z",
+  "system": "TutorNove PDF Extraction Engine (PyMuPDF & pdfplumber)",
+  "total_items_in_review_queue": 2,
+  "confidence_threshold": 0.85,
+  "review_queue": [
+    {
+      "id": "REV-2025-S1-PH-Q14",
+      "exam": "JEE Main",
+      "year": 2025,
+      "session": "Session 1",
+      "date": "2025-01-22",
+      "shift": "Shift 1",
+      "subject": "Physics",
+      "questionNumber": 14,
+      "questionType": "MCQ",
+      "flagReason": "INCOMPLETE_OPTIONS_COUNT_3",
+      "confidenceScore": 0.65,
+      "questionTextSnippet": "In a series LCR circuit connected to an AC source of variable frequency, the current amplitude is maximum at angular frequency ω₀...",
+      "detectedOptions": [
+        {"key": "A", "text": "ω₀ = 1 / sqrt(LC)"},
+        {"key": "B", "text": "ω₀ = sqrt(LC)"},
+        {"key": "C", "text": "ω₀ = L / C"}
+      ],
+      "missingElements": ["Option D was truncated by page break border"],
+      "recommendedAction": "Admin manual input via Admin Portal /pyq/questions/:id or inspect page 4 of source PDF."
+    },
+    {
+      "id": "REV-2024-S1-CH-Q28",
+      "exam": "JEE Main",
+      "year": 2024,
+      "session": "Session 1",
+      "date": "2024-01-27",
+      "shift": "Shift 1",
+      "subject": "Chemistry",
+      "questionNumber": 28,
+      "questionType": "MCQ",
+      "flagReason": "EMBEDDED_DIAGRAM_RESOLUTION_UNCERTAIN",
+      "confidenceScore": 0.72,
+      "questionTextSnippet": "Consider the following reaction sequence: Cyclohexanone + HCN -> (A) --H3O+--> (B)... Identify product (B).",
+      "detectedDiagrams": ["tutornove-pyq/extracted/diagrams/JEE_Main_2024_Session1_p8_img2.png"],
+      "missingElements": [],
+      "recommendedAction": "Verify chemical skeletal structure image rendering in Admin preview."
+    }
+  ]
+}
+

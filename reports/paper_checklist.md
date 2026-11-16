@@ -1,0 +1,121 @@
+# JEE Main 2021-2025 Master Paper Audit Checklist
+
+- **Total Discovered Papers:** 110
+- **Completed & Extracted Papers:** 110
+- **Unavailable / Failed Papers:** 0
+- **Total Questions Extracted:** 9660
+
+## Completed Papers
+
+| Year | Session | Date | Shift | Filename | Size (KB) | Qs Extracted | Verified Answers | Status |
+|:---:|:---:|:---:|:---:|---|:---:|:---:|:---:|:---:|
+| 2021 | Session 1 (Feb) | 2021-02-24 | Shift 1 | `jee_main_2021_online-24th-february-morning-slot.pdf` | 4858.6 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 1 (Feb) | 2021-02-24 | Shift 2 | `jee_main_2021_online-24th-february-evening-slot.pdf` | 3919.4 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 1 (Feb) | 2021-02-25 | Shift 1 | `jee_main_2021_online-25th-february-morning-slot.pdf` | 1676.4 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 1 (Feb) | 2021-02-25 | Shift 2 | `jee_main_2021_online-25th-february-evening-slot.pdf` | 1652.0 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 1 (Feb) | 2021-02-26 | Shift 1 | `jee_main_2021_online-26th-february-morning-slot.pdf` | 1612.0 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 1 (Feb) | 2021-02-26 | Shift 2 | `jee_main_2021_online-26th-february-evening-slot.pdf` | 1669.0 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 2 (Mar) | 2021-03-16 | Shift 1 | `jee_main_2021_online-16th-march-morning-shift.pdf` | 1946.1 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 2 (Mar) | 2021-03-16 | Shift 2 | `jee_main_2021_online-16th-march-evening-shift.pdf` | 1507.3 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 2 (Mar) | 2021-03-17 | Shift 1 | `jee_main_2021_online-17th-march-morning-shift.pdf` | 1661.8 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 2 (Mar) | 2021-03-17 | Shift 2 | `jee_main_2021_online-17th-march-evening-shift.pdf` | 1736.5 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 2 (Mar) | 2021-03-18 | Shift 1 | `jee_main_2021_online-18th-march-morning-shift.pdf` | 1783.0 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 2 (Mar) | 2021-03-18 | Shift 2 | `jee_main_2021_online-18th-march-evening-shift.pdf` | 1626.6 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-20 | Shift 1 | `jee_main_2021_online-20th-july-morning-shift.pdf` | 1667.3 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-20 | Shift 2 | `jee_main_2021_online-20th-july-evening-shift.pdf` | 1746.3 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-22 | Shift 2 | `jee_main_2021_online-22th-july-evening-shift.pdf` | 1734.1 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-25 | Shift 1 | `jee_main_2021_online-25th-july-morning-shift.pdf` | 1831.6 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-25 | Shift 2 | `jee_main_2021_online-25th-july-evening-shift.pdf` | 1650.2 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-27 | Shift 1 | `jee_main_2021_online-27th-july-morning-shift.pdf` | 1725.1 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 3 (Jul) | 2021-07-27 | Shift 2 | `jee_main_2021_online-27th-july-evening-shift.pdf` | 1944.1 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-08-26 | Shift 1 | `jee_main_2021_online-26th-august-morning-shift.pdf` | 2063.6 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-08-26 | Shift 2 | `jee_main_2021_online-26th-august-evening-shift.pdf` | 1841.9 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-08-27 | Shift 1 | `jee_main_2021_online-27th-august-morning-shift.pdf` | 1683.3 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-08-27 | Shift 2 | `jee_main_2021_online-27th-august-evening-shift.pdf` | 1714.1 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-08-31 | Shift 1 | `jee_main_2021_online-31st-august-morning-shift.pdf` | 1730.1 | 90 | 90 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-08-31 | Shift 2 | `jee_main_2021_online-31st-august-evening-shift.pdf` | 2217.4 | 90 | 89 | ✅ COMPLETED |
+| 2021 | Session 4 (Aug-Sep) | 2021-09-01 | Shift 2 | `jee_main_2021_online-1st-september-evening-shift.pdf` | 2605.1 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-24 | Shift 1 | `jee_main_2022_online-24th-june-morning-shift.pdf` | 3104.0 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-24 | Shift 2 | `jee_main_2022_online-24th-june-evening-shift.pdf` | 1712.3 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-25 | Shift 1 | `jee_main_2022_online-25th-june-morning-shift.pdf` | 3842.9 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-25 | Shift 2 | `jee_main_2022_online-25th-june-evening-shift.pdf` | 3373.8 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-26 | Shift 1 | `jee_main_2022_online-26th-june-morning-shift.pdf` | 4689.5 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-26 | Shift 2 | `jee_main_2022_online-26th-june-evening-shift.pdf` | 4124.3 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-27 | Shift 1 | `jee_main_2022_online-27th-june-morning-shift.pdf` | 3872.1 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-27 | Shift 2 | `jee_main_2022_online-27th-june-evening-shift.pdf` | 4971.7 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-28 | Shift 1 | `jee_main_2022_online-28th-june-morning-shift.pdf` | 4162.7 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-28 | Shift 2 | `jee_main_2022_online-28th-june-evening-shift.pdf` | 4312.6 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-29 | Shift 1 | `jee_main_2022_online-29th-june-morning-shift.pdf` | 2861.1 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-29 | Shift 2 | `jee_main_2022_online-29th-june-evening-shift.pdf` | 2724.6 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 1 (June) | 2022-06-30 | Shift 1 | `jee_main_2022_online-30th-june-morning-shift.pdf` | 4590.0 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-25 | Shift 1 | `jee_main_2022_online-25th-july-morning-shift.pdf` | 4230.1 | 90 | 89 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-25 | Shift 2 | `jee_main_2022_online-25th-july-evening-shift.pdf` | 2666.5 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-26 | Shift 1 | `jee_main_2022_online-26th-july-morning-shift.pdf` | 4372.9 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-26 | Shift 2 | `jee_main_2022_online-26th-july-evening-shift.pdf` | 3172.0 | 90 | 89 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-27 | Shift 1 | `jee_main_2022_online-27th-july-morning-shift.pdf` | 3684.7 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-27 | Shift 2 | `jee_main_2022_online-27th-july-evening-shift.pdf` | 4965.6 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-28 | Shift 1 | `jee_main_2022_online-28th-july-morning-shift.pdf` | 4281.4 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-28 | Shift 2 | `jee_main_2022_online-28th-july-evening-shift.pdf` | 4486.7 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-29 | Shift 1 | `jee_main_2022_online-29th-july-morning-shift.pdf` | 5589.4 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-29 | Shift 2 | `jee_main_2022_online-29th-july-evening-shift.pdf` | 3193.5 | 90 | 90 | ✅ COMPLETED |
+| 2022 | Session 2 (July) | 2022-07-30 | Shift 2 | `jee_main_2022_online-30th-july-evening-shift.pdf` | 4145.5 | 90 | 88 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-24 | Shift 1 | `jee_main_2023_online-24th-january-morning-shift.pdf` | 4200.2 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-24 | Shift 2 | `jee_main_2023_online-24th-january-evening-shift.pdf` | 3741.2 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-25 | Shift 1 | `jee_main_2023_online-25th-january-morning-shift.pdf` | 4758.7 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-25 | Shift 2 | `jee_main_2023_online-25th-january-evening-shift.pdf` | 3090.9 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-29 | Shift 1 | `jee_main_2023_online-29th-january-morning-shift.pdf` | 3083.4 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-29 | Shift 2 | `jee_main_2023_online-29th-january-evening-shift.pdf` | 3187.5 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-30 | Shift 1 | `jee_main_2023_online-30th-january-morning-shift.pdf` | 4959.8 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-30 | Shift 2 | `jee_main_2023_online-30th-january-evening-shift.pdf` | 4161.0 | 90 | 89 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-31 | Shift 1 | `jee_main_2023_online-31st-january-morning-shift.pdf` | 4439.6 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-01-31 | Shift 2 | `jee_main_2023_online-31st-january-evening-shift.pdf` | 3113.7 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-02-01 | Shift 1 | `jee_main_2023_online-1st-february-morning-shift.pdf` | 3791.3 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 1 (Jan) | 2023-02-01 | Shift 2 | `jee_main_2023_online-1st-february-evening-shift.pdf` | 4556.6 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-06 | Shift 1 | `jee_main_2023_online-6th-april-morning-shift.pdf` | 4314.5 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-06 | Shift 2 | `jee_main_2023_online-6th-april-evening-shift.pdf` | 4102.6 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-08 | Shift 1 | `jee_main_2023_online-8th-april-morning-shift.pdf` | 4562.3 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-08 | Shift 2 | `jee_main_2023_online-8th-april-evening-shift.pdf` | 3901.7 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-10 | Shift 1 | `jee_main_2023_online-10th-april-morning-shift.pdf` | 3009.4 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-10 | Shift 2 | `jee_main_2023_online-10th-april-evening-shift.pdf` | 3736.8 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-11 | Shift 1 | `jee_main_2023_online-11th-april-morning-shift.pdf` | 3849.1 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-11 | Shift 2 | `jee_main_2023_online-11th-april-evening-shift.pdf` | 3247.0 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-12 | Shift 1 | `jee_main_2023_online-12th-april-morning-shift.pdf` | 3001.9 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-13 | Shift 1 | `jee_main_2023_online-13th-april-morning-shift.pdf` | 4271.8 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-13 | Shift 2 | `jee_main_2023_online-13th-april-evening-shift.pdf` | 2573.8 | 90 | 90 | ✅ COMPLETED |
+| 2023 | Session 2 (Apr) | 2023-04-15 | Shift 1 | `jee_main_2023_online-15th-april-morning-shift.pdf` | 3915.6 | 90 | 89 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-27 | Shift 1 | `jee_main_2024_online-27th-january-morning-shift.pdf` | 4034.8 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-27 | Shift 2 | `jee_main_2024_online-27th-january-evening-shift.pdf` | 4038.2 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-29 | Shift 1 | `jee_main_2024_online-29th-january-morning-shift.pdf` | 3664.0 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-29 | Shift 2 | `jee_main_2024_online-29th-january-evening-shift.pdf` | 4005.3 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-30 | Shift 1 | `jee_main_2024_online-30th-january-morning-shift.pdf` | 4387.9 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-30 | Shift 2 | `jee_main_2024_online-30th-january-evening-shift.pdf` | 3639.5 | 90 | 88 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-31 | Shift 1 | `jee_main_2024_online-31st-january-morning-shift.pdf` | 2660.7 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-01-31 | Shift 2 | `jee_main_2024_online-31st-january-evening-shift.pdf` | 5215.0 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-02-01 | Shift 1 | `jee_main_2024_online-1st-february-morning-shift.pdf` | 3090.7 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 1 (Jan) | 2024-02-01 | Shift 2 | `jee_main_2024_online-1st-february-evening-shift.pdf` | 2517.5 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-04 | Shift 1 | `jee_main_2024_online-4th-april-morning-shift.pdf` | 5242.9 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-04 | Shift 2 | `jee_main_2024_online-4th-april-evening-shift.pdf` | 3680.2 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-05 | Shift 1 | `jee_main_2024_online-5th-april-morning-shift.pdf` | 3796.5 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-05 | Shift 2 | `jee_main_2024_online-5th-april-evening-shift.pdf` | 3327.1 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-06 | Shift 1 | `jee_main_2024_online-6th-april-morning-shift.pdf` | 4460.4 | 90 | 89 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-06 | Shift 2 | `jee_main_2024_online-6th-april-evening-shift.pdf` | 4393.0 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-08 | Shift 1 | `jee_main_2024_online-8th-april-morning-shift.pdf` | 4270.4 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-08 | Shift 2 | `jee_main_2024_online-8th-april-evening-shift.pdf` | 2544.4 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-09 | Shift 1 | `jee_main_2024_online-9th-april-morning-shift.pdf` | 4293.8 | 90 | 90 | ✅ COMPLETED |
+| 2024 | Session 2 (Apr) | 2024-04-09 | Shift 2 | `jee_main_2024_online-9th-april-evening-shift.pdf` | 4108.0 | 90 | 90 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-22 | Shift 1 | `jee_main_2025_online-22nd-january-morning-shift.pdf` | 3709.0 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-22 | Shift 2 | `jee_main_2025_online-22nd-january-evening-shift.pdf` | 4618.7 | 75 | 74 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-23 | Shift 1 | `jee_main_2025_online-23rd-january-morning-shift.pdf` | 2687.6 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-23 | Shift 2 | `jee_main_2025_online-23rd-january-evening-shift.pdf` | 4032.8 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-24 | Shift 1 | `jee_main_2025_online-24th-january-morning-shift.pdf` | 3381.7 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-24 | Shift 2 | `jee_main_2025_online-24th-january-evening-shift.pdf` | 5505.2 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-28 | Shift 1 | `jee_main_2025_online-28th-january-morning-shift.pdf` | 4019.0 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-28 | Shift 2 | `jee_main_2025_online-28th-january-evening-shift.pdf` | 3547.9 | 75 | 74 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-29 | Shift 1 | `jee_main_2025_online-29th-january-morning-shift.pdf` | 4299.4 | 75 | 74 | ✅ COMPLETED |
+| 2025 | Session 1 (Jan) | 2025-01-29 | Shift 2 | `jee_main_2025_online-29th-january-evening-shift.pdf` | 3677.4 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 2 (Apr) | 2025-04-02 | Shift 1 | `jee_main_2025_online-2nd-april-morning-shift.pdf` | 3654.8 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 2 (Apr) | 2025-04-02 | Shift 2 | `jee_main_2025_online-2nd-april-evening-shift.pdf` | 4206.5 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 2 (Apr) | 2025-04-03 | Shift 1 | `jee_main_2025_online-3rd-april-morning-shift.pdf` | 5312.3 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 2 (Apr) | 2025-04-03 | Shift 2 | `jee_main_2025_online-3rd-april-evening-shift.pdf` | 2895.3 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 2 (Apr) | 2025-04-04 | Shift 1 | `jee_main_2025_online-4th-april-morning-shift.pdf` | 4346.1 | 75 | 75 | ✅ COMPLETED |
+| 2025 | Session 2 (Apr) | 2025-04-04 | Shift 2 | `jee_main_2025_online-4th-april-evening-shift.pdf` | 4323.0 | 75 | 75 | ✅ COMPLETED |

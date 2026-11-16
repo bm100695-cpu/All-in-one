@@ -1,0 +1,75 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'tn-navy': '#14213D',
+        'tn-blue': '#2563EB',
+        'tn-blue-hover': '#1D4ED8',
+        'tn-blue-light': '#EFF6FF',
+        'tn-bg': '#F8FAFC',
+        'tn-surface': '#FFFFFF',
+        'tn-text': '#172033',
+        'tn-muted': '#64748B',
+        'tn-border': '#E2E8F0',
+        'tn-success': '#15803D',
+        'tn-warning': '#D97706',
+        'tn-error': '#DC2626',
+        tn: {
+          navy: '#14213D',
+          'navy-dark': '#0B1324',
+          'navy-light': '#1E2F54',
+          blue: '#2563EB',
+          'blue-hover': '#1D4ED8',
+          'blue-light': '#EFF6FF',
+          bg: '#F8FAFC',
+          surface: '#FFFFFF',
+          text: '#172033',
+          muted: '#64748B',
+          'muted-light': '#94A3B8',
+          border: '#E2E8F0',
+          'border-dark': '#CBD5E1',
+          success: '#15803D',
+          'success-light': '#F0FDF4',
+          warning: '#D97706',
+          'warning-light': '#FFFBEB',
+          error: '#DC2626',
+          'error-light': '#FEF2F2',
+        },
+        brand: {
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
+          950: '#14213D',
+        },
+        navy: {
+          800: '#1E293B',
+          900: '#14213D',
+          950: '#0B1324',
+        }
+      },
+      boxShadow: {
+        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
+        'card-hover': '0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
+        'modal': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+      }
+    },
+  },
+  plugins: [],
+}
