@@ -8,8 +8,9 @@ export default defineConfig({
     port: 3005,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://all-in-one-japb.onrender.com',
         changeOrigin: true,
+        secure: true,
       },
     },
   },
