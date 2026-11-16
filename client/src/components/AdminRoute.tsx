@@ -6,31 +6,43 @@ import { api } from '../api';
 interface AdminRouteProps {
   currentUser: User | null;
   children: React.ReactNode;
-  fallback: React.ReactNode;
+  fallback?: React.ReactNode;
   onRedirectToStudent?: () => void;
+  onRedirectToLogin?: () => void;
   onSwitchToAdmin?: () => void;
   onUserRefreshed?: (user: User) => void;
 }
 
 /**
  * Protected Admin Route Wrapper (RBAC)
- * Strictly verifies ADMIN / CONTENT_REVIEWER roles.
- * If user is a student, provides one-click options to re-verify permissions or switch accounts.
+ * Strictly verifies ADMIN role.
+ * - If not authenticated: Redirects to /login (or renders fallback if provided)
+ * - If logged in as STUDENT: Blocks access, redirects to /dashboard (or provides re-verification)
+ * - If ADMIN: Renders protected children
  */
 export const AdminRoute: React.FC<AdminRouteProps> = ({
   currentUser,
   children,
   fallback,
   onRedirectToStudent,
+  onRedirectToLogin,
   onSwitchToAdmin,
   onUserRefreshed,
 }) => {
   const [checkingRole, setCheckingRole] = useState(false);
   const [roleMessage, setRoleMessage] = useState<string | null>(null);
 
-  // If no user is logged in, show the isolated Admin Login component
+  // 1. Not authenticated -> Redirect to /login
   if (!currentUser) {
-    return <>{fallback}</>;
+    if (fallback) {
+      return <>{fallback}</>;
+    }
+    if (onRedirectToLogin) {
+      onRedirectToLogin();
+    } else {
+      window.location.hash = '/login';
+    }
+    return null;
   }
 
   // Handle re-verifying role from database
@@ -39,7 +51,7 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
     setRoleMessage(null);
     try {
       const res = await api.getCurrentUser();
-      if (res.user && (res.user.role === 'ADMIN' || res.user.role === 'CONTENT_REVIEWER')) {
+      if (res.user && res.user.role === 'ADMIN') {
         setRoleMessage('Permissions verified! Access granted.');
         if (onUserRefreshed) {
           onUserRefreshed(res.user);
@@ -54,8 +66,8 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
     }
   };
 
-  // If logged in as a normal STUDENT, display the interactive access denied screen
-  if (currentUser.role !== 'ADMIN' && currentUser.role !== 'CONTENT_REVIEWER') {
+  // 2. Authenticated as STUDENT -> 403 Forbidden Guard
+  if (currentUser.role !== 'ADMIN') {
     return (
       <div className="min-h-[75vh] flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl border border-rose-200 shadow-xl p-6 sm:p-8 text-center space-y-5">
@@ -81,7 +93,6 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
           )}
 
           <div className="space-y-2 pt-1">
-            {/* Primary Action: Re-check role (if account was recently promoted to ADMIN) */}
             <button
               onClick={handleCheckPermission}
               disabled={checkingRole}
@@ -91,14 +102,13 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
               <span>{checkingRole ? 'Checking Database...' : 'Re-verify My Admin Access'}</span>
             </button>
 
-            {/* Secondary Action: Switch Account / Sign in as Admin */}
             <button
               onClick={() => {
                 if (onSwitchToAdmin) {
                   onSwitchToAdmin();
                 } else {
                   api.logout();
-                  window.location.reload();
+                  window.location.hash = '/login';
                 }
               }}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer"
@@ -107,13 +117,12 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
               <span>Sign In with Admin Account</span>
             </button>
 
-            {/* Exit Action: Return to Student Dashboard */}
             <button
               onClick={() => {
                 if (onRedirectToStudent) {
                   onRedirectToStudent();
                 } else {
-                  window.location.hash = '/';
+                  window.location.hash = '/dashboard';
                 }
               }}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-xs font-medium rounded-lg transition cursor-pointer"
@@ -127,7 +136,7 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
     );
   }
 
-  // User is verified Admin or Content Reviewer
+  // 3. Authenticated as ADMIN -> Access Granted
   return <>{children}</>;
 };
 

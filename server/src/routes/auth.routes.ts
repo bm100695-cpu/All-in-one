@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../prisma';
 import { generateToken, authenticate, AuthUser } from '../middleware/auth';
+import { login } from '../controllers/auth.controller';
 
 const router = Router();
 
@@ -157,64 +158,10 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 // ----------------------------------------------------------------------------
-// 2. Student & Standard Login (Public)
+// 2. Unified Login (Public - Students & Admins authenticate here)
+// Handled by auth.controller.ts with RBAC token generation
 // ----------------------------------------------------------------------------
-router.post('/login', async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      res.status(400).json({ error: 'Email and password are required.' });
-      return;
-    }
-
-    const cleanEmail = String(email).trim().toLowerCase();
-    const user = await prisma.user.findUnique({ where: { email: cleanEmail } });
-
-    if (!user || !user.passwordHash) {
-      res.status(401).json({ error: 'Invalid email or password.' });
-      return;
-    }
-
-    const isValid = await bcrypt.compare(password, user.passwordHash);
-    if (!isValid) {
-      res.status(401).json({ error: 'Invalid email or password.' });
-      return;
-    }
-
-    // Ensure student has a studentId if not yet populated
-    let sId = user.studentId;
-    if (!sId && user.role === 'STUDENT') {
-      sId = await generateUniqueStudentId();
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { studentId: sId },
-      });
-    }
-
-    const authPayload: AuthUser = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role as AuthUser['role'],
-      studentId: sId || undefined,
-      targetExamId: user.targetExamId || undefined,
-      referralCode: user.referralCode || undefined,
-      referralCredits: user.referralCredits || 0,
-    };
-
-    const token = generateToken(authPayload);
-
-    res.json({
-      message: 'Login successful',
-      token,
-      user: authPayload,
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed. Please check credentials.' });
-  }
-});
+router.post('/login', login);
 
 // Helper to verify Google OAuth ID token using Google official tokeninfo API
 async function verifyGoogleToken(idToken: string): Promise<{ email: string; name: string; avatar?: string; googleId: string } | null> {
@@ -457,8 +404,8 @@ router.post('/admin-login', async (req: Request, res: Response) => {
       return;
     }
 
-    // STRICT RBAC CHECK: User MUST have ADMIN or CONTENT_REVIEWER role
-    if (user.role !== 'ADMIN' && user.role !== 'CONTENT_REVIEWER') {
+    // STRICT RBAC CHECK: User MUST have ADMIN role
+    if (user.role !== 'ADMIN') {
       res.status(403).json({
         error: 'ACCESS_DENIED',
         message: 'Forbidden. This portal is restricted to authorized administrative personnel only.',

@@ -19,7 +19,6 @@ import { ProfileSettingsModal } from './components/ProfileSettingsModal';
 import { PricingModal } from './components/PricingModal';
 import { ReferralModal } from './components/ReferralModal';
 import { LegalModal } from './components/LegalModals';
-import { AdminLogin } from './components/AdminLogin';
 import { AdminRoute } from './components/AdminRoute';
 import { SelectExamPage } from './components/SelectExamPage';
 import { ExamPortalView } from './components/ExamPortalView';
@@ -73,13 +72,20 @@ export const App: React.FC = () => {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
       const isControlRoute =
+        hash.includes('admin-secure-dashboard') ||
         hash.includes('control-center') ||
         hash.includes('admin') ||
+        path.includes('admin-secure-dashboard') ||
         path.includes('control-center') ||
         path.includes('admin');
 
-      if (isControlRoute) {
+      if (hash === '#/login' || hash === '#login' || path === '/login') {
+        setAuthModalMode('login');
+        setIsAuthModalOpen(true);
+      } else if (isControlRoute) {
         setActiveTab('control-center');
+      } else if (hash === '#/dashboard' || hash === '#dashboard' || path === '/dashboard') {
+        setActiveTab('dashboard');
       } else if (hash === '#/live-tests' || hash === '#live-tests' || path === '/live-tests') {
         setActiveTab('live-tests');
       } else if (hash === '#/select-exam' || hash === '#select-exam' || path === '/select-exam') {
@@ -232,22 +238,31 @@ export const App: React.FC = () => {
     setCurrentUser(user);
     setIsAuthModalOpen(false);
 
+    // Persist session & user details in localStorage for client RBAC
+    try {
+      localStorage.setItem('examverse_user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
+    } catch (e) {
+      console.error('Failed to cache user session:', e);
+    }
+
+    // Dynamic Redirection based on role
+    if (user.role === 'ADMIN') {
+      setActiveTab('control-center');
+      window.location.hash = '/admin-secure-dashboard';
+      showToast(`Welcome Admin, ${user.name}!`);
+      return;
+    }
+
+    // Role === 'STUDENT'
     if (requiresExamSelection || (!user.targetExamId && user.role === 'STUDENT')) {
       setActiveTab('select-exam');
       window.location.hash = '/select-exam';
       showToast(`Welcome to All in One, ${user.name}! Please choose your target examination.`);
     } else {
       showToast(`Welcome back, ${user.name}!`);
-      if (user.targetExamId?.toLowerCase().includes('super-tet')) {
-        setActiveTab('super-tet');
-        window.location.hash = '/student/super-tet/dashboard';
-      } else if (user.targetExamId?.toLowerCase().includes('uptet')) {
-        setActiveTab('uptet');
-        window.location.hash = '/student/uptet/dashboard';
-      } else {
-        setActiveTab('dashboard');
-        window.location.hash = `/student/${user.targetExamId}/dashboard`;
-      }
+      setActiveTab(user.targetExamId?.toLowerCase().includes('super-tet') ? 'super-tet' : user.targetExamId?.toLowerCase().includes('uptet') ? 'uptet' : 'dashboard');
+      window.location.hash = '/dashboard';
     }
   };
 
@@ -645,9 +660,15 @@ export const App: React.FC = () => {
             {(activeTab === 'admin' || activeTab === 'control-center') && (
               <AdminRoute
                 currentUser={currentUser}
+                onRedirectToLogin={() => {
+                  setAuthModalMode('login');
+                  setIsAuthModalOpen(true);
+                }}
                 onSwitchToAdmin={() => {
                   api.logout();
                   setCurrentUser(null);
+                  setAuthModalMode('login');
+                  setIsAuthModalOpen(true);
                 }}
                 onUserRefreshed={(refreshedUser) => {
                   setCurrentUser(refreshedUser);
@@ -661,28 +682,8 @@ export const App: React.FC = () => {
                   } else {
                     setActiveTab('landing');
                   }
-                  window.location.hash = '';
+                  window.location.hash = '/dashboard';
                 }}
-                fallback={
-                  <AdminLogin
-                    onSuccess={(adminUser) => {
-                      setCurrentUser(adminUser);
-                      setActiveTab('control-center');
-                      window.location.hash = '/admin-portal-secure/dashboard';
-                      showToast(`Control Center session active: ${adminUser.name}`);
-                    }}
-                    onExit={() => {
-                      if (currentUser?.targetExamId?.toLowerCase().includes('uptet')) {
-                        setActiveTab('uptet');
-                      } else if (currentUser) {
-                        setActiveTab('dashboard');
-                      } else {
-                        setActiveTab('landing');
-                      }
-                      window.location.hash = '';
-                    }}
-                  />
-                }
               >
                 <AdminPortal />
               </AdminRoute>

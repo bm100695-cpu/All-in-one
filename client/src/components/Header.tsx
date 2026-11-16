@@ -198,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({
             {!isAdminPage && (currentUser?.role === 'ADMIN' || currentUser?.role === 'CONTENT_REVIEWER') && (
               <button
                 onClick={() => {
-                  window.location.hash = '/admin-portal-secure/dashboard';
+                  window.location.hash = '/admin-secure-dashboard';
                   handleNavClick('control-center');
                 }}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition shadow-xs cursor-pointer"
@@ -295,7 +295,7 @@ export const Header: React.FC<HeaderProps> = ({
                           <button
                             onClick={() => {
                               setRoleMenuOpen(false);
-                              window.location.hash = '/admin-portal-secure/dashboard';
+                              window.location.hash = '/admin-secure-dashboard';
                               handleNavClick('control-center');
                             }}
                             className="w-full text-left px-3 py-1.5 rounded-lg text-xs text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 flex items-center gap-2 cursor-pointer font-semibold"
@@ -419,7 +419,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     onClick={() => {
                       setMobileMenuOpen(false);
-                      window.location.hash = '/admin-portal-secure/dashboard';
+                      window.location.hash = '/admin-secure-dashboard';
                       handleNavClick('control-center');
                     }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50/60 hover:bg-indigo-50 rounded-lg border border-indigo-100"

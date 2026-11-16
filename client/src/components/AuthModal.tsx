@@ -98,6 +98,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setLoading(true);
       try {
         const res = await api.login(email.trim(), password);
+        // Store auth token and user details in localStorage
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        localStorage.setItem('examverse_token', res.token);
+        localStorage.setItem('examverse_user', JSON.stringify(res.user));
+
         onSuccess(res.user, !res.user.targetExamId);
         onClose();
       } catch (err: any) {

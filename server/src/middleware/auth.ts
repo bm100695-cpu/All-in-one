@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'examverse_super_secret_jwt_key_2025_prod_grade_xyz';
 
 export interface AuthUser {
+  userId?: string;
   id: string;
   email: string;
   name: string;
@@ -27,6 +28,7 @@ declare global {
 export function generateToken(user: AuthUser): string {
   return jwt.sign(
     {
+      userId: user.id,
       id: user.id,
       email: user.email,
       name: user.name,

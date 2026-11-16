@@ -10,12 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  STUDENT
+  ADMIN
+}
+
 model User {
   id              String        @id @default(cuid())
   email           String        @unique
   passwordHash    String?
   name            String
-  role            String        @default("STUDENT") // STUDENT, ADMIN, CONTENT_REVIEWER, INSTITUTION_ADMIN
+  role            Role          @default(STUDENT)
   avatar          String?
   targetExamId    String?
   examSelectedAt  DateTime?

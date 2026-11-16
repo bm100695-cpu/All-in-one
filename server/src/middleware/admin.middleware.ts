@@ -21,7 +21,7 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction): vo
       }
     }
 
-    if (user && (user.role === 'ADMIN' || user.role === 'CONTENT_REVIEWER')) {
+    if (user && user.role === 'ADMIN') {
       next();
     } else {
       res.status(403).json({ error: 'Access denied. Admin only.' });
