@@ -22,7 +22,12 @@ export function getCashfreeConfig() {
     .replace(/^["']|["']$/g, '')
     .trim()
     .toUpperCase();
-  const isProduction = rawEnv === 'PROD' || rawEnv === 'PRODUCTION';
+  // Strictly route to PRODUCTION unless explicitly configured as TEST or SANDBOX
+  const isProduction =
+    rawEnv === 'PROD' ||
+    rawEnv === 'PRODUCTION' ||
+    rawEnv === 'LIVE' ||
+    (rawEnv !== 'TEST' && rawEnv !== 'SANDBOX' && rawEnv !== 'DEV');
   const baseUrl = isProduction ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
   const isMasked = secretKey.includes('xxxxxxxx');
   const isLive = Boolean(
@@ -916,14 +921,15 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         }
       }
 
+      const cfConfig = getCashfreeConfig();
       const amountInPaise = Math.round(finalAmount * 100);
-      const receipt = `test_${Date.now()}_${userId.slice(-6)}`;
-      let orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
+      const receipt = `rcpt_${Date.now()}_${userId.slice(-6)}`;
+      const orderPrefix = cfConfig.isProduction ? 'order_' : 'test_order_';
+      let orderId = `${orderPrefix}${Date.now()}_${userId.slice(-6)}`;
       let paymentSessionId: string | null = null;
       let gatewayUsed = 'CASHFREE';
 
       const user = await prisma.user.findUnique({ where: { id: userId } });
-      const cfConfig = getCashfreeConfig();
 
       if (cfConfig.isLive) {
         try {
@@ -1137,14 +1143,15 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       }
     }
 
+    const cfConfig = getCashfreeConfig();
     const amountInPaise = Math.round(finalAmount * 100);
     const receipt = `rcpt_${Date.now()}_${userId.slice(-6)}`;
-    let orderId = `cf_sub_${Date.now()}_${userId.slice(-6)}`;
+    const orderPrefix = cfConfig.isProduction ? 'order_' : 'test_order_';
+    let orderId = `${orderPrefix}${Date.now()}_${userId.slice(-6)}`;
     let paymentSessionId: string | null = null;
     let gatewayUsed = 'CASHFREE';
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    const cfConfig = getCashfreeConfig();
 
     if (cfConfig.isLive) {
       try {

@@ -393,8 +393,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         try {
           const loaded = await loadCashfreeScript();
           if (loaded && (window as any).Cashfree) {
+            const targetMode =
+              order.cashfreeMode === 'sandbox'
+                ? 'sandbox'
+                : 'production'; // Default to production so live UPI QR / Cards modal loads
+
             const cashfree = (window as any).Cashfree({
-              mode: order.cashfreeMode || 'sandbox',
+              mode: targetMode,
             });
 
             setStatusMessage({
