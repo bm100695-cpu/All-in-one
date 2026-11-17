@@ -374,70 +374,38 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       return;
     }
 
-    // 2. Paid Plans (> ₹0): Cashfree modal checkout with UPI QR & cards
+    // 2. Paid Plans (> ₹0): Cashfree official live production modal checkout
     try {
       const order = await api.createPaymentOrder(plan.id, appliedCoupon?.code, activeExamSlug, plan.code);
 
-      if (!order.orderId) {
-        throw new Error('Order initialization failed. Please retry.');
+      const activeSession = order.payment_session_id || order.paymentSessionId;
+      if (!order.orderId || !activeSession) {
+        throw new Error(order.message || 'Payment session could not be established. Please retry.');
       }
 
-      // Priority 1: Official Cashfree JS SDK v3 Modal Checkout (if live production session)
-      const activeSession = order.paymentSessionId || (order as any).payment_session_id;
-      const isOfficialLive =
-        activeSession &&
-        !activeSession.startsWith('cf_mock_') &&
-        order.gateway === 'CASHFREE';
-
-      if (isOfficialLive) {
-        try {
-          const loaded = await loadCashfreeScript();
-          if (loaded && (window as any).Cashfree) {
-            const targetMode =
-              order.cashfreeMode === 'sandbox'
-                ? 'sandbox'
-                : 'production'; // Default to production so live UPI QR / Cards modal loads
-
-            const cashfree = (window as any).Cashfree({
-              mode: targetMode,
-            });
-
-            setStatusMessage({
-              type: 'info',
-              text: 'Opening Cashfree secure modal... Scan UPI QR or choose Netbanking / Card.',
-            });
-
-            cashfree.checkout({
-              paymentSessionId: activeSession,
-              redirectTarget: '_modal',
-            }).then(async (result: any) => {
-              if (result.error) {
-                console.warn('Cashfree payment modal closed or notice:', result.error);
-              }
-              handleVerifyCashfreeOrder(order.orderId!, plan.code, plan.name);
-            });
-            return;
-          }
-        } catch (sdkErr) {
-          console.warn('Cashfree SDK notice, opening in-modal UPI QR Checkout:', sdkErr);
-        }
+      const loaded = await loadCashfreeScript();
+      if (!loaded || !(window as any).Cashfree) {
+        throw new Error('Cashfree official checkout SDK failed to load. Please check your connection and retry.');
       }
 
-      // Priority 2: In-Modal Cashfree Verified UPI QR Checkout
-      // Seamlessly handles Sandbox, Dynamic UPI QR Scanner, and ISP fallbacks
-      setActiveCheckoutOrder({
-        orderId: order.orderId,
-        paymentSessionId: activeSession,
-        amount: order.amount || plan.price,
-        planName: plan.name,
-        planCode: plan.code,
-        currency: order.currency || plan.currency || 'INR',
-        examName: currentExamName,
-        gateway: order.gateway || 'CASHFREE',
+      // Strictly Production Mode: Triggers real live payment gateway & real UPI QR intent
+      const cashfree = (window as any).Cashfree({
+        mode: 'production',
       });
+
       setStatusMessage({
         type: 'info',
-        text: 'Cashfree Secure Checkout ready. Scan the UPI QR or click Verify Payment to complete.',
+        text: 'Opening Cashfree secure modal... Scan UPI QR or choose PhonePe, GPay, Paytm, Cards.',
+      });
+
+      cashfree.checkout({
+        paymentSessionId: activeSession,
+        redirectTarget: '_modal',
+      }).then(async (result: any) => {
+        if (result.error) {
+          console.warn('Cashfree payment modal notice:', result.error);
+        }
+        handleVerifyCashfreeOrder(order.orderId!, plan.code, plan.name);
       });
     } catch (err: any) {
       console.error('Subscription error:', err);

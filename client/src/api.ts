@@ -423,7 +423,9 @@ export const api = {
   createPaymentOrder: async (planId: string, couponCode?: string, examSlug?: string, planCode?: string) => {
     return request<{
       orderId?: string;
+      order_id?: string;
       paymentSessionId?: string;
+      payment_session_id?: string;
       cashfreeMode?: 'sandbox' | 'production';
       gateway?: string;
       amount?: number;

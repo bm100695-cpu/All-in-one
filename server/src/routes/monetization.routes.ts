@@ -950,28 +950,20 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           gatewayUsed = 'CASHFREE';
         } catch (cfErr: any) {
           console.error('[Cashfree Live Order Error for test]:', cfErr.message);
-          if (cfConfig.environment === 'PRODUCTION' || cfConfig.isLive) {
-            res.status(502).json({
-              error: `Cashfree gateway error: ${cfErr.message}`,
-              message: cfErr.message,
-            });
-            return;
-          }
-          paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
-          orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
-          gatewayUsed = 'CASHFREE_TEST';
-        }
-      } else {
-        if (cfConfig.isMasked) {
           res.status(502).json({
-            error: 'Cashfree Secret Key is currently masked with "xxxx" in server/.env. Please configure your unmasked Cashfree production credentials.',
-            message: 'Cashfree credentials masked. Please set valid production secret key in .env.',
+            error: `Cashfree gateway error: ${cfErr.message}`,
+            message: cfErr.message,
           });
           return;
         }
-        paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
-        orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
-        gatewayUsed = 'CASHFREE_TEST';
+      } else {
+        res.status(502).json({
+          error: cfConfig.isMasked
+            ? 'Cashfree Secret Key is currently masked with "xxxx" in server/.env. Please configure your unmasked Cashfree production credentials.'
+            : 'Cashfree credentials (CASHFREE_APP_ID / CASHFREE_SECRET_KEY) are missing in environment variables.',
+          message: 'Cashfree production gateway unavailable. Please configure production keys.',
+        });
+        return;
       }
 
       const payment = await prisma.payment.create({
@@ -1172,28 +1164,20 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         gatewayUsed = 'CASHFREE';
       } catch (cfErr: any) {
         console.error('[Cashfree Live Order Error for plan]:', cfErr.message);
-        if (cfConfig.environment === 'PRODUCTION' || cfConfig.isLive) {
-          res.status(502).json({
-            error: `Cashfree gateway error: ${cfErr.message}`,
-            message: cfErr.message,
-          });
-          return;
-        }
-        paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
-        orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
-        gatewayUsed = 'CASHFREE_TEST';
-      }
-    } else {
-      if (cfConfig.isMasked) {
         res.status(502).json({
-          error: 'Cashfree Secret Key is currently masked with "xxxx" in server/.env. Please configure your unmasked Cashfree production credentials.',
-          message: 'Cashfree credentials masked. Please set valid production secret key in .env.',
+          error: `Cashfree gateway error: ${cfErr.message}`,
+          message: cfErr.message,
         });
         return;
       }
-      paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
-      orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
-      gatewayUsed = 'CASHFREE_TEST';
+    } else {
+      res.status(502).json({
+        error: cfConfig.isMasked
+          ? 'Cashfree Secret Key is currently masked with "xxxx" in server/.env. Please configure your unmasked Cashfree production credentials.'
+          : 'Cashfree credentials (CASHFREE_APP_ID / CASHFREE_SECRET_KEY) are missing in environment variables.',
+        message: 'Cashfree production gateway unavailable. Please configure production keys.',
+      });
+      return;
     }
 
     const payment = await prisma.payment.create({
