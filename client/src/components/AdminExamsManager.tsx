@@ -18,7 +18,15 @@ import {
 } from 'lucide-react';
 import { api } from '../api';
 
-export const AdminExamsManager: React.FC = () => {
+export interface AdminExamsManagerProps {
+  selectedExamId?: string;
+  onExamSelected?: (exam: any) => void;
+}
+
+export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
+  selectedExamId,
+  onExamSelected,
+}) => {
   const [categories, setCategories] = useState<any[]>([]);
   const [exams, setExams] = useState<any[]>([]);
   const [selectedExam, setSelectedExam] = useState<any | null>(null);
@@ -95,7 +103,9 @@ export const AdminExamsManager: React.FC = () => {
         setNewExam((prev) => ({ ...prev, categoryId: res.categories[0].id }));
       }
       if (res.exams?.length) {
-        const target = selectedExam
+        const target = selectedExamId
+          ? res.exams.find((e: any) => e.id === selectedExamId || e.slug === selectedExamId) || res.exams[0]
+          : selectedExam
           ? res.exams.find((e: any) => e.id === selectedExam.id) || res.exams[0]
           : res.exams[0];
         selectExamRow(target);
@@ -107,8 +117,23 @@ export const AdminExamsManager: React.FC = () => {
     }
   };
 
+  // Sync external selection changes
+  useEffect(() => {
+    if (selectedExamId && exams.length > 0) {
+      if (selectedExam?.id !== selectedExamId && selectedExam?.slug !== selectedExamId) {
+        const target = exams.find((e: any) => e.id === selectedExamId || e.slug === selectedExamId);
+        if (target) {
+          selectExamRow(target);
+        }
+      }
+    }
+  }, [selectedExamId, exams]);
+
   const selectExamRow = async (exam: any) => {
     setSelectedExam(exam);
+    if (onExamSelected) {
+      onExamSelected(exam);
+    }
     setSelectedTest(null);
     setTestQuestions([]);
     setEditHeadline(exam.portalHeadline || '');

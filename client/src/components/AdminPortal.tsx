@@ -44,6 +44,34 @@ export const AdminPortal: React.FC = () => {
   const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
   const [actingOnId, setActingOnId] = useState<string | null>(null);
 
+  // Dynamic Multi-Exam State for Navbar & Control Center
+  const [adminExams, setAdminExams] = useState<any[]>([]);
+  const [selectedExam, setSelectedExam] = useState<any | null>(null);
+
+  useEffect(() => {
+    const fetchAdminExams = async () => {
+      try {
+        const res = await api.getAdminExams();
+        const list = res.exams || [];
+        setAdminExams(list);
+        if (list.length > 0) {
+          const savedSlug = localStorage.getItem('admin_selected_exam_slug') || 'jee-main';
+          const match = list.find((e: any) => e.slug === savedSlug) || list[0];
+          setSelectedExam(match);
+        }
+      } catch (e) {
+        console.error('Failed to preload admin exams:', e);
+      }
+    };
+    fetchAdminExams();
+  }, []);
+
+  const handleSelectExam = (exam: any) => {
+    setSelectedExam(exam);
+    localStorage.setItem('admin_selected_exam_slug', exam.slug);
+    localStorage.setItem('selected_exam_slug', exam.slug);
+  };
+
   // Monetization State
   const [monetizationOverview, setMonetizationOverview] = useState<any>(null);
   const [refundingId, setRefundingId] = useState<string | null>(null);
@@ -271,15 +299,29 @@ export const AdminPortal: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('JEE_PYQ')}
+            onClick={() => {
+              if (selectedExam?.slug === 'super-tet') {
+                setActiveTab('SUPER_TET_PYQ');
+              } else {
+                setActiveTab('JEE_PYQ');
+              }
+            }}
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'JEE_PYQ'
+              activeTab === 'JEE_PYQ' || (activeTab === 'SUPER_TET_PYQ' && selectedExam?.slug === 'super-tet')
                 ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
                 : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
             }`}
           >
-            <FileCheck className={`w-3.5 h-3.5 ${activeTab === 'JEE_PYQ' ? 'text-emerald-700' : 'text-zinc-400'}`} />
-            <span>JEE Main PYQ ({pyqQuestions.length})</span>
+            <FileCheck className={`w-3.5 h-3.5 ${activeTab === 'JEE_PYQ' || (activeTab === 'SUPER_TET_PYQ' && selectedExam?.slug === 'super-tet') ? 'text-emerald-700' : 'text-zinc-400'}`} />
+            <span>
+              {selectedExam ? selectedExam.shortName : 'JEE Main'} PYQ (
+              {selectedExam?.slug === 'jee-main'
+                ? pyqQuestions.length
+                : selectedExam?.slug === 'super-tet'
+                ? '2012–25'
+                : selectedExam?._count?.questions || selectedExam?._count?.tests || 0}
+              )
+            </span>
           </button>
 
           <button
@@ -339,6 +381,29 @@ export const AdminPortal: React.FC = () => {
             <ShieldCheck className={`w-3.5 h-3.5 ${activeTab === 'SUPER_TET_PYQ' ? 'text-emerald-700' : 'text-zinc-400'}`} />
             <span>SUPER TET (2012–25)</span>
           </button>
+
+          {/* Active Exam Quick Switcher Dropdown in Sub-Navbar */}
+          {adminExams.length > 0 && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-zinc-200/90 shadow-2xs text-xs ml-auto shrink-0">
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider whitespace-nowrap">
+                Active Exam:
+              </span>
+              <select
+                value={selectedExam?.id || ''}
+                onChange={(e) => {
+                  const target = adminExams.find((x) => x.id === e.target.value);
+                  if (target) handleSelectExam(target);
+                }}
+                className="font-bold text-emerald-800 bg-transparent focus:outline-none cursor-pointer text-xs"
+              >
+                {adminExams.map((ex) => (
+                  <option key={ex.id} value={ex.id}>
+                    {ex.shortName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </div>
 
@@ -346,7 +411,12 @@ export const AdminPortal: React.FC = () => {
       {activeTab === 'LIVE_TESTS' && <AdminLiveTestManager />}
 
       {/* Tab: Multi-Exam Manager */}
-      {activeTab === 'EXAMS_MANAGER' && <AdminExamsManager />}
+      {activeTab === 'EXAMS_MANAGER' && (
+        <AdminExamsManager
+          selectedExamId={selectedExam?.id}
+          onExamSelected={handleSelectExam}
+        />
+      )}
 
       {/* Tab: Live Students & Exam History */}
       {activeTab === 'STUDENTS_ACTIVITY' && <AdminStudentActivity />}
@@ -354,8 +424,47 @@ export const AdminPortal: React.FC = () => {
       {/* Tab: SUPER TET PYQ Manager */}
       {activeTab === 'SUPER_TET_PYQ' && <AdminSuperTetManager />}
 
-      {/* Tab 0: JEE Main PYQ Database Management */}
-      {activeTab === 'JEE_PYQ' && (
+      {/* Tab: Selected Exam Question Bank & Tests Hub (When non-JEE & non-SUPER-TET exam is selected) */}
+      {activeTab === 'JEE_PYQ' && selectedExam && selectedExam.slug !== 'jee-main' && selectedExam.slug !== 'super-tet' && (
+        <div className="space-y-6">
+          <div className="p-6 rounded-2xl bg-white border border-zinc-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-emerald-700">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
+                  {selectedExam.conductingBody || 'National Exam Body'}
+                </span>
+                <span className="text-xs text-zinc-500 font-mono">/exams/{selectedExam.slug}</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-100 text-zinc-700">
+                  {selectedExam._count?.tests || 0} Tests • {selectedExam._count?.questions || 0} Questions
+                </span>
+              </div>
+              <h2 className="text-xl font-extrabold text-zinc-950 tracking-[-0.02em]">
+                {selectedExam.title || selectedExam.shortName} — Question Bank & Official Test Series
+              </h2>
+              <p className="text-xs text-zinc-600 mt-1">
+                {selectedExam.portalHeadline || `Curated question bank, official past year papers, and mock tests for ${selectedExam.shortName}.`}
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setActiveTab('EXAMS_MANAGER')}
+                className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>Open in Full Exams & Tests Manager</span>
+              </button>
+            </div>
+          </div>
+
+          <AdminExamsManager
+            selectedExamId={selectedExam.id}
+            onExamSelected={handleSelectExam}
+          />
+        </div>
+      )}
+
+      {/* Tab 0: JEE Main PYQ Database Management (When JEE Main is selected or default) */}
+      {activeTab === 'JEE_PYQ' && (selectedExam?.slug === 'jee-main' || !selectedExam) && (
         <div className="space-y-6">
           {saveSuccessMsg && (
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">

@@ -46,7 +46,15 @@ const getInitialTab = (): NavTab => {
 export const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<NavTab>(getInitialTab());
-  const [selectedExamSlug, setSelectedExamSlug] = useState<string>('jee-main');
+  const [selectedExamSlug, setSelectedExamSlug] = useState<string>(() => {
+    return localStorage.getItem('selected_exam_slug') || 'jee-main';
+  });
+
+  useEffect(() => {
+    if (selectedExamSlug) {
+      localStorage.setItem('selected_exam_slug', selectedExamSlug);
+    }
+  }, [selectedExamSlug]);
   const [activeTestId, setActiveTestId] = useState<string | null>(null);
   const [submittedAttemptId, setSubmittedAttemptId] = useState<string | null>(null);
   const [isUptetTest, setIsUptetTest] = useState<boolean>(false);
@@ -427,7 +435,7 @@ export const App: React.FC = () => {
           language={language}
           setLanguage={setLanguage}
           activeTestTitle={activeTestId ? 'CBT Test in Progress' : undefined}
-          activeExamSlug={activeTab === 'exam-portal' ? selectedExamSlug : currentUser?.targetExamId}
+          activeExamSlug={currentUser?.targetExamId || selectedExamSlug || 'jee-main'}
           onOpenExamPortal={openExamPortal}
           onOpenAuthModal={(mode) => {
             setAuthModalMode(mode);

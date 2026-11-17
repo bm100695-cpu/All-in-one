@@ -74,7 +74,13 @@ export const Header: React.FC<HeaderProps> = ({
   // Yeh pata lagane ke liye ki abhi admin page par hain ya nahi
   const isAdminPage = activeTab === 'admin' || activeTab === 'control-center';
 
-  const targetExam = (activeExamSlug || currentUser?.targetExamId || 'jee-main').toLowerCase();
+  const targetExam = (
+    activeExamSlug ||
+    currentUser?.targetExamId ||
+    localStorage.getItem('selected_exam_slug') ||
+    localStorage.getItem('admin_selected_exam_slug') ||
+    'jee-main'
+  ).toLowerCase();
   const isSuperTet = targetExam.includes('super-tet');
   const isUptet = !isSuperTet && targetExam.includes('uptet');
 
@@ -85,6 +91,9 @@ export const Header: React.FC<HeaderProps> = ({
     'neet-ug': 'NEET UG',
     'upsc-prelims': 'UPSC Prelims',
     'ssc-cgl-tier1': 'SSC CGL',
+    'ssc-cgl': 'SSC CGL',
+    'ctet': 'CTET',
+    'rrb-ntpc': 'RRB NTPC',
     'gate-cs': 'GATE CS',
   };
   const examBadge = examLabels[targetExam] || targetExam.toUpperCase();
