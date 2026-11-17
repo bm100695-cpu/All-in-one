@@ -127,6 +127,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     avatar?: string;
     googleId: string;
     idToken?: string;
+    accessToken?: string;
   }) => {
     setGoogleLoading(true);
     setError(null);
@@ -181,6 +182,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               }
 
               await executeGoogleAuth({
+                accessToken: tokenResponse.access_token,
                 email: userInfo.email,
                 name: userInfo.name || userInfo.email.split('@')[0],
                 avatar: userInfo.picture,

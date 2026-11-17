@@ -78,6 +78,11 @@ model Exam {
   importantDatesJson         String?             @default("{}")
   officialNoticeUrl          String?
   accentColor                String              @default("#1D4ED8")
+  accessMode                 String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
+  price                      Float               @default(0.0)
+  originalPrice              Float?
+  discountPct                Int                 @default(0)
+  offerExpiresAt             DateTime?
   createdAt                  DateTime            @default(now())
   updatedAt                  DateTime            @updatedAt
 
@@ -259,7 +264,12 @@ model Test {
   instructionsEn   String
   instructionsHi   String?
   pyqReference     String?
-  accessLevel      String              @default("FREE") // FREE, PREMIUM
+  accessLevel      String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
+  accessMode       String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
+  price            Float               @default(0.0)
+  originalPrice    Float?
+  discountPct      Int                 @default(0)
+  offerExpiresAt   DateTime?
   isFeatured       Boolean             @default(false)
   isPublished      Boolean             @default(true)
   examYearId       String?
@@ -282,6 +292,7 @@ model Test {
   testQuestions    TestQuestion[]
   attempts         TestAttempt[]
   entitlements     Entitlement[]
+  payments         Payment[]
   liveSchedules    LiveTestSchedule[]
 }
 
@@ -364,14 +375,20 @@ model SubscriptionPlan {
   name            String
   description     String
   price           Float          @default(0.0)
+  originalPrice   Float?
+  discountPct     Int            @default(0)
   currency        String         @default("INR")
-  billingInterval String         @default("ONCE") // ONCE, MONTHLY, YEARLY
+  billingInterval String         @default("ONCE") // ONCE, MONTHLY, QUARTERLY, YEARLY, LIFETIME
   durationDays    Int            @default(0) // 0 for lifetime/free, 30 for monthly, 365 for annual
   testAccessLimit Int            @default(0) // 0 for unlimited eligible, 5 for test pack
   featuresJson    String         @default("[]") // JSON array of string features
+  includedExamsJson     String?  @default("[]") // Specific exams included: [] = all or examSlug
+  includedPapersJson    String?  @default("[]") // Specific papers included
+  includedMockTestsJson String?  @default("[]") // Specific tests included
   badge           String?        // e.g. "Most Popular", "Best Value"
   isPublished     Boolean        @default(true)
   displayOrder    Int            @default(0)
+  offerExpiresAt  DateTime?
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
@@ -411,6 +428,7 @@ model Payment {
   id              String           @id @default(cuid())
   userId          String
   planId          String?
+  testId          String?
   examSlug        String?
   originalPrice   Float?
   discountAmount  Float            @default(0.0)
@@ -435,6 +453,7 @@ model Payment {
 
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan            SubscriptionPlan? @relation(fields: [planId], references: [id])
+  test            Test?            @relation(fields: [testId], references: [id])
   subscriptions   Subscription[]
 }
 
@@ -463,6 +482,20 @@ model Referral {
 
   referrer        User             @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
   referredUser    User             @relation("ReferredUser", fields: [referredUserId], references: [id], onDelete: Cascade)
+}
+
+model PricingAuditLog {
+  id              String         @id @default(cuid())
+  adminId         String
+  targetType      String         // EXAM, TEST, PAPER, PLAN
+  targetId        String
+  targetTitle     String
+  previousPrice   Float          @default(0.0)
+  newPrice        Float          @default(0.0)
+  previousAccess  String         @default("FREE")
+  newAccess       String         @default("FREE")
+  notes           String?
+  createdAt       DateTime       @default(now())
 }
 
 // ============================================================================

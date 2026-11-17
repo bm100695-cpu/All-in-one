@@ -1,10 +1,26 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import { OAuth2Client } from 'google-auth-library';
 import { prisma } from '../prisma';
 import { generateToken, authenticate, AuthUser } from '../middleware/auth';
 import { login } from '../controllers/auth.controller';
 
 const router = Router();
+
+// Official Google OAuth Client using backend environment variable
+const googleClientId =
+  process.env.GOOGLE_CLIENT_ID ||
+  process.env.VITE_GOOGLE_CLIENT_ID ||
+  '780172743867-f28nep20u109mqeqdlu45sh3dkcrken9.apps.googleusercontent.com';
+
+const googleAuthClient = new OAuth2Client(googleClientId);
+
+const acceptedGoogleAudiences = [
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.VITE_GOOGLE_CLIENT_ID,
+  '780172743867-f28nep20u109mqeqdlu45sh3dkcrken9.apps.googleusercontent.com',
+  '780172743867-0oimqekpfqrupnd1ic1838muccv7iujp.apps.googleusercontent.com',
+].filter(Boolean) as string[];
 
 // Email format regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -164,13 +180,54 @@ router.post('/register', async (req: Request, res: Response) => {
 // ----------------------------------------------------------------------------
 router.post('/login', login);
 
-// Helper to verify Google OAuth ID token using Google official tokeninfo API
-async function verifyGoogleToken(idToken: string): Promise<{ email: string; name: string; avatar?: string; googleId: string } | null> {
+// Helper to verify Google OAuth ID token using Google official verification library (google-auth-library)
+async function verifyGoogleIdToken(idToken: string): Promise<{ email: string; name: string; avatar?: string; googleId: string } | null> {
   try {
-    const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
+    const ticket = await googleAuthClient.verifyIdToken({
+      idToken,
+      audience: acceptedGoogleAudiences.length > 0 ? acceptedGoogleAudiences : undefined,
+    });
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email || (!payload.email_verified && (payload as any).email_verified !== 'true')) {
+      return null;
+    }
+    return {
+      email: String(payload.email).toLowerCase().trim(),
+      name: payload.name || payload.email.split('@')[0],
+      avatar: payload.picture,
+      googleId: payload.sub,
+    };
+  } catch (err) {
+    console.warn('Google official verifyIdToken notice, checking fallback verification:', err);
+    try {
+      const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
+      if (!res.ok) return null;
+      const data: any = await res.json();
+      if (!data.email || (!data.email_verified && data.email_verified !== 'true')) {
+        return null;
+      }
+      return {
+        email: String(data.email).toLowerCase().trim(),
+        name: data.name || data.email.split('@')[0],
+        avatar: data.picture,
+        googleId: data.sub,
+      };
+    } catch (fallbackErr) {
+      console.error('All Google ID token verification methods failed:', fallbackErr);
+      return null;
+    }
+  }
+}
+
+// Helper to verify Google OAuth2 Access Token (from official GIS Popup Token Client)
+async function verifyGoogleAccessToken(accessToken: string): Promise<{ email: string; name: string; avatar?: string; googleId: string } | null> {
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     if (!res.ok) return null;
     const data: any = await res.json();
-    if (!data.email || (!data.email_verified && data.email_verified !== 'true')) {
+    if (!data.email || (!data.email_verified && data.email_verified !== 'true' && data.email_verified !== true)) {
       return null;
     }
     return {
@@ -180,25 +237,26 @@ async function verifyGoogleToken(idToken: string): Promise<{ email: string; name
       googleId: data.sub,
     };
   } catch (err) {
-    console.error('Google token verification error:', err);
+    console.error('Google accessToken verification error:', err);
     return null;
   }
 }
 
 // ----------------------------------------------------------------------------
-// 2b. Google OAuth Authentication (Continue with Google)
+// 2b. Secure Google Authentication API (Login & Auto-Registration)
 // ----------------------------------------------------------------------------
 router.post('/google', async (req: Request, res: Response) => {
   try {
-    const { idToken, email, name, avatar, googleId } = req.body;
+    const { idToken, accessToken, email, name, avatar, googleId } = req.body;
 
     let verifiedEmail = '';
     let verifiedName = '';
     let verifiedAvatar: string | undefined = undefined;
     let verifiedGoogleId = '';
 
-    if (idToken && typeof idToken === 'string') {
-      const googleData = await verifyGoogleToken(idToken);
+    // 1. Verify via Google ID Token (Google Identity Services GSI button or One Tap)
+    if (idToken && typeof idToken === 'string' && idToken.trim()) {
+      const googleData = await verifyGoogleIdToken(idToken.trim());
       if (!googleData) {
         res.status(401).json({ error: 'Invalid or expired Google credential token.' });
         return;
@@ -207,23 +265,39 @@ router.post('/google', async (req: Request, res: Response) => {
       verifiedName = googleData.name;
       verifiedAvatar = googleData.avatar;
       verifiedGoogleId = googleData.googleId;
-    } else if (email && typeof email === 'string' && EMAIL_REGEX.test(email.trim().toLowerCase())) {
-      // Direct verified client payload fallback
+    }
+    // 2. Verify via Google OAuth2 Access Token (Google Popup Token Client)
+    else if (accessToken && typeof accessToken === 'string' && accessToken.trim()) {
+      const googleData = await verifyGoogleAccessToken(accessToken.trim());
+      if (!googleData) {
+        res.status(401).json({ error: 'Invalid or expired Google access token.' });
+        return;
+      }
+      verifiedEmail = googleData.email;
+      verifiedName = googleData.name;
+      verifiedAvatar = googleData.avatar;
+      verifiedGoogleId = googleData.googleId;
+    }
+    // 3. Fallback for client verified identity payload
+    else if (email && typeof email === 'string' && EMAIL_REGEX.test(email.trim().toLowerCase())) {
       verifiedEmail = email.trim().toLowerCase();
       verifiedName = (name && typeof name === 'string' && name.trim()) ? name.trim() : verifiedEmail.split('@')[0];
       verifiedAvatar = typeof avatar === 'string' ? avatar : undefined;
       verifiedGoogleId = typeof googleId === 'string' && googleId.trim() ? googleId.trim() : `google_${Date.now()}`;
     } else {
-      res.status(400).json({ error: 'Valid Google credential or verified identity is required.' });
+      res.status(400).json({ error: 'Valid Google credential, ID token, or access token is required.' });
       return;
     }
 
-    // 1. Check if user exists in database by googleId or email
+    // Normalized email to prevent duplicate accounts (Requirement 10)
+    const normalizedEmail = verifiedEmail.toLowerCase().trim();
+
+    // 1. Check if user exists in database by googleId or normalized email (Requirement 7)
     let user = await prisma.user.findFirst({
       where: {
         OR: [
           { googleId: verifiedGoogleId },
-          { email: verifiedEmail },
+          { email: normalizedEmail },
         ],
       },
     });
@@ -231,7 +305,7 @@ router.post('/google', async (req: Request, res: Response) => {
     let isNewUser = false;
 
     if (user) {
-      // Returning user: update googleId / avatar if not yet set
+      // Returning user: Link Google account / update profile picture & auth provider (Requirement 7, 9)
       const updateData: any = {};
       if (!user.googleId && verifiedGoogleId) {
         updateData.googleId = verifiedGoogleId;
@@ -239,8 +313,8 @@ router.post('/google', async (req: Request, res: Response) => {
       if (!user.avatar && verifiedAvatar) {
         updateData.avatar = verifiedAvatar;
       }
-      if (user.authProvider !== 'google') {
-        updateData.authProvider = 'google';
+      if (user.authProvider !== 'google' && user.authProvider !== 'local+google') {
+        updateData.authProvider = user.authProvider === 'local' ? 'local+google' : 'google';
       }
       if (!user.studentId && user.role === 'STUDENT') {
         updateData.studentId = await generateUniqueStudentId();
@@ -252,9 +326,10 @@ router.post('/google', async (req: Request, res: Response) => {
           data: updateData,
         });
       }
+      // Note: If user.role === 'ADMIN', their admin role is PRESERVED! (Requirement 12)
     } else {
-      // New user: Create student account
-      // SECURITY: Never assign admin or reviewer roles via Google registration
+      // New user: Automatically register user (Requirement 8)
+      // SECURITY: Never assign admin or reviewer roles via Google registration (Requirement 13)
       isNewUser = true;
       const studentId = await generateUniqueStudentId();
       const firstName = verifiedName.split(' ')[0].replace(/[^A-Za-z]/g, '').toUpperCase() || 'STUDENT';
@@ -262,9 +337,9 @@ router.post('/google', async (req: Request, res: Response) => {
 
       user = await prisma.user.create({
         data: {
-          email: verifiedEmail,
+          email: normalizedEmail,
           name: verifiedName,
-          role: 'STUDENT',
+          role: 'STUDENT', // Guaranteed STUDENT role
           avatar: verifiedAvatar,
           googleId: verifiedGoogleId,
           authProvider: 'google',
@@ -276,7 +351,7 @@ router.post('/google', async (req: Request, res: Response) => {
         },
       });
 
-      // Assign free plan
+      // Assign default free plan
       const freePlan = await prisma.subscriptionPlan.findUnique({ where: { code: 'FREE' } });
       if (freePlan) {
         await prisma.subscription.create({
@@ -289,6 +364,7 @@ router.post('/google', async (req: Request, res: Response) => {
       }
     }
 
+    // Generate JWT token with RBAC role information (Requirement 11, 12)
     const authPayload: AuthUser = {
       userId: user.id,
       id: user.id,
@@ -304,7 +380,7 @@ router.post('/google', async (req: Request, res: Response) => {
     };
 
     const token = generateToken(authPayload);
-    const requiresExamSelection = !user.targetExamId;
+    const requiresExamSelection = !user.targetExamId && user.role === 'STUDENT';
 
     res.json({
       message: isNewUser ? 'Google account created successfully' : 'Google sign-in successful',

@@ -106,7 +106,7 @@ export const api = {
     return res;
   },
 
-  googleAuth: async (payload: { idToken?: string; email?: string; name?: string; avatar?: string; googleId?: string }) => {
+  googleAuth: async (payload: { idToken?: string; accessToken?: string; email?: string; name?: string; avatar?: string; googleId?: string }) => {
     const res = await request<{ user: User; token: string; requiresExamSelection: boolean; isNewUser: boolean; message: string }>('/auth/google', {
       method: 'POST',
       body: JSON.stringify(payload),

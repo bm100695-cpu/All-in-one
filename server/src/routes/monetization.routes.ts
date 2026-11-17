@@ -64,6 +64,9 @@ router.get('/plans', async (req: Request, res: Response) => {
       priceINR: p.price,
       priceUSD: p.price === 0 ? 0 : Math.max(1, Math.round(p.price / 75)),
       features: JSON.parse(p.featuresJson || '[]'),
+      includedExams: JSON.parse(p.includedExamsJson || '[]'),
+      includedPapers: JSON.parse(p.includedPapersJson || '[]'),
+      includedMockTests: JSON.parse(p.includedMockTestsJson || '[]'),
     }));
 
     res.json({ plans: parsedPlans });
@@ -76,7 +79,7 @@ router.get('/plans', async (req: Request, res: Response) => {
 // Validate a discount coupon code on the backend
 router.post('/validate-coupon', authenticate, async (req: Request, res: Response) => {
   try {
-    const { code, examSlug, planId } = req.body;
+    const { code, examSlug, planId, testId } = req.body;
     if (!code || typeof code !== 'string') {
       res.status(400).json({ error: 'Coupon code is required.' });
       return;
@@ -97,17 +100,24 @@ router.post('/validate-coupon', authenticate, async (req: Request, res: Response
     }
 
     if (coupon.examSlug && examSlug && coupon.examSlug !== String(examSlug).toLowerCase()) {
-      res.status(400).json({ error: `Coupon "${coupon.code}" is valid only for ${coupon.examSlug.toUpperCase()} plans.` });
+      res.status(400).json({ error: `Coupon "${coupon.code}" is valid only for ${coupon.examSlug.toUpperCase()} items.` });
       return;
     }
 
     let discountedPrice: number | undefined = undefined;
     let originalPrice: number | undefined = undefined;
+
     if (planId) {
       const plan = await prisma.subscriptionPlan.findUnique({ where: { id: String(planId) } });
       if (plan) {
         originalPrice = plan.price;
         discountedPrice = Math.max(1, Math.round(plan.price * (1 - coupon.discountPct / 100)));
+      }
+    } else if (testId) {
+      const test = await prisma.test.findUnique({ where: { id: String(testId) } });
+      if (test) {
+        originalPrice = test.price;
+        discountedPrice = Math.max(1, Math.round(test.price * (1 - coupon.discountPct / 100)));
       }
     }
 
@@ -160,21 +170,25 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
           isActive: true,
           OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
         },
-        include: { test: { select: { id: true, title: true, accessLevel: true } } },
+        include: { test: { select: { id: true, title: true, accessLevel: true, accessMode: true, price: true } } },
       }),
       prisma.payment.findMany({
         where: { userId },
+        include: {
+          plan: { select: { name: true, code: true } },
+          test: { select: { id: true, title: true } },
+        },
         orderBy: { createdAt: 'desc' },
-        take: 5,
+        take: 10,
       }),
     ]);
 
     // Fallback to FREE plan if no paid subscription active
     let effectivePlan = activeSub?.plan;
     if (!effectivePlan) {
-      effectivePlan = await prisma.subscriptionPlan.findUnique({
+      effectivePlan = (await prisma.subscriptionPlan.findUnique({
         where: { code: 'FREE' },
-      }) || undefined;
+      })) || undefined;
     }
 
     res.json({
@@ -208,7 +222,7 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
         : null,
       entitlements,
       recentPayments,
-      isPremium: activeSub?.plan?.code === 'PREMIUM_MONTHLY_149',
+      isPremium: Boolean(activeSub && activeSub.plan?.price > 0),
       testsRemaining: activeSub?.testsRemaining ?? 0,
       referralCredits: user?.referralCredits ?? 0,
       referralCode: user?.referralCode ?? '',
@@ -219,7 +233,7 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
   }
 });
 
-// Check access entitlement for a specific mock test
+// Check access entitlement for a specific mock test with dynamic pricing info
 router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: Response) => {
   try {
     const testId = req.params.testId as string;
@@ -227,7 +241,17 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
 
     const test = await prisma.test.findUnique({
       where: { id: testId },
-      select: { id: true, title: true, accessLevel: true, exam: { select: { slug: true } } },
+      select: {
+        id: true,
+        title: true,
+        accessLevel: true,
+        accessMode: true,
+        price: true,
+        originalPrice: true,
+        discountPct: true,
+        offerExpiresAt: true,
+        exam: { select: { id: true, title: true, slug: true, accessMode: true, price: true } },
+      },
     });
 
     if (!test) {
@@ -235,51 +259,32 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       return;
     }
 
-    // Free test is accessible to everyone
-    if (test.accessLevel === 'FREE') {
+    // 1. Free test is accessible to everyone immediately (DYNAMIC PRICING CHECK)
+    if (test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.price === 0) {
       res.json({
         entitled: true,
+        accessMode: 'FREE',
         accessLevel: 'FREE',
-        reason: 'Public free tier mock test',
+        price: 0,
+        reason: 'Free Mock Test',
       });
       return;
     }
 
-    // Admins and Content Reviewers bypass paywall
+    // 2. Admins and Content Reviewers bypass paywall
     if (req.user!.role === 'ADMIN' || req.user!.role === 'CONTENT_REVIEWER') {
       res.json({
         entitled: true,
+        accessMode: test.accessMode || 'PAID',
         accessLevel: 'PREMIUM',
-        reason: 'Staff / Admin privileges',
+        price: test.price,
+        reason: 'Admin / Staff privileges',
       });
       return;
     }
 
-    // Check for monthly unlimited subscription
-    const activeSub = await prisma.subscription.findFirst({
-      where: {
-        userId,
-        status: 'ACTIVE',
-        OR: [{ endDate: null }, { endDate: { gt: new Date() } }],
-      },
-      include: { plan: true },
-    });
-
-    if (
-      activeSub &&
-      (activeSub.plan.code === 'PREMIUM_MONTHLY_149' ||
-        (activeSub.plan.examSlug && activeSub.plan.examSlug === test.exam?.slug))
-    ) {
-      res.json({
-        entitled: true,
-        accessLevel: 'PREMIUM',
-        reason: `Active ${activeSub.plan.name} Subscription`,
-      });
-      return;
-    }
-
-    // Check specific entitlement
-    const entitlement = await prisma.entitlement.findFirst({
+    // 3. Check for specific entitlement (e.g. single test purchased or referral redeemed)
+    const specificEntitlement = await prisma.entitlement.findFirst({
       where: {
         userId,
         isActive: true,
@@ -290,29 +295,77 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       },
     });
 
-    if (entitlement) {
+    if (specificEntitlement) {
       res.json({
         entitled: true,
+        accessMode: test.accessMode || 'PAID',
         accessLevel: 'PREMIUM',
-        reason: `Unlocked via ${entitlement.source}`,
+        reason: `Unlocked via ${specificEntitlement.source}`,
       });
       return;
     }
 
-    // Check if test pack has remaining unlocks
-    const canUnlockWithPack = activeSub && activeSub.plan.code === 'TEST_PACK_99' && (activeSub.testsRemaining || 0) > 0;
+    // 4. Check for active subscription that includes this test or exam
+    const activeSub = await prisma.subscription.findFirst({
+      where: {
+        userId,
+        status: 'ACTIVE',
+        OR: [{ endDate: null }, { endDate: { gt: new Date() } }],
+      },
+      include: { plan: true },
+    });
 
-    // Check if user has referral credits
+    if (activeSub) {
+      const plan = activeSub.plan;
+      // All-access plans
+      if (plan.code === 'PREMIUM_MONTHLY_149' || plan.price >= 499 || !plan.examSlug) {
+        res.json({
+          entitled: true,
+          accessMode: test.accessMode || 'PAID',
+          accessLevel: 'PREMIUM',
+          reason: `Active ${plan.name} Subscription`,
+        });
+        return;
+      }
+      // Scoped exam plan
+      if (plan.examSlug && test.exam?.slug && plan.examSlug === test.exam.slug) {
+        res.json({
+          entitled: true,
+          accessMode: test.accessMode || 'PAID',
+          accessLevel: 'PREMIUM',
+          reason: `Included in ${plan.name}`,
+        });
+        return;
+      }
+    }
+
+    // Check if test pack has remaining unlocks
+    const canUnlockWithPack = Boolean(activeSub && activeSub.plan.code === 'TEST_PACK_99' && (activeSub.testsRemaining || 0) > 0);
+
+    // Check referral credits
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { referralCredits: true },
     });
     const canRedeemCredit = (user?.referralCredits || 0) > 0;
 
+    // Calculate effective discounted price if promotional offer is active
+    let effectivePrice = test.price;
+    const isOfferActive = test.offerExpiresAt ? new Date(test.offerExpiresAt) > new Date() : true;
+    if (test.discountPct > 0 && isOfferActive) {
+      const discount = Math.round((test.price * test.discountPct) / 100);
+      effectivePrice = Math.max(1, test.price - discount);
+    }
+
     res.json({
       entitled: false,
+      accessMode: test.accessMode || 'PAID',
       accessLevel: 'PREMIUM',
-      reason: 'Premium mock test requires active plan or unlock credit',
+      price: effectivePrice,
+      originalPrice: test.originalPrice || test.price,
+      discountPct: test.discountPct || 0,
+      offerExpiresAt: test.offerExpiresAt,
+      reason: 'Payment or active subscription required to unlock this test',
       canUnlockWithPack,
       testsRemainingInPack: activeSub?.testsRemaining || 0,
       canRedeemCredit,
@@ -325,17 +378,145 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
 });
 
 // =========================================================================
-// 3. PAYMENT ORDER CREATION & VERIFICATION (RAZORPAY)
+// 3. PAYMENT ORDER CREATION & VERIFICATION (RAZORPAY DYNAMIC PRICING)
 // =========================================================================
 
-// Create Razorpay payment order with backend coupon validation & original price snapshot
+// Create Razorpay payment order for a Plan, Single Test, or Exam Series
 router.post('/create-order', authenticate, async (req: Request, res: Response) => {
   try {
-    const { planId, planCode, couponCode, examSlug } = req.body;
+    const { planId, planCode, testId, examId, couponCode, examSlug } = req.body;
     const userId = req.user!.id;
 
+    // Case 1: Individual Mock Test Purchase
+    if (testId) {
+      const test = await prisma.test.findUnique({
+        where: { id: testId },
+        include: { exam: true },
+      });
+
+      if (!test) {
+        res.status(404).json({ error: 'Mock test not found.' });
+        return;
+      }
+
+      // Check if test is free
+      if (test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.price <= 0) {
+        // Automatically grant entitlement
+        await prisma.entitlement.upsert({
+          where: { id: `free_${userId}_${test.id}` },
+          update: { isActive: true },
+          create: {
+            id: `free_${userId}_${test.id}`,
+            userId,
+            testId: test.id,
+            planCode: 'FREE_ACCESS',
+            source: 'FREE_PROMO',
+            expiresAt: null,
+          },
+        });
+        res.json({
+          freeUnlocked: true,
+          message: 'Free test unlocked successfully!',
+        });
+        return;
+      }
+
+      // Server-side price calculation
+      const originalPrice = test.originalPrice && test.originalPrice > test.price ? test.originalPrice : test.price;
+      let finalAmount = test.price;
+      let discountAmount = 0;
+      let verifiedCouponCode: string | null = null;
+
+      // Apply promotional discount if active
+      const isOfferActive = test.offerExpiresAt ? new Date(test.offerExpiresAt) > new Date() : true;
+      if (test.discountPct > 0 && isOfferActive) {
+        discountAmount = Math.round((test.price * test.discountPct) / 100);
+        finalAmount = Math.max(1, test.price - discountAmount);
+      }
+
+      // Apply coupon code if provided
+      if (couponCode && typeof couponCode === 'string' && couponCode.trim()) {
+        const coupon = await prisma.coupon.findUnique({
+          where: { code: couponCode.trim().toUpperCase() },
+        });
+        if (coupon && coupon.isActive && (!coupon.expiresAt || coupon.expiresAt > new Date())) {
+          if (!coupon.examSlug || coupon.examSlug === (test.exam?.slug || examSlug)) {
+            const couponDiscount = Math.round((finalAmount * coupon.discountPct) / 100);
+            discountAmount += couponDiscount;
+            finalAmount = Math.max(1, finalAmount - couponDiscount);
+            verifiedCouponCode = coupon.code;
+          }
+        }
+      }
+
+      const amountInPaise = Math.round(finalAmount * 100);
+      const receipt = `test_${Date.now()}_${userId.slice(-6)}`;
+      let orderId = '';
+
+      if (razorpayClient) {
+        const rzpOrder = await razorpayClient.orders.create({
+          amount: amountInPaise,
+          currency: 'INR',
+          receipt,
+          notes: {
+            purchaseType: 'SINGLE_TEST',
+            testId: test.id,
+            testTitle: test.title,
+            examSlug: test.exam?.slug || examSlug || 'general',
+            userId,
+          },
+        });
+        orderId = rzpOrder.id;
+      } else {
+        orderId = `order_sim_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+      }
+
+      const payment = await prisma.payment.create({
+        data: {
+          userId,
+          testId: test.id,
+          planId: null,
+          examSlug: test.exam?.slug || examSlug || null,
+          originalPrice,
+          discountAmount,
+          couponCode: verifiedCouponCode,
+          amount: finalAmount,
+          currency: 'INR',
+          status: 'PENDING',
+          orderId,
+          receipt,
+          notesJson: JSON.stringify({
+            purchaseType: 'SINGLE_TEST',
+            testId: test.id,
+            testTitle: test.title,
+            originalPrice,
+            discountAmount,
+            couponCode: verifiedCouponCode,
+          }),
+        },
+      });
+
+      res.json({
+        orderId,
+        amount: finalAmount,
+        originalPrice,
+        discountAmount,
+        couponCode: verifiedCouponCode,
+        amountPaise: amountInPaise,
+        currency: 'INR',
+        keyId: isRazorpayLive ? RAZORPAY_KEY_ID : 'rzp_test_mock_all_in_one',
+        planName: `Single Mock Test: ${test.title}`,
+        description: `Unlock complete access & detailed analytics for ${test.title}`,
+        receipt,
+        paymentDbId: payment.id,
+        isLiveGateway: isRazorpayLive,
+      });
+      return;
+    }
+
+    // Case 2: Subscription Plan Purchase
     if (!planId && !planCode) {
-      res.status(400).json({ error: 'Plan ID or Plan Code is required.' });
+      res.status(400).json({ error: 'Plan ID, Plan Code, or Test ID is required.' });
       return;
     }
 
@@ -367,10 +548,17 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     }
 
     // Backend price & coupon validation + originalPrice snapshot
-    const originalPrice = plan.price;
-    let finalAmount = originalPrice;
+    const originalPrice = plan.originalPrice && plan.originalPrice > plan.price ? plan.originalPrice : plan.price;
+    let finalAmount = plan.price;
     let discountAmount = 0;
     let verifiedCouponCode: string | null = null;
+
+    // Apply plan promotional discount if active
+    const isOfferActive = plan.offerExpiresAt ? new Date(plan.offerExpiresAt) > new Date() : true;
+    if (plan.discountPct > 0 && isOfferActive) {
+      discountAmount = Math.round((plan.price * plan.discountPct) / 100);
+      finalAmount = Math.max(1, plan.price - discountAmount);
+    }
 
     if (couponCode && typeof couponCode === 'string' && couponCode.trim()) {
       const coupon = await prisma.coupon.findUnique({
@@ -378,8 +566,9 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       });
       if (coupon && coupon.isActive && (!coupon.expiresAt || coupon.expiresAt > new Date())) {
         if (!coupon.examSlug || coupon.examSlug === (plan.examSlug || examSlug)) {
-          discountAmount = Math.round((originalPrice * coupon.discountPct) / 100);
-          finalAmount = Math.max(1, originalPrice - discountAmount);
+          const couponDiscount = Math.round((finalAmount * coupon.discountPct) / 100);
+          discountAmount += couponDiscount;
+          finalAmount = Math.max(1, finalAmount - couponDiscount);
           verifiedCouponCode = coupon.code;
         }
       }
@@ -390,7 +579,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     let orderId = '';
 
     if (razorpayClient) {
-      // Call official Razorpay Orders API
       const rzpOrder = await razorpayClient.orders.create({
         amount: amountInPaise,
         currency: plan.currency || 'INR',
@@ -404,15 +592,14 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       });
       orderId = rzpOrder.id;
     } else {
-      // Standard fallback order ID for test environments
       orderId = `order_sim_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
     }
 
-    // Persist Payment record in PENDING state with original price snapshot
     const payment = await prisma.payment.create({
       data: {
         userId,
         planId: plan.id,
+        testId: null,
         examSlug: plan.examSlug || examSlug || null,
         originalPrice,
         discountAmount,
@@ -455,7 +642,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
   }
 });
 
-// Verify official Razorpay payment signature & activate entitlement
+// Verify official Razorpay payment signature & activate entitlement / subscription
 router.post('/verify-payment', authenticate, async (req: Request, res: Response) => {
   try {
     const { orderId, paymentId, signature } = req.body;
@@ -466,10 +653,9 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
       return;
     }
 
-    // Find the pending payment
     const payment = await prisma.payment.findUnique({
       where: { orderId },
-      include: { plan: true },
+      include: { plan: true, test: true },
     });
 
     if (!payment) {
@@ -496,7 +682,6 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
 
       isSignatureValid = generatedSignature === signature;
     } else {
-      // In sandbox mode with placeholder credentials, verify non-empty parameters
       isSignatureValid = Boolean(orderId && paymentId && (signature || paymentId.startsWith('pay_')));
     }
 
@@ -525,13 +710,34 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
       },
     });
 
+    // Case A: Single Mock Test Purchase
+    if (payment.testId) {
+      await prisma.entitlement.create({
+        data: {
+          userId,
+          testId: payment.testId,
+          planCode: 'TEST_PURCHASE',
+          source: 'TEST_PURCHASE',
+          expiresAt: null, // Lifetime access to this specific purchased test
+        },
+      });
+
+      res.json({
+        success: true,
+        message: `Payment of ₹${payment.amount} verified! "${payment.test?.title || 'Mock Test'}" has been unlocked permanently.`,
+        payment: updatedPayment,
+        purchasedTestId: payment.testId,
+      });
+      return;
+    }
+
+    // Case B: Subscription Plan Purchase
     const plan = payment.plan;
     if (!plan) {
       res.status(500).json({ error: 'Associated subscription plan not found.' });
       return;
     }
 
-    // Calculate expiration date
     let endDate: Date | null = null;
     if (plan.durationDays > 0) {
       endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
@@ -543,7 +749,6 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
       data: { status: 'CANCELLED' },
     });
 
-    // Create fresh Subscription
     const subscription = await prisma.subscription.create({
       data: {
         userId,
@@ -557,19 +762,16 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
       include: { plan: true },
     });
 
-    // Create Entitlements
-    if (plan.code === 'PREMIUM_MONTHLY_149') {
-      // Global entitlement: access to all premium tests
-      await prisma.entitlement.create({
-        data: {
-          userId,
-          testId: null, // null = all eligible tests
-          planCode: plan.code,
-          source: 'SUBSCRIPTION',
-          expiresAt: endDate,
-        },
-      });
-    }
+    // Create entitlements
+    await prisma.entitlement.create({
+      data: {
+        userId,
+        testId: null, // Global access to eligible tests
+        planCode: plan.code,
+        source: 'SUBSCRIPTION',
+        expiresAt: endDate,
+      },
+    });
 
     res.json({
       success: true,
@@ -589,7 +791,7 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
   }
 });
 
-// Official Razorpay Webhook listener (Processes async captured/failed/refund events)
+// Official Razorpay Webhook listener
 router.post('/webhook', async (req: Request, res: Response) => {
   try {
     const webhookSignature = req.headers['x-razorpay-signature'] as string;
@@ -610,45 +812,18 @@ router.post('/webhook', async (req: Request, res: Response) => {
     const event = req.body.event;
     const payload = req.body.payload;
 
-    console.log(`[Razorpay Webhook] Received event: ${event}`);
-
     if (event === 'payment.captured') {
-      const p = payload.payment?.entity;
-      if (p?.order_id) {
-        await prisma.payment.updateMany({
-          where: { orderId: p.order_id },
-          data: {
-            status: 'SUCCESS',
-            paymentId: p.id,
-            method: p.method,
-          },
-        });
-      }
-    } else if (event === 'payment.failed') {
-      const p = payload.payment?.entity;
-      if (p?.order_id) {
-        await prisma.payment.updateMany({
-          where: { orderId: p.order_id },
-          data: {
-            status: 'FAILED',
-            errorMessage: p.error_description || 'Payment failed via gateway',
-          },
-        });
-      }
-    } else if (event === 'refund.processed') {
-      const r = payload.refund?.entity;
-      if (r?.payment_id) {
-        await prisma.payment.updateMany({
-          where: { paymentId: r.payment_id },
-          data: {
-            status: 'REFUNDED',
-            refundId: r.id,
-            refundAmount: r.amount / 100,
-            refundStatus: 'COMPLETED',
-            refundedAt: new Date(),
-          },
-        });
-      }
+      const orderId = payload.payment.entity.order_id;
+      const paymentId = payload.payment.entity.id;
+
+      await prisma.payment.updateMany({
+        where: { orderId, status: 'PENDING' },
+        data: {
+          status: 'SUCCESS',
+          paymentId,
+          signature: 'webhook_captured',
+        },
+      });
     }
 
     res.json({ status: 'ok', received: true });
@@ -664,7 +839,10 @@ router.get('/my-payments', authenticate, async (req: Request, res: Response) => 
     const userId = req.user!.id;
     const payments = await prisma.payment.findMany({
       where: { userId },
-      include: { plan: true },
+      include: {
+        plan: { select: { name: true, code: true } },
+        test: { select: { id: true, title: true } },
+      },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -700,7 +878,6 @@ router.get('/referral/me', authenticate, async (req: Request, res: Response) => 
       return;
     }
 
-    // Auto-generate referral code if missing
     if (!user.referralCode) {
       const newCode = `TN-${user.name.split(' ')[0].toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
       user = await prisma.user.update({
@@ -765,7 +942,6 @@ router.post('/referral/redeem', authenticate, async (req: Request, res: Response
       return;
     }
 
-    // Deduct 1 credit & grant permanent entitlement for this test
     await prisma.$transaction([
       prisma.user.update({
         where: { id: userId },
@@ -777,7 +953,7 @@ router.post('/referral/redeem', authenticate, async (req: Request, res: Response
           testId,
           planCode: 'REFERRAL_REWARD',
           source: 'REFERRAL_CREDIT',
-          expiresAt: null, // lifetime unlock for redeemed test
+          expiresAt: null,
         },
       }),
     ]);
@@ -794,109 +970,453 @@ router.post('/referral/redeem', authenticate, async (req: Request, res: Response
 });
 
 // =========================================================================
-// 5. ADMIN MONETIZATION & ANALYTICS DASHBOARD
+// 5. DYNAMIC ADMIN PRICING & PLAN MANAGEMENT SYSTEM
 // =========================================================================
 
-// Get admin monetization overview
+// Comprehensive Admin Pricing Overview (Exams, Tests, Plans, Stats, Audit Logs)
 router.get('/admin/overview', authenticate, requireRole(['ADMIN']), async (_req: Request, res: Response) => {
   try {
     const [
-      totalStudents,
-      paidSubscriptions,
+      totalExams,
+      freeExams,
+      paidExams,
+      totalTests,
+      freeTests,
+      paidTests,
+      plans,
       successfulPayments,
       failedPayments,
-      plans,
-      recentTransactions,
-      topTests,
+      allExams,
+      allTests,
+      recentPayments,
+      auditLogs,
+      activeSubscriptionsCount,
     ] = await Promise.all([
-      prisma.user.count({ where: { role: 'STUDENT' } }),
-      prisma.subscription.findMany({
+      prisma.exam.count(),
+      prisma.exam.count({ where: { accessMode: 'FREE' } }),
+      prisma.exam.count({ where: { accessMode: { not: 'FREE' } } }),
+      prisma.test.count(),
+      prisma.test.count({
         where: {
-          status: 'ACTIVE',
-          plan: { price: { gt: 0 } },
+          OR: [{ accessMode: 'FREE' }, { accessLevel: 'FREE' }, { price: 0 }],
         },
-        include: { plan: true },
       }),
-      prisma.payment.findMany({
-        where: { status: 'SUCCESS' },
+      prisma.test.count({
+        where: {
+          AND: [
+            { accessMode: { not: 'FREE' } },
+            { accessLevel: { not: 'FREE' } },
+            { price: { gt: 0 } },
+          ],
+        },
       }),
-      prisma.payment.count({ where: { status: 'FAILED' } }),
       prisma.subscriptionPlan.findMany({ orderBy: { displayOrder: 'asc' } }),
+      prisma.payment.findMany({ where: { status: 'SUCCESS' } }),
+      prisma.payment.count({ where: { status: 'FAILED' } }),
+      prisma.exam.findMany({
+        orderBy: { title: 'asc' },
+        select: {
+          id: true,
+          title: true,
+          shortName: true,
+          slug: true,
+          category: true,
+          accessMode: true,
+          price: true,
+          originalPrice: true,
+          discountPct: true,
+          offerExpiresAt: true,
+          _count: { select: { tests: true } },
+        },
+      }),
+      prisma.test.findMany({
+        orderBy: [{ examId: 'asc' }, { createdAt: 'desc' }],
+        take: 150,
+        select: {
+          id: true,
+          title: true,
+          type: true,
+          accessMode: true,
+          accessLevel: true,
+          price: true,
+          originalPrice: true,
+          discountPct: true,
+          offerExpiresAt: true,
+          isPublished: true,
+          exam: { select: { id: true, title: true, shortName: true, slug: true } },
+          _count: { select: { testQuestions: true, attempts: true } },
+        },
+      }),
       prisma.payment.findMany({
-        take: 10,
+        take: 15,
         orderBy: { createdAt: 'desc' },
         include: {
           user: { select: { id: true, name: true, email: true } },
           plan: { select: { name: true, code: true, price: true } },
+          test: { select: { id: true, title: true } },
         },
       }),
-      prisma.test.findMany({
-        take: 5,
-        orderBy: { attempts: { _count: 'desc' } },
-        select: {
-          id: true,
-          title: true,
-          accessLevel: true,
-          _count: { select: { attempts: true } },
+      prisma.pricingAuditLog.findMany({
+        take: 30,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.subscription.count({
+        where: {
+          status: 'ACTIVE',
+          OR: [{ endDate: null }, { endDate: { gt: new Date() } }],
         },
       }),
     ]);
 
     const totalRevenue = successfulPayments.reduce((sum, p) => sum + p.amount, 0);
-    const premiumStudentsCount = new Set(paidSubscriptions.map((s) => s.userId)).size;
-    const freeStudentsCount = Math.max(0, totalStudents - premiumStudentsCount);
-    const refundedPaymentsCount = await prisma.payment.count({ where: { status: 'REFUNDED' } });
+    const activePlansCount = plans.filter((p) => p.isPublished).length;
 
-    const metrics = {
-      totalRevenueINR: totalRevenue,
-      totalRevenueUSD: 0,
-      activePaidSubscriptions: paidSubscriptions.length,
-      totalStudents,
-      freeStudents: freeStudentsCount,
-      paidStudents: premiumStudentsCount,
-      successfulPayments: successfulPayments.length,
-      refundedPayments: refundedPaymentsCount,
-    };
+    const parsedPlans = plans.map((p) => ({
+      ...p,
+      features: JSON.parse(p.featuresJson || '[]'),
+      includedExams: JSON.parse(p.includedExamsJson || '[]'),
+      includedPapers: JSON.parse(p.includedPapersJson || '[]'),
+      includedMockTests: JSON.parse(p.includedMockTestsJson || '[]'),
+    }));
 
     res.json({
-      metrics,
-      totalStudents,
-      freeStudentsCount,
-      premiumStudentsCount,
-      activePaidSubscriptionsCount: paidSubscriptions.length,
-      totalVerifiedRevenue: totalRevenue,
-      successfulTransactionsCount: successfulPayments.length,
-      failedTransactionsCount: failedPayments,
-      plans,
-      recentPayments: recentTransactions,
-      recentTransactions,
-      topTests: topTests.map((t) => ({
-        id: t.id,
-        title: t.title,
-        accessLevel: t.accessLevel,
-        attemptsCount: t._count.attempts,
-      })),
+      stats: {
+        totalExams,
+        freeExams,
+        paidExams,
+        totalTests,
+        freeTests,
+        paidTests,
+        activePlans: activePlansCount,
+        totalRevenue,
+        totalSubscribers: activeSubscriptionsCount,
+        successfulTransactions: successfulPayments.length,
+        failedTransactions: failedPayments,
+      },
+      exams: allExams,
+      tests: allTests,
+      plans: parsedPlans,
+      recentPayments,
+      auditLogs,
     });
   } catch (error) {
-    console.error('Admin monetization overview error:', error);
-    res.status(500).json({ error: 'Failed to fetch admin monetization data' });
+    console.error('Admin pricing overview error:', error);
+    res.status(500).json({ error: 'Failed to fetch admin pricing data' });
   }
 });
 
-// Admin plan updates (update price, features, active status)
+// Update pricing & access control for Exam, Test, or Bulk Tests
+router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const adminId = req.user!.id;
+    const {
+      targetType, // 'EXAM' | 'TEST' | 'BULK_TESTS'
+      targetId,
+      accessMode, // 'FREE' | 'PAID' | 'PREMIUM' | 'PRIVATE' | 'COMING_SOON' | 'DISABLED'
+      price,
+      originalPrice,
+      discountPct,
+      offerExpiresAt,
+      notes,
+      bulkTestIds,
+    } = req.body;
+
+    if (!targetType) {
+      res.status(400).json({ error: 'targetType is required.' });
+      return;
+    }
+
+    // 1. Single Exam Pricing Update
+    if (targetType === 'EXAM') {
+      const existingExam = await prisma.exam.findUnique({ where: { id: targetId } });
+      if (!existingExam) {
+        res.status(404).json({ error: 'Exam not found' });
+        return;
+      }
+
+      const updatedExam = await prisma.exam.update({
+        where: { id: targetId },
+        data: {
+          accessMode: accessMode || existingExam.accessMode,
+          price: price !== undefined ? Number(price) : existingExam.price,
+          originalPrice: originalPrice !== undefined ? Number(originalPrice) : existingExam.originalPrice,
+          discountPct: discountPct !== undefined ? Number(discountPct) : existingExam.discountPct,
+          offerExpiresAt: offerExpiresAt !== undefined ? (offerExpiresAt ? new Date(offerExpiresAt) : null) : existingExam.offerExpiresAt,
+        },
+      });
+
+      // Audit Log
+      await prisma.pricingAuditLog.create({
+        data: {
+          adminId,
+          targetType: 'EXAM',
+          targetId: existingExam.id,
+          targetTitle: existingExam.title,
+          previousPrice: existingExam.price,
+          newPrice: updatedExam.price,
+          previousAccess: existingExam.accessMode,
+          newAccess: updatedExam.accessMode,
+          notes: notes || `Updated pricing for exam ${existingExam.title}`,
+        },
+      });
+
+      res.json({
+        success: true,
+        message: `Pricing and access updated for exam "${updatedExam.title}"`,
+        exam: updatedExam,
+      });
+      return;
+    }
+
+    // 2. Single Test Pricing Update
+    if (targetType === 'TEST') {
+      const existingTest = await prisma.test.findUnique({ where: { id: targetId } });
+      if (!existingTest) {
+        res.status(404).json({ error: 'Mock test not found' });
+        return;
+      }
+
+      const newAccessMode = accessMode || existingTest.accessMode;
+      const newPrice = price !== undefined ? Number(price) : existingTest.price;
+      const newAccessLevel = newAccessMode === 'FREE' || newPrice === 0 ? 'FREE' : 'PREMIUM';
+
+      const updatedTest = await prisma.test.update({
+        where: { id: targetId },
+        data: {
+          accessMode: newAccessMode,
+          accessLevel: newAccessLevel,
+          price: newPrice,
+          originalPrice: originalPrice !== undefined ? Number(originalPrice) : existingTest.originalPrice,
+          discountPct: discountPct !== undefined ? Number(discountPct) : existingTest.discountPct,
+          offerExpiresAt: offerExpiresAt !== undefined ? (offerExpiresAt ? new Date(offerExpiresAt) : null) : existingTest.offerExpiresAt,
+        },
+      });
+
+      // Audit Log
+      await prisma.pricingAuditLog.create({
+        data: {
+          adminId,
+          targetType: 'TEST',
+          targetId: existingTest.id,
+          targetTitle: existingTest.title,
+          previousPrice: existingTest.price,
+          newPrice: updatedTest.price,
+          previousAccess: existingTest.accessMode,
+          newAccess: updatedTest.accessMode,
+          notes: notes || `Updated pricing for mock test ${existingTest.title}`,
+        },
+      });
+
+      res.json({
+        success: true,
+        message: `Pricing updated for test "${updatedTest.title}"`,
+        test: updatedTest,
+      });
+      return;
+    }
+
+    // 3. Bulk Tests Pricing Update
+    if (targetType === 'BULK_TESTS') {
+      if (!bulkTestIds || !Array.isArray(bulkTestIds) || bulkTestIds.length === 0) {
+        res.status(400).json({ error: 'bulkTestIds array is required for bulk updates.' });
+        return;
+      }
+
+      const newAccessMode = accessMode || 'PAID';
+      const newPrice = price !== undefined ? Number(price) : 0;
+      const newAccessLevel = newAccessMode === 'FREE' || newPrice === 0 ? 'FREE' : 'PREMIUM';
+
+      const updateData: any = {
+        accessMode: newAccessMode,
+        accessLevel: newAccessLevel,
+      };
+      if (price !== undefined) updateData.price = newPrice;
+      if (originalPrice !== undefined) updateData.originalPrice = Number(originalPrice);
+      if (discountPct !== undefined) updateData.discountPct = Number(discountPct);
+      if (offerExpiresAt !== undefined) updateData.offerExpiresAt = offerExpiresAt ? new Date(offerExpiresAt) : null;
+
+      const updatedBatch = await prisma.test.updateMany({
+        where: { id: { in: bulkTestIds } },
+        data: updateData,
+      });
+
+      // Audit Log
+      await prisma.pricingAuditLog.create({
+        data: {
+          adminId,
+          targetType: 'BULK_TESTS',
+          targetId: bulkTestIds.join(','),
+          targetTitle: `${bulkTestIds.length} tests bulk updated`,
+          previousPrice: null,
+          newPrice: price !== undefined ? Number(price) : null,
+          previousAccess: 'MULTIPLE',
+          newAccess: newAccessMode,
+          notes: notes || `Bulk updated ${bulkTestIds.length} tests to ${newAccessMode} (₹${newPrice})`,
+        },
+      });
+
+      res.json({
+        success: true,
+        message: `Bulk updated ${updatedBatch.count} mock tests successfully.`,
+        count: updatedBatch.count,
+      });
+      return;
+    }
+
+    res.status(400).json({ error: 'Invalid targetType' });
+  } catch (error) {
+    console.error('Content pricing update error:', error);
+    res.status(500).json({ error: 'Failed to update content pricing' });
+  }
+});
+
+// Create new custom subscription plan
+router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const adminId = req.user!.id;
+    const {
+      name,
+      code,
+      description,
+      price,
+      originalPrice,
+      discountPct,
+      durationDays,
+      billingInterval,
+      features,
+      includedExams,
+      includedPapers,
+      includedMockTests,
+      examSlug,
+      badge,
+      isPublished,
+      displayOrder,
+      offerExpiresAt,
+    } = req.body;
+
+    if (!name || price === undefined) {
+      res.status(400).json({ error: 'Plan name and price are required.' });
+      return;
+    }
+
+    const planCode = code
+      ? code.trim().toUpperCase()
+      : `PLAN_${name.replace(/[^A-Za-z0-9]/g, '_').toUpperCase()}_${Date.now().toString().slice(-4)}`;
+
+    const newPlan = await prisma.subscriptionPlan.create({
+      data: {
+        name,
+        code: planCode,
+        description: description || '',
+        price: Number(price),
+        originalPrice: originalPrice ? Number(originalPrice) : Number(price),
+        discountPct: discountPct ? Number(discountPct) : 0,
+        currency: 'INR',
+        durationDays: Number(durationDays) || 30,
+        billingInterval: billingInterval || 'MONTHLY',
+        featuresJson: JSON.stringify(features || []),
+        includedExamsJson: JSON.stringify(includedExams || []),
+        includedPapersJson: JSON.stringify(includedPapers || []),
+        includedMockTestsJson: JSON.stringify(includedMockTests || []),
+        examSlug: examSlug || null,
+        badge: badge || null,
+        isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
+        displayOrder: Number(displayOrder) || 10,
+        offerExpiresAt: offerExpiresAt ? new Date(offerExpiresAt) : null,
+      },
+    });
+
+    await prisma.pricingAuditLog.create({
+      data: {
+        adminId,
+        targetType: 'PLAN',
+        targetId: newPlan.id,
+        targetTitle: newPlan.name,
+        previousPrice: null,
+        newPrice: newPlan.price,
+        previousAccess: null,
+        newAccess: newPlan.isPublished ? 'ACTIVE' : 'INACTIVE',
+        notes: `Created new pricing plan: ${newPlan.name} (₹${newPlan.price})`,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Plan "${newPlan.name}" created successfully.`,
+      plan: {
+        ...newPlan,
+        features: JSON.parse(newPlan.featuresJson || '[]'),
+      },
+    });
+  } catch (error: any) {
+    console.error('Create plan error:', error);
+    res.status(500).json({ error: error.message || 'Failed to create plan' });
+  }
+});
+
+// Update custom subscription plan
 router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { name, description, price, isPublished, features } = req.body;
+    const adminId = req.user!.id;
+    const id = req.params.id as string;
+    const {
+      name,
+      description,
+      price,
+      originalPrice,
+      discountPct,
+      durationDays,
+      billingInterval,
+      features,
+      includedExams,
+      includedPapers,
+      includedMockTests,
+      examSlug,
+      badge,
+      isPublished,
+      displayOrder,
+      offerExpiresAt,
+    } = req.body;
+
+    const existingPlan = await prisma.subscriptionPlan.findUnique({ where: { id } });
+    if (!existingPlan) {
+      res.status(404).json({ error: 'Subscription plan not found' });
+      return;
+    }
 
     const updated = await prisma.subscriptionPlan.update({
       where: { id },
       data: {
         ...(name && { name }),
-        ...(description && { description }),
+        ...(description !== undefined && { description }),
         ...(price !== undefined && { price: Number(price) }),
-        ...(isPublished !== undefined && { isPublished: Boolean(isPublished) }),
+        ...(originalPrice !== undefined && { originalPrice: Number(originalPrice) }),
+        ...(discountPct !== undefined && { discountPct: Number(discountPct) }),
+        ...(durationDays !== undefined && { durationDays: Number(durationDays) }),
+        ...(billingInterval && { billingInterval }),
         ...(features && { featuresJson: JSON.stringify(features) }),
+        ...(includedExams && { includedExamsJson: JSON.stringify(includedExams) }),
+        ...(includedPapers && { includedPapersJson: JSON.stringify(includedPapers) }),
+        ...(includedMockTests && { includedMockTestsJson: JSON.stringify(includedMockTests) }),
+        ...(examSlug !== undefined && { examSlug: examSlug || null }),
+        ...(badge !== undefined && { badge }),
+        ...(isPublished !== undefined && { isPublished: Boolean(isPublished) }),
+        ...(displayOrder !== undefined && { displayOrder: Number(displayOrder) }),
+        ...(offerExpiresAt !== undefined && { offerExpiresAt: offerExpiresAt ? new Date(offerExpiresAt) : null }),
+      },
+    });
+
+    await prisma.pricingAuditLog.create({
+      data: {
+        adminId,
+        targetType: 'PLAN',
+        targetId: updated.id,
+        targetTitle: updated.name,
+        previousPrice: existingPlan.price,
+        newPrice: updated.price,
+        previousAccess: existingPlan.isPublished ? 'ACTIVE' : 'INACTIVE',
+        newAccess: updated.isPublished ? 'ACTIVE' : 'INACTIVE',
+        notes: `Updated subscription plan ${updated.name}`,
       },
     });
 
@@ -911,6 +1431,87 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
   } catch (error) {
     console.error('Update plan error:', error);
     res.status(500).json({ error: 'Failed to update plan' });
+  }
+});
+
+// Delete or archive subscription plan
+router.delete('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const adminId = req.user!.id;
+    const id = req.params.id as string;
+
+    const plan = await prisma.subscriptionPlan.findUnique({ where: { id } });
+    if (!plan) {
+      res.status(404).json({ error: 'Plan not found' });
+      return;
+    }
+
+    // If there are existing subscriptions, mark as unpublished (archived) instead of deleting
+    const subCount = await prisma.subscription.count({ where: { planId: id } });
+    if (subCount > 0) {
+      await prisma.subscriptionPlan.update({
+        where: { id },
+        data: { isPublished: false },
+      });
+
+      await prisma.pricingAuditLog.create({
+        data: {
+          adminId,
+          targetType: 'PLAN',
+          targetId: id,
+          targetTitle: plan.name,
+          previousPrice: plan.price,
+          newPrice: 0,
+          previousAccess: 'ACTIVE',
+          newAccess: 'ARCHIVED',
+          notes: `Archived plan "${plan.name}" because it has ${subCount} existing subscriptions`,
+        },
+      });
+
+      res.json({
+        success: true,
+        message: `Plan "${plan.name}" has active subscribers, so it has been unpublished/archived.`,
+      });
+      return;
+    }
+
+    await prisma.subscriptionPlan.delete({ where: { id } });
+
+    await prisma.pricingAuditLog.create({
+      data: {
+        adminId,
+        targetType: 'PLAN',
+        targetId: id,
+        targetTitle: plan.name,
+        previousPrice: plan.price,
+        newPrice: 0,
+        previousAccess: 'ACTIVE',
+        newAccess: 'DELETED',
+        notes: `Deleted plan "${plan.name}"`,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Plan "${plan.name}" deleted successfully.`,
+    });
+  } catch (error) {
+    console.error('Delete plan error:', error);
+    res.status(500).json({ error: 'Failed to delete plan' });
+  }
+});
+
+// Pricing audit log history
+router.get('/admin/audit-logs', authenticate, requireRole(['ADMIN']), async (_req: Request, res: Response) => {
+  try {
+    const logs = await prisma.pricingAuditLog.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+    res.json({ logs });
+  } catch (error) {
+    console.error('Fetch audit logs error:', error);
+    res.status(500).json({ error: 'Failed to retrieve pricing audit logs' });
   }
 });
 
@@ -934,7 +1535,6 @@ router.post('/admin/refund', authenticate, requireRole(['ADMIN']), async (req: R
       return;
     }
 
-    // Process refund record & deactivate subscriptions
     const refundRef = `ref_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
     await prisma.$transaction([
       prisma.payment.update({
