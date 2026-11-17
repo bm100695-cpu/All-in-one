@@ -212,7 +212,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     setStatusMessage(null);
 
     try {
-      const order = await api.createPaymentOrder(plan.id, appliedCoupon?.code, activeExamSlug);
+      const order = await api.createPaymentOrder(plan.id, appliedCoupon?.code, activeExamSlug, plan.code);
       const scriptLoaded = await loadRazorpayScript();
 
       if (scriptLoaded && (window as any).Razorpay && order.isLiveGateway) {

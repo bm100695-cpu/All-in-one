@@ -414,7 +414,7 @@ export const api = {
     }>(`/monetization/test-entitlement/${testId}`);
   },
 
-  createPaymentOrder: async (planId: string, couponCode?: string, examSlug?: string) => {
+  createPaymentOrder: async (planId: string, couponCode?: string, examSlug?: string, planCode?: string) => {
     return request<{
       orderId?: string;
       amount?: number;
@@ -434,7 +434,7 @@ export const api = {
       message?: string;
     }>('/monetization/create-order', {
       method: 'POST',
-      body: JSON.stringify({ planId, couponCode, examSlug }),
+      body: JSON.stringify({ planId, planCode, couponCode, examSlug }),
     });
   },
 

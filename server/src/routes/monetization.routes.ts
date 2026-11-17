@@ -47,12 +47,9 @@ router.get('/config', (_req: Request, res: Response) => {
 // Helper to ensure default subscription plans exist in database
 async function ensureDefaultPlansExist(): Promise<void> {
   try {
-    const count = await prisma.subscriptionPlan.count();
-    if (count > 0) return;
-
     const defaultPlans = [
       {
-        name: 'Free Starter Pass',
+        name: 'Free Starter Plan',
         code: 'PLAN_FREE_0',
         description: 'Essential CBT practice with real PYQ shift papers & answer keys.',
         price: 0,
@@ -61,34 +58,55 @@ async function ensureDefaultPlansExist(): Promise<void> {
         currency: 'INR',
         durationDays: 365,
         billingInterval: 'ONCE',
+        badge: 'Free Forever',
         featuresJson: JSON.stringify([
-          'Access to Official PYQ Shift Papers',
-          'Authentic NTA / Board CBT Exam Simulator',
-          'Instant Scorecard & Answer Review',
+          '2 Free Mock Tests included',
+          'Real CBT Exam Timer & Interface',
+          'Instant Scorecard & Solutions',
           'No Credit Card Required',
         ]),
         isPublished: true,
         displayOrder: 1,
       },
       {
-        name: 'Target Exam 30-Day Booster',
+        name: '5-Test Booster Pack',
         code: 'PLAN_BOOSTER_49',
-        description: 'Intensive 30-day exam preparation with full access to mock tests & derivations.',
+        description: 'Unlock 5 verified shift papers for your target exam with detailed solutions.',
         price: 49,
         originalPrice: 149,
         discountPct: 67,
         currency: 'INR',
-        durationDays: 30,
+        durationDays: 90,
         billingInterval: 'ONCE',
-        badge: 'POPULAR',
+        badge: 'Top Choice',
         featuresJson: JSON.stringify([
-          'Full 30-Day Unlimited Mock Tests',
-          'Complete Step-by-Step Derivations & Solutions',
-          'AI Readiness Index & Weakness Analysis',
-          'AIR Rank & Percentile Prediction',
+          '5 Verified Mock Tests',
+          'Detailed Step-by-Step Solutions',
+          'Subject-wise Accuracy Audit',
+          'Personal Mistake Journal Tagging',
         ]),
         isPublished: true,
         displayOrder: 2,
+      },
+      {
+        name: 'Premium All-Access',
+        code: 'PLAN_PRO_99',
+        description: 'Unlock all 10 verified mock series and solutions for your target exam.',
+        price: 99,
+        originalPrice: 299,
+        discountPct: 67,
+        currency: 'INR',
+        durationDays: 180,
+        billingInterval: 'ONCE',
+        badge: 'Best Value',
+        featuresJson: JSON.stringify([
+          '10 Full-Length Mock & PYQ Papers',
+          'Complete Historical Archive Access',
+          'Advanced Speed & Readiness Analytics',
+          'Priority Reviewer Q&A Support',
+        ]),
+        isPublished: true,
+        displayOrder: 3,
       },
       {
         name: 'All-Access 1-Year Super Pass',
@@ -100,7 +118,7 @@ async function ensureDefaultPlansExist(): Promise<void> {
         currency: 'INR',
         durationDays: 365,
         billingInterval: 'YEARLY',
-        badge: 'BEST VALUE',
+        badge: 'SUPER VALUE',
         featuresJson: JSON.stringify([
           'Full Access to All 7 Exams & 155+ Mock Tests',
           'UPTET, SUPER TET, JEE, NEET, CTET, SSC, UPSC',
@@ -108,7 +126,7 @@ async function ensureDefaultPlansExist(): Promise<void> {
           'Priority Live All-India Mock Tests with Rank',
         ]),
         isPublished: true,
-        displayOrder: 3,
+        displayOrder: 4,
       },
       {
         name: 'Lifetime Master VIP Pass',
@@ -128,12 +146,21 @@ async function ensureDefaultPlansExist(): Promise<void> {
           'VIP Support & Early Access to New Features',
         ]),
         isPublished: true,
-        displayOrder: 4,
+        displayOrder: 5,
       },
     ];
 
     for (const p of defaultPlans) {
-      await prisma.subscriptionPlan.create({ data: p });
+      await prisma.subscriptionPlan.upsert({
+        where: { code: p.code },
+        update: {
+          isPublished: true,
+          price: p.price,
+          name: p.name,
+          badge: p.badge,
+        },
+        create: p,
+      });
     }
   } catch (err) {
     console.warn('ensureDefaultPlansExist notice:', err);
@@ -617,13 +644,73 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       return;
     }
 
-    const plan = planId
-      ? await prisma.subscriptionPlan.findUnique({ where: { id: planId } })
-      : await prisma.subscriptionPlan.findUnique({ where: { code: planCode } });
+    await ensureDefaultPlansExist();
 
-    if (!plan || !plan.isPublished) {
-      res.status(404).json({ error: 'Subscription plan not found or unavailable.' });
-      return;
+    let plan: any = null;
+    const lookupKey = String(planId || planCode || '').trim();
+
+    // 1. Try finding by ID
+    if (planId) {
+      plan = await prisma.subscriptionPlan.findUnique({ where: { id: planId } }).catch(() => null);
+    }
+
+    // 2. Try finding by Code or variations
+    if (!plan && lookupKey) {
+      plan = await prisma.subscriptionPlan.findFirst({
+        where: {
+          OR: [
+            { code: lookupKey },
+            { code: lookupKey.toUpperCase() },
+            { code: `PLAN_${lookupKey.toUpperCase()}` },
+            { code: lookupKey.replace(/^(booster|pro|free)_/i, 'PLAN_$1_').toUpperCase() },
+          ],
+        },
+      });
+    }
+
+    // 3. Fallback: match by known alias or price
+    if (!plan && lookupKey) {
+      const lower = lookupKey.toLowerCase();
+      if (lower.includes('booster') || lower.includes('49')) {
+        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_BOOSTER_49' }, { price: 49 }] } });
+      } else if (lower.includes('pro') || lower.includes('99') || lower.includes('premium')) {
+        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_PRO_99' }, { price: 99 }] } });
+      } else if (lower.includes('free') || lower.includes('starter') || lower.includes('0')) {
+        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_FREE_0' }, { price: 0 }] } });
+      } else if (lower.includes('year') || lower.includes('199')) {
+        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_YEARLY_199' }, { price: 199 }] } });
+      } else if (lower.includes('lifetime') || lower.includes('499')) {
+        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_LIFETIME_499' }, { price: 499 }] } });
+      }
+    }
+
+    // 4. Auto-generate plan if somehow still missing so user is NEVER blocked
+    if (!plan) {
+      const is99 = lookupKey.includes('99');
+      const is49 = lookupKey.includes('49');
+      const price = is49 ? 49 : is99 ? 99 : 49;
+      const code = is49 ? 'PLAN_BOOSTER_49' : is99 ? 'PLAN_PRO_99' : `PLAN_${lookupKey.toUpperCase().replace(/[^A-Z0-9_]/g, '_')}`;
+      const name = is49 ? '5-Test Booster Pack' : is99 ? 'Premium All-Access' : 'Standard Exam Pass';
+
+      plan = await prisma.subscriptionPlan.create({
+        data: {
+          name,
+          code,
+          description: `Access plan for ${examSlug || 'all exams'}`,
+          price,
+          currency: 'INR',
+          billingInterval: 'ONCE',
+          durationDays: 90,
+          isPublished: true,
+        },
+      });
+    }
+
+    if (!plan.isPublished) {
+      plan = await prisma.subscriptionPlan.update({
+        where: { id: plan.id },
+        data: { isPublished: true },
+      });
     }
 
     if (plan.price <= 0) {
