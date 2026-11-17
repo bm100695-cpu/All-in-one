@@ -24,6 +24,7 @@ interface PricingModalProps {
   lockedTest?: {
     id: string;
     title: string;
+    priceINR?: number;
   } | null;
   currentUser?: User | null;
   userReferralCredits?: number;

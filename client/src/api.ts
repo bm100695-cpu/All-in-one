@@ -457,7 +457,39 @@ export const api = {
   },
 
   getAdminMonetizationOverview: async () => {
-    return request<MonetizationOverview>('/monetization/admin/overview');
+    return request<any>('/monetization/admin/overview');
+  },
+
+  getContentPricing: async (params?: { type?: string; search?: string; accessMode?: string }) => {
+    const q = new URLSearchParams();
+    if (params?.type) q.append('type', params.type);
+    if (params?.search) q.append('search', params.search);
+    if (params?.accessMode) q.append('accessMode', params.accessMode);
+    const qs = q.toString() ? `?${q.toString()}` : '';
+    return request<{ exams: any[]; tests: any[] }>(`/monetization/admin/content-pricing${qs}`);
+  },
+
+  updateContentPricing: async (data: {
+    contentType: 'EXAM' | 'TEST';
+    contentId: string;
+    accessMode: string;
+    priceINR?: number;
+    originalPriceINR?: number;
+    discountPercent?: number;
+    isPublished?: boolean;
+    notes?: string;
+  }) => {
+    return request<{ success: boolean; message: string; updated: any }>('/monetization/admin/content-pricing', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  createAdminPlan: async (data: any) => {
+    return request<{ success: boolean; message: string; plan: any }>('/monetization/admin/plans', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   },
 
   updateAdminPlan: async (id: string, data: Partial<SubscriptionPlan>) => {
@@ -465,6 +497,20 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(data),
     });
+  },
+
+  deleteAdminPlan: async (id: string) => {
+    return request<{ success: boolean; message: string }>(`/monetization/admin/plans/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  getAdminAuditLogs: async (params?: { page?: number; limit?: number }) => {
+    const q = new URLSearchParams();
+    if (params?.page) q.append('page', params.page.toString());
+    if (params?.limit) q.append('limit', params.limit.toString());
+    const qs = q.toString() ? `?${q.toString()}` : '';
+    return request<{ auditLogs: any[]; total: number }>(`/monetization/admin/audit-logs${qs}`);
   },
 
   processAdminRefund: async (paymentId: string, reason?: string) => {

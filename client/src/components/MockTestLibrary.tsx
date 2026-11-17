@@ -60,33 +60,39 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   };
 
   const handleTestClick = async (test: any, index: number) => {
-    // Pehle 5 tests (index 0 to 4) strictly FREE rahenge
-    const isFreeTest = index < 5;
+    // Dynamic Access Check: If marked FREE, price is 0, or default first 5
+    const isFreeTest = test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.priceINR === 0 || (test.accessMode == null && index < 5);
+
+    if (test.accessMode === 'COMING_SOON') {
+      alert('This mock test is scheduled to be released soon! Please check back shortly.');
+      return;
+    }
 
     if (isFreeTest) {
       onStartExam(test.id);
       return;
     }
 
-    // Baaki ke tests ke liye backend entitlement check ya Pricing modal open hoga
+    // Backend entitlement check or Pricing modal open
     setCheckingEntitlementId(test.id);
     try {
       const ent = await api.checkTestEntitlement(test.id);
       if (ent.entitled) {
         onStartExam(test.id);
       } else {
-        onOpenPricingModal?.({ id: test.id, title: test.title });
+        onOpenPricingModal?.({ id: test.id, title: test.title, priceINR: test.priceINR });
       }
     } catch (err) {
       console.warn('Entitlement check failed, presenting pricing options:', err);
-      onOpenPricingModal?.({ id: test.id, title: test.title });
+      onOpenPricingModal?.({ id: test.id, title: test.title, priceINR: test.priceINR });
     } finally {
       setCheckingEntitlementId(null);
     }
   };
 
   const filteredTests = tests.filter((t, index) => {
-    const isFreeTest = index < 5;
+    if (t.accessMode === 'DISABLED') return false;
+    const isFreeTest = t.accessMode === 'FREE' || t.accessLevel === 'FREE' || t.priceINR === 0 || (t.accessMode == null && index < 5);
 
     // Shift filter
     if (shiftFilter !== 'ALL') {
@@ -280,8 +286,9 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
       ) : viewMode === 'rows' ? (
         <div className="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-xs divide-y divide-slate-100">
           {displayedTests.map((test, index) => {
-            // STRICT RULE: First 5 mock tests are FREE, rest are PREMIUM (Paid)
-            const isFree = index < 5;
+            const isFree = test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.priceINR === 0 || (test.accessMode == null && index < 5);
+            const isPaid = test.accessMode === 'PAID' || (test.priceINR && test.priceINR > 0);
+            const isComingSoon = test.accessMode === 'COMING_SOON';
             const isChecking = checkingEntitlementId === test.id;
 
             return (
@@ -296,11 +303,20 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     </span>
 
                     {isFree ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         FREE
                       </span>
+                    ) : isComingSoon ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                        COMING SOON
+                      </span>
+                    ) : isPaid ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                        <Lock className="w-2.5 h-2.5" />
+                        PAID • ₹{test.priceINR}
+                      </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
                         <Lock className="w-2.5 h-2.5" />
                         PREMIUM
                       </span>
@@ -322,12 +338,16 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
 
                 <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
                   <button
-                    disabled={isChecking}
+                    disabled={isChecking || isComingSoon}
                     onClick={() => handleTestClick(test, index)}
                     className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                       isFree
                         ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : isComingSoon
+                        ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                        : isPaid
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                     }`}
                   >
                     {isChecking ? (
@@ -338,7 +358,15 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     ) : (
                       <>
                         {!isFree ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
-                        <span>{isFree ? 'Start Test' : 'Unlock Test'}</span>
+                        <span>
+                          {isFree
+                            ? 'Start Test'
+                            : isComingSoon
+                            ? 'Coming Soon'
+                            : isPaid
+                            ? `Unlock (₹${test.priceINR})`
+                            : 'Unlock Test'}
+                        </span>
                       </>
                     )}
                   </button>
@@ -350,7 +378,9 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {displayedTests.map((test, index) => {
-            const isFree = index < 5;
+            const isFree = test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.priceINR === 0 || (test.accessMode == null && index < 5);
+            const isPaid = test.accessMode === 'PAID' || (test.priceINR && test.priceINR > 0);
+            const isComingSoon = test.accessMode === 'COMING_SOON';
             const isChecking = checkingEntitlementId === test.id;
 
             return (
@@ -365,11 +395,20 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                         Mock #{index + 1}
                       </span>
                       {isFree ? (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                           FREE
                         </span>
+                      ) : isComingSoon ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                          COMING SOON
+                        </span>
+                      ) : isPaid ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                          <Lock className="w-2.5 h-2.5" />
+                          PAID • ₹{test.priceINR}
+                        </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
                           <Lock className="w-2.5 h-2.5" />
                           PREMIUM
                         </span>
@@ -395,12 +434,16 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     <span>Timed CBT Mode</span>
                   </span>
                   <button
-                    disabled={isChecking}
+                    disabled={isChecking || isComingSoon}
                     onClick={() => handleTestClick(test, index)}
                     className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                       isFree
                         ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : isComingSoon
+                        ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                        : isPaid
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                     }`}
                   >
                     {isChecking ? (
@@ -411,7 +454,15 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     ) : (
                       <>
                         {!isFree ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
-                        <span>{isFree ? 'Start Test' : 'Unlock Test'}</span>
+                        <span>
+                          {isFree
+                            ? 'Start Test'
+                            : isComingSoon
+                            ? 'Coming Soon'
+                            : isPaid
+                            ? `Unlock (₹${test.priceINR})`
+                            : 'Unlock Test'}
+                        </span>
                       </>
                     )}
                   </button>

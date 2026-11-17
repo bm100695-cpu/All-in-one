@@ -1,0 +1,1190 @@
+import React, { useState, useEffect } from 'react';
+import {
+  IndianRupee,
+  Layers,
+  FileCheck,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Edit3,
+  Plus,
+  Search,
+  Filter,
+  RefreshCw,
+  Lock,
+  Unlock,
+  Sparkles,
+  TrendingUp,
+  Receipt,
+  Users,
+  Calendar,
+  Tag,
+  ShieldAlert,
+  ArrowUpRight,
+  Trash2,
+  Eye,
+  EyeOff,
+  Clock,
+  Check,
+  X,
+} from 'lucide-react';
+import { api } from '../api';
+
+interface ContentItem {
+  id: string;
+  type: 'EXAM' | 'TEST';
+  title: string;
+  examSlug?: string;
+  examTitle?: string;
+  category?: string;
+  accessMode: 'FREE' | 'PAID' | 'PREMIUM' | 'PRIVATE' | 'COMING_SOON' | 'DISABLED';
+  priceINR: number;
+  originalPriceINR?: number;
+  discountPercent?: number;
+  isPublished: boolean;
+  totalQuestions?: number;
+  offerStartAt?: string;
+  offerEndAt?: string;
+}
+
+export const AdminPricingManager: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'CONTENT_PRICING' | 'PLANS' | 'AUDIT_LOGS' | 'TRANSACTIONS'>('CONTENT_PRICING');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [overview, setOverview] = useState<any>(null);
+  const [contentList, setContentList] = useState<ContentItem[]>([]);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [actionMessage, setActionMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
+  // Filters
+  const [filterType, setFilterType] = useState<'ALL' | 'EXAM' | 'TEST'>('ALL');
+  const [filterAccess, setFilterAccess] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Edit Pricing Modal State
+  const [editingItem, setEditingItem] = useState<ContentItem | null>(null);
+  const [editAccessMode, setEditAccessMode] = useState<string>('FREE');
+  const [editPriceINR, setEditPriceINR] = useState<number>(0);
+  const [editOriginalPriceINR, setEditOriginalPriceINR] = useState<number>(0);
+  const [editDiscountPercent, setEditDiscountPercent] = useState<number>(0);
+  const [editIsPublished, setEditIsPublished] = useState<boolean>(true);
+  const [editNotes, setEditNotes] = useState<string>('');
+  const [savingEdit, setSavingEdit] = useState<boolean>(false);
+
+  // Plan Modal State
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
+  const [editingPlan, setEditingPlan] = useState<any | null>(null);
+  const [planForm, setPlanForm] = useState({
+    name: '',
+    code: '',
+    description: '',
+    priceINR: 0,
+    originalPriceINR: 0,
+    discountPercent: 0,
+    billingInterval: 'ONCE',
+    durationDays: 365,
+    testLimit: 0,
+    features: ['Access to All Practice Papers', 'Verified CBT Simulator', 'Detailed Step-by-Step Solutions', 'AIR Rank & Percentile Report'],
+    featureInput: '',
+    isActive: true,
+  });
+  const [savingPlan, setSavingPlan] = useState<boolean>(false);
+
+  // Refund Action State
+  const [refundingId, setRefundingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadAllData();
+  }, []);
+
+  const showNotification = (text: string, type: 'success' | 'error' = 'success') => {
+    setActionMessage({ text, type });
+    setTimeout(() => setActionMessage(null), 4000);
+  };
+
+  const loadAllData = async () => {
+    setLoading(true);
+    try {
+      const [ovData, cpData, logsData] = await Promise.all([
+        api.getAdminMonetizationOverview().catch(() => null),
+        api.getContentPricing().catch(() => ({ exams: [], tests: [] })),
+        api.getAdminAuditLogs({ limit: 50 }).catch(() => ({ auditLogs: [], total: 0 })),
+      ]);
+
+      if (ovData) setOverview(ovData);
+
+      // Merge exams and tests into a unified list
+      const merged: ContentItem[] = [];
+      if (cpData?.exams) {
+        cpData.exams.forEach((ex: any) => {
+          merged.push({
+            id: ex.id,
+            type: 'EXAM',
+            title: ex.title,
+            examSlug: ex.slug,
+            category: ex.category?.name || 'General',
+            accessMode: ex.accessMode || (ex.priceINR === 0 ? 'FREE' : 'PAID'),
+            priceINR: ex.priceINR || 0,
+            originalPriceINR: ex.originalPriceINR || 0,
+            discountPercent: ex.discountPercent || 0,
+            isPublished: ex.isPublished ?? true,
+          });
+        });
+      }
+
+      if (cpData?.tests) {
+        cpData.tests.forEach((t: any) => {
+          merged.push({
+            id: t.id,
+            type: 'TEST',
+            title: t.title,
+            examSlug: t.exam?.slug,
+            examTitle: t.exam?.title,
+            category: t.exam?.category?.name || 'Mock Tests',
+            accessMode: t.accessMode || (t.accessLevel === 'FREE' ? 'FREE' : 'PREMIUM'),
+            priceINR: t.priceINR || 0,
+            originalPriceINR: t.originalPriceINR || 0,
+            discountPercent: t.discountPercent || 0,
+            isPublished: t.isPublished ?? true,
+            totalQuestions: t.totalQuestions,
+          });
+        });
+      }
+
+      setContentList(merged);
+      if (logsData?.auditLogs) setAuditLogs(logsData.auditLogs);
+    } catch (err: any) {
+      console.error('Failed to load pricing manager data:', err);
+      showNotification('Error loading data: ' + err.message, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Open Edit Pricing Modal
+  const handleOpenEdit = (item: ContentItem) => {
+    setEditingItem(item);
+    setEditAccessMode(item.accessMode);
+    setEditPriceINR(item.priceINR);
+    setEditOriginalPriceINR(item.originalPriceINR || 0);
+    setEditDiscountPercent(item.discountPercent || 0);
+    setEditIsPublished(item.isPublished);
+    setEditNotes('');
+  };
+
+  // Save Pricing Changes
+  const handleSavePricing = async () => {
+    if (!editingItem) return;
+    setSavingEdit(true);
+    try {
+      await api.updateContentPricing({
+        contentType: editingItem.type,
+        contentId: editingItem.id,
+        accessMode: editAccessMode,
+        priceINR: Number(editPriceINR),
+        originalPriceINR: Number(editOriginalPriceINR),
+        discountPercent: Number(editDiscountPercent),
+        isPublished: editIsPublished,
+        notes: editNotes || `Updated ${editingItem.type} pricing to ${editAccessMode} (₹${editPriceINR})`,
+      });
+
+      showNotification(`Successfully updated pricing for "${editingItem.title}"`);
+      setEditingItem(null);
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to update pricing', 'error');
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  // Plan Management Handlers
+  const handleOpenCreatePlan = () => {
+    setEditingPlan(null);
+    setPlanForm({
+      name: '',
+      code: `PLAN_${Date.now().toString().slice(-4)}`,
+      description: '',
+      priceINR: 199,
+      originalPriceINR: 499,
+      discountPercent: 60,
+      billingInterval: 'ONCE',
+      durationDays: 365,
+      testLimit: 0,
+      features: ['Access to All Practice Papers', 'Verified CBT Simulator', 'Detailed Solutions', 'AIR Rank & Percentile'],
+      featureInput: '',
+      isActive: true,
+    });
+    setIsPlanModalOpen(true);
+  };
+
+  const handleOpenEditPlan = (plan: any) => {
+    setEditingPlan(plan);
+    setPlanForm({
+      name: plan.name,
+      code: plan.code,
+      description: plan.description || '',
+      priceINR: plan.priceINR,
+      originalPriceINR: plan.originalPriceINR || plan.priceINR * 2,
+      discountPercent: plan.discountPercent || 0,
+      billingInterval: plan.billingInterval || 'ONCE',
+      durationDays: plan.durationDays || 365,
+      testLimit: plan.testLimit || 0,
+      features: Array.isArray(plan.features) ? plan.features : ['All Mock Tests Included', 'Full CBT Simulator'],
+      featureInput: '',
+      isActive: plan.isActive ?? true,
+    });
+    setIsPlanModalOpen(true);
+  };
+
+  const handleSavePlan = async () => {
+    if (!planForm.name.trim()) {
+      alert('Plan Name is required');
+      return;
+    }
+    setSavingPlan(true);
+    try {
+      if (editingPlan) {
+        await api.updateAdminPlan(editingPlan.id, {
+          name: planForm.name,
+          description: planForm.description,
+          priceINR: Number(planForm.priceINR),
+          testLimit: Number(planForm.testLimit),
+          isActive: planForm.isActive,
+        });
+        showNotification('Plan updated successfully');
+      } else {
+        await api.createAdminPlan({
+          name: planForm.name,
+          code: planForm.code || `PLAN_${Date.now()}`,
+          description: planForm.description,
+          priceINR: Number(planForm.priceINR),
+          originalPriceINR: Number(planForm.originalPriceINR),
+          discountPercent: Number(planForm.discountPercent),
+          billingInterval: planForm.billingInterval,
+          durationDays: Number(planForm.durationDays),
+          testLimit: Number(planForm.testLimit),
+          features: planForm.features,
+          isActive: planForm.isActive,
+        });
+        showNotification('New custom plan created successfully');
+      }
+      setIsPlanModalOpen(false);
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to save plan', 'error');
+    } finally {
+      setSavingPlan(false);
+    }
+  };
+
+  const handleDeletePlan = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to deactivate/archive plan "${name}"? Existing subscribers will retain access until expiry.`)) {
+      return;
+    }
+    try {
+      await api.deleteAdminPlan(id);
+      showNotification(`Plan "${name}" deactivated successfully`);
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to archive plan', 'error');
+    }
+  };
+
+  const handleProcessRefund = async (paymentId: string) => {
+    if (!confirm('Are you sure you want to process a 100% refund for this transaction?')) return;
+    setRefundingId(paymentId);
+    try {
+      await api.processAdminRefund(paymentId, 'Admin initiated refund from Pricing Manager');
+      showNotification('100% Refund processed and verified successfully');
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to process refund', 'error');
+    } finally {
+      setRefundingId(null);
+    }
+  };
+
+  // Filtered Content
+  const filteredContent = contentList.filter((item) => {
+    if (filterType !== 'ALL' && item.type !== filterType) return false;
+    if (filterAccess !== 'ALL' && item.accessMode !== filterAccess) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchTitle = item.title?.toLowerCase().includes(q);
+      const matchSlug = item.examSlug?.toLowerCase().includes(q);
+      const matchCat = item.category?.toLowerCase().includes(q);
+      if (!matchTitle && !matchSlug && !matchCat) return false;
+    }
+    return true;
+  });
+
+  // Calculate Metrics
+  const totalExams = contentList.filter((i) => i.type === 'EXAM').length;
+  const totalFreeExams = contentList.filter((i) => i.type === 'EXAM' && (i.accessMode === 'FREE' || i.priceINR === 0)).length;
+  const totalPaidExams = totalExams - totalFreeExams;
+  const totalTests = contentList.filter((i) => i.type === 'TEST').length;
+  const totalFreeTests = contentList.filter((i) => i.type === 'TEST' && (i.accessMode === 'FREE' || i.priceINR === 0)).length;
+  const totalPaidTests = totalTests - totalFreeTests;
+  const activePlansCount = overview?.plans?.filter((p: any) => p.isActive)?.length || overview?.plans?.length || 0;
+  const totalRevenue = overview?.metrics?.totalRevenueINR || 0;
+  const totalSubscribers = overview?.metrics?.paidStudents || 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Toast Notification */}
+      {actionMessage && (
+        <div
+          className={`p-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-lg transition-all border ${
+            actionMessage.type === 'success'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+              : 'bg-rose-50 text-rose-900 border-rose-300'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {actionMessage.type === 'success' ? (
+              <CheckCircle className="w-4 h-4 text-emerald-600" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-rose-600" />
+            )}
+            <span>{actionMessage.text}</span>
+          </div>
+          <button onClick={() => setActionMessage(null)} className="cursor-pointer">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* 8 Required Dashboard Metrics Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Exams</span>
+          <div className="text-xl font-extrabold text-slate-900">{totalExams}</div>
+          <span className="text-[10px] text-slate-500">Live target exams</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-emerald-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Free Exams</span>
+          <div className="text-xl font-extrabold text-emerald-700">{totalFreeExams}</div>
+          <span className="text-[10px] text-emerald-600">Open to public</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-blue-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Paid Exams</span>
+          <div className="text-xl font-extrabold text-blue-700">{totalPaidExams}</div>
+          <span className="text-[10px] text-blue-600">Monetized tiers</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-emerald-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Free Tests</span>
+          <div className="text-xl font-extrabold text-emerald-700">{totalFreeTests}</div>
+          <span className="text-[10px] text-emerald-600">Complimentary CBTs</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-indigo-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Paid Tests</span>
+          <div className="text-xl font-extrabold text-indigo-700">{totalPaidTests}</div>
+          <span className="text-[10px] text-indigo-600">Premium / Locked</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-amber-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Active Plans</span>
+          <div className="text-xl font-extrabold text-amber-700">{activePlansCount}</div>
+          <span className="text-[10px] text-amber-600">Subscription packs</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-emerald-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Total Revenue</span>
+          <div className="text-xl font-extrabold text-emerald-800">₹{totalRevenue}</div>
+          <span className="text-[10px] text-emerald-700">Verified Razorpay</span>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-white border border-purple-100 shadow-xs space-y-1">
+          <span className="text-[10px] font-bold text-purple-600 uppercase tracking-wider">Subscribers</span>
+          <div className="text-xl font-extrabold text-purple-700">{totalSubscribers}</div>
+          <span className="text-[10px] text-purple-600">Paid aspirants</span>
+        </div>
+      </div>
+
+      {/* Tabs Navigation */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+          <button
+            onClick={() => setActiveTab('CONTENT_PRICING')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'CONTENT_PRICING' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
+            <span>Exams & Mock Tests Pricing ({contentList.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('PLANS')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'PLANS' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Tag className="w-3.5 h-3.5 text-amber-600" />
+            <span>Custom Subscription Plans</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('AUDIT_LOGS')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'AUDIT_LOGS' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Clock className="w-3.5 h-3.5 text-slate-600" />
+            <span>Pricing Change History ({auditLogs.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('TRANSACTIONS')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'TRANSACTIONS' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Receipt className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Payments & Refunds</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {activeTab === 'PLANS' && (
+            <button
+              onClick={handleOpenCreatePlan}
+              className="px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Create New Plan</span>
+            </button>
+          )}
+
+          <button
+            onClick={loadAllData}
+            disabled={loading}
+            className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer disabled:opacity-50"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </button>
+        </div>
+      </div>
+
+      {/* TAB 1: CONTENT PRICING (EXAMS, PAPERS & TESTS) */}
+      {activeTab === 'CONTENT_PRICING' && (
+        <div className="space-y-4">
+          {/* Search & Filter Toolbar */}
+          <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by exam name, paper, or mock test..."
+                className="w-full pl-9 pr-8 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-2.5 text-slate-400 cursor-pointer">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <select
+                value={filterType}
+                onChange={(e: any) => setFilterType(e.target.value)}
+                className="px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer"
+              >
+                <option value="ALL">All Types (Exams & Tests)</option>
+                <option value="EXAM">Exams Only</option>
+                <option value="TEST">Tests / Papers Only</option>
+              </select>
+
+              <select
+                value={filterAccess}
+                onChange={(e) => setFilterAccess(e.target.value)}
+                className="px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer"
+              >
+                <option value="ALL">All Access Modes</option>
+                <option value="FREE">FREE</option>
+                <option value="PAID">PAID</option>
+                <option value="PREMIUM">PREMIUM</option>
+                <option value="PRIVATE">PRIVATE</option>
+                <option value="COMING_SOON">COMING SOON</option>
+                <option value="DISABLED">DISABLED</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Content Pricing Table */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600 uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th className="p-3">Type</th>
+                    <th className="p-3">Title & Exam Context</th>
+                    <th className="p-3">Access Mode</th>
+                    <th className="p-3">Live Price (INR)</th>
+                    <th className="p-3">Original MRP</th>
+                    <th className="p-3">Discount</th>
+                    <th className="p-3">Status</th>
+                    <th className="p-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredContent.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="p-8 text-center text-xs text-slate-500">
+                        No content matching your search or filters.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredContent.map((item) => {
+                      const isExam = item.type === 'EXAM';
+                      const badgeColor =
+                        item.accessMode === 'FREE'
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                          : item.accessMode === 'PAID'
+                          ? 'bg-blue-100 text-blue-800 border-blue-200'
+                          : item.accessMode === 'PREMIUM'
+                          ? 'bg-purple-100 text-purple-800 border-purple-200'
+                          : item.accessMode === 'PRIVATE'
+                          ? 'bg-amber-100 text-amber-800 border-amber-200'
+                          : item.accessMode === 'COMING_SOON'
+                          ? 'bg-sky-100 text-sky-800 border-sky-200'
+                          : 'bg-rose-100 text-rose-800 border-rose-200';
+
+                      return (
+                        <tr key={`${item.type}-${item.id}`} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="p-3">
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                isExam ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-800'
+                              }`}
+                            >
+                              {item.type}
+                            </span>
+                          </td>
+                          <td className="p-3">
+                            <div className="font-bold text-slate-900">{item.title}</div>
+                            <div className="text-[10px] text-slate-400">
+                              {item.examTitle ? `Part of ${item.examTitle}` : `Category: ${item.category}`}
+                              {item.totalQuestions ? ` • ${item.totalQuestions} Questions` : ''}
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${badgeColor}`}>
+                              {item.accessMode}
+                            </span>
+                          </td>
+                          <td className="p-3 font-bold text-slate-900">
+                            {item.accessMode === 'FREE' || item.priceINR === 0 ? (
+                              <span className="text-emerald-700 font-extrabold">FREE (₹0)</span>
+                            ) : (
+                              <span className="text-slate-900">₹{item.priceINR}</span>
+                            )}
+                          </td>
+                          <td className="p-3 text-slate-500">
+                            {item.originalPriceINR && item.originalPriceINR > item.priceINR ? (
+                              <span className="line-through text-slate-400">₹{item.originalPriceINR}</span>
+                            ) : (
+                              '—'
+                            )}
+                          </td>
+                          <td className="p-3 text-slate-600">
+                            {item.discountPercent && item.discountPercent > 0 ? (
+                              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                                {item.discountPercent}% OFF
+                              </span>
+                            ) : (
+                              '—'
+                            )}
+                          </td>
+                          <td className="p-3">
+                            {item.isPublished ? (
+                              <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                                <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                                <span>Published</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+                                <EyeOff className="w-3.5 h-3.5 text-slate-400" />
+                                <span>Draft / Hidden</span>
+                              </span>
+                            )}
+                          </td>
+                          <td className="p-3 text-right">
+                            <button
+                              onClick={() => handleOpenEdit(item)}
+                              className="px-3 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition-colors cursor-pointer flex items-center gap-1 ml-auto"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                              <span>Edit Pricing</span>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 2: CUSTOM SUBSCRIPTION PLANS */}
+      {activeTab === 'PLANS' && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {overview?.plans?.map((plan: any) => {
+              return (
+                <div
+                  key={plan.id}
+                  className="p-5 rounded-2xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 uppercase tracking-wider font-mono">
+                        {plan.code}
+                      </span>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          plan.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                        }`}
+                      >
+                        {plan.isActive ? 'ACTIVE' : 'INACTIVE'}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="text-base font-bold text-slate-900">{plan.name}</h4>
+                      <p className="text-xs text-slate-500 leading-relaxed mt-1">{plan.description}</p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-black text-slate-900">₹{plan.priceINR}</span>
+                        {plan.originalPriceINR && plan.originalPriceINR > plan.priceINR && (
+                          <span className="text-xs line-through text-slate-400">₹{plan.originalPriceINR}</span>
+                        )}
+                        <span className="text-[11px] text-slate-500 font-medium">
+                          / {plan.billingInterval === 'ONCE' ? 'One-time' : plan.billingInterval?.toLowerCase()}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Features list */}
+                    <div className="space-y-1.5 pt-2">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Features</span>
+                      <ul className="text-xs text-slate-600 space-y-1">
+                        <li className="flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span>
+                            {plan.testLimit ? `Up to ${plan.testLimit} CBT Tests` : 'Unlimited 111+ Mock Tests'}
+                          </span>
+                        </li>
+                        <li className="flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span>Authentic NTA CBT Exam Interface</span>
+                        </li>
+                        <li className="flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span>Detailed Derivations & Analytics</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <button
+                      onClick={() => handleOpenEditPlan(plan)}
+                      className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                    >
+                      <Edit3 className="w-3 h-3" />
+                      <span>Edit Plan</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleDeletePlan(plan.id, plan.name)}
+                      className="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Archive</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: AUDIT LOGS */}
+      {activeTab === 'AUDIT_LOGS' && (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden space-y-3 p-5">
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+              <Clock className="w-4 h-4 text-slate-500" />
+              <span>Immutable Pricing & Access Change History</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              Every price change, access switch, and plan update is permanently recorded with admin ID and timestamps.
+            </p>
+          </div>
+
+          {auditLogs.length === 0 ? (
+            <div className="p-8 text-center text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl">
+              No pricing changes recorded yet. Changes made using this portal will appear here automatically.
+            </div>
+          ) : (
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600 uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th className="p-3">Timestamp</th>
+                    <th className="p-3">Admin</th>
+                    <th className="p-3">Action</th>
+                    <th className="p-3">Target Content</th>
+                    <th className="p-3">Previous State</th>
+                    <th className="p-3">New State</th>
+                    <th className="p-3">Reason / Notes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {auditLogs.map((log: any) => (
+                    <tr key={log.id} className="hover:bg-slate-50/70 transition-colors font-mono text-[11px]">
+                      <td className="p-3 text-slate-500 whitespace-nowrap">
+                        {new Date(log.createdAt).toLocaleString('en-IN')}
+                      </td>
+                      <td className="p-3 font-sans text-slate-900 font-semibold">
+                        {log.admin?.name || log.admin?.email || 'Super Admin'}
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-800">
+                          {log.action}
+                        </span>
+                      </td>
+                      <td className="p-3 font-sans text-slate-900 font-bold">
+                        {log.contentTitle || `${log.contentType} #${log.contentId?.slice(0, 8)}`}
+                      </td>
+                      <td className="p-3 text-slate-500">
+                        {log.previousPrice != null ? `₹${log.previousPrice}` : ''}
+                        {log.previousAccess ? ` (${log.previousAccess})` : '—'}
+                      </td>
+                      <td className="p-3 text-emerald-700 font-bold">
+                        {log.newPrice != null ? `₹${log.newPrice}` : ''}
+                        {log.newAccess ? ` (${log.newAccess})` : '—'}
+                      </td>
+                      <td className="p-3 font-sans text-slate-600 max-w-xs truncate">
+                        {log.reason || 'Admin modification'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 4: TRANSACTIONS & REFUNDS */}
+      {activeTab === 'TRANSACTIONS' && (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+              <Receipt className="w-4 h-4 text-slate-500" />
+              <span>Razorpay Verified Payment Transactions & Refunds</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              Official backend signature verified transactions. Includes automated one-click 7-day refund processing.
+            </p>
+          </div>
+
+          {overview?.recentPayments?.length === 0 ? (
+            <div className="p-8 text-center text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl">
+              No transactions recorded yet. Student purchases will automatically stream here.
+            </div>
+          ) : (
+            <div className="overflow-x-auto border border-slate-200 rounded-xl">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600 uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th className="p-3">Order ID</th>
+                    <th className="p-3">Student Aspirant</th>
+                    <th className="p-3">Amount</th>
+                    <th className="p-3">Gateway</th>
+                    <th className="p-3">Status</th>
+                    <th className="p-3">Date</th>
+                    <th className="p-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {overview?.recentPayments?.map((p: any) => {
+                    const isRefunded = p.status === 'REFUNDED';
+                    const isRefunding = refundingId === p.id;
+
+                    return (
+                      <tr key={p.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="p-3 font-mono text-[11px]">
+                          <div className="font-bold text-slate-900">{p.orderId}</div>
+                          <div className="text-[10px] text-slate-400">{p.paymentId || 'Pending'}</div>
+                        </td>
+                        <td className="p-3">
+                          <div className="font-bold text-slate-900">{p.user?.name || 'Aspirant'}</div>
+                          <div className="text-[11px] text-slate-400">{p.user?.email}</div>
+                        </td>
+                        <td className="p-3 font-extrabold text-slate-900">₹{p.amount}</td>
+                        <td className="p-3 uppercase font-mono text-[11px]">{p.method || 'Razorpay'}</td>
+                        <td className="p-3">
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              isRefunded ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
+                            }`}
+                          >
+                            {p.status}
+                          </span>
+                        </td>
+                        <td className="p-3 text-slate-500 whitespace-nowrap">
+                          {new Date(p.createdAt).toLocaleDateString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })}
+                        </td>
+                        <td className="p-3 text-right whitespace-nowrap">
+                          {isRefunded ? (
+                            <span className="text-[11px] text-slate-400">100% Refunded</span>
+                          ) : (
+                            <button
+                              disabled={isRefunding}
+                              onClick={() => handleProcessRefund(p.id)}
+                              className="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                            >
+                              {isRefunding ? 'Refunding...' : 'Process Refund'}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* EDIT PRICING MODAL */}
+      {editingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-900 text-white uppercase tracking-wider">
+                  {editingItem.type} PRICING CONTROL
+                </span>
+                <h3 className="text-base font-extrabold text-slate-900 mt-1">{editingItem.title}</h3>
+              </div>
+              <button
+                onClick={() => setEditingItem(null)}
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Access Mode Selector */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Access Setting Mode</label>
+                <select
+                  value={editAccessMode}
+                  onChange={(e) => {
+                    const mode = e.target.value;
+                    setEditAccessMode(mode);
+                    if (mode === 'FREE') {
+                      setEditPriceINR(0);
+                    }
+                  }}
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer"
+                >
+                  <option value="FREE">FREE — Everyone can access without payment</option>
+                  <option value="PAID">PAID — Direct single-purchase payment required</option>
+                  <option value="PREMIUM">PREMIUM — Included in subscription plan</option>
+                  <option value="PRIVATE">PRIVATE — Selected/invited students only</option>
+                  <option value="COMING_SOON">COMING SOON — Visible in catalog but locked</option>
+                  <option value="DISABLED">DISABLED — Hidden completely from students</option>
+                </select>
+              </div>
+
+              {/* Price Fields */}
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Live Price (₹)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={editPriceINR}
+                    disabled={editAccessMode === 'FREE'}
+                    onChange={(e) => setEditPriceINR(Number(e.target.value))}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 bg-white disabled:bg-slate-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Original MRP (₹)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={editOriginalPriceINR}
+                    disabled={editAccessMode === 'FREE'}
+                    onChange={(e) => setEditOriginalPriceINR(Number(e.target.value))}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 bg-white disabled:bg-slate-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Discount (%)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={editDiscountPercent}
+                    disabled={editAccessMode === 'FREE'}
+                    onChange={(e) => setEditDiscountPercent(Number(e.target.value))}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 bg-white disabled:bg-slate-100"
+                  />
+                </div>
+              </div>
+
+              {/* Published Toggle */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="text-xs font-bold text-slate-800">Publish in Student Portal</span>
+                <input
+                  type="checkbox"
+                  checked={editIsPublished}
+                  onChange={(e) => setEditIsPublished(e.target.checked)}
+                  className="w-4 h-4 rounded text-blue-600 cursor-pointer"
+                />
+              </div>
+
+              {/* Change Reason Note */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Audit Log Reason</label>
+                <input
+                  type="text"
+                  value={editNotes}
+                  onChange={(e) => setEditNotes(e.target.value)}
+                  placeholder="e.g. Festival promotional discount or free starter unlock"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 bg-white"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <button
+                onClick={() => setEditingItem(null)}
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                disabled={savingEdit}
+                onClick={handleSavePricing}
+                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {savingEdit ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Save Pricing Changes</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CREATE / EDIT PLAN MODAL */}
+      {isPlanModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-extrabold text-slate-900">
+                {editingPlan ? 'Edit Custom Subscription Plan' : 'Create Custom Pricing Plan'}
+              </h3>
+              <button onClick={() => setIsPlanModalOpen(false)} className="cursor-pointer text-slate-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Plan Name *</label>
+                <input
+                  type="text"
+                  value={planForm.name}
+                  onChange={(e) => setPlanForm({ ...planForm, name: e.target.value })}
+                  placeholder="e.g. JEE Full Pass or Ultimate All-Access"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900 bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Unique Plan Code</label>
+                  <input
+                    type="text"
+                    value={planForm.code}
+                    disabled={!!editingPlan}
+                    onChange={(e) => setPlanForm({ ...planForm, code: e.target.value.toUpperCase().replace(/\s+/g, '_') })}
+                    placeholder="e.g. JEE_PASS_2026"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 bg-slate-50 disabled:bg-slate-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Billing Interval</label>
+                  <select
+                    value={planForm.billingInterval}
+                    onChange={(e) => setPlanForm({ ...planForm, billingInterval: e.target.value })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900 bg-white cursor-pointer"
+                  >
+                    <option value="ONCE">One-Time Pack</option>
+                    <option value="MONTHLY">Monthly</option>
+                    <option value="QUARTERLY">Quarterly (3 Months)</option>
+                    <option value="YEARLY">Yearly</option>
+                    <option value="LIFETIME">Lifetime Access</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Description</label>
+                <textarea
+                  rows={2}
+                  value={planForm.description}
+                  onChange={(e) => setPlanForm({ ...planForm, description: e.target.value })}
+                  placeholder="Short description shown to students in pricing modal..."
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Price (₹) *</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={planForm.priceINR}
+                    onChange={(e) => setPlanForm({ ...planForm, priceINR: Number(e.target.value) })}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Original Price (₹)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={planForm.originalPriceINR}
+                    onChange={(e) => setPlanForm({ ...planForm, originalPriceINR: Number(e.target.value) })}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Discount (%)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={planForm.discountPercent}
+                    onChange={(e) => setPlanForm({ ...planForm, discountPercent: Number(e.target.value) })}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Duration (Days)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={planForm.durationDays}
+                    onChange={(e) => setPlanForm({ ...planForm, durationDays: Number(e.target.value) })}
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Test Attempt Limit</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={planForm.testLimit}
+                    onChange={(e) => setPlanForm({ ...planForm, testLimit: Number(e.target.value) })}
+                    placeholder="0 = Unlimited"
+                    className="w-full p-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="text-xs font-bold text-slate-800">Plan Status</span>
+                <label className="inline-flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={planForm.isActive}
+                    onChange={(e) => setPlanForm({ ...planForm, isActive: e.target.checked })}
+                    className="w-4 h-4 rounded text-blue-600"
+                  />
+                  <span className="text-xs font-semibold text-slate-700">
+                    {planForm.isActive ? 'Active (Purchasable)' : 'Inactive'}
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <button
+                onClick={() => setIsPlanModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                disabled={savingPlan}
+                onClick={handleSavePlan}
+                className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {savingPlan ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-3.5 h-3.5" />
+                    <span>{editingPlan ? 'Update Plan' : 'Create Plan'}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
