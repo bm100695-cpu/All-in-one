@@ -24,9 +24,22 @@ import {
   AdminAttemptDetailResponse,
 } from './types';
 
-const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL
-  ? `${String((import.meta as any).env.VITE_API_BASE_URL).replace(/\/+$/, '')}/api`
-  : '/api';
+const getApiBase = (): string => {
+  const envUrl = (import.meta as any).env?.VITE_API_BASE_URL || (import.meta as any).env?.VITE_API_URL;
+  if (envUrl) {
+    const clean = String(envUrl).replace(/\/+$/, '');
+    return clean.endsWith('/api') ? clean : `${clean}/api`;
+  }
+  if (typeof window !== 'undefined') {
+    // If running in production (e.g. Vercel deployment), point directly to live Render backend
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      return 'https://all-in-one-japb.onrender.com/api';
+    }
+  }
+  return '/api';
+};
+
+const API_BASE = getApiBase();
 
 export function getStoredToken(): string | null {
   return localStorage.getItem('examverse_token');
