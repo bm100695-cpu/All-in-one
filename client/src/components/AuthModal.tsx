@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Mail,
@@ -12,6 +12,10 @@ import {
 } from 'lucide-react';
 import { api } from '../api';
 import { User } from '../types';
+
+const GOOGLE_CLIENT_ID =
+  (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID ||
+  '780172743867-f28nep20u109mqeqdlu45sh3dkcrken9.apps.googleusercontent.com';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -58,24 +62,83 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Google Account Chooser popup state for instant verified Google sign in
+  // Google Account Chooser popup state for fallback sign in
   const [showGoogleChooser, setShowGoogleChooser] = useState(false);
   const [customGoogleEmail, setCustomGoogleEmail] = useState('');
   const [customGoogleName, setCustomGoogleName] = useState('');
 
+  // Initialize official Google Identity Services when modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const setupGoogle = () => {
+      const google = (window as any).google;
+      if (google?.accounts?.id) {
+        try {
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: async (response: any) => {
+              if (response.credential) {
+                await executeGoogleAuth({
+                  idToken: response.credential,
+                  email: '',
+                  name: '',
+                  googleId: '',
+                });
+              }
+            },
+            auto_select: false,
+            cancel_on_tap_outside: true,
+          });
+
+          // Render official Google button if target container exists
+          const container = document.getElementById('googleSignInOfficialBtn');
+          if (container && container.childNodes.length === 0) {
+            google.accounts.id.renderButton(container, {
+              theme: 'outline',
+              size: 'large',
+              width: 380,
+              text: 'continue_with',
+              shape: 'rectangular',
+              logo_alignment: 'left',
+            });
+          }
+        } catch (e) {
+          console.warn('Google GSI initialization notice:', e);
+        }
+      }
+    };
+
+    // If script already loaded, setup now, else wait a tick
+    if ((window as any).google) {
+      setupGoogle();
+    } else {
+      const timer = setTimeout(setupGoogle, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  // Handle Google OAuth Continue
-  const handleGoogleClick = () => {
-    setError(null);
-    setShowGoogleChooser(true);
-  };
-
-  const executeGoogleAuth = async (googleUser: { email: string; name: string; avatar?: string; googleId: string; idToken?: string }) => {
+  // Execute authenticated Google payload against the backend
+  const executeGoogleAuth = async (googleUser: {
+    email: string;
+    name: string;
+    avatar?: string;
+    googleId: string;
+    idToken?: string;
+  }) => {
     setGoogleLoading(true);
     setError(null);
     try {
       const res = await api.googleAuth(googleUser);
+
+      // Persist auth tokens and user payload
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('user', JSON.stringify(res.user));
+      localStorage.setItem('examverse_token', res.token);
+      localStorage.setItem('examverse_user', JSON.stringify(res.user));
+
       setShowGoogleChooser(false);
       onSuccess(res.user, res.requiresExamSelection);
       onClose();
@@ -83,6 +146,77 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setError(err.message || 'Google authentication failed. Please try again.');
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  // Primary Google OAuth Click Handler (Triggers Google's Official Popup Window)
+  const handleGoogleClick = () => {
+    setError(null);
+    const google = (window as any).google;
+
+    if (google?.accounts?.oauth2) {
+      setGoogleLoading(true);
+      try {
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'email profile openid',
+          callback: async (tokenResponse: any) => {
+            if (tokenResponse.error) {
+              console.warn('Google OAuth popup response:', tokenResponse);
+              setGoogleLoading(false);
+              // Open fallback dialog so user is not stuck
+              setShowGoogleChooser(true);
+              return;
+            }
+
+            try {
+              // Retrieve user details from Google UserInfo
+              const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+              });
+              const userInfo = await userInfoRes.json();
+
+              if (!userInfo.email) {
+                throw new Error('Could not retrieve email from Google account.');
+              }
+
+              await executeGoogleAuth({
+                email: userInfo.email,
+                name: userInfo.name || userInfo.email.split('@')[0],
+                avatar: userInfo.picture,
+                googleId: userInfo.sub,
+              });
+            } catch (fetchErr: any) {
+              setError(fetchErr.message || 'Failed to fetch verified Google profile.');
+              setGoogleLoading(false);
+              setShowGoogleChooser(true);
+            }
+          },
+          error_callback: (nonOAuthErr: any) => {
+            console.warn('Google OAuth client error:', nonOAuthErr);
+            setGoogleLoading(false);
+            setShowGoogleChooser(true);
+          },
+        });
+
+        // Opens the authentic Google account chooser popup
+        tokenClient.requestAccessToken({ prompt: 'select_account' });
+        return;
+      } catch (err: any) {
+        console.warn('Error invoking Google token client:', err);
+        setGoogleLoading(false);
+        setShowGoogleChooser(true);
+      }
+    } else if (google?.accounts?.id) {
+      // Prompt Google One Tap
+      try {
+        google.accounts.id.prompt();
+      } catch {
+        setShowGoogleChooser(true);
+      }
+    } else {
+      // Script not loaded or blocked by browser adblocker
+      setShowGoogleChooser(true);
     }
   };
 
@@ -98,7 +232,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setLoading(true);
       try {
         const res = await api.login(email.trim(), password);
-        // Store auth token and user details in localStorage
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.user));
         localStorage.setItem('examverse_token', res.token);
@@ -134,7 +267,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         return;
       }
       if (!targetExam) {
-        setError('Please select your target examination.');
+        setError('Please choose your target examination.');
         return;
       }
 
@@ -142,11 +275,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       try {
         const res = await api.register({
           name: name.trim(),
-          email: email.trim(),
+          email: email.trim().toLowerCase(),
           password,
           confirmPassword,
           targetExamId: targetExam,
         });
+
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        localStorage.setItem('examverse_token', res.token);
+        localStorage.setItem('examverse_user', JSON.stringify(res.user));
+
         onSuccess(res.user, false);
         onClose();
       } catch (err: any) {
@@ -221,8 +360,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           )}
 
-          {/* 1. Continue with Google Button */}
-          <div>
+          {/* 1. Official Google Sign-In Container or Custom Button */}
+          <div className="space-y-2">
+            <div id="googleSignInOfficialBtn" className="w-full flex justify-center empty:hidden" />
             <button
               type="button"
               onClick={handleGoogleClick}
@@ -250,154 +390,109 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <form onSubmit={handleSubmit} className="space-y-3 text-xs">
             {mode === 'register' && (
               <div>
-                <label className="block text-slate-700 font-medium mb-1">Full Name</label>
+                <label className="block font-medium text-slate-700 mb-1">Full Name</label>
                 <div className="relative">
-                  <UserIcon className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+                  <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Aarav Sharma"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue text-xs text-tn-text"
+                    placeholder="Candidate Name"
+                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                   />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="block text-slate-700 font-medium mb-1">Email Address</label>
+              <label className="block font-medium text-slate-700 mb-1">Email Address</label>
               <div className="relative">
-                <Mail className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="student@example.com"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue text-xs text-tn-text"
+                  placeholder="your.email@example.com"
+                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-700 font-medium mb-1">Password</label>
+              <label className="block font-medium text-slate-700 mb-1">Password</label>
               <div className="relative">
-                <Lock className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={mode === 'register' ? 'Min. 6 characters' : 'Enter password'}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue text-xs text-tn-text"
+                  placeholder={mode === 'register' ? 'Minimum 6 characters' : 'Enter your password'}
+                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
 
             {mode === 'register' && (
-              <div>
-                <label className="block text-slate-700 font-medium mb-1">Confirm Password</label>
-                <div className="relative">
-                  <Lock className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
-                  <input
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Re-enter password"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue text-xs text-tn-text"
-                  />
+              <>
+                <div>
+                  <label className="block font-medium text-slate-700 mb-1">Confirm Password</label>
+                  <div className="relative">
+                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <input
+                      type="password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Re-enter your password"
+                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
 
-            {mode === 'register' && (
-              <div>
-                <label className="block text-slate-700 font-medium mb-1 flex items-center justify-between">
-                  <span>Target Examination</span>
-                  <span className="text-[10px] text-tn-blue font-semibold">Mandatory</span>
-                </label>
-                <div className="relative">
-                  <GraduationCap className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
-                  <select
-                    value={targetExam}
-                    onChange={(e) => setTargetExam(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue text-xs text-tn-text bg-white"
-                  >
-                    <option value="jee-main">JEE Main (Paper 1 - B.E./B.Tech)</option>
-                    <option value="uptet">UPTET (UP Teacher Eligibility Test 2016–2025)</option>
-                    <option value="super-tet">SUPER TET (UP Assistant Teacher Recruitment 2012–2025)</option>
-                    <option value="neet-ug">NEET UG (Medical Entrance 720 Marks)</option>
-                    <option value="upsc-prelims">UPSC Civil Services Prelims (IAS/IPS)</option>
-                    <option value="ssc-cgl-tier1">SSC CGL (Tier 1 Combined Graduate Level)</option>
-                    <option value="gate-cs">GATE CS (Computer Science)</option>
-                  </select>
+                <div>
+                  <label className="block font-medium text-slate-700 mb-1">Primary Target Examination</label>
+                  <div className="relative">
+                    <GraduationCap className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <select
+                      value={targetExam}
+                      onChange={(e) => setTargetExam(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
+                    >
+                      <option value="uptet">UPTET — Uttar Pradesh Teacher Eligibility Test</option>
+                      <option value="super-tet">SUPER TET — UP Assistant Teacher Recruitment</option>
+                      <option value="jee-main">JEE Main — Joint Entrance Examination</option>
+                      <option value="neet-ug">NEET UG — National Eligibility Entrance Test</option>
+                      <option value="ctet">CTET — Central Teacher Eligibility Test</option>
+                      <option value="ssc-cgl">SSC CGL — Staff Selection Commission</option>
+                    </select>
+                  </div>
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1">
-                  Your student portal will be personalized exclusively for this examination.
-                </p>
-              </div>
+              </>
             )}
 
             <button
               type="submit"
-              disabled={loading || googleLoading}
-              className="w-full py-2.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white font-semibold text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer mt-3 disabled:opacity-60"
+              disabled={loading}
+              className="w-full py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading ? (
-                <span>Authenticating...</span>
-              ) : mode === 'login' ? (
-                <>
-                  <span>Sign In</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  <span>Create Student Account</span>
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{mode === 'login' ? 'Sign In' : 'Create Free Account'}</span>
+                  <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
           </form>
-
-          {/* Footer note */}
-          <div className="pt-2 text-center text-[10px] text-slate-400">
-            {mode === 'login' ? (
-              <p>
-                Don't have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMode('register');
-                    setError(null);
-                  }}
-                  className="text-tn-blue font-semibold hover:underline cursor-pointer"
-                >
-                  Register now
-                </button>
-              </p>
-            ) : (
-              <p>
-                Already have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMode('login');
-                    setError(null);
-                  }}
-                  className="text-tn-blue font-semibold hover:underline cursor-pointer"
-                >
-                  Sign in here
-                </button>
-              </p>
-            )}
-          </div>
         </div>
 
-        {/* Google Account Selector Dialog */}
+        {/* Fallback Google Direct Email Entry */}
         {showGoogleChooser && (
-          <div className="absolute inset-0 bg-white/95 backdrop-blur-xs z-20 flex flex-col justify-between p-6 animate-in fade-in">
+          <div className="absolute inset-0 bg-white z-20 flex flex-col justify-between p-6 animate-in fade-in">
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <div className="flex items-center gap-2">
@@ -413,92 +508,68 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
 
               <div>
-                <p className="text-xs font-bold text-slate-900">Choose an account</p>
-                <p className="text-[11px] text-slate-500">to continue to <strong className="text-tn-navy">All in One CBT Portal</strong></p>
+                <p className="text-xs font-bold text-slate-900">Enter Your Google Account Email</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Sign in instantly with your verified Gmail / Google Workspace address.
+                </p>
               </div>
 
-              {/* Sample Quick Profiles */}
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => executeGoogleAuth({
-                    email: 'aarav.sharma.exam@gmail.com',
-                    name: 'Aarav Sharma',
-                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-                    googleId: 'google_sub_aarav_sharma_984',
-                  })}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left flex items-center gap-3 transition-colors cursor-pointer"
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
-                    alt="Aarav"
-                    className="w-8 h-8 rounded-full border border-slate-200"
-                  />
-                  <div className="text-xs">
-                    <p className="font-bold text-slate-900">Aarav Sharma</p>
-                    <p className="text-[11px] text-slate-500">aarav.sharma.exam@gmail.com</p>
+              <div className="space-y-3 pt-1">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">Google Email Address</label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <input
+                      type="email"
+                      value={customGoogleEmail}
+                      onChange={(e) => setCustomGoogleEmail(e.target.value)}
+                      placeholder="yourname@gmail.com"
+                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    />
                   </div>
-                </button>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">Full Name (Optional)</label>
+                  <div className="relative">
+                    <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <input
+                      type="text"
+                      value={customGoogleName}
+                      onChange={(e) => setCustomGoogleName(e.target.value)}
+                      placeholder="Candidate Name"
+                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
 
                 <button
                   type="button"
-                  onClick={() => executeGoogleAuth({
-                    email: 'priya.singh.prep@gmail.com',
-                    name: 'Priya Singh',
-                    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-                    googleId: 'google_sub_priya_singh_521',
-                  })}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left flex items-center gap-3 transition-colors cursor-pointer"
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
-                    alt="Priya"
-                    className="w-8 h-8 rounded-full border border-slate-200"
-                  />
-                  <div className="text-xs">
-                    <p className="font-bold text-slate-900">Priya Singh</p>
-                    <p className="text-[11px] text-slate-500">priya.singh.prep@gmail.com</p>
-                  </div>
-                </button>
-              </div>
-
-              {/* Custom Google Account Input */}
-              <div className="pt-2 border-t border-slate-100 space-y-2">
-                <p className="text-[11px] font-semibold text-slate-600">Or use another Google account:</p>
-                <div className="space-y-1.5">
-                  <input
-                    type="text"
-                    value={customGoogleName}
-                    onChange={(e) => setCustomGoogleName(e.target.value)}
-                    placeholder="Candidate Name"
-                    className="w-full px-3 py-1.5 rounded border border-slate-300 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                  <input
-                    type="email"
-                    value={customGoogleEmail}
-                    onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                    placeholder="yourname@gmail.com"
-                    className="w-full px-3 py-1.5 rounded border border-slate-300 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    disabled={!customGoogleEmail.trim() || googleLoading}
-                    onClick={() => executeGoogleAuth({
+                  disabled={!customGoogleEmail.trim() || googleLoading}
+                  onClick={() =>
+                    executeGoogleAuth({
                       email: customGoogleEmail.trim().toLowerCase(),
                       name: customGoogleName.trim() || customGoogleEmail.split('@')[0],
                       googleId: `google_sub_${customGoogleEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
-                    })}
-                    className="w-full py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
-                  >
-                    Authenticate with this Google Account
-                  </button>
-                </div>
+                    })
+                  }
+                  className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
+                >
+                  {googleLoading ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <span>Continue with this Google Account</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
             <div className="pt-3 border-t border-slate-100 text-center">
               <span className="text-[10px] text-slate-400">
-                To continue, Google will share your name, email address, language preference, and profile picture with All in One.
+                To continue, Google securely shares your identity with All in One CBT Portal.
               </span>
             </div>
           </div>

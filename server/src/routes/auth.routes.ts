@@ -134,6 +134,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const authPayload: AuthUser = {
+      userId: user.id,
       id: user.id,
       email: user.email,
       name: user.name,
@@ -289,6 +290,7 @@ router.post('/google', async (req: Request, res: Response) => {
     }
 
     const authPayload: AuthUser = {
+      userId: user.id,
       id: user.id,
       email: user.email,
       name: user.name,
@@ -414,6 +416,7 @@ router.post('/admin-login', async (req: Request, res: Response) => {
     }
 
     const authPayload: AuthUser = {
+      userId: user.id,
       id: user.id,
       email: user.email,
       name: user.name,
