@@ -204,106 +204,141 @@ export const AdminPortal: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16">
-      {/* Header Banner */}
-      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-brand-950 to-indigo-950 text-white p-6 sm:p-10 shadow-xl border border-slate-800">
+    <div className="space-y-6 pb-16">
+      {/* 1. Bespoke Architectural Header Surface (Clean Light SaaS Canvas) */}
+      <div className="rounded-2xl bg-white border border-zinc-200/80 p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-semibold border border-brand-400/30">
-              <ShieldCheck className="w-3.5 h-3.5 text-brand-400" />
-              <span>Academic Integrity • Content Governance Portal</span>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-700 text-xs font-semibold border border-zinc-200/80">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+              <span className="text-[11px] font-medium tracking-tight">Academic Integrity • Content Governance Portal</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-950 tracking-[-0.02em]">
               Reviewer & Admin Control Center
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
+            <p className="text-zinc-600 text-xs sm:text-sm leading-relaxed max-w-2xl">
               Maintain transparent exam provenance, verify questions, audit official syllabus coverage, and inspect schema-validated AI practice variants before publishing.
             </p>
           </div>
 
-          {/* Sub-Tabs */}
-          <div className="flex items-center gap-1 bg-white/10 p-1 rounded-xl border border-white/20 overflow-x-auto">
-            <button
-              onClick={() => setActiveTab('LIVE_TESTS')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                activeTab === 'LIVE_TESTS' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-500" />
-              <span>Weekly Live Tests</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
-            </button>
-            <button
-              onClick={() => setActiveTab('EXAMS_MANAGER')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                activeTab === 'EXAMS_MANAGER' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5 text-blue-500" />
-              <span>All Exams & Tests Manager</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('STUDENTS_ACTIVITY')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                activeTab === 'STUDENTS_ACTIVITY' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5 text-blue-400" />
-              <span>Live Students & Exam History</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('JEE_PYQ')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'JEE_PYQ' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <FileCheck className="w-3.5 h-3.5 text-emerald-500" />
-              <span>JEE Main PYQ Database ({pyqQuestions.length})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('QUEUE')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors whitespace-nowrap ${
-                activeTab === 'QUEUE' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              Review Queue ({queue.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('AI_GENERATOR')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'AI_GENERATOR' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>AI Synthesizer</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('AUDIT')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors whitespace-nowrap ${
-                activeTab === 'AUDIT' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              Coverage Audit
-            </button>
-            <button
-              onClick={() => setActiveTab('MONETIZATION')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'MONETIZATION' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <IndianRupee className="w-3.5 h-3.5 text-amber-400" />
-              <span>Monetization & Plans</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('SUPER_TET_PYQ')}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'SUPER_TET_PYQ' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-              <span>SUPER TET (2012–25)</span>
-            </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="px-3 py-1.5 rounded-lg bg-zinc-50 border border-zinc-200/80 text-zinc-600 text-xs font-mono tabular-nums flex items-center gap-2 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="font-medium text-zinc-700">Governance Engine Active</span>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* 2. Refined Segmented Sub-Navigation Track */}
+      <div className="bg-zinc-100/90 p-1.5 rounded-xl border border-zinc-200/80 shadow-2xs overflow-hidden">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5">
+          <button
+            onClick={() => setActiveTab('LIVE_TESTS')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'LIVE_TESTS'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <Zap className={`w-3.5 h-3.5 ${activeTab === 'LIVE_TESTS' ? 'text-amber-600' : 'text-zinc-400'}`} />
+            <span>Weekly Live Tests</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block" />
+          </button>
+
+          <button
+            onClick={() => setActiveTab('EXAMS_MANAGER')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'EXAMS_MANAGER'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <Layers className={`w-3.5 h-3.5 ${activeTab === 'EXAMS_MANAGER' ? 'text-emerald-700' : 'text-zinc-400'}`} />
+            <span>All Exams & Tests Manager</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('STUDENTS_ACTIVITY')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'STUDENTS_ACTIVITY'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <Users className={`w-3.5 h-3.5 ${activeTab === 'STUDENTS_ACTIVITY' ? 'text-emerald-700' : 'text-zinc-400'}`} />
+            <span>Live Students & Exam History</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('JEE_PYQ')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'JEE_PYQ'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <FileCheck className={`w-3.5 h-3.5 ${activeTab === 'JEE_PYQ' ? 'text-emerald-700' : 'text-zinc-400'}`} />
+            <span>JEE Main PYQ ({pyqQuestions.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('QUEUE')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'QUEUE'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            Review Queue ({queue.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('AI_GENERATOR')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'AI_GENERATOR'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <Sparkles className={`w-3.5 h-3.5 ${activeTab === 'AI_GENERATOR' ? 'text-amber-600' : 'text-zinc-400'}`} />
+            <span>AI Synthesizer</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('AUDIT')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'AUDIT'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            Coverage Audit
+          </button>
+
+          <button
+            onClick={() => setActiveTab('MONETIZATION')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'MONETIZATION'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <IndianRupee className={`w-3.5 h-3.5 ${activeTab === 'MONETIZATION' ? 'text-emerald-700' : 'text-zinc-400'}`} />
+            <span>Monetization & Pricing</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('SUPER_TET_PYQ')}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              activeTab === 'SUPER_TET_PYQ'
+                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+            }`}
+          >
+            <ShieldCheck className={`w-3.5 h-3.5 ${activeTab === 'SUPER_TET_PYQ' ? 'text-emerald-700' : 'text-zinc-400'}`} />
+            <span>SUPER TET (2012–25)</span>
+          </button>
         </div>
       </div>
 

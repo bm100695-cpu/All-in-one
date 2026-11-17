@@ -320,21 +320,21 @@ export const AdminLiveTestManager: React.FC = () => {
         </div>
       )}
 
-      {/* Top Banner & Control Bar */}
-      <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      {/* Top Banner & Control Bar (Clean SaaS Surface) */}
+      <div className="bg-white rounded-xl border border-zinc-200/80 p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold shadow-xs">
-              <Zap className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-emerald-800 text-white flex items-center justify-center font-bold shadow-xs shrink-0">
+              <Zap className="w-4 h-4 text-emerald-300" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-                Weekly Live Mock Test Management System
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+              <h2 className="text-base font-extrabold text-zinc-950 tracking-[-0.02em] flex items-center gap-2">
+                <span>Weekly Live Mock Test Management</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/90 tabular-nums">
                   IST (UTC+5:30)
                 </span>
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-zinc-500 mt-0.5">
                 Schedule, monitor, reschedule, and publish weekly online live mock examinations across all portal exams.
               </p>
             </div>
@@ -344,62 +344,70 @@ export const AdminLiveTestManager: React.FC = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => loadData()}
-            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
+            className="p-2 rounded-lg bg-zinc-100 hover:bg-zinc-200/70 text-zinc-700 border border-zinc-200/60 transition cursor-pointer"
             title="Refresh Schedules"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           </button>
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+            className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-3.5 h-3.5" />
             <span>Schedule New Live Mock Test</span>
           </button>
         </div>
       </div>
 
-      {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+      {/* Navigation Sub-Tabs (Clean Segmented Track) */}
+      <div className="flex items-center gap-1.5 bg-zinc-100/90 p-1 rounded-xl border border-zinc-200/80 text-xs font-semibold shadow-2xs">
         <button
           onClick={() => setActiveTab('CALENDAR')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer ${
-            activeTab === 'CALENDAR' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+            activeTab === 'CALENDAR'
+              ? 'bg-white text-zinc-950 shadow-xs font-bold border border-zinc-200/80'
+              : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/60'
           }`}
         >
-          <Calendar className="w-3.5 h-3.5 text-blue-600" />
+          <Calendar className="w-3.5 h-3.5 text-zinc-500" />
           <span>Weekly Calendar (Mon – Sun)</span>
         </button>
 
         <button
           onClick={() => setActiveTab('SCHEDULES')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer ${
-            activeTab === 'SCHEDULES' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+            activeTab === 'SCHEDULES'
+              ? 'bg-white text-zinc-950 shadow-xs font-bold border border-zinc-200/80'
+              : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/60'
           }`}
         >
-          <CalendarCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <CalendarCheck className="w-3.5 h-3.5 text-emerald-700" />
           <span>All Scheduled Tests ({schedules.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('RECURRING')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer ${
-            activeTab === 'RECURRING' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+            activeTab === 'RECURRING'
+              ? 'bg-white text-zinc-950 shadow-xs font-bold border border-zinc-200/80'
+              : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/60'
           }`}
         >
-          <Layers className="w-3.5 h-3.5 text-purple-600" />
+          <Layers className="w-3.5 h-3.5 text-zinc-500" />
           <span>Recurring Weekly Rules</span>
         </button>
 
         {selectedMonitorId && (
           <button
             onClick={() => setActiveTab('MONITOR')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer ${
-              activeTab === 'MONITOR' ? 'bg-slate-900 text-white shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+              activeTab === 'MONITOR'
+                ? 'bg-white text-emerald-800 shadow-xs font-bold border border-emerald-300'
+                : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200/60'
             }`}
           >
-            <Activity className="w-3.5 h-3.5 text-emerald-400" />
+            <Activity className="w-3.5 h-3.5 text-emerald-600" />
             <span>Live Monitor Terminal</span>
           </button>
         )}
@@ -643,80 +651,82 @@ export const AdminLiveTestManager: React.FC = () => {
         </div>
       )}
 
-      {/* VIEW 3: LIVE MONITORING & PROCTORING TERMINAL */}
+      {/* VIEW 3: LIVE MONITORING & PROCTORING TERMINAL (Refined Structured SaaS Card) */}
       {activeTab === 'MONITOR' && monitorData && (
         <div className="space-y-4">
-          <div className="bg-slate-900 text-white rounded-xl p-5 shadow-md flex items-center justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                  {monitorData.exam} Live Terminal
-                </span>
-                <span className="text-xs text-slate-400 font-mono">
-                  Server Clock: {monitorData.serverTimeIST}
-                </span>
+          <div className="bg-white rounded-xl border border-zinc-200/90 shadow-xs border-l-4 border-l-emerald-700 overflow-hidden">
+            <div className="bg-slate-50/80 border-b border-zinc-200/80 p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    {monitorData.exam} Live Terminal
+                  </span>
+                  <span className="text-xs text-zinc-500 font-mono tabular-nums">
+                    Server Clock: <span className="font-semibold text-zinc-800">{monitorData.serverTimeIST}</span>
+                  </span>
+                </div>
+                <h2 className="text-base font-extrabold text-zinc-950 tracking-[-0.02em]">{monitorData.title}</h2>
+                <p className="text-xs text-zinc-500 font-mono tabular-nums">
+                  Start: <span className="text-zinc-700 font-medium">{monitorData.startAtIST}</span> • Scheduled End: <span className="text-zinc-700 font-medium">{monitorData.endAtIST}</span>
+                </p>
               </div>
-              <h2 className="text-base font-extrabold text-white">{monitorData.title}</h2>
-              <p className="text-xs text-slate-400 font-mono">
-                Start: {monitorData.startAtIST} • Scheduled End: {monitorData.endAtIST}
-              </p>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={refreshMonitor}
-                disabled={monitorLoading}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 ${monitorLoading ? 'animate-spin' : ''}`} />
-                <span>Refresh Telemetry</span>
-              </button>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  onClick={refreshMonitor}
+                  disabled={monitorLoading}
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-200/90 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${monitorLoading ? 'animate-spin' : ''}`} />
+                  <span>Refresh Telemetry</span>
+                </button>
 
-              <button
-                onClick={() => handlePublishResults(monitorData.scheduleId)}
-                className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition cursor-pointer"
-              >
-                Publish Results & Leaderboard
-              </button>
+                <button
+                  onClick={() => handlePublishResults(monitorData.scheduleId)}
+                  className="px-4 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition cursor-pointer"
+                >
+                  Publish Results & Leaderboard
+                </button>
 
-              <button
-                onClick={() => {
-                  setCancelTargetId(monitorData.scheduleId);
-                  setShowCancelModal(true);
-                }}
-                className="px-3 py-1.5 rounded-lg bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold transition cursor-pointer"
-              >
-                Emergency Cancel
-              </button>
+                <button
+                  onClick={() => {
+                    setCancelTargetId(monitorData.scheduleId);
+                    setShowCancelModal(true);
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold border border-rose-200 transition cursor-pointer"
+                >
+                  Emergency Cancel
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Telemetry Metric Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Registered</span>
-              <span className="text-2xl font-black text-slate-900">{monitorData.metrics.registeredCount}</span>
+            <div className="bg-white rounded-xl border border-zinc-200/90 p-4 shadow-xs">
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">Registered</span>
+              <span className="text-2xl font-black text-zinc-900 tabular-nums">{monitorData.metrics.registeredCount}</span>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Joined Exam</span>
-              <span className="text-2xl font-black text-blue-600">{monitorData.metrics.joinedCount}</span>
-              <span className="text-[10px] text-slate-400 block mt-0.5">{monitorData.metrics.participationRatePct}% turnout</span>
+            <div className="bg-white rounded-xl border border-zinc-200/90 p-4 shadow-xs">
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">Joined Exam</span>
+              <span className="text-2xl font-black text-blue-600 tabular-nums">{monitorData.metrics.joinedCount}</span>
+              <span className="text-[10px] text-zinc-400 block mt-0.5 tabular-nums">{monitorData.metrics.participationRatePct}% turnout</span>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Attempting Now</span>
-              <span className="text-2xl font-black text-emerald-600 animate-pulse">{monitorData.metrics.inProgressCount}</span>
+            <div className="bg-white rounded-xl border border-zinc-200/90 p-4 shadow-xs">
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">Attempting Now</span>
+              <span className="text-2xl font-black text-emerald-600 animate-pulse tabular-nums">{monitorData.metrics.inProgressCount}</span>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Submitted</span>
-              <span className="text-2xl font-black text-indigo-700">{monitorData.metrics.submittedCount}</span>
+            <div className="bg-white rounded-xl border border-zinc-200/90 p-4 shadow-xs">
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">Submitted</span>
+              <span className="text-2xl font-black text-indigo-700 tabular-nums">{monitorData.metrics.submittedCount}</span>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Not Joined Yet</span>
-              <span className="text-2xl font-black text-amber-700">{monitorData.metrics.notStartedCount}</span>
+            <div className="bg-white rounded-xl border border-zinc-200/90 p-4 shadow-xs">
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">Not Joined Yet</span>
+              <span className="text-2xl font-black text-amber-700 tabular-nums">{monitorData.metrics.notStartedCount}</span>
             </div>
           </div>
 
