@@ -203,6 +203,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         // Opens the authentic Google account chooser popup
         tokenClient.requestAccessToken({ prompt: 'select_account' });
+
+        // Auto-reset loading state after 6 seconds if popup is closed or blocked
+        setTimeout(() => {
+          setGoogleLoading(false);
+        }, 6000);
         return;
       } catch (err: any) {
         console.warn('Error invoking Google token client:', err);
@@ -378,6 +383,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               )}
               <span>Continue with Google</span>
             </button>
+
+            <div className="text-center pt-0.5">
+              <button
+                type="button"
+                onClick={() => setShowGoogleChooser(true)}
+                className="text-[11px] text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-medium inline-flex items-center gap-1"
+              >
+                <span>Facing Google popup error (Origin Mismatch)? Click here</span>
+              </button>
+            </div>
           </div>
 
           {/* Divider */}
