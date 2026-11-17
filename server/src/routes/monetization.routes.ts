@@ -18,16 +18,14 @@ export function getCashfreeConfig() {
   const secretKey = String(process.env.CASHFREE_SECRET_KEY || '')
     .replace(/^["']|["']$/g, '')
     .trim();
-  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || '')
+  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || 'PRODUCTION')
     .replace(/^["']|["']$/g, '')
     .trim()
     .toUpperCase();
 
-  // Automatic Environment Detection: Cashfree Sandbox keys start with 'TEST' (e.g. TEST1136...)
-  // Production keys do NOT start with TEST and route to https://api.cashfree.com/pg
-  const isTestKey = appId.startsWith('TEST') || appId.startsWith('test') || rawEnv === 'TEST' || rawEnv === 'SANDBOX';
-  const isProduction = !isTestKey;
-  const baseUrl = isProduction ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
+  // Strictly Live Production Gateway: Explicitly set to https://api.cashfree.com/pg
+  // All sandbox.cashfree.com URLs and test fallbacks are removed.
+  const baseUrl = 'https://api.cashfree.com/pg';
   const isMasked = secretKey.includes('xxxxxxxx');
   const isLive = Boolean(
     appId &&
@@ -40,11 +38,11 @@ export function getCashfreeConfig() {
   return {
     appId,
     secretKey,
-    rawEnv,
-    environment: isProduction ? 'PRODUCTION' : 'TEST',
-    mode: (isProduction ? 'production' : 'sandbox') as 'production' | 'sandbox',
+    rawEnv: 'PRODUCTION',
+    environment: 'PRODUCTION',
+    mode: 'production' as const,
     baseUrl,
-    isProduction,
+    isProduction: true,
     isLive,
     isMasked,
   };

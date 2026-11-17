@@ -291,10 +291,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         throw new Error('Cashfree official checkout SDK failed to load. Please check your connection and retry.');
       }
 
-      // Automatically synchronizes mode with the environment used to create the session
-      const targetMode = order.cashfreeMode === 'sandbox' ? 'sandbox' : 'production';
+      // Strictly Production Mode: Live Cashfree modal checkout with real UPI QR & intent
       const cashfree = (window as any).Cashfree({
-        mode: targetMode,
+        mode: 'production',
       });
 
       setStatusMessage({
