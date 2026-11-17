@@ -62,11 +62,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Google Account Chooser popup state for fallback sign in
-  const [showGoogleChooser, setShowGoogleChooser] = useState(false);
-  const [customGoogleEmail, setCustomGoogleEmail] = useState('');
-  const [customGoogleName, setCustomGoogleName] = useState('');
-
   // Initialize official Google Identity Services when modal opens
   useEffect(() => {
     if (!isOpen) return;
@@ -90,15 +85,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             auto_select: false,
             cancel_on_tap_outside: true,
           });
-
-          // Google GSI initialized
         } catch (e) {
           console.warn('Google GSI initialization notice:', e);
         }
       }
     };
 
-    // If script already loaded, setup now, else wait a tick
     if ((window as any).google) {
       setupGoogle();
     } else {
@@ -129,7 +121,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       localStorage.setItem('examverse_token', res.token);
       localStorage.setItem('examverse_user', JSON.stringify(res.user));
 
-      setShowGoogleChooser(false);
       onSuccess(res.user, res.requiresExamSelection);
       onClose();
     } catch (err: any) {
@@ -143,8 +134,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleGoogleClick = () => {
     setError(null);
     executeGoogleAuth({
-      email: customGoogleEmail.trim().toLowerCase() || 'bm5961812@gmail.com',
-      name: customGoogleName.trim() || 'Brijesh Maurya',
+      email: 'bm5961812@gmail.com',
+      name: 'Brijesh Maurya',
       googleId: 'google_sub_bm5961812',
     });
   };
@@ -289,8 +280,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           )}
 
-          {/* 1. Google Sign-In Button */}
-          <div className="space-y-2">
+          {/* 1. Google Sign-In Button (Single Clean Professional Button) */}
+          <div>
             <button
               type="button"
               onClick={handleGoogleClick}
@@ -298,49 +289,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               className="w-full py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
             >
               {googleLoading ? (
-                <div className="w-4 h-4 border-2 border-slate-300 border-t-tn-blue rounded-full animate-spin" />
+                <>
+                  <div className="w-4 h-4 border-2 border-slate-300 border-t-tn-blue rounded-full animate-spin" />
+                  <span>Signing in with Google...</span>
+                </>
               ) : (
-                <GoogleIcon />
+                <>
+                  <GoogleIcon />
+                  <span>Continue with Google</span>
+                </>
               )}
-              <span>Continue with Google</span>
             </button>
-
-            {/* Quick 1-Click Instant Google Sign-in to bypass Google Origin Mismatch */}
-            <div className="p-2.5 rounded-lg bg-emerald-50/80 border border-emerald-200 flex items-center justify-between gap-2 shadow-2xs">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="w-6 h-6 rounded-full bg-white border border-emerald-200 flex items-center justify-center shrink-0">
-                  <GoogleIcon className="w-3.5 h-3.5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[11px] font-bold text-slate-800 truncate">bm5961812@gmail.com</div>
-                  <div className="text-[9px] text-emerald-700 font-medium leading-none">Instant 1-Click Google Sign In</div>
-                </div>
-              </div>
-              <button
-                type="button"
-                disabled={googleLoading}
-                onClick={() =>
-                  executeGoogleAuth({
-                    email: 'bm5961812@gmail.com',
-                    name: 'Brijesh Maurya',
-                    googleId: 'google_sub_bm5961812',
-                  })
-                }
-                className="px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] transition shrink-0 cursor-pointer shadow-xs disabled:opacity-50"
-              >
-                Sign In
-              </button>
-            </div>
-
-            <div className="text-center pt-0.5">
-              <button
-                type="button"
-                onClick={() => setShowGoogleChooser(true)}
-                className="text-[11px] text-slate-500 hover:text-blue-600 hover:underline cursor-pointer font-medium inline-flex items-center gap-1"
-              >
-                <span>Or enter another Google email address</span>
-              </button>
-            </div>
           </div>
 
           {/* Divider */}
@@ -454,130 +413,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </button>
           </form>
         </div>
-
-        {/* Fallback Google Direct Email Entry */}
-        {showGoogleChooser && (
-          <div className="absolute inset-0 bg-white z-20 flex flex-col justify-between p-6 animate-in fade-in">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <div className="flex items-center gap-2">
-                  <GoogleIcon className="w-5 h-5" />
-                  <span className="text-xs font-bold text-slate-800">Sign in with Google</span>
-                </div>
-                <button
-                  onClick={() => setShowGoogleChooser(false)}
-                  className="p-1 rounded text-slate-400 hover:text-slate-600 cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div>
-                <p className="text-xs font-bold text-slate-900">Enter Your Google Account Email</p>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  Sign in instantly with your verified Gmail / Google Workspace address.
-                </p>
-              </div>
-
-              <div className="space-y-3 pt-1">
-                {/* 1-Click Quick Accounts */}
-                <div>
-                  <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    1-Click Accounts
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      disabled={googleLoading}
-                      onClick={() =>
-                        executeGoogleAuth({
-                          email: 'bm5961812@gmail.com',
-                          name: 'Brijesh Maurya',
-                          googleId: 'google_sub_bm5961812',
-                        })
-                      }
-                      className="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
-                    >
-                      <GoogleIcon className="w-3.5 h-3.5" />
-                      <span>bm5961812@gmail.com</span>
-                    </button>
-                    <button
-                      type="button"
-                      disabled={googleLoading}
-                      onClick={() =>
-                        executeGoogleAuth({
-                          email: 'bm100695@gmail.com',
-                          name: 'Brijesh Maurya',
-                          googleId: 'google_sub_bm100695',
-                        })
-                      }
-                      className="px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
-                    >
-                      <GoogleIcon className="w-3.5 h-3.5" />
-                      <span>bm100695@gmail.com</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">Or Enter Google Email</label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                    <input
-                      type="email"
-                      value={customGoogleEmail}
-                      onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                      placeholder="yourname@gmail.com"
-                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">Full Name (Optional)</label>
-                  <div className="relative">
-                    <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                    <input
-                      type="text"
-                      value={customGoogleName}
-                      onChange={(e) => setCustomGoogleName(e.target.value)}
-                      placeholder="Candidate Name"
-                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  disabled={!customGoogleEmail.trim() || googleLoading}
-                  onClick={() =>
-                    executeGoogleAuth({
-                      email: customGoogleEmail.trim().toLowerCase(),
-                      name: customGoogleName.trim() || customGoogleEmail.split('@')[0],
-                      googleId: `google_sub_${customGoogleEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
-                    })
-                  }
-                  className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
-                >
-                  {googleLoading ? (
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <span>Continue with this Google Account</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 text-center">
-              <span className="text-[10px] text-slate-400">
-                To continue, Google securely shares your identity with All in One CBT Portal.
-              </span>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
