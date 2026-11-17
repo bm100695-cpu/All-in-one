@@ -470,7 +470,7 @@ export const AdminPricingManager: React.FC = () => {
         <div className="p-3.5 rounded-xl bg-white border border-emerald-100 shadow-xs space-y-1">
           <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Total Revenue</span>
           <div className="text-xl font-extrabold text-emerald-800">₹{totalRevenue}</div>
-          <span className="text-[10px] text-emerald-700">Verified Razorpay</span>
+          <span className="text-[10px] text-emerald-700">Verified Cashfree</span>
         </div>
 
         <div className="p-3.5 rounded-xl bg-white border border-purple-100 shadow-xs space-y-1">
@@ -920,7 +920,7 @@ export const AdminPricingManager: React.FC = () => {
           <div>
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <Receipt className="w-4 h-4 text-slate-500" />
-              <span>Razorpay Verified Payment Transactions & Refunds</span>
+              <span>Cashfree Verified Payment Transactions & Refunds</span>
             </h3>
             <p className="text-xs text-slate-500">
               Official backend signature verified transactions. Includes automated one-click 7-day refund processing.
@@ -961,7 +961,7 @@ export const AdminPricingManager: React.FC = () => {
                           <div className="text-[11px] text-slate-400">{p.user?.email}</div>
                         </td>
                         <td className="p-3 font-extrabold text-slate-900">₹{p.amount}</td>
-                        <td className="p-3 uppercase font-mono text-[11px]">{p.method || 'Razorpay'}</td>
+                        <td className="p-3 uppercase font-mono text-[11px]">{p.method || 'Cashfree'}</td>
                         <td className="p-3">
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] font-bold ${

@@ -75,7 +75,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, isOpen = true, onC
               </p>
               <h3 className="font-bold text-slate-900">2. Payment Information Security</h3>
               <p>
-                All in One processes subscription payments securely via Razorpay. All in One never stores complete credit/debit card numbers, CVVs, or netbanking passwords on our servers. All transactions are protected by bank-grade 256-bit encryption.
+                All in One processes subscription payments securely via Cashfree Payments Gateway. All in One never stores complete credit/debit card numbers, CVVs, or netbanking passwords on our servers. All transactions are protected by bank-grade 256-bit encryption.
               </p>
               <h3 className="font-bold text-slate-900">3. Data Sharing & Third Parties</h3>
               <p>
@@ -97,11 +97,11 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, isOpen = true, onC
               </p>
               <h3 className="font-bold text-slate-900">2. Refund Process</h3>
               <p>
-                To request a refund, simply send an email to <strong className="text-tn-blue font-mono">refunds@allinone.edu</strong> or contact your student advisor with your Razorpay payment ID (e.g. <code>pay_...</code>) or order ID.
+                To request a refund, simply send an email to <strong className="text-tn-blue font-mono">refunds@allinone.edu</strong> or contact your student advisor with your Cashfree payment ID or order ID.
               </p>
               <h3 className="font-bold text-slate-900">3. Credit Timeline</h3>
               <p>
-                Upon review, verified refunds are initiated immediately and credited back to the original payment source (UPI, Credit/Debit card, or Netbanking) within 5 to 7 business days, in accordance with standard RBI and Razorpay processing guidelines.
+                Upon review, verified refunds are initiated immediately and credited back to the original payment source (UPI, Credit/Debit card, or Netbanking) within 5 to 7 business days, in accordance with standard RBI and Cashfree processing guidelines.
               </p>
               <h3 className="font-bold text-slate-900">4. Access Revocation</h3>
               <p>

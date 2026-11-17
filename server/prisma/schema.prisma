@@ -436,8 +436,8 @@ model Payment {
   amount          Float
   currency        String           @default("INR")
   status          String           @default("PENDING") // PENDING, SUCCESS, FAILED, REFUNDED
-  orderId         String           @unique // Razorpay Order ID (e.g. order_xxx)
-  paymentId       String?          @unique // Razorpay Payment ID (e.g. pay_xxx)
+  orderId         String           @unique // Cashfree / Gateway Order ID (e.g. order_xxx)
+  paymentId       String?          @unique // Cashfree / Gateway Payment ID (e.g. cf_xxx)
   signature       String?
   method          String?          // upi, card, netbanking, wallet
   receipt         String
