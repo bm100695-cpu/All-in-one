@@ -1,6 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
 import examRoutes from './routes/exam.routes';
 import testRoutes from './routes/test.routes';
@@ -12,8 +14,6 @@ import monetizationRoutes from './routes/monetization.routes';
 import uptetRoutes from './routes/uptet.routes';
 import supertetRoutes from './routes/supertet.routes';
 import liveTestRoutes from './routes/live_test.routes';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

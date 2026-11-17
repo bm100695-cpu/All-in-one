@@ -1,25 +1,50 @@
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
 import { prisma } from '../prisma';
 import { authenticate, requireRole } from '../middleware/auth';
+
+dotenv.config();
 
 const router = Router();
 
 const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
 
-// Official Cashfree PG Configuration (Read from environment variables)
-const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || '';
-const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY || '';
-const CASHFREE_ENVIRONMENT = (process.env.CASHFREE_ENVIRONMENT || 'TEST').toUpperCase();
-const isCashfreeLive = Boolean(
-  CASHFREE_APP_ID &&
-  CASHFREE_SECRET_KEY &&
-  !CASHFREE_APP_ID.includes('placeholder')
-);
-const CASHFREE_BASE_URL =
-  CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION'
-    ? 'https://api.cashfree.com/pg'
-    : 'https://sandbox.cashfree.com/pg';
+// Helper to dynamically read official Cashfree PG Configuration from process.env on every request
+export function getCashfreeConfig() {
+  const appId = String(process.env.CASHFREE_APP_ID || '')
+    .replace(/^["']|["']$/g, '')
+    .trim();
+  const secretKey = String(process.env.CASHFREE_SECRET_KEY || '')
+    .replace(/^["']|["']$/g, '')
+    .trim();
+  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || 'PRODUCTION')
+    .replace(/^["']|["']$/g, '')
+    .trim()
+    .toUpperCase();
+  const isProduction = rawEnv === 'PROD' || rawEnv === 'PRODUCTION';
+  const baseUrl = isProduction ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
+  const isMasked = secretKey.includes('xxxxxxxx');
+  const isLive = Boolean(
+    appId &&
+    secretKey &&
+    !appId.includes('placeholder') &&
+    !secretKey.includes('placeholder') &&
+    !isMasked
+  );
+
+  return {
+    appId,
+    secretKey,
+    rawEnv,
+    environment: isProduction ? 'PRODUCTION' : 'TEST',
+    mode: (isProduction ? 'production' : 'sandbox') as 'production' | 'sandbox',
+    baseUrl,
+    isProduction,
+    isLive,
+    isMasked,
+  };
+}
 
 // Cashfree Order Creation Helper (Official API version 2022-09-01)
 async function createCashfreeOrder(params: {
@@ -38,7 +63,18 @@ async function createCashfreeOrder(params: {
   };
   orderNote?: string;
 }): Promise<{ paymentSessionId: string; orderId: string; cfOrderId?: string }> {
-  const url = `${CASHFREE_BASE_URL}/orders`;
+  const config = getCashfreeConfig();
+
+  if (!config.isLive) {
+    if (config.isMasked) {
+      throw new Error(
+        'CASHFREE_SECRET_KEY in server/.env is currently masked with "xxxx". Please set your unmasked production secret key.'
+      );
+    }
+    throw new Error('Cashfree credentials (CASHFREE_APP_ID or CASHFREE_SECRET_KEY) are missing in environment variables.');
+  }
+
+  const url = `${config.baseUrl}/orders`;
 
   const cleanCustomerId = (params.customerDetails.customerId || 'cust_guest')
     .replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -67,11 +103,13 @@ async function createCashfreeOrder(params: {
     };
   }
 
+  console.log(`[Cashfree API] POST ${url} | Order: ${params.orderId} | Amount: ₹${params.orderAmount} | AppId: ${config.appId.slice(0, 8)}... | API-Version: 2022-09-01`);
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'x-client-id': CASHFREE_APP_ID,
-      'x-client-secret': CASHFREE_SECRET_KEY,
+      'x-client-id': config.appId,
+      'x-client-secret': config.secretKey,
       'x-api-version': '2022-09-01',
       'Content-Type': 'application/json',
     },
@@ -83,13 +121,17 @@ async function createCashfreeOrder(params: {
   try {
     data = JSON.parse(text);
   } catch {
+    console.error(`[Cashfree API Error] Non-JSON response (${response.status}):`, text);
     throw new Error(`Cashfree gateway returned non-JSON response (${response.status})`);
   }
 
   if (!response.ok || !data.payment_session_id) {
-    console.error('Cashfree Create Order Error:', response.status, data);
-    throw new Error(data?.message || `Cashfree order creation failed with status ${response.status}`);
+    console.error(`[Cashfree API Error] Status ${response.status}:`, data);
+    const errorMsg = data?.message || `Cashfree order creation failed with status ${response.status}`;
+    throw new Error(errorMsg);
   }
+
+  console.log(`[Cashfree API Success] Order ${params.orderId} created. Session: ${data.payment_session_id.slice(0, 15)}...`);
 
   return {
     paymentSessionId: data.payment_session_id,
@@ -100,12 +142,17 @@ async function createCashfreeOrder(params: {
 
 // Cashfree Order Status Fetch Helper (Official API version 2022-09-01)
 async function getCashfreeOrder(orderId: string): Promise<any> {
-  const url = `${CASHFREE_BASE_URL}/orders/${orderId}`;
+  const config = getCashfreeConfig();
+  if (!config.isLive) {
+    throw new Error('Cashfree credentials missing for order status check.');
+  }
+
+  const url = `${config.baseUrl}/orders/${encodeURIComponent(orderId)}`;
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'x-client-id': CASHFREE_APP_ID,
-      'x-client-secret': CASHFREE_SECRET_KEY,
+      'x-client-id': config.appId,
+      'x-client-secret': config.secretKey,
       'x-api-version': '2022-09-01',
     },
   });
@@ -135,13 +182,15 @@ let activeMerchantUpiId = process.env.MERCHANT_UPI_ID || 'bm100695@okhdfcbank';
 
 // Public gateway configuration status
 router.get('/config', (_req: Request, res: Response) => {
+  const config = getCashfreeConfig();
   res.json({
     currency: DEFAULT_CURRENCY,
-    isGatewayConfigured: isCashfreeLive,
+    isGatewayConfigured: config.isLive,
     supportedCurrencies: ['INR', 'USD'],
     activeGateway: 'Cashfree',
-    cashfreeAppId: CASHFREE_APP_ID,
-    cashfreeMode: CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
+    cashfreeAppId: config.appId,
+    cashfreeMode: config.mode,
+    isMasked: config.isMasked,
     merchantUpiId: activeMerchantUpiId,
   });
 });
@@ -874,8 +923,9 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       let gatewayUsed = 'CASHFREE';
 
       const user = await prisma.user.findUnique({ where: { id: userId } });
+      const cfConfig = getCashfreeConfig();
 
-      if (isCashfreeLive) {
+      if (cfConfig.isLive) {
         try {
           const cfRes = await createCashfreeOrder({
             orderId,
@@ -893,12 +943,26 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           orderId = cfRes.orderId;
           gatewayUsed = 'CASHFREE';
         } catch (cfErr: any) {
-          console.warn('Cashfree live order creation notice for test, activating Cashfree UPI QR session:', cfErr.message);
+          console.error('[Cashfree Live Order Error for test]:', cfErr.message);
+          if (cfConfig.environment === 'PRODUCTION' || cfConfig.isLive) {
+            res.status(502).json({
+              error: `Cashfree gateway error: ${cfErr.message}`,
+              message: cfErr.message,
+            });
+            return;
+          }
           paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
           orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
           gatewayUsed = 'CASHFREE_TEST';
         }
       } else {
+        if (cfConfig.isMasked) {
+          res.status(502).json({
+            error: 'Cashfree Secret Key is currently masked with "xxxx" in server/.env. Please configure your unmasked Cashfree production credentials.',
+            message: 'Cashfree credentials masked. Please set valid production secret key in .env.',
+          });
+          return;
+        }
         paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
         orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
         gatewayUsed = 'CASHFREE_TEST';
@@ -936,7 +1000,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         orderId,
         payment_session_id: paymentSessionId,
         paymentSessionId,
-        cashfreeMode: CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
+        cashfreeMode: cfConfig.mode,
         gateway: gatewayUsed,
         amount: finalAmount,
         originalPrice,
@@ -948,7 +1012,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         description: `Unlock complete access & detailed analytics for ${test.title}`,
         receipt,
         paymentDbId: payment.id,
-        isLiveGateway: true,
+        isLiveGateway: cfConfig.isLive,
       });
       return;
     }
@@ -1080,8 +1144,9 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     let gatewayUsed = 'CASHFREE';
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
+    const cfConfig = getCashfreeConfig();
 
-    if (isCashfreeLive) {
+    if (cfConfig.isLive) {
       try {
         const cfRes = await createCashfreeOrder({
           orderId,
@@ -1099,12 +1164,26 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         orderId = cfRes.orderId;
         gatewayUsed = 'CASHFREE';
       } catch (cfErr: any) {
-        console.warn('Cashfree live order creation notice for plan, activating Cashfree UPI QR session:', cfErr.message);
+        console.error('[Cashfree Live Order Error for plan]:', cfErr.message);
+        if (cfConfig.environment === 'PRODUCTION' || cfConfig.isLive) {
+          res.status(502).json({
+            error: `Cashfree gateway error: ${cfErr.message}`,
+            message: cfErr.message,
+          });
+          return;
+        }
         paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
         orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
         gatewayUsed = 'CASHFREE_TEST';
       }
     } else {
+      if (cfConfig.isMasked) {
+        res.status(502).json({
+          error: 'Cashfree Secret Key is currently masked with "xxxx" in server/.env. Please configure your unmasked Cashfree production credentials.',
+          message: 'Cashfree credentials masked. Please set valid production secret key in .env.',
+        });
+        return;
+      }
       paymentSessionId = `cf_mock_session_${Date.now()}_${userId.slice(-6)}`;
       orderId = `cf_test_${Date.now()}_${userId.slice(-6)}`;
       gatewayUsed = 'CASHFREE_TEST';
@@ -1142,7 +1221,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       orderId,
       payment_session_id: paymentSessionId,
       paymentSessionId,
-      cashfreeMode: CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
+      cashfreeMode: cfConfig.mode,
       gateway: gatewayUsed,
       amount: finalAmount,
       originalPrice,
@@ -1155,7 +1234,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       description: plan.description,
       receipt,
       paymentDbId: payment.id,
-      isLiveGateway: true,
+      isLiveGateway: cfConfig.isLive,
     });
   } catch (error) {
     console.error('Create order error:', error);
@@ -1208,20 +1287,21 @@ router.post('/verify-cashfree', authenticate, async (req: Request, res: Response
       return;
     }
 
-    // Fetch official order status from Cashfree REST API if in live production mode
+    // Fetch official order status from Cashfree REST API if in live mode
+    const cfConfig = getCashfreeConfig();
     const isTestOrder =
       orderId.startsWith('cf_test_') ||
       orderId.startsWith('cf_sub_test_') ||
       (payment.notesJson && payment.notesJson.includes('CASHFREE_TEST')) ||
-      (CASHFREE_ENVIRONMENT !== 'PROD' && CASHFREE_ENVIRONMENT !== 'PRODUCTION');
+      !cfConfig.isProduction;
 
     let cfOrder: any = null;
-    if (isCashfreeLive && !orderId.startsWith('cf_test_')) {
+    if (cfConfig.isLive && !orderId.startsWith('cf_test_')) {
       try {
         cfOrder = await getCashfreeOrder(orderId);
       } catch (cfErr: any) {
         console.warn('Cashfree order status check notice:', cfErr);
-        if (CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION') {
+        if (cfConfig.isProduction) {
           res.status(502).json({
             success: false,
             message: `Failed to verify with Cashfree gateway: ${cfErr.message}`,
