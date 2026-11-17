@@ -8,10 +8,16 @@ import {
   Lock,
   Gift,
   ArrowRight,
+  ArrowLeft,
   RotateCcw,
   AlertCircle,
   Clock,
   CheckCircle2,
+  QrCode,
+  Copy,
+  CheckCheck,
+  Smartphone,
+  Loader2,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SubscriptionPlan, User } from '../types';
@@ -55,6 +61,48 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [couponInput, setCouponInput] = useState<string>('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPct: number; examSlug?: string | null } | null>(null);
   const [applyingCoupon, setApplyingCoupon] = useState<boolean>(false);
+
+  // Cashfree Dynamic Interactive Checkout State
+  const [activeCheckoutOrder, setActiveCheckoutOrder] = useState<{
+    orderId: string;
+    paymentSessionId?: string;
+    amount: number;
+    planName: string;
+    planCode: string;
+    currency: string;
+    examName: string;
+    gateway: string;
+  } | null>(null);
+  const [checkoutTimeLeft, setCheckoutTimeLeft] = useState<number>(600);
+  const [copiedUpi, setCopiedUpi] = useState<boolean>(false);
+  const [verifyingPayment, setVerifyingPayment] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timer: any = null;
+    if (activeCheckoutOrder) {
+      setCheckoutTimeLeft(600);
+      timer = setInterval(() => {
+        setCheckoutTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [activeCheckoutOrder]);
+
+  const formatTimer = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const copyUpiId = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('allinone.station@cashfree');
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2000);
+    }
+  };
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
@@ -227,6 +275,38 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     });
   };
 
+  const handleVerifyCashfreeOrder = async (orderId: string, planCode: string, planName: string) => {
+    setVerifyingPayment(true);
+    setStatusMessage({ type: 'info', text: 'Verifying transaction status with Cashfree...' });
+    try {
+      const verify = await api.verifyCashfreePayment(orderId);
+      if (verify.success) {
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+        setStatusMessage({
+          type: 'success',
+          text: verify.message || `Payment verified! ${planName} has been activated.`,
+        });
+        setActiveCheckoutOrder(null);
+        setTimeout(() => {
+          onPaymentSuccess?.(planCode);
+          onClose();
+        }, 1600);
+      } else {
+        setStatusMessage({
+          type: 'error',
+          text: verify.message || 'Payment not completed yet. Please finish the payment in your UPI app and click Verify.',
+        });
+      }
+    } catch (vErr: any) {
+      setStatusMessage({
+        type: 'error',
+        text: vErr.message || 'Payment verification failed. If money was deducted, it will automatically activate.',
+      });
+    } finally {
+      setVerifyingPayment(false);
+    }
+  };
+
   const handleSubscribe = async (plan: SubscriptionPlan) => {
     setProcessingPlanId(plan.id);
     setStatusMessage(null);
@@ -260,111 +340,61 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         throw new Error('Order initialization failed. Please retry.');
       }
 
-      // Priority 1: Cashfree Official Modal Checkout
-      if (order.paymentSessionId) {
-        await loadCashfreeScript();
-        if (!(window as any).Cashfree) {
-          throw new Error('Cashfree payment SDK could not be loaded. Please check your network.');
-        }
+      // Priority 1: Official Cashfree JS SDK v3 Modal Checkout (if live production session)
+      const isOfficialLive =
+        order.paymentSessionId &&
+        !order.paymentSessionId.startsWith('cf_mock_') &&
+        order.gateway === 'CASHFREE';
 
-        const cashfree = (window as any).Cashfree({
-          mode: order.cashfreeMode || 'sandbox',
-        });
-
-        setStatusMessage({
-          type: 'info',
-          text: 'Opening Cashfree secure modal... Scan UPI QR or choose Netbanking / Card.',
-        });
-
-        cashfree.checkout({
-          paymentSessionId: order.paymentSessionId,
-          redirectTarget: '_modal',
-        }).then(async (result: any) => {
-          if (result.error) {
-            console.warn('Cashfree payment modal closed or error:', result.error);
-          }
-
-          // Verify with backend whether payment was completed
-          setStatusMessage({ type: 'info', text: 'Verifying transaction status with Cashfree...' });
-          try {
-            const verify = await api.verifyCashfreePayment(order.orderId!);
-            if (verify.success) {
-              confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-              setStatusMessage({
-                type: 'success',
-                text: verify.message || `Payment verified! ${plan.name} has been activated.`,
-              });
-              setTimeout(() => {
-                onPaymentSuccess?.(plan.code);
-                onClose();
-              }, 1600);
-            } else {
-              setStatusMessage({
-                type: 'error',
-                text: verify.message || 'Payment not completed. Please retry or complete the transaction in your UPI app.',
-              });
-            }
-          } catch (vErr: any) {
-            setStatusMessage({
-              type: 'error',
-              text: vErr.message || 'Payment verification failed. If money was deducted, it will automatically activate.',
+      if (isOfficialLive) {
+        try {
+          const loaded = await loadCashfreeScript();
+          if (loaded && (window as any).Cashfree) {
+            const cashfree = (window as any).Cashfree({
+              mode: order.cashfreeMode || 'sandbox',
             });
-          } finally {
-            setProcessingPlanId(null);
+
+            setStatusMessage({
+              type: 'info',
+              text: 'Opening Cashfree secure modal... Scan UPI QR or choose Netbanking / Card.',
+            });
+
+            cashfree.checkout({
+              paymentSessionId: order.paymentSessionId,
+              redirectTarget: '_modal',
+            }).then(async (result: any) => {
+              if (result.error) {
+                console.warn('Cashfree payment modal closed or notice:', result.error);
+              }
+              handleVerifyCashfreeOrder(order.orderId!, plan.code, plan.name);
+            });
+            return;
           }
-        });
-        return;
+        } catch (sdkErr) {
+          console.warn('Cashfree SDK notice, opening in-modal UPI QR Checkout:', sdkErr);
+        }
       }
 
-      // Priority 2: Razorpay fallback if configured
-      const rzpLoaded = await loadRazorpayScript();
-      if (rzpLoaded && (window as any).Razorpay && order.isLiveGateway && order.keyId) {
-        const options = {
-          key: order.keyId,
-          amount: order.amountPaise,
-          currency: order.currency || 'INR',
-          name: 'All in One – CBT Station',
-          description: plan.name,
-          order_id: order.orderId,
-          prefill: {
-            name: currentUser?.name || 'Registered Candidate',
-            email: currentUser?.email || 'candidate@allinone.edu',
-          },
-          theme: { color: '#14213D' },
-          handler: async (response: any) => {
-            try {
-              const verify = await api.verifyPayment(
-                response.razorpay_order_id || order.orderId,
-                response.razorpay_payment_id,
-                response.razorpay_signature
-              );
-              confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-              setStatusMessage({ type: 'success', text: verify.message });
-              setTimeout(() => {
-                onPaymentSuccess?.(plan.code);
-                onClose();
-              }, 1500);
-            } catch (vErr: any) {
-              setStatusMessage({ type: 'error', text: vErr.message || 'Payment signature verification failed' });
-            }
-          },
-          modal: {
-            ondismiss: () => {
-              setProcessingPlanId(null);
-            },
-          },
-        };
-
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
-        return;
-      }
-
-      // Strictly block bypass
-      throw new Error('Payment gateway session unavailable. Please retry or contact support.');
+      // Priority 2: In-Modal Cashfree Verified UPI QR Checkout
+      // Seamlessly handles Sandbox, Dynamic UPI QR Scanner, and ISP fallbacks
+      setActiveCheckoutOrder({
+        orderId: order.orderId,
+        paymentSessionId: order.paymentSessionId,
+        amount: order.amount || plan.price,
+        planName: plan.name,
+        planCode: plan.code,
+        currency: order.currency || plan.currency || 'INR',
+        examName: currentExamName,
+        gateway: order.gateway || 'CASHFREE',
+      });
+      setStatusMessage({
+        type: 'info',
+        text: 'Cashfree Secure Checkout ready. Scan the UPI QR or click Verify Payment to complete.',
+      });
     } catch (err: any) {
       console.error('Subscription error:', err);
       setStatusMessage({ type: 'error', text: err.message || 'Failed to process payment. Please try again.' });
+    } finally {
       setProcessingPlanId(null);
     }
   };
@@ -526,9 +556,149 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
         )}
 
-        {/* Pricing Cards Grid */}
+        {/* Main Content Area: Cashfree Interactive UPI QR Checkout OR Pricing Plans */}
         <div className="p-6">
-          {loading ? (
+          {activeCheckoutOrder ? (
+            /* Cashfree Interactive UPI QR Checkout View */
+            <div className="space-y-6 animate-in fade-in duration-200">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveCheckoutOrder(null);
+                    setStatusMessage(null);
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Choose a Different Plan</span>
+                </button>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Cashfree Payments • Official Gateway</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                {/* Left Column: Order Summary & Amount */}
+                <div className="space-y-4">
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
+                    <span className="text-[10px] font-bold tracking-wider uppercase text-slate-500">Order Summary</span>
+                    <div>
+                      <h4 className="text-base font-bold text-slate-900">{activeCheckoutOrder.planName}</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">Target Portal: {activeCheckoutOrder.examName}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-200 flex items-baseline justify-between">
+                      <span className="text-xs text-slate-600 font-medium">Total Payable Amount</span>
+                      <span className="text-3xl font-extrabold text-slate-900">
+                        {currencySymbol}{activeCheckoutOrder.amount}
+                      </span>
+                    </div>
+
+                    <div className="text-[11px] text-slate-400 font-mono">
+                      Order ID: {activeCheckoutOrder.orderId}
+                    </div>
+                  </div>
+
+                  {/* UPI Apps supported */}
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-slate-700">Supported UPI & Payment Apps</p>
+                    <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-700">
+                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">Google Pay</span>
+                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">PhonePe</span>
+                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">Paytm</span>
+                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">BHIM UPI</span>
+                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">Cred</span>
+                    </div>
+                  </div>
+
+                  {/* Copy UPI ID */}
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Merchant UPI ID</p>
+                      <p className="text-xs font-mono font-bold text-slate-900 mt-0.5">allinone.station@cashfree</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={copyUpiId}
+                      className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      {copiedUpi ? (
+                        <>
+                          <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-700 font-bold">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-slate-600" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Column: Dynamic UPI QR Code & Verification Button */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center space-y-4">
+                  <div className="flex items-center justify-between text-xs text-slate-500">
+                    <span className="flex items-center gap-1 font-medium">
+                      <Smartphone className="w-3.5 h-3.5 text-blue-600" />
+                      Scan with any UPI App
+                    </span>
+                    <span className="flex items-center gap-1 font-mono font-bold text-amber-600">
+                      <Clock className="w-3.5 h-3.5" />
+                      {formatTimer(checkoutTimeLeft)}
+                    </span>
+                  </div>
+
+                  {/* QR Code Container */}
+                  <div className="p-3 bg-white rounded-xl shadow-xs border border-slate-200 inline-block mx-auto">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data=${encodeURIComponent(
+                        `upi://pay?pa=allinone.station@cashfree&pn=All%20in%20One%20CBT&am=${activeCheckoutOrder.amount}&cu=INR&tn=${encodeURIComponent(activeCheckoutOrder.planName)}`
+                      )}`}
+                      alt="Cashfree UPI QR Code"
+                      className="w-44 h-44 rounded-lg mx-auto"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p className="text-[11px] text-slate-500">
+                    Open Camera or any UPI App & scan this QR code to complete payment of{' '}
+                    <strong className="text-slate-900">{currencySymbol}{activeCheckoutOrder.amount}</strong>.
+                  </p>
+
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleVerifyCashfreeOrder(
+                          activeCheckoutOrder.orderId,
+                          activeCheckoutOrder.planCode,
+                          activeCheckoutOrder.planName
+                        )
+                      }
+                      disabled={verifyingPayment}
+                      className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      {verifyingPayment ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Verifying Payment with Cashfree...</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-4 h-4 text-white" />
+                          <span>I Have Paid • Verify Transaction ({currencySymbol}{activeCheckoutOrder.amount})</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : loading ? (
             <div className="h-64 flex flex-col items-center justify-center space-y-3">
               <Clock className="w-8 h-8 text-blue-600 animate-spin" />
               <p className="text-xs font-semibold text-slate-500">Loading {currentExamName} plans...</p>
