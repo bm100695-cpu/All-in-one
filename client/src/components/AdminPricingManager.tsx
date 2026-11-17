@@ -110,45 +110,55 @@ export const AdminPricingManager: React.FC = () => {
         api.getAdminAuditLogs({ limit: 50 }).catch(() => ({ auditLogs: [], total: 0 })),
       ]);
 
-      if (ovData) setOverview(ovData);
+      if (ovData) {
+        if (Array.isArray(ovData.plans)) {
+          ovData.plans = ovData.plans.map((p: any) => ({
+            ...p,
+            priceINR: Number(p.priceINR ?? p.price ?? 0),
+            originalPriceINR: Number(p.originalPriceINR ?? p.originalPrice ?? p.price ?? 0),
+            discountPercent: Number(p.discountPercent ?? p.discountPct ?? 0),
+            isActive: p.isActive !== undefined ? p.isActive : (p.isPublished ?? true),
+          }));
+        }
+        setOverview(ovData);
+      }
 
       // Merge exams and tests into a unified list
       const merged: ContentItem[] = [];
-      if (cpData?.exams) {
-        cpData.exams.forEach((ex: any) => {
-          merged.push({
-            id: ex.id,
-            type: 'EXAM',
-            title: ex.title,
-            examSlug: ex.slug,
-            category: ex.category?.name || 'General',
-            accessMode: ex.accessMode || (ex.priceINR === 0 ? 'FREE' : 'PAID'),
-            priceINR: ex.priceINR || 0,
-            originalPriceINR: ex.originalPriceINR || 0,
-            discountPercent: ex.discountPercent || 0,
-            isPublished: ex.isPublished ?? true,
-          });
-        });
-      }
+      const examsSource = (cpData?.exams && cpData.exams.length > 0) ? cpData.exams : (ovData?.exams || []);
+      const testsSource = (cpData?.tests && cpData.tests.length > 0) ? cpData.tests : (ovData?.tests || []);
 
-      if (cpData?.tests) {
-        cpData.tests.forEach((t: any) => {
-          merged.push({
-            id: t.id,
-            type: 'TEST',
-            title: t.title,
-            examSlug: t.exam?.slug,
-            examTitle: t.exam?.title,
-            category: t.exam?.category?.name || 'Mock Tests',
-            accessMode: t.accessMode || (t.accessLevel === 'FREE' ? 'FREE' : 'PREMIUM'),
-            priceINR: t.priceINR || 0,
-            originalPriceINR: t.originalPriceINR || 0,
-            discountPercent: t.discountPercent || 0,
-            isPublished: t.isPublished ?? true,
-            totalQuestions: t.totalQuestions,
-          });
+      examsSource.forEach((ex: any) => {
+        merged.push({
+          id: ex.id,
+          type: 'EXAM',
+          title: ex.title,
+          examSlug: ex.slug,
+          category: ex.category?.name || 'General Exam',
+          accessMode: ex.accessMode || (Number(ex.priceINR ?? ex.price ?? 0) === 0 ? 'FREE' : 'PAID'),
+          priceINR: Number(ex.priceINR ?? ex.price ?? 0),
+          originalPriceINR: Number(ex.originalPriceINR ?? ex.originalPrice ?? ex.price ?? 0),
+          discountPercent: Number(ex.discountPercent ?? ex.discountPct ?? 0),
+          isPublished: ex.isPublished ?? true,
         });
-      }
+      });
+
+      testsSource.forEach((t: any) => {
+        merged.push({
+          id: t.id,
+          type: 'TEST',
+          title: t.title,
+          examSlug: t.exam?.slug,
+          examTitle: t.exam?.title,
+          category: t.exam?.category?.name || 'Mock Tests',
+          accessMode: t.accessMode || (t.accessLevel === 'FREE' ? 'FREE' : 'PREMIUM'),
+          priceINR: Number(t.priceINR ?? t.price ?? 0),
+          originalPriceINR: Number(t.originalPriceINR ?? t.originalPrice ?? t.price ?? 0),
+          discountPercent: Number(t.discountPercent ?? t.discountPct ?? 0),
+          isPublished: t.isPublished ?? true,
+          totalQuestions: t.totalQuestions,
+        });
+      });
 
       setContentList(merged);
       if (logsData?.auditLogs) setAuditLogs(logsData.auditLogs);
@@ -157,6 +167,54 @@ export const AdminPricingManager: React.FC = () => {
       showNotification('Error loading data: ' + err.message, 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Quick 1-Click Toggle Free / Paid
+  const handleQuickToggleFree = async (item: ContentItem) => {
+    try {
+      const isCurrentlyFree = item.accessMode === 'FREE' || item.priceINR === 0;
+      const newMode = isCurrentlyFree ? 'PAID' : 'FREE';
+      const newPrice = isCurrentlyFree ? 49 : 0;
+      const newOrig = isCurrentlyFree ? 149 : 0;
+      const newDisc = isCurrentlyFree ? 67 : 0;
+
+      await api.updateContentPricing({
+        contentType: item.type,
+        contentId: item.id,
+        accessMode: newMode,
+        priceINR: newPrice,
+        originalPriceINR: newOrig,
+        discountPercent: newDisc,
+        isPublished: true,
+        notes: `Quick toggled ${item.title} to ${newMode}`,
+      });
+      showNotification(`"${item.title}" is now set to ${newMode} (₹${newPrice})`);
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to update access mode', 'error');
+    }
+  };
+
+  // Quick Plan Price Variation Handler
+  const handleQuickPlanPrice = async (plan: any, newPrice: number) => {
+    try {
+      const orig = plan.originalPriceINR > newPrice ? plan.originalPriceINR : (newPrice > 0 ? Math.round(newPrice * 2.5) : 0);
+      const disc = orig > newPrice ? Math.round(((orig - newPrice) / orig) * 100) : 0;
+
+      await api.updateAdminPlan(plan.id, {
+        ...plan,
+        price: newPrice,
+        priceINR: newPrice,
+        originalPrice: orig,
+        originalPriceINR: orig,
+        discountPct: disc,
+        discountPercent: disc,
+      });
+      showNotification(`Updated "${plan.name}" price to ₹${newPrice}`);
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to vary plan price', 'error');
     }
   };
 
@@ -187,7 +245,7 @@ export const AdminPricingManager: React.FC = () => {
         notes: editNotes || `Updated ${editingItem.type} pricing to ${editAccessMode} (₹${editPriceINR})`,
       });
 
-      showNotification(`Successfully updated pricing for "${editingItem.title}"`);
+      showNotification(`Successfully updated pricing for "${editingItem.title}" to ₹${editPriceINR}`);
       setEditingItem(null);
       await loadAllData();
     } catch (err: any) {
@@ -219,19 +277,23 @@ export const AdminPricingManager: React.FC = () => {
 
   const handleOpenEditPlan = (plan: any) => {
     setEditingPlan(plan);
+    const pINR = Number(plan.priceINR ?? plan.price ?? 0);
+    const origINR = Number(plan.originalPriceINR ?? plan.originalPrice ?? (pINR > 0 ? Math.round(pINR * 2.5) : 0));
+    const disc = Number(plan.discountPercent ?? plan.discountPct ?? (origINR > pINR ? Math.round(((origINR - pINR) / origINR) * 100) : 0));
+
     setPlanForm({
       name: plan.name,
       code: plan.code,
       description: plan.description || '',
-      priceINR: plan.priceINR,
-      originalPriceINR: plan.originalPriceINR || plan.priceINR * 2,
-      discountPercent: plan.discountPercent || 0,
+      priceINR: pINR,
+      originalPriceINR: origINR,
+      discountPercent: disc,
       billingInterval: plan.billingInterval || 'ONCE',
       durationDays: plan.durationDays || 365,
       testLimit: plan.testLimit || 0,
       features: Array.isArray(plan.features) ? plan.features : ['All Mock Tests Included', 'Full CBT Simulator'],
       featureInput: '',
-      isActive: plan.isActive ?? true,
+      isActive: plan.isActive !== undefined ? plan.isActive : (plan.isPublished ?? true),
     });
     setIsPlanModalOpen(true);
   };
@@ -247,26 +309,39 @@ export const AdminPricingManager: React.FC = () => {
         await api.updateAdminPlan(editingPlan.id, {
           name: planForm.name,
           description: planForm.description,
+          price: Number(planForm.priceINR),
           priceINR: Number(planForm.priceINR),
-          testLimit: Number(planForm.testLimit),
-          isActive: planForm.isActive,
-        });
-        showNotification('Plan updated successfully');
-      } else {
-        await api.createAdminPlan({
-          name: planForm.name,
-          code: planForm.code || `PLAN_${Date.now()}`,
-          description: planForm.description,
-          priceINR: Number(planForm.priceINR),
+          originalPrice: Number(planForm.originalPriceINR),
           originalPriceINR: Number(planForm.originalPriceINR),
+          discountPct: Number(planForm.discountPercent),
           discountPercent: Number(planForm.discountPercent),
           billingInterval: planForm.billingInterval,
           durationDays: Number(planForm.durationDays),
           testLimit: Number(planForm.testLimit),
           features: planForm.features,
+          isPublished: planForm.isActive,
           isActive: planForm.isActive,
         });
-        showNotification('New custom plan created successfully');
+        showNotification(`Plan "${planForm.name}" updated successfully (₹${planForm.priceINR})`);
+      } else {
+        await api.createAdminPlan({
+          name: planForm.name,
+          code: planForm.code || `PLAN_${Date.now()}`,
+          description: planForm.description,
+          price: Number(planForm.priceINR),
+          priceINR: Number(planForm.priceINR),
+          originalPrice: Number(planForm.originalPriceINR),
+          originalPriceINR: Number(planForm.originalPriceINR),
+          discountPct: Number(planForm.discountPercent),
+          discountPercent: Number(planForm.discountPercent),
+          billingInterval: planForm.billingInterval,
+          durationDays: Number(planForm.durationDays),
+          testLimit: Number(planForm.testLimit),
+          features: planForm.features,
+          isPublished: planForm.isActive,
+          isActive: planForm.isActive,
+        });
+        showNotification(`New custom plan "${planForm.name}" created successfully (₹${planForm.priceINR})`);
       }
       setIsPlanModalOpen(false);
       await loadAllData();
@@ -618,13 +693,37 @@ export const AdminPricingManager: React.FC = () => {
                             )}
                           </td>
                           <td className="p-3 text-right">
-                            <button
-                              onClick={() => handleOpenEdit(item)}
-                              className="px-3 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition-colors cursor-pointer flex items-center gap-1 ml-auto"
-                            >
-                              <Edit3 className="w-3.5 h-3.5" />
-                              <span>Edit Pricing</span>
-                            </button>
+                            <div className="flex items-center justify-end gap-1.5 ml-auto">
+                              <button
+                                type="button"
+                                onClick={() => handleQuickToggleFree(item)}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors cursor-pointer flex items-center gap-1 ${
+                                  item.accessMode === 'FREE' || item.priceINR === 0
+                                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
+                                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200'
+                                }`}
+                              >
+                                {item.accessMode === 'FREE' || item.priceINR === 0 ? (
+                                  <>
+                                    <Tag className="w-3 h-3" />
+                                    <span>Set Paid</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Unlock className="w-3 h-3" />
+                                    <span>Make Free</span>
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEdit(item)}
+                                className="px-3 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition-colors cursor-pointer flex items-center gap-1"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                                <span>Edit Pricing</span>
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -675,6 +774,29 @@ export const AdminPricingManager: React.FC = () => {
                         <span className="text-[11px] text-slate-500 font-medium">
                           / {plan.billingInterval === 'ONCE' ? 'One-time' : plan.billingInterval?.toLowerCase()}
                         </span>
+                      </div>
+                    </div>
+
+                    {/* Quick 1-Click Price Vary for Admin */}
+                    <div className="pt-2 border-t border-slate-100 space-y-1.5">
+                      <span className="block text-[10px] font-bold uppercase text-slate-400 tracking-wider">
+                        ⚡ Quick Vary Price (कीमत तुरंत बदलें):
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {[0, 19, 29, 49, 99, 149, 199, 299, 499, 999].map((pVal) => (
+                          <button
+                            key={pVal}
+                            type="button"
+                            onClick={() => handleQuickPlanPrice(plan, pVal)}
+                            className={`px-2 py-0.5 rounded text-[11px] font-bold border transition cursor-pointer ${
+                              plan.priceINR === pVal
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                            }`}
+                          >
+                            {pVal === 0 ? 'FREE' : `₹${pVal}`}
+                          </button>
+                        ))}
                       </div>
                     </div>
 
@@ -922,6 +1044,52 @@ export const AdminPricingManager: React.FC = () => {
                 </select>
               </div>
 
+              {/* Quick Preset Buttons for Admin */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Quick Price Presets (त्वरित मूल्य विकल्प)</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: 'FREE (₹0)', price: 0, mode: 'FREE' },
+                    { label: '₹19', price: 19, mode: 'PAID' },
+                    { label: '₹29', price: 29, mode: 'PAID' },
+                    { label: '₹49', price: 49, mode: 'PAID' },
+                    { label: '₹99', price: 99, mode: 'PAID' },
+                    { label: '₹149', price: 149, mode: 'PAID' },
+                    { label: '₹199', price: 199, mode: 'PREMIUM' },
+                    { label: '₹299', price: 299, mode: 'PREMIUM' },
+                    { label: '₹499', price: 499, mode: 'PREMIUM' },
+                    { label: '₹999', price: 999, mode: 'PREMIUM' },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => {
+                        setEditPriceINR(preset.price);
+                        setEditAccessMode(preset.mode);
+                        if (preset.price === 0) {
+                          setEditOriginalPriceINR(0);
+                          setEditDiscountPercent(0);
+                        } else {
+                          const suggestedOrig = editOriginalPriceINR > preset.price ? editOriginalPriceINR : Math.round(preset.price * 2.5);
+                          setEditOriginalPriceINR(suggestedOrig);
+                          setEditDiscountPercent(Math.round(((suggestedOrig - preset.price) / suggestedOrig) * 100));
+                        }
+                      }}
+                      className={`px-2.5 py-1 rounded-md text-xs font-bold border transition cursor-pointer ${
+                        editPriceINR === preset.price
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                          : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Price Fields */}
               <div className="grid grid-cols-3 gap-3">
                 <div>
@@ -1078,6 +1246,39 @@ export const AdminPricingManager: React.FC = () => {
                   placeholder="Short description shown to students in pricing modal..."
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 bg-white"
                 />
+              </div>
+
+              {/* Quick Preset Buttons for Plans */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Quick Price Presets (प्लान का मूल्य तुरंत चुनें)</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {[0, 29, 49, 99, 149, 199, 299, 499, 799, 999].map((pVal) => (
+                    <button
+                      key={pVal}
+                      type="button"
+                      onClick={() => {
+                        const orig = pVal > 0 ? (planForm.originalPriceINR > pVal ? planForm.originalPriceINR : Math.round(pVal * 2.5)) : 0;
+                        const disc = orig > pVal ? Math.round(((orig - pVal) / orig) * 100) : 0;
+                        setPlanForm({
+                          ...planForm,
+                          priceINR: pVal,
+                          originalPriceINR: orig,
+                          discountPercent: disc,
+                        });
+                      }}
+                      className={`px-2.5 py-1 rounded-md text-xs font-bold border transition cursor-pointer ${
+                        planForm.priceINR === pVal
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                          : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
+                      }`}
+                    >
+                      {pVal === 0 ? 'FREE' : `₹${pVal}`}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">

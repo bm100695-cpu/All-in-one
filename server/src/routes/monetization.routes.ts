@@ -44,9 +44,106 @@ router.get('/config', (_req: Request, res: Response) => {
   });
 });
 
+// Helper to ensure default subscription plans exist in database
+async function ensureDefaultPlansExist(): Promise<void> {
+  try {
+    const count = await prisma.subscriptionPlan.count();
+    if (count > 0) return;
+
+    const defaultPlans = [
+      {
+        name: 'Free Starter Pass',
+        code: 'PLAN_FREE_0',
+        description: 'Essential CBT practice with real PYQ shift papers & answer keys.',
+        price: 0,
+        originalPrice: 0,
+        discountPct: 0,
+        currency: 'INR',
+        durationDays: 365,
+        billingInterval: 'ONCE',
+        featuresJson: JSON.stringify([
+          'Access to Official PYQ Shift Papers',
+          'Authentic NTA / Board CBT Exam Simulator',
+          'Instant Scorecard & Answer Review',
+          'No Credit Card Required',
+        ]),
+        isPublished: true,
+        displayOrder: 1,
+      },
+      {
+        name: 'Target Exam 30-Day Booster',
+        code: 'PLAN_BOOSTER_49',
+        description: 'Intensive 30-day exam preparation with full access to mock tests & derivations.',
+        price: 49,
+        originalPrice: 149,
+        discountPct: 67,
+        currency: 'INR',
+        durationDays: 30,
+        billingInterval: 'ONCE',
+        badge: 'POPULAR',
+        featuresJson: JSON.stringify([
+          'Full 30-Day Unlimited Mock Tests',
+          'Complete Step-by-Step Derivations & Solutions',
+          'AI Readiness Index & Weakness Analysis',
+          'AIR Rank & Percentile Prediction',
+        ]),
+        isPublished: true,
+        displayOrder: 2,
+      },
+      {
+        name: 'All-Access 1-Year Super Pass',
+        code: 'PLAN_YEARLY_199',
+        description: 'Complete 1-year unlimited access to all 7 competitive & teaching exams.',
+        price: 199,
+        originalPrice: 599,
+        discountPct: 67,
+        currency: 'INR',
+        durationDays: 365,
+        billingInterval: 'YEARLY',
+        badge: 'BEST VALUE',
+        featuresJson: JSON.stringify([
+          'Full Access to All 7 Exams & 155+ Mock Tests',
+          'UPTET, SUPER TET, JEE, NEET, CTET, SSC, UPSC',
+          'Mistake Journal & Adaptive Question Re-Attempt',
+          'Priority Live All-India Mock Tests with Rank',
+        ]),
+        isPublished: true,
+        displayOrder: 3,
+      },
+      {
+        name: 'Lifetime Master VIP Pass',
+        code: 'PLAN_LIFETIME_499',
+        description: 'One-time payment for lifetime VIP access to all present & upcoming tests.',
+        price: 499,
+        originalPrice: 1499,
+        discountPct: 67,
+        currency: 'INR',
+        durationDays: 3650,
+        billingInterval: 'LIFETIME',
+        badge: 'VIP LIFETIME',
+        featuresJson: JSON.stringify([
+          'Lifetime Unlimited Access to Everything',
+          'All Future Exams & Test Series Included',
+          'Downloadable PDF Solution Sets',
+          'VIP Support & Early Access to New Features',
+        ]),
+        isPublished: true,
+        displayOrder: 4,
+      },
+    ];
+
+    for (const p of defaultPlans) {
+      await prisma.subscriptionPlan.create({ data: p });
+    }
+  } catch (err) {
+    console.warn('ensureDefaultPlansExist notice:', err);
+  }
+}
+
 // Get all published subscription plans (optionally filtered by examSlug)
 router.get('/plans', async (req: Request, res: Response) => {
   try {
+    await ensureDefaultPlansExist();
     const { examSlug } = req.query;
     const where: any = { isPublished: true };
     if (examSlug && String(examSlug).trim() && String(examSlug) !== 'ALL') {
@@ -976,6 +1073,8 @@ router.post('/referral/redeem', authenticate, async (req: Request, res: Response
 // Comprehensive Admin Pricing Overview (Exams, Tests, Plans, Stats, Audit Logs)
 router.get('/admin/overview', authenticate, requireRole(['ADMIN']), async (_req: Request, res: Response) => {
   try {
+    await ensureDefaultPlansExist();
+
     const [
       totalExams,
       freeExams,
@@ -1073,10 +1172,30 @@ router.get('/admin/overview', authenticate, requireRole(['ADMIN']), async (_req:
 
     const parsedPlans = plans.map((p) => ({
       ...p,
+      priceINR: p.price,
+      originalPriceINR: p.originalPrice || p.price,
+      discountPercent: p.discountPct || 0,
+      isActive: p.isPublished,
       features: JSON.parse(p.featuresJson || '[]'),
       includedExams: JSON.parse(p.includedExamsJson || '[]'),
       includedPapers: JSON.parse(p.includedPapersJson || '[]'),
       includedMockTests: JSON.parse(p.includedMockTestsJson || '[]'),
+    }));
+
+    const parsedExams = allExams.map((ex) => ({
+      ...ex,
+      priceINR: ex.price,
+      originalPriceINR: ex.originalPrice || ex.price,
+      discountPercent: ex.discountPct || 0,
+      isPublished: true,
+    }));
+
+    const parsedTests = allTests.map((t) => ({
+      ...t,
+      priceINR: t.price,
+      originalPriceINR: t.originalPrice || t.price,
+      discountPercent: t.discountPct || 0,
+      totalQuestions: t._count?.testQuestions || 0,
     }));
 
     res.json({
@@ -1093,8 +1212,8 @@ router.get('/admin/overview', authenticate, requireRole(['ADMIN']), async (_req:
         successfulTransactions: successfulPayments.length,
         failedTransactions: failedPayments,
       },
-      exams: allExams,
-      tests: allTests,
+      exams: parsedExams,
+      tests: parsedTests,
       plans: parsedPlans,
       recentPayments,
       auditLogs,
@@ -1105,24 +1224,105 @@ router.get('/admin/overview', authenticate, requireRole(['ADMIN']), async (_req:
   }
 });
 
+// Admin Content Pricing listing (Exams + Tests)
+router.get('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { type, accessMode } = req.query;
+
+    const examWhere: any = {};
+    if (accessMode && accessMode !== 'ALL') {
+      examWhere.accessMode = String(accessMode);
+    }
+
+    const testWhere: any = {};
+    if (accessMode && accessMode !== 'ALL') {
+      testWhere.accessMode = String(accessMode);
+    }
+
+    const [exams, tests] = await Promise.all([
+      prisma.exam.findMany({
+        where: examWhere,
+        include: {
+          category: true,
+          _count: { select: { tests: true } },
+        },
+        orderBy: { title: 'asc' },
+      }),
+      prisma.test.findMany({
+        where: testWhere,
+        take: 300,
+        include: {
+          exam: {
+            select: { id: true, title: true, slug: true, category: true },
+          },
+          _count: { select: { testQuestions: true } },
+        },
+        orderBy: [{ examId: 'asc' }, { createdAt: 'desc' }],
+      }),
+    ]);
+
+    const formattedExams = exams.map((ex) => ({
+      id: ex.id,
+      title: ex.title,
+      slug: ex.slug,
+      shortName: ex.shortName,
+      category: ex.category?.name || 'General',
+      accessMode: ex.accessMode,
+      price: ex.price,
+      priceINR: ex.price,
+      originalPrice: ex.originalPrice || ex.price,
+      originalPriceINR: ex.originalPrice || ex.price,
+      discountPct: ex.discountPct || 0,
+      discountPercent: ex.discountPct || 0,
+      isPublished: true,
+      offerExpiresAt: ex.offerExpiresAt,
+      testsCount: ex._count?.tests || 0,
+    }));
+
+    const formattedTests = tests.map((t) => ({
+      id: t.id,
+      title: t.title,
+      type: t.type,
+      accessMode: t.accessMode,
+      accessLevel: t.accessLevel,
+      price: t.price,
+      priceINR: t.price,
+      originalPrice: t.originalPrice || t.price,
+      originalPriceINR: t.originalPrice || t.price,
+      discountPct: t.discountPct || 0,
+      discountPercent: t.discountPct || 0,
+      isPublished: t.isPublished,
+      totalQuestions: t.totalQuestions || t._count?.testQuestions || 0,
+      exam: t.exam,
+      offerExpiresAt: t.offerExpiresAt,
+    }));
+
+    res.json({
+      exams: formattedExams,
+      tests: formattedTests,
+    });
+  } catch (error) {
+    console.error('Error fetching admin content pricing:', error);
+    res.status(500).json({ error: 'Failed to fetch content pricing list' });
+  }
+});
+
 // Update pricing & access control for Exam, Test, or Bulk Tests
 router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
     const adminId = req.user!.id;
-    const {
-      targetType, // 'EXAM' | 'TEST' | 'BULK_TESTS'
-      targetId,
-      accessMode, // 'FREE' | 'PAID' | 'PREMIUM' | 'PRIVATE' | 'COMING_SOON' | 'DISABLED'
-      price,
-      originalPrice,
-      discountPct,
-      offerExpiresAt,
-      notes,
-      bulkTestIds,
-    } = req.body;
+    const targetType = req.body.targetType || req.body.contentType;
+    const targetId = req.body.targetId || req.body.contentId;
+    const accessMode = req.body.accessMode;
+    const price = req.body.price !== undefined ? req.body.price : req.body.priceINR;
+    const originalPrice = req.body.originalPrice !== undefined ? req.body.originalPrice : req.body.originalPriceINR;
+    const discountPct = req.body.discountPct !== undefined ? req.body.discountPct : req.body.discountPercent;
+    const offerExpiresAt = req.body.offerExpiresAt;
+    const notes = req.body.notes;
+    const bulkTestIds = req.body.bulkTestIds;
 
     if (!targetType) {
-      res.status(400).json({ error: 'targetType is required.' });
+      res.status(400).json({ error: 'targetType or contentType is required.' });
       return;
     }
 
@@ -1278,9 +1478,6 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
       name,
       code,
       description,
-      price,
-      originalPrice,
-      discountPct,
       durationDays,
       billingInterval,
       features,
@@ -1289,10 +1486,14 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
       includedMockTests,
       examSlug,
       badge,
-      isPublished,
       displayOrder,
       offerExpiresAt,
     } = req.body;
+
+    const price = req.body.price !== undefined ? req.body.price : req.body.priceINR;
+    const originalPrice = req.body.originalPrice !== undefined ? req.body.originalPrice : req.body.originalPriceINR;
+    const discountPct = req.body.discountPct !== undefined ? req.body.discountPct : req.body.discountPercent;
+    const isPublished = req.body.isPublished !== undefined ? req.body.isPublished : (req.body.isActive !== undefined ? req.body.isActive : true);
 
     if (!name || price === undefined) {
       res.status(400).json({ error: 'Plan name and price are required.' });
@@ -1345,6 +1546,10 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
       message: `Plan "${newPlan.name}" created successfully.`,
       plan: {
         ...newPlan,
+        priceINR: newPlan.price,
+        originalPriceINR: newPlan.originalPrice,
+        discountPercent: newPlan.discountPct,
+        isActive: newPlan.isPublished,
         features: JSON.parse(newPlan.featuresJson || '[]'),
       },
     });
@@ -1362,9 +1567,6 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
     const {
       name,
       description,
-      price,
-      originalPrice,
-      discountPct,
       durationDays,
       billingInterval,
       features,
@@ -1373,10 +1575,14 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
       includedMockTests,
       examSlug,
       badge,
-      isPublished,
       displayOrder,
       offerExpiresAt,
     } = req.body;
+
+    const price = req.body.price !== undefined ? req.body.price : req.body.priceINR;
+    const originalPrice = req.body.originalPrice !== undefined ? req.body.originalPrice : req.body.originalPriceINR;
+    const discountPct = req.body.discountPct !== undefined ? req.body.discountPct : req.body.discountPercent;
+    const isPublished = req.body.isPublished !== undefined ? req.body.isPublished : (req.body.isActive !== undefined ? req.body.isActive : undefined);
 
     const existingPlan = await prisma.subscriptionPlan.findUnique({ where: { id } });
     if (!existingPlan) {
@@ -1416,6 +1622,27 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
         newPrice: updated.price,
         previousAccess: existingPlan.isPublished ? 'ACTIVE' : 'INACTIVE',
         newAccess: updated.isPublished ? 'ACTIVE' : 'INACTIVE',
+        notes: `Updated subscription plan ${updated.name} (₹${updated.price})`,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'Plan updated successfully',
+      plan: {
+        ...updated,
+        priceINR: updated.price,
+        originalPriceINR: updated.originalPrice,
+        discountPercent: updated.discountPct,
+        isActive: updated.isPublished,
+        features: JSON.parse(updated.featuresJson || '[]'),
+      },
+    });
+  } catch (error) {
+    console.error('Update plan error:', error);
+    res.status(500).json({ error: 'Failed to update plan' });
+  }
+});
         notes: `Updated subscription plan ${updated.name}`,
       },
     });

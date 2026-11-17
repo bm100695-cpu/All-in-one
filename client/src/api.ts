@@ -505,10 +505,16 @@ export const api = {
     });
   },
 
-  updateAdminPlan: async (id: string, data: Partial<SubscriptionPlan>) => {
+  updateAdminPlan: async (id: string, data: any) => {
     return request<{ success: boolean; message: string; plan: SubscriptionPlan }>(`/monetization/admin/plans/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        price: data.priceINR !== undefined ? data.priceINR : data.price,
+        originalPrice: data.originalPriceINR !== undefined ? data.originalPriceINR : data.originalPrice,
+        discountPct: data.discountPercent !== undefined ? data.discountPercent : data.discountPct,
+        isPublished: data.isActive !== undefined ? data.isActive : data.isPublished,
+      }),
     });
   },
 
