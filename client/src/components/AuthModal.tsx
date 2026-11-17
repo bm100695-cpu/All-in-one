@@ -91,18 +91,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             cancel_on_tap_outside: true,
           });
 
-          // Render official Google button if target container exists
-          const container = document.getElementById('googleSignInOfficialBtn');
-          if (container && container.childNodes.length === 0) {
-            google.accounts.id.renderButton(container, {
-              theme: 'outline',
-              size: 'large',
-              width: 380,
-              text: 'continue_with',
-              shape: 'rectangular',
-              logo_alignment: 'left',
-            });
-          }
+          // Google GSI initialized
         } catch (e) {
           console.warn('Google GSI initialization notice:', e);
         }
@@ -300,9 +289,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           )}
 
-          {/* 1. Official Google Sign-In Container or Custom Button */}
+          {/* 1. Google Sign-In Button */}
           <div className="space-y-2">
-            <div id="googleSignInOfficialBtn" className="w-full flex justify-center empty:hidden" />
             <button
               type="button"
               onClick={handleGoogleClick}
