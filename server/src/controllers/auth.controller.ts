@@ -36,6 +36,33 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
+
+    // Auto-bootstrap Admin user for bm100695@gmail.com
+    if (cleanEmail === 'bm100695@gmail.com' && password === 'brijesh@1234') {
+      const passwordHash = await bcrypt.hash('brijesh@1234', 10);
+      const existingAdmin = await prisma.user.findUnique({ where: { email: cleanEmail } });
+      if (!existingAdmin) {
+        await prisma.user.create({
+          data: {
+            email: cleanEmail,
+            name: 'Brijesh Maurya (Admin)',
+            role: 'ADMIN',
+            passwordHash,
+            authProvider: 'local',
+          },
+        });
+      } else if (existingAdmin.role !== 'ADMIN' || !existingAdmin.passwordHash) {
+        await prisma.user.update({
+          where: { id: existingAdmin.id },
+          data: {
+            role: 'ADMIN',
+            passwordHash,
+            name: 'Brijesh Maurya (Admin)',
+          },
+        });
+      }
+    }
+
     const user = await prisma.user.findUnique({ where: { email: cleanEmail } });
 
     if (!user || !user.passwordHash) {

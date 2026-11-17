@@ -9,8 +9,8 @@ interface AdminLoginProps {
 }
 
 export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => {
-  const [email, setEmail] = useState('admin@examverse.ai');
-  const [password, setPassword] = useState('Admin@123');
+  const [email, setEmail] = useState('bm100695@gmail.com');
+  const [password, setPassword] = useState('brijesh@1234');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,9 +38,9 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => 
   };
 
   const handleQuickAdminLogin = () => {
-    setEmail('admin@examverse.ai');
-    setPassword('Admin@123');
-    performLogin('admin@examverse.ai', 'Admin@123');
+    setEmail('bm100695@gmail.com');
+    setPassword('brijesh@1234');
+    performLogin('bm100695@gmail.com', 'brijesh@1234');
   };
 
   return (
@@ -100,7 +100,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => 
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@examverse.ai"
+                placeholder="bm100695@gmail.com"
                 className="w-full pl-9 pr-3 py-2 rounded-md bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 text-xs transition"
               />
             </div>
