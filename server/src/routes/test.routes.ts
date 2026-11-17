@@ -194,7 +194,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
       return;
     }
 
-    // Entitlement Check for PREMIUM tests (Phase 4: Backend-Controlled Access)
+    // Entitlement Check for PREMIUM tests (Backend-Controlled Access & Payment Protection)
     if (test.accessLevel === 'PREMIUM' && req.user!.role !== 'ADMIN' && req.user!.role !== 'CONTENT_REVIEWER') {
       // 1. Check for active subscription
       const activeSub = await prisma.subscription.findFirst({
@@ -207,47 +207,64 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
         orderBy: { createdAt: 'desc' },
       });
 
-      // 2. Check for explicit entitlement (individual unlock, referral credit, or global)
+      // 2. Check for explicit entitlement (individual unlock, referral credit, or paid subscription unlock)
       const entitlement = await prisma.entitlement.findFirst({
         where: {
           userId,
           isActive: true,
           AND: [
-            { OR: [{ testId: null }, { testId: test.id }] },
+            { OR: [{ testId: test.id }, { testId: null, planCode: { not: 'PLAN_FREE_0' } }] },
             { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
           ],
         },
       });
 
+      const isPaidSub = Boolean(
+        activeSub &&
+        activeSub.plan &&
+        activeSub.plan.price > 0 &&
+        !activeSub.plan.code.includes('FREE')
+      );
+
       const isSubUnlimited = Boolean(
-        activeSub?.plan?.code === 'PREMIUM_MONTHLY_149' ||
-          (activeSub?.plan?.examSlug && activeSub.plan.examSlug === test.exam.slug)
+        isPaidSub &&
+          (activeSub!.plan.code === 'PREMIUM_MONTHLY_149' ||
+           activeSub!.plan.code === 'PLAN_YEARLY_199' ||
+           activeSub!.plan.code === 'PLAN_LIFETIME_499' ||
+           activeSub!.plan.code === 'PLAN_PRO_99' ||
+           (activeSub!.plan.examSlug && activeSub!.plan.examSlug === test.exam.slug && activeSub!.testsRemaining === null))
       );
       const hasSpecificEntitlement = Boolean(entitlement);
 
       if (!isSubUnlimited && !hasSpecificEntitlement) {
-        // Check if student has a Test Pack with remaining tests
-        if (activeSub && activeSub.plan.code === 'TEST_PACK_99' && (activeSub.testsRemaining ?? 0) > 0) {
+        // Check if student has a Booster Pack / Test Pack with remaining tests
+        const hasRemainingPack = Boolean(
+          isPaidSub &&
+          (activeSub!.plan.code === 'PLAN_BOOSTER_49' || activeSub!.plan.code === 'TEST_PACK_99' || activeSub!.plan.code.includes('BOOSTER')) &&
+          (activeSub!.testsRemaining ?? 0) > 0
+        );
+
+        if (hasRemainingPack) {
           // Consume 1 test and grant entitlement
           await prisma.$transaction([
             prisma.subscription.update({
-              where: { id: activeSub.id },
-              data: { testsRemaining: activeSub.testsRemaining! - 1 },
+              where: { id: activeSub!.id },
+              data: { testsRemaining: activeSub!.testsRemaining! - 1 },
             }),
             prisma.entitlement.create({
               data: {
                 userId,
                 testId: test.id,
-                planCode: 'TEST_PACK_99',
+                planCode: activeSub!.plan.code,
                 source: 'TEST_PACK',
-                expiresAt: activeSub.endDate,
+                expiresAt: activeSub!.endDate,
               },
             }),
           ]);
         } else {
           res.status(403).json({
             error: 'PREMIUM_LOCKED',
-            message: `"${test.title}" is a Premium Mock Test. Unlock it with the ₹99 Test Pack, ₹149 Premium Monthly subscription, or by redeeming a referral credit.`,
+            message: `"${test.title}" is a Premium Mock Test. Please upgrade your plan or complete payment with Cashfree to unlock.`,
             testTitle: test.title,
             testId: test.id,
             accessLevel: test.accessLevel,

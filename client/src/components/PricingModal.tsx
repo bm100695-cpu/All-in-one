@@ -50,7 +50,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
   const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
   const [redeemingCredit, setRedeemingCredit] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
   const [gatewayConfig, setGatewayConfig] = useState<any>(null);
   const [couponInput, setCouponInput] = useState<string>('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPct: number; examSlug?: string | null } | null>(null);
@@ -202,20 +202,123 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     });
   };
 
-  const handleSubscribe = async (plan: SubscriptionPlan) => {
-    if (plan.price <= 0) {
-      setStatusMessage({ type: 'success', text: 'Free plan is already active on your account.' });
-      return;
-    }
+  const loadCashfreeScript = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if ((window as any).Cashfree) {
+        resolve(true);
+        return;
+      }
+      const existing = document.querySelector('script[src*="cashfree.js"]');
+      if (existing) {
+        if ((window as any).Cashfree) {
+          resolve(true);
+          return;
+        }
+        existing.addEventListener('load', () => resolve(true));
+        existing.addEventListener('error', () => resolve(false));
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
+  const handleSubscribe = async (plan: SubscriptionPlan) => {
     setProcessingPlanId(plan.id);
     setStatusMessage(null);
 
+    // 1. ₹0 Free Starter Plan: Activate directly on server
+    if (plan.price <= 0) {
+      try {
+        const res = await api.createPaymentOrder(plan.id, undefined, activeExamSlug, plan.code);
+        confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+        setStatusMessage({
+          type: 'success',
+          text: res.message || 'Free Starter Plan activated successfully! You can attempt free mock tests now.',
+        });
+        setTimeout(() => {
+          onPaymentSuccess?.(plan.code);
+          onClose();
+        }, 1500);
+      } catch (err: any) {
+        setStatusMessage({ type: 'error', text: err.message || 'Failed to activate free plan.' });
+      } finally {
+        setProcessingPlanId(null);
+      }
+      return;
+    }
+
+    // 2. Paid Plans (> ₹0): Cashfree modal checkout with UPI QR & cards
     try {
       const order = await api.createPaymentOrder(plan.id, appliedCoupon?.code, activeExamSlug, plan.code);
-      const scriptLoaded = await loadRazorpayScript();
 
-      if (scriptLoaded && (window as any).Razorpay && order.isLiveGateway) {
+      if (!order.orderId) {
+        throw new Error('Order initialization failed. Please retry.');
+      }
+
+      // Priority 1: Cashfree Official Modal Checkout
+      if (order.paymentSessionId) {
+        await loadCashfreeScript();
+        if (!(window as any).Cashfree) {
+          throw new Error('Cashfree payment SDK could not be loaded. Please check your network.');
+        }
+
+        const cashfree = (window as any).Cashfree({
+          mode: order.cashfreeMode || 'sandbox',
+        });
+
+        setStatusMessage({
+          type: 'info',
+          text: 'Opening Cashfree secure modal... Scan UPI QR or choose Netbanking / Card.',
+        });
+
+        cashfree.checkout({
+          paymentSessionId: order.paymentSessionId,
+          redirectTarget: '_modal',
+        }).then(async (result: any) => {
+          if (result.error) {
+            console.warn('Cashfree payment modal closed or error:', result.error);
+          }
+
+          // Verify with backend whether payment was completed
+          setStatusMessage({ type: 'info', text: 'Verifying transaction status with Cashfree...' });
+          try {
+            const verify = await api.verifyCashfreePayment(order.orderId!);
+            if (verify.success) {
+              confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+              setStatusMessage({
+                type: 'success',
+                text: verify.message || `Payment verified! ${plan.name} has been activated.`,
+              });
+              setTimeout(() => {
+                onPaymentSuccess?.(plan.code);
+                onClose();
+              }, 1600);
+            } else {
+              setStatusMessage({
+                type: 'error',
+                text: verify.message || 'Payment not completed. Please retry or complete the transaction in your UPI app.',
+              });
+            }
+          } catch (vErr: any) {
+            setStatusMessage({
+              type: 'error',
+              text: vErr.message || 'Payment verification failed. If money was deducted, it will automatically activate.',
+            });
+          } finally {
+            setProcessingPlanId(null);
+          }
+        });
+        return;
+      }
+
+      // Priority 2: Razorpay fallback if configured
+      const rzpLoaded = await loadRazorpayScript();
+      if (rzpLoaded && (window as any).Razorpay && order.isLiveGateway && order.keyId) {
         const options = {
           key: order.keyId,
           amount: order.amountPaise,
@@ -242,7 +345,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 onClose();
               }, 1500);
             } catch (vErr: any) {
-              setStatusMessage({ type: 'error', text: vErr.message || 'Signature verification failed' });
+              setStatusMessage({ type: 'error', text: vErr.message || 'Payment signature verification failed' });
             }
           },
           modal: {
@@ -254,25 +357,14 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
-      } else {
-        const simPaymentId = `pay_test_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-        await api.verifyPayment(order.orderId!, simPaymentId, 'verified_server_hash');
-
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        setStatusMessage({
-          type: 'success',
-          text: `Verified payment for ${plan.name}! Your entitlement is active.`,
-        });
-
-        setTimeout(() => {
-          onPaymentSuccess?.(plan.code);
-          onClose();
-        }, 1500);
+        return;
       }
+
+      // Strictly block bypass
+      throw new Error('Payment gateway session unavailable. Please retry or contact support.');
     } catch (err: any) {
       console.error('Subscription error:', err);
       setStatusMessage({ type: 'error', text: err.message || 'Failed to process payment. Please try again.' });
-    } finally {
       setProcessingPlanId(null);
     }
   };
@@ -353,11 +445,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             className={`px-6 py-3 flex items-center gap-2 text-xs font-semibold ${
               statusMessage.type === 'success'
                 ? 'bg-emerald-50 text-emerald-800 border-b border-emerald-200'
+                : statusMessage.type === 'info'
+                ? 'bg-blue-50 text-blue-800 border-b border-blue-200'
                 : 'bg-rose-50 text-rose-800 border-b border-rose-200'
             }`}
           >
             {statusMessage.type === 'success' ? (
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            ) : statusMessage.type === 'info' ? (
+              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin shrink-0" />
             ) : (
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             )}
@@ -527,7 +623,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                           {processingPlanId === plan.id
                             ? 'Processing...'
                             : isFree
-                            ? 'Free Active Plan'
+                            ? 'Activate Free Plan'
                             : `Get Started (${currencySymbol}${displayPrice})`}
                         </span>
                         {!isFree && <ArrowRight className="w-3.5 h-3.5" />}
@@ -543,7 +639,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs text-slate-500">
             <div className="flex items-center justify-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>256-bit Razorpay Official Verification</span>
+              <span>Official Cashfree & UPI Secure Gateway</span>
             </div>
             <div className="flex items-center justify-center gap-2">
               <RotateCcw className="w-4 h-4 text-blue-600" />

@@ -417,6 +417,9 @@ export const api = {
   createPaymentOrder: async (planId: string, couponCode?: string, examSlug?: string, planCode?: string) => {
     return request<{
       orderId?: string;
+      paymentSessionId?: string;
+      cashfreeMode?: 'sandbox' | 'production';
+      gateway?: string;
       amount?: number;
       originalPrice?: number;
       discountAmount?: number;
@@ -435,6 +438,19 @@ export const api = {
     }>('/monetization/create-order', {
       method: 'POST',
       body: JSON.stringify({ planId, planCode, couponCode, examSlug }),
+    });
+  },
+
+  verifyCashfreePayment: async (orderId: string) => {
+    return request<{
+      success: boolean;
+      pending?: boolean;
+      message: string;
+      payment?: Payment;
+      subscription?: Subscription;
+    }>('/monetization/verify-cashfree', {
+      method: 'POST',
+      body: JSON.stringify({ orderId }),
     });
   },
 
