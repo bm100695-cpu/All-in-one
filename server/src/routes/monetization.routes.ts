@@ -258,36 +258,191 @@ async function ensureDefaultPlansExist(): Promise<void> {
   }
 }
 
-// Get all published subscription plans (optionally filtered by examSlug)
+// Auto-seed exam-specific starter plans if none exist for a given exam slug
+async function ensureExamPlansExist(examSlug: string): Promise<void> {
+  try {
+    const cleanSlug = examSlug.trim().toLowerCase();
+    const existing = await prisma.subscriptionPlan.findFirst({
+      where: { examSlug: cleanSlug },
+    });
+
+    if (existing) {
+      return; // Already initialized, keep admin custom edits completely intact
+    }
+
+    const exam = await prisma.exam.findUnique({
+      where: { slug: cleanSlug },
+      select: { title: true, shortName: true },
+    });
+    const examName = exam?.shortName || exam?.title || cleanSlug.toUpperCase();
+    const prefix = cleanSlug.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+
+    const examDefaultPlans = [
+      {
+        name: 'Free Starter Plan',
+        code: `PLAN_${prefix}_FREE_0`,
+        description: `Essential practice for ${examName} with authentic shift papers and answer keys.`,
+        price: 0,
+        originalPrice: 0,
+        discountPct: 0,
+        currency: 'INR',
+        durationDays: 365,
+        billingInterval: 'ONCE',
+        badge: 'Free Forever',
+        examSlug: cleanSlug,
+        featuresJson: JSON.stringify([
+          '2 Free Mock Tests included',
+          'Real CBT Exam Timer & Interface',
+          'Instant Scorecard & Solutions',
+          'No Credit Card Required',
+        ]),
+        isPublished: true,
+        displayOrder: 1,
+      },
+      {
+        name: '5-Test Booster Pack',
+        code: `PLAN_${prefix}_BOOSTER_49`,
+        description: `Unlock 5 verified shift papers for ${examName} with detailed solutions.`,
+        price: 49,
+        originalPrice: 149,
+        discountPct: 67,
+        currency: 'INR',
+        durationDays: 90,
+        billingInterval: 'ONCE',
+        badge: 'Top Choice',
+        examSlug: cleanSlug,
+        featuresJson: JSON.stringify([
+          '5 Verified Mock Tests',
+          'Detailed Step-by-Step Solutions',
+          'Subject-wise Accuracy Audit',
+          'Personal Mistake Journal Tagging',
+        ]),
+        isPublished: true,
+        displayOrder: 2,
+      },
+      {
+        name: 'Premium All-Access',
+        code: `PLAN_${prefix}_PRO_99`,
+        description: `Unlock all 10 verified mock series and solutions for ${examName}.`,
+        price: 99,
+        originalPrice: 299,
+        discountPct: 67,
+        currency: 'INR',
+        durationDays: 180,
+        billingInterval: 'ONCE',
+        badge: 'Best Value',
+        examSlug: cleanSlug,
+        featuresJson: JSON.stringify([
+          '10 Full-Length Mock & PYQ Papers',
+          'Complete Historical Archive Access',
+          'Advanced Speed & Readiness Analytics',
+          'Priority Reviewer Q&A Support',
+        ]),
+        isPublished: true,
+        displayOrder: 3,
+      },
+    ];
+
+    for (const p of examDefaultPlans) {
+      await prisma.subscriptionPlan.upsert({
+        where: { code: p.code },
+        update: {},
+        create: p,
+      });
+    }
+  } catch (err) {
+    console.warn(`ensureExamPlansExist notice for ${examSlug}:`, err);
+  }
+}
+
+// Format subscription plan model with parsed JSON fields
+function formatSubscriptionPlan(p: any) {
+  return {
+    ...p,
+    priceINR: p.price,
+    priceUSD: p.price === 0 ? 0 : Math.max(1, Math.round((p.price / 75) * 100) / 100),
+    features: JSON.parse(p.featuresJson || '[]'),
+    includedExams: JSON.parse(p.includedExamsJson || '[]'),
+    includedPapers: JSON.parse(p.includedPapersJson || '[]'),
+    includedMockTests: JSON.parse(p.includedMockTestsJson || '[]'),
+  };
+}
+
+// Get all published subscription plans (optionally filtered and prioritized by examSlug)
 router.get('/plans', async (req: Request, res: Response) => {
   try {
     await ensureDefaultPlansExist();
-    const { examSlug } = req.query;
-    const where: any = { isPublished: true };
-    if (examSlug && String(examSlug).trim() && String(examSlug) !== 'ALL') {
-      const cleanSlug = String(examSlug).trim().toLowerCase();
-      where.OR = [{ examSlug: cleanSlug }, { examSlug: null }];
+    const { examSlug, all } = req.query;
+    const cleanSlug = examSlug && String(examSlug).trim() && String(examSlug) !== 'ALL'
+      ? String(examSlug).trim().toLowerCase()
+      : null;
+
+    if (cleanSlug) {
+      await ensureExamPlansExist(cleanSlug);
     }
 
-    const plans = await prisma.subscriptionPlan.findMany({
-      where,
-      orderBy: { displayOrder: 'asc' },
-    });
+    const where: any = {};
+    if (all !== 'true') {
+      where.isPublished = true;
+    }
 
-    const parsedPlans = plans.map((p) => ({
-      ...p,
-      priceINR: p.price,
-      priceUSD: p.price === 0 ? 0 : Math.max(1, Math.round(p.price / 75)),
-      features: JSON.parse(p.featuresJson || '[]'),
-      includedExams: JSON.parse(p.includedExamsJson || '[]'),
-      includedPapers: JSON.parse(p.includedPapersJson || '[]'),
-      includedMockTests: JSON.parse(p.includedMockTestsJson || '[]'),
-    }));
+    let plans: any[] = [];
+    if (cleanSlug) {
+      // Prioritize exam-specific plans
+      const examPlans = await prisma.subscriptionPlan.findMany({
+        where: {
+          ...where,
+          examSlug: cleanSlug,
+        },
+        orderBy: { displayOrder: 'asc' },
+      });
 
-    res.json({ plans: parsedPlans });
+      if (examPlans.length > 0) {
+        plans = examPlans;
+      } else {
+        // Fallback to global plans
+        plans = await prisma.subscriptionPlan.findMany({
+          where: {
+            ...where,
+            examSlug: null,
+          },
+          orderBy: { displayOrder: 'asc' },
+        });
+      }
+    } else {
+      plans = await prisma.subscriptionPlan.findMany({
+        where,
+        orderBy: { displayOrder: 'asc' },
+      });
+    }
+
+    res.json({ plans: plans.map(formatSubscriptionPlan) });
   } catch (error) {
     console.error('Error fetching plans:', error);
     res.status(500).json({ error: 'Failed to fetch subscription plans' });
+  }
+});
+
+// Admin: Get all plans for a specific exam portal (including unpublished)
+router.get('/admin/exam-plans/:examSlug', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { examSlug } = req.params;
+    const cleanSlug = String(examSlug).trim().toLowerCase();
+    await ensureExamPlansExist(cleanSlug);
+
+    const plans = await prisma.subscriptionPlan.findMany({
+      where: { examSlug: cleanSlug },
+      orderBy: { displayOrder: 'asc' },
+    });
+
+    res.json({
+      success: true,
+      examSlug: cleanSlug,
+      plans: plans.map(formatSubscriptionPlan),
+    });
+  } catch (error: any) {
+    console.error('Error fetching admin exam plans:', error);
+    res.status(500).json({ error: error.message || 'Failed to fetch exam plans' });
   }
 });
 

@@ -310,6 +310,9 @@ export interface SubscriptionPlan {
   priceINR: number;
   priceUSD?: number;
   price: number;
+  originalPrice?: number | null;
+  originalPriceINR?: number | null;
+  discountPct?: number;
   currency: string;
   billingInterval?: 'ONCE' | 'MONTHLY' | 'YEARLY' | 'ONE_TIME';
   interval?: string;

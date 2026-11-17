@@ -408,7 +408,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             <p className="text-xs text-slate-300">
               {lockedTest
                 ? `You clicked on "${lockedTest.title}". Choose a plan or redeem a referral credit.`
-                : `Includes 2 Free Mock Tests, ₹49 Booster Pack (5 Tests), and ₹99 All-Access Plan for ${currentExamName}.`}
+                : plans.length > 0
+                ? `Choose from ${plans.map((p) => `${p.name} (${p.price === 0 ? 'Free' : `₹${p.price}`})`).join(', ')} for ${currentExamName}.`
+                : `Includes Free Starter, Booster Pack, and All-Access plans for ${currentExamName}.`}
             </p>
           </div>
 

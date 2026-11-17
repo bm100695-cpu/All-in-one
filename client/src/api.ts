@@ -374,6 +374,12 @@ export const api = {
     return request<{ plans: SubscriptionPlan[] }>(`/monetization/plans${q}`);
   },
 
+  getAdminExamPlans: async (examSlug: string) => {
+    return request<{ success: boolean; examSlug: string; plans: SubscriptionPlan[] }>(
+      `/monetization/admin/exam-plans/${encodeURIComponent(examSlug)}`
+    );
+  },
+
   validateCoupon: async (code: string, planId?: string, examSlug?: string) => {
     return request<{
       valid: boolean;

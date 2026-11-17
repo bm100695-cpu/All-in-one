@@ -15,8 +15,15 @@ import {
   BookOpen,
   Bell,
   X,
+  IndianRupee,
+  Tag,
+  Sparkles,
+  Edit3,
+  Check,
+  RefreshCw,
 } from 'lucide-react';
 import { api } from '../api';
+import { SubscriptionPlan } from '../types';
 
 export interface AdminExamsManagerProps {
   selectedExamId?: string;
@@ -89,6 +96,22 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
     isPYQ: false,
   });
 
+  // Pricing & Plans CMS State for Selected Exam
+  const [examPlans, setExamPlans] = useState<SubscriptionPlan[]>([]);
+  const [loadingPlans, setLoadingPlans] = useState(false);
+  const [savingPlanId, setSavingPlanId] = useState<string | null>(null);
+  const [showAddPlanModal, setShowAddPlanModal] = useState(false);
+  const [newPlanForm, setNewPlanForm] = useState({
+    name: '',
+    badge: 'Popular',
+    priceINR: 49,
+    originalPriceINR: 149,
+    durationDays: 90,
+    description: '',
+    featuresText: 'Full CBT Simulator Interface\nOfficial Verified Shift Papers\nDetailed Derivations & Solutions\nAIR Rank & Accuracy Audit',
+    isPublished: true,
+  });
+
   useEffect(() => {
     loadExams();
   }, []);
@@ -148,6 +171,100 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
       setExamTests(res.tests || []);
     } catch (err) {
       console.error('Error loading tests for exam:', err);
+    }
+
+    if (exam.slug) {
+      loadExamPlans(exam.slug);
+    }
+  };
+
+  const loadExamPlans = async (slug: string) => {
+    setLoadingPlans(true);
+    try {
+      const res = await api.getAdminExamPlans(slug);
+      setExamPlans(res.plans || []);
+    } catch (err) {
+      console.error('Error loading plans for exam:', err);
+    } finally {
+      setLoadingPlans(false);
+    }
+  };
+
+  const handleSavePlan = async (planId: string, updatedData: any) => {
+    setSavingPlanId(planId);
+    setMsg(null);
+    try {
+      const featuresArray = typeof updatedData.features === 'string'
+        ? updatedData.features.split('\n').map((f: string) => f.trim()).filter(Boolean)
+        : Array.isArray(updatedData.features)
+        ? updatedData.features
+        : [];
+
+      await api.updateAdminPlan(planId, {
+        name: updatedData.name,
+        badge: updatedData.badge || null,
+        price: Number(updatedData.priceINR ?? updatedData.price),
+        originalPrice: Number(updatedData.originalPriceINR ?? updatedData.originalPrice),
+        discountPct: updatedData.discountPct ? Number(updatedData.discountPct) : undefined,
+        durationDays: Number(updatedData.durationDays),
+        description: updatedData.description,
+        features: featuresArray,
+        isPublished: updatedData.isPublished !== undefined ? Boolean(updatedData.isPublished) : true,
+        examSlug: selectedExam?.slug,
+      });
+
+      setMsg({ type: 'success', text: `Plan "${updatedData.name}" updated successfully for ${selectedExam?.shortName}!` });
+      if (selectedExam?.slug) {
+        loadExamPlans(selectedExam.slug);
+      }
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to update plan' });
+    } finally {
+      setSavingPlanId(null);
+    }
+  };
+
+  const handleCreateExamPlan = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedExam) return;
+    setMsg(null);
+    try {
+      const featuresArray = newPlanForm.featuresText
+        .split('\n')
+        .map((f) => f.trim())
+        .filter(Boolean);
+
+      const prefix = selectedExam.slug.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+      const uniqueCode = `PLAN_${prefix}_${Date.now().toString().slice(-4)}`;
+
+      await api.createAdminPlan({
+        name: newPlanForm.name,
+        code: uniqueCode,
+        badge: newPlanForm.badge || null,
+        price: Number(newPlanForm.priceINR),
+        originalPrice: Number(newPlanForm.originalPriceINR),
+        durationDays: Number(newPlanForm.durationDays),
+        description: newPlanForm.description,
+        features: featuresArray,
+        isPublished: newPlanForm.isPublished,
+        examSlug: selectedExam.slug,
+      });
+
+      setMsg({ type: 'success', text: `Created plan "${newPlanForm.name}" for ${selectedExam.shortName}!` });
+      setShowAddPlanModal(false);
+      setNewPlanForm({
+        name: '',
+        badge: 'Popular',
+        priceINR: 49,
+        originalPriceINR: 149,
+        durationDays: 90,
+        description: '',
+        featuresText: 'Full CBT Simulator Interface\nOfficial Verified Shift Papers\nDetailed Derivations & Solutions\nAIR Rank & Accuracy Audit',
+        isPublished: true,
+      });
+      loadExamPlans(selectedExam.slug);
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to create plan' });
     }
   };
 
@@ -493,6 +610,63 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                 </div>
               </div>
 
+              {/* Dynamic Pricing & Plan Manager for Selected Exam (Student Modal CMS) */}
+              <div className="p-5 rounded-xl bg-white border border-slate-200 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                      <IndianRupee className="w-4 h-4 text-emerald-600" />
+                      <span>{selectedExam.shortName} Pricing & Plans Manager (Dynamic Student Modal)</span>
+                    </h3>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Directly edit and vary plan titles, badges, prices (INR / USD), validity, and features shown in the student pricing modal for {selectedExam.title}.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => loadExamPlans(selectedExam.slug)}
+                      disabled={loadingPlans}
+                      className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold cursor-pointer"
+                      title="Reload Plans"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${loadingPlans ? 'animate-spin' : ''}`} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowAddPlanModal(true)}
+                      className="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Custom Plan</span>
+                    </button>
+                  </div>
+                </div>
+
+                {loadingPlans && examPlans.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+                    <RefreshCw className="w-4 h-4 animate-spin text-emerald-600" />
+                    <span>Loading pricing plans for {selectedExam.shortName}...</span>
+                  </div>
+                ) : examPlans.length === 0 ? (
+                  <div className="py-6 text-center text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl">
+                    No custom plans found. Default starter plans will automatically populate.
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {examPlans.map((plan) => (
+                      <ExamPlanEditorCard
+                        key={plan.id}
+                        plan={plan}
+                        selectedExam={selectedExam}
+                        saving={savingPlanId === plan.id}
+                        onSave={(updatedData) => handleSavePlan(plan.id, updatedData)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Tests List for Selected Exam */}
               <div className="p-5 rounded-xl bg-white border border-slate-200 space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -799,6 +973,424 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
           </form>
         </div>
       )}
+
+      {/* Create Custom Plan for Selected Exam Modal */}
+      {showAddPlanModal && selectedExam && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                <Tag className="w-4 h-4 text-emerald-600" />
+                <span>Add Custom Plan for {selectedExam.shortName}</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowAddPlanModal(false)}
+                className="cursor-pointer text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateExamPlan} className="space-y-3.5 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Plan Title *</label>
+                <input
+                  type="text"
+                  required
+                  value={newPlanForm.name}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, name: e.target.value })}
+                  placeholder="e.g. 15-Test Mega Booster"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold text-slate-900 bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Badge Tag</label>
+                  <input
+                    type="text"
+                    value={newPlanForm.badge}
+                    onChange={(e) => setNewPlanForm({ ...newPlanForm, badge: e.target.value })}
+                    placeholder="e.g. Popular, Top Choice, Best Value"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 text-slate-900 bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Validity (Days)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    required
+                    value={newPlanForm.durationDays}
+                    onChange={(e) => setNewPlanForm({ ...newPlanForm, durationDays: Number(e.target.value) })}
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold text-slate-900 bg-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Price (₹ INR) *</label>
+                  <input
+                    type="number"
+                    min="0"
+                    required
+                    value={newPlanForm.priceINR}
+                    onChange={(e) => setNewPlanForm({ ...newPlanForm, priceINR: Number(e.target.value) })}
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 font-bold text-slate-900 bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Original Price (₹)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={newPlanForm.originalPriceINR}
+                    onChange={(e) => setNewPlanForm({ ...newPlanForm, originalPriceINR: Number(e.target.value) })}
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 text-slate-900 bg-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Description Tagline</label>
+                <textarea
+                  rows={2}
+                  value={newPlanForm.description}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, description: e.target.value })}
+                  placeholder={`Short description shown in ${selectedExam.shortName} pricing modal...`}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 text-slate-800 bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Features List (One bullet point per line)
+                </label>
+                <textarea
+                  rows={3}
+                  value={newPlanForm.featuresText}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, featuresText: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 font-mono text-slate-800 bg-white"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="newPlanPublished"
+                  checked={newPlanForm.isPublished}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, isPublished: e.target.checked })}
+                  className="rounded text-blue-600 border-slate-300"
+                />
+                <label htmlFor="newPlanPublished" className="font-semibold text-slate-700 cursor-pointer">
+                  Publish immediately in student modal for {selectedExam.shortName}
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowAddPlanModal(false)}
+                  className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold cursor-pointer"
+                >
+                  Create Plan for {selectedExam.shortName}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface ExamPlanEditorCardProps {
+  plan: SubscriptionPlan;
+  selectedExam: any;
+  saving: boolean;
+  onSave: (data: any) => Promise<void>;
+}
+
+const ExamPlanEditorCard: React.FC<ExamPlanEditorCardProps> = ({
+  plan,
+  selectedExam,
+  saving,
+  onSave,
+}) => {
+  const [name, setName] = useState(plan.name || '');
+  const [badge, setBadge] = useState(plan.badge || '');
+  const [priceINR, setPriceINR] = useState<number>(Number(plan.priceINR ?? plan.price ?? 0));
+  const [originalPriceINR, setOriginalPriceINR] = useState<number>(Number(plan.originalPriceINR ?? plan.originalPrice ?? 0));
+  const [durationDays, setDurationDays] = useState<number>(Number(plan.durationDays ?? 0));
+  const [description, setDescription] = useState(plan.description || '');
+  const [featuresText, setFeaturesText] = useState(
+    Array.isArray(plan.features) ? plan.features.join('\n') : ''
+  );
+  const [isPublished, setIsPublished] = useState<boolean>(
+    plan.isPublished !== undefined ? plan.isPublished : true
+  );
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
+
+  useEffect(() => {
+    setName(plan.name || '');
+    setBadge(plan.badge || '');
+    setPriceINR(Number(plan.priceINR ?? plan.price ?? 0));
+    setOriginalPriceINR(Number(plan.originalPriceINR ?? plan.originalPrice ?? 0));
+    setDurationDays(Number(plan.durationDays ?? 0));
+    setDescription(plan.description || '');
+    setFeaturesText(Array.isArray(plan.features) ? plan.features.join('\n') : '');
+    setIsPublished(plan.isPublished !== undefined ? plan.isPublished : true);
+    setHasChanges(false);
+  }, [plan]);
+
+  const handleSave = () => {
+    onSave({
+      name,
+      badge,
+      priceINR: Number(priceINR),
+      price: Number(priceINR),
+      originalPriceINR: Number(originalPriceINR),
+      durationDays: Number(durationDays),
+      description,
+      features: featuresText.split('\n').map((f) => f.trim()).filter(Boolean),
+      isPublished,
+    });
+    setHasChanges(false);
+  };
+
+  const isFree = priceINR === 0;
+
+  return (
+    <div
+      className={`p-4 rounded-xl border transition-all space-y-3.5 ${
+        isPublished
+          ? 'bg-white border-slate-200 shadow-2xs hover:border-slate-300'
+          : 'bg-slate-50 border-slate-200/80 opacity-75'
+      }`}
+    >
+      {/* Plan Header Info & Status */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 text-slate-700">
+            {plan.code}
+          </span>
+          {badge && (
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+              {badge}
+            </span>
+          )}
+          <span className="text-xs font-bold text-slate-900">
+            Current: {isFree ? '₹0 (Free Forever)' : `₹${priceINR}`}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isPublished}
+              onChange={(e) => {
+                setIsPublished(e.target.checked);
+                setHasChanges(true);
+              }}
+              className="rounded text-blue-600 border-slate-300"
+            />
+            <span className="text-[11px]">{isPublished ? 'Published in Student Modal' : 'Hidden'}</span>
+          </label>
+
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+              hasChanges
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs animate-pulse'
+                : 'bg-slate-900 hover:bg-slate-800 text-white'
+            }`}
+          >
+            {saving ? (
+              <>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-3.5 h-3.5" />
+                <span>Save Changes</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Editable Fields Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+        {/* Title */}
+        <div className="sm:col-span-5">
+          <label className="block font-bold text-slate-700 mb-1">Plan Title *</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setHasChanges(true);
+            }}
+            placeholder="e.g. 5-Test Booster Pack"
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-900 bg-white"
+          />
+        </div>
+
+        {/* Badge */}
+        <div className="sm:col-span-4">
+          <label className="block font-bold text-slate-700 mb-1">Badge Tag</label>
+          <input
+            type="text"
+            value={badge}
+            onChange={(e) => {
+              setBadge(e.target.value);
+              setHasChanges(true);
+            }}
+            placeholder="e.g. Top Choice, Best Value"
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+          />
+          <div className="flex gap-1 mt-1">
+            {['Free Forever', 'Top Choice', 'Best Value', 'Super Value'].map((bText) => (
+              <button
+                key={bText}
+                type="button"
+                onClick={() => {
+                  setBadge(bText);
+                  setHasChanges(true);
+                }}
+                className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600"
+              >
+                {bText}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Validity */}
+        <div className="sm:col-span-3">
+          <label className="block font-bold text-slate-700 mb-1">Validity (Days)</label>
+          <input
+            type="number"
+            min="0"
+            value={durationDays}
+            onChange={(e) => {
+              setDurationDays(Number(e.target.value));
+              setHasChanges(true);
+            }}
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-900 bg-white"
+          />
+          <span className="text-[10px] text-slate-400 block mt-0.5">
+            {durationDays === 0 ? 'Lifetime Access' : `${durationDays} Days`}
+          </span>
+        </div>
+
+        {/* Price & Presets */}
+        <div className="sm:col-span-6">
+          <label className="block font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Price (₹ INR) *</span>
+            <span className="text-[10px] text-slate-400 font-normal">Approx USD: ${(priceINR / 75).toFixed(2)}</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min="0"
+              value={priceINR}
+              onChange={(e) => {
+                setPriceINR(Number(e.target.value));
+                setHasChanges(true);
+              }}
+              className="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+            />
+            <div className="flex flex-wrap gap-1">
+              {[0, 29, 49, 99, 149, 199, 299].map((pVal) => (
+                <button
+                  key={pVal}
+                  type="button"
+                  onClick={() => {
+                    setPriceINR(pVal);
+                    if (originalPriceINR <= pVal && pVal > 0) {
+                      setOriginalPriceINR(Math.round(pVal * 2.5));
+                    }
+                    setHasChanges(true);
+                  }}
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold border transition cursor-pointer ${
+                    priceINR === pVal
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                  }`}
+                >
+                  {pVal === 0 ? 'FREE' : `₹${pVal}`}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Original Price */}
+        <div className="sm:col-span-6">
+          <label className="block font-bold text-slate-700 mb-1">
+            Original Strikethrough Price (₹)
+          </label>
+          <input
+            type="number"
+            min="0"
+            value={originalPriceINR}
+            onChange={(e) => {
+              setOriginalPriceINR(Number(e.target.value));
+              setHasChanges(true);
+            }}
+            placeholder="e.g. 149 or 299 (optional)"
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+          />
+        </div>
+
+        {/* Description */}
+        <div className="sm:col-span-12">
+          <label className="block font-bold text-slate-700 mb-1">Description Tagline</label>
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              setHasChanges(true);
+            }}
+            placeholder={`Short description shown under plan name in ${selectedExam?.shortName || ''} modal...`}
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white"
+          />
+        </div>
+
+        {/* Features list */}
+        <div className="sm:col-span-12">
+          <label className="block font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Features List (One feature per line, rendered with checkmark)</span>
+            <span className="text-[10px] text-slate-400 font-normal">
+              {featuresText.split('\n').filter((f) => f.trim()).length} bullet points
+            </span>
+          </label>
+          <textarea
+            rows={3}
+            value={featuresText}
+            onChange={(e) => {
+              setFeaturesText(e.target.value);
+              setHasChanges(true);
+            }}
+            placeholder="5 Verified Mock Tests&#10;Detailed Step-by-Step Solutions&#10;Subject-wise Accuracy Audit"
+            className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 font-mono bg-white leading-relaxed"
+          />
+        </div>
+      </div>
     </div>
   );
 };
