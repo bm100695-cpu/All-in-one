@@ -18,6 +18,7 @@ import {
   CheckCheck,
   Smartphone,
   Loader2,
+  ExternalLink,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SubscriptionPlan, User } from '../types';
@@ -76,6 +77,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [checkoutTimeLeft, setCheckoutTimeLeft] = useState<number>(600);
   const [copiedUpi, setCopiedUpi] = useState<boolean>(false);
   const [verifyingPayment, setVerifyingPayment] = useState<boolean>(false);
+  const [merchantUpiId, setMerchantUpiId] = useState<string>(() => {
+    return localStorage.getItem('admin_merchant_upi_id') || 'bm100695@okhdfcbank';
+  });
+  const [isEditingUpi, setIsEditingUpi] = useState<boolean>(false);
+  const [tempUpiInput, setTempUpiInput] = useState<string>('');
 
   useEffect(() => {
     let timer: any = null;
@@ -96,11 +102,62 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleSaveUpi = async () => {
+    const clean = tempUpiInput.trim();
+    if (clean && clean.includes('@')) {
+      setMerchantUpiId(clean);
+      localStorage.setItem('admin_merchant_upi_id', clean);
+      if (currentUser?.role === 'ADMIN') {
+        try {
+          await api.updateMerchantUpi(clean);
+        } catch (e) {
+          console.warn('Saved UPI ID locally:', e);
+        }
+      }
+    }
+    setIsEditingUpi(false);
+  };
+
   const copyUpiId = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText('allinone.station@cashfree');
+      navigator.clipboard.writeText(merchantUpiId);
       setCopiedUpi(true);
       setTimeout(() => setCopiedUpi(false), 2000);
+    }
+  };
+
+  const handleOpenUpiApp = (appScheme: string, appName: string) => {
+    if (!activeCheckoutOrder) return;
+    const baseUpiParams = `pa=${encodeURIComponent(merchantUpiId)}&pn=${encodeURIComponent('All in One CBT')}&am=${activeCheckoutOrder.amount}&cu=INR&tn=${encodeURIComponent(activeCheckoutOrder.planName)}`;
+    
+    // App-specific scheme
+    const customUri = `${appScheme}?${baseUpiParams}`;
+    // Universal standard UPI scheme fallback
+    const universalUri = `upi://pay?${baseUpiParams}`;
+
+    const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      try {
+        window.location.href = customUri;
+        setTimeout(() => {
+          window.location.href = universalUri;
+        }, 1200);
+      } catch {
+        window.location.href = universalUri;
+      }
+      setStatusMessage({
+        type: 'info',
+        text: `Opening ${appName}... Complete payment in your app and click "I Have Paid • Verify Transaction" below.`,
+      });
+    } else {
+      try {
+        window.location.href = universalUri;
+      } catch {}
+      setStatusMessage({
+        type: 'info',
+        text: `Opening ${appName} UPI protocol. On computer, you can also scan the QR code on the right with your phone camera!`,
+      });
     }
   };
 
@@ -601,41 +658,141 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                     </div>
                   </div>
 
-                  {/* UPI Apps supported */}
+                  {/* Interactive UPI Apps Direct Pay Buttons */}
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold text-slate-700">Supported UPI & Payment Apps</p>
-                    <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-700">
-                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">Google Pay</span>
-                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">PhonePe</span>
-                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">Paytm</span>
-                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">BHIM UPI</span>
-                      <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 shadow-2xs">Cred</span>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-semibold text-slate-700">Supported UPI & Payment Apps</p>
+                      <span className="text-[10px] text-slate-400">Tap to pay via app</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenUpiApp('tez://upi/pay', 'Google Pay')}
+                        className="px-3 py-1.5 rounded-lg bg-white hover:bg-blue-50/70 border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-600 shadow-2xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        title="Click to open Google Pay"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span>Google Pay</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenUpiApp('phonepe://pay', 'PhonePe')}
+                        className="px-3 py-1.5 rounded-lg bg-white hover:bg-purple-50/70 border border-slate-200 hover:border-purple-400 text-slate-700 hover:text-purple-600 shadow-2xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        title="Click to open PhonePe"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-purple-600"></span>
+                        <span>PhonePe</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenUpiApp('paytmmp://pay', 'Paytm')}
+                        className="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50/70 border border-slate-200 hover:border-sky-400 text-slate-700 hover:text-sky-600 shadow-2xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        title="Click to open Paytm"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-sky-500"></span>
+                        <span>Paytm</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenUpiApp('upi://pay', 'BHIM UPI')}
+                        className="px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-50/70 border border-slate-200 hover:border-emerald-400 text-slate-700 hover:text-emerald-700 shadow-2xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        title="Click to open BHIM UPI"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                        <span>BHIM UPI</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenUpiApp('cred://pay', 'Cred')}
+                        className="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 border border-slate-200 hover:border-zinc-500 text-slate-700 hover:text-zinc-900 shadow-2xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        title="Click to open Cred"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-zinc-900"></span>
+                        <span>Cred</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+                      </button>
                     </div>
                   </div>
 
-                  {/* Copy UPI ID */}
-                  <div className="p-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Merchant UPI ID</p>
-                      <p className="text-xs font-mono font-bold text-slate-900 mt-0.5">allinone.station@cashfree</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={copyUpiId}
-                      className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      {copiedUpi ? (
-                        <>
-                          <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-700 font-bold">Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 text-slate-600" />
-                          <span>Copy</span>
-                        </>
+                  {/* Copy & Manage UPI ID */}
+                  <div className="p-3.5 bg-white border border-slate-200 rounded-xl space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 mr-2">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Merchant UPI ID</p>
+                        {isEditingUpi ? (
+                          <div className="flex items-center gap-1.5 mt-1.5">
+                            <input
+                              type="text"
+                              value={tempUpiInput}
+                              onChange={(e) => setTempUpiInput(e.target.value)}
+                              placeholder="e.g. yourname@okhdfcbank"
+                              className="px-2.5 py-1 text-xs border border-blue-400 rounded-lg font-mono w-full max-w-[210px] focus:outline-none focus:ring-1 focus:ring-blue-600 bg-white"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleSaveUpi}
+                              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                            >
+                              Save
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingUpi(false)}
+                              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs transition-colors cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <p className="text-xs font-mono font-bold text-slate-900 mt-0.5">{merchantUpiId}</p>
+                        )}
+                      </div>
+
+                      {!isEditingUpi && (
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {currentUser?.role === 'ADMIN' && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setTempUpiInput(merchantUpiId);
+                                setIsEditingUpi(true);
+                              }}
+                              className="px-2.5 py-1.5 rounded-lg text-blue-600 hover:bg-blue-50 text-xs font-semibold transition-colors cursor-pointer border border-blue-200"
+                              title="Click to enter your real Google Pay / PhonePe UPI ID"
+                            >
+                              Edit UPI
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={copyUpiId}
+                            className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            {copiedUpi ? (
+                              <>
+                                <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
+                                <span className="text-emerald-700 font-bold">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3.5 h-3.5 text-slate-600" />
+                                <span>Copy</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
                       )}
-                    </button>
+                    </div>
+
+                    {currentUser?.role === 'ADMIN' && !isEditingUpi && (
+                      <p className="text-[10px] text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-200 leading-relaxed">
+                        <strong>Admin Tip:</strong> Google Pay me "No account registered" dummy UPI ID ke karan aata hai. Apna asli UPI ID (GPay/PhonePe) dalne ke liye <strong>"Edit UPI"</strong> par click karein.
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -656,9 +813,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                   <div className="p-3 bg-white rounded-xl shadow-xs border border-slate-200 inline-block mx-auto">
                     <img
                       src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data=${encodeURIComponent(
-                        `upi://pay?pa=allinone.station@cashfree&pn=All%20in%20One%20CBT&am=${activeCheckoutOrder.amount}&cu=INR&tn=${encodeURIComponent(activeCheckoutOrder.planName)}`
+                        `upi://pay?pa=${merchantUpiId}&pn=All%20in%20One%20CBT&am=${activeCheckoutOrder.amount}&cu=INR&tn=${encodeURIComponent(activeCheckoutOrder.planName)}`
                       )}`}
-                      alt="Cashfree UPI QR Code"
+                      alt="Verified UPI QR Code"
                       className="w-44 h-44 rounded-lg mx-auto"
                       loading="lazy"
                     />

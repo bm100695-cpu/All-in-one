@@ -460,6 +460,13 @@ export const api = {
     });
   },
 
+  updateMerchantUpi: async (upiId: string) => {
+    return request<{ success: boolean; merchantUpiId: string; message: string }>('/monetization/admin/merchant-upi', {
+      method: 'POST',
+      body: JSON.stringify({ upiId }),
+    });
+  },
+
   verifyPayment: async (orderId: string, paymentId: string, signature?: string) => {
     return request<{
       success: boolean;

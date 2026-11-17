@@ -132,6 +132,9 @@ async function getCashfreeOrder(orderId: string): Promise<any> {
   return data;
 }
 
+// Global Merchant UPI ID for candidate mobile QR transfers
+let activeMerchantUpiId = process.env.MERCHANT_UPI_ID || 'bm100695@okhdfcbank';
+
 // =========================================================================
 // 1. PUBLIC CONFIGURATION & PLANS
 // =========================================================================
@@ -146,7 +149,27 @@ router.get('/config', (_req: Request, res: Response) => {
     activeGateway: isCashfreeLive ? 'Cashfree' : isRazorpayLive ? 'Razorpay' : 'Cashfree',
     cashfreeAppId: CASHFREE_APP_ID,
     cashfreeMode: CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
+    merchantUpiId: activeMerchantUpiId,
   });
+});
+
+// Admin: Update merchant UPI ID for dynamic QR code collection
+router.post('/admin/merchant-upi', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { upiId } = req.body;
+    if (!upiId || typeof upiId !== 'string' || !upiId.includes('@')) {
+      res.status(400).json({ error: 'Valid UPI ID required (e.g. mobile@paytm or name@bank)' });
+      return;
+    }
+    activeMerchantUpiId = upiId.trim();
+    res.json({
+      success: true,
+      merchantUpiId: activeMerchantUpiId,
+      message: `Merchant UPI ID updated to "${activeMerchantUpiId}" successfully.`,
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Failed to update merchant UPI ID' });
+  }
 });
 
 // Helper to ensure default subscription plans exist in database
