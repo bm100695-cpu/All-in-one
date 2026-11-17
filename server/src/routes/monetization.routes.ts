@@ -11,7 +11,7 @@ const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'rzp_test_placeho
 const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || 'rzp_webhook_placeholder_secret';
 const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
 
-// Official Cashfree PG v2023-08-01 Configuration (Read from environment variables)
+// Official Cashfree PG Configuration (Read from environment variables)
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || '';
 const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY || '';
 const CASHFREE_ENVIRONMENT = (process.env.CASHFREE_ENVIRONMENT || 'TEST').toUpperCase();
@@ -43,7 +43,7 @@ if (isRazorpayLive) {
   }
 }
 
-// Cashfree Order Creation Helper
+// Cashfree Order Creation Helper (Official API version 2022-09-01)
 async function createCashfreeOrder(params: {
   orderId: string;
   orderAmount: number;
@@ -61,27 +61,43 @@ async function createCashfreeOrder(params: {
   orderNote?: string;
 }): Promise<{ paymentSessionId: string; orderId: string; cfOrderId?: string }> {
   const url = `${CASHFREE_BASE_URL}/orders`;
+
+  const cleanCustomerId = (params.customerDetails.customerId || 'cust_guest')
+    .replace(/[^a-zA-Z0-9_-]/g, '_')
+    .slice(0, 50);
+  const cleanPhone = (params.customerDetails.customerPhone || '9999999999')
+    .replace(/\D/g, '')
+    .slice(-10) || '9999999999';
+
+  const orderPayload: any = {
+    order_id: params.orderId,
+    order_amount: Number(params.orderAmount.toFixed(2)),
+    order_currency: params.orderCurrency || 'INR',
+    customer_details: {
+      customer_id: cleanCustomerId.length >= 3 ? cleanCustomerId : `cust_${cleanCustomerId}_01`,
+      customer_name: params.customerDetails.customerName || 'Registered Candidate',
+      customer_email: params.customerDetails.customerEmail || 'candidate@allinone.edu',
+      customer_phone: cleanPhone.length === 10 ? cleanPhone : '9999999999',
+    },
+    order_note: params.orderNote || 'Exam Plan Purchase',
+  };
+
+  if (params.orderMeta?.returnUrl) {
+    orderPayload.order_meta = {
+      return_url: params.orderMeta.returnUrl,
+      notify_url: params.orderMeta.notifyUrl,
+    };
+  }
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'x-client-id': CASHFREE_APP_ID,
       'x-client-secret': CASHFREE_SECRET_KEY,
-      'x-api-version': '2023-08-01',
+      'x-api-version': '2022-09-01',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      order_id: params.orderId,
-      order_amount: params.orderAmount,
-      order_currency: params.orderCurrency || 'INR',
-      customer_details: {
-        customer_id: params.customerDetails.customerId.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 50),
-        customer_name: params.customerDetails.customerName || 'Registered Candidate',
-        customer_email: params.customerDetails.customerEmail || 'candidate@allinone.edu',
-        customer_phone: params.customerDetails.customerPhone || '9999999999',
-      },
-      order_meta: params.orderMeta || {},
-      order_note: params.orderNote || 'Exam Plan Purchase',
-    }),
+    body: JSON.stringify(orderPayload),
   });
 
   const text = await response.text();
@@ -104,7 +120,7 @@ async function createCashfreeOrder(params: {
   };
 }
 
-// Cashfree Order Status Fetch Helper
+// Cashfree Order Status Fetch Helper (Official API version 2022-09-01)
 async function getCashfreeOrder(orderId: string): Promise<any> {
   const url = `${CASHFREE_BASE_URL}/orders/${orderId}`;
   const response = await fetch(url, {
@@ -112,7 +128,7 @@ async function getCashfreeOrder(orderId: string): Promise<any> {
     headers: {
       'x-client-id': CASHFREE_APP_ID,
       'x-client-secret': CASHFREE_SECRET_KEY,
-      'x-api-version': '2023-08-01',
+      'x-api-version': '2022-09-01',
     },
   });
 
@@ -941,6 +957,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       res.json({
         orderId,
         paymentSessionId,
+        payment_session_id: paymentSessionId,
         cashfreeMode: CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
         gateway: gatewayUsed,
         amount: finalAmount,
@@ -1146,6 +1163,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     res.json({
       orderId,
       paymentSessionId,
+      payment_session_id: paymentSessionId,
       cashfreeMode: CASHFREE_ENVIRONMENT === 'PROD' || CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
       gateway: gatewayUsed,
       amount: finalAmount,

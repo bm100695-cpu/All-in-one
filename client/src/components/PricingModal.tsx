@@ -398,9 +398,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       }
 
       // Priority 1: Official Cashfree JS SDK v3 Modal Checkout (if live production session)
+      const activeSession = order.paymentSessionId || (order as any).payment_session_id;
       const isOfficialLive =
-        order.paymentSessionId &&
-        !order.paymentSessionId.startsWith('cf_mock_') &&
+        activeSession &&
+        !activeSession.startsWith('cf_mock_') &&
         order.gateway === 'CASHFREE';
 
       if (isOfficialLive) {
@@ -417,7 +418,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             });
 
             cashfree.checkout({
-              paymentSessionId: order.paymentSessionId,
+              paymentSessionId: activeSession,
               redirectTarget: '_modal',
             }).then(async (result: any) => {
               if (result.error) {
@@ -436,7 +437,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       // Seamlessly handles Sandbox, Dynamic UPI QR Scanner, and ISP fallbacks
       setActiveCheckoutOrder({
         orderId: order.orderId,
-        paymentSessionId: order.paymentSessionId,
+        paymentSessionId: activeSession,
         amount: order.amount || plan.price,
         planName: plan.name,
         planCode: plan.code,
