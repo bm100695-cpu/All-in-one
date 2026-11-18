@@ -10,15 +10,39 @@ const router = Router();
 
 const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
 
-// Helper to dynamically read official Cashfree PG Configuration from process.env on every request
+// In-memory dynamic overrides (allows instant activation of production keys from database or admin API)
+let dynamicOverrideAppId: string | null = null;
+let dynamicOverrideSecretKey: string | null = null;
+let dynamicOverrideEnv: string | null = null;
+
+// Auto-load dynamic production credentials from Neon PostgreSQL if saved
+(async () => {
+  try {
+    const savedConfig = await prisma.pricingAuditLog.findFirst({
+      where: { targetType: 'CASHFREE_CONFIG' },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (savedConfig?.notes) {
+      const parsed = JSON.parse(savedConfig.notes);
+      if (parsed.appId) dynamicOverrideAppId = parsed.appId;
+      if (parsed.secretKey) dynamicOverrideSecretKey = parsed.secretKey;
+      if (parsed.environment) dynamicOverrideEnv = parsed.environment;
+      console.log(`[Cashfree Config] Loaded persistent credentials from database. Mode: ${parsed.environment || 'PRODUCTION'}`);
+    }
+  } catch (err: any) {
+    console.warn('[Cashfree Config] Notice loading DB credentials:', err.message);
+  }
+})();
+
+// Helper to dynamically read official Cashfree PG Configuration from memory/db/env on every request
 export function getCashfreeConfig() {
-  const appId = String(process.env.CASHFREE_APP_ID || '')
+  const appId = String(dynamicOverrideAppId || process.env.CASHFREE_APP_ID || '')
     .replace(/^["']|["']$/g, '')
     .trim();
-  const secretKey = String(process.env.CASHFREE_SECRET_KEY || '')
+  const secretKey = String(dynamicOverrideSecretKey || process.env.CASHFREE_SECRET_KEY || '')
     .replace(/^["']|["']$/g, '')
     .trim();
-  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || '')
+  const rawEnv = String(dynamicOverrideEnv || process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || '')
     .replace(/^["']|["']$/g, '')
     .trim()
     .toUpperCase();
@@ -232,22 +256,45 @@ router.get('/config', (_req: Request, res: Response) => {
   });
 });
 
-// Admin: Update merchant UPI ID for dynamic QR code collection
-router.post('/admin/merchant-upi', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+// Admin: Update Cashfree production credentials dynamically without redeploying
+router.post('/admin/cashfree-config', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
-    const { upiId } = req.body;
-    if (!upiId || typeof upiId !== 'string' || !upiId.includes('@')) {
-      res.status(400).json({ error: 'Valid UPI ID required (e.g. mobile@paytm or name@bank)' });
+    const { appId, secretKey, environment } = req.body;
+    if (!appId || !secretKey) {
+      res.status(400).json({ error: 'App ID and Secret Key are required.' });
       return;
     }
-    activeMerchantUpiId = upiId.trim();
+
+    dynamicOverrideAppId = String(appId).trim();
+    dynamicOverrideSecretKey = String(secretKey).trim();
+    dynamicOverrideEnv = String(environment || 'PRODUCTION').trim().toUpperCase();
+
+    // Persist securely to Neon PostgreSQL
+    await prisma.pricingAuditLog.create({
+      data: {
+        adminId: req.user!.id,
+        targetType: 'CASHFREE_CONFIG',
+        targetId: 'ACTIVE',
+        targetTitle: 'Cashfree Payment Gateway Credentials',
+        notes: JSON.stringify({
+          appId: dynamicOverrideAppId,
+          secretKey: dynamicOverrideSecretKey,
+          environment: dynamicOverrideEnv,
+          updatedAt: new Date().toISOString(),
+        }),
+      },
+    });
+
+    const config = getCashfreeConfig();
     res.json({
       success: true,
-      merchantUpiId: activeMerchantUpiId,
-      message: `Merchant UPI ID updated to "${activeMerchantUpiId}" successfully.`,
+      message: `Cashfree credentials updated successfully! Active mode: ${config.mode.toUpperCase()}`,
+      cashfreeAppId: config.appId,
+      cashfreeMode: config.mode,
+      isLive: config.isLive,
     });
   } catch (err: any) {
-    res.status(500).json({ error: err.message || 'Failed to update merchant UPI ID' });
+    res.status(500).json({ error: err.message || 'Failed to update Cashfree configuration' });
   }
 });
 
@@ -1035,6 +1082,9 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         payment_session_id: paymentSessionId,
         paymentSessionId,
         cashfreeMode: cfConfig.mode,
+        checkoutUrl: cfConfig.mode === 'sandbox'
+          ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
+          : `https://payments.cashfree.com/forms/${paymentSessionId}`,
         gateway: gatewayUsed,
         amount: finalAmount,
         originalPrice,
@@ -1253,6 +1303,9 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       payment_session_id: paymentSessionId,
       paymentSessionId,
       cashfreeMode: cfConfig.mode,
+      checkoutUrl: cfConfig.mode === 'sandbox'
+        ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
+        : `https://payments.cashfree.com/forms/${paymentSessionId}`,
       gateway: gatewayUsed,
       amount: finalAmount,
       originalPrice,

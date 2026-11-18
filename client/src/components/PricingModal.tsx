@@ -64,6 +64,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [applyingCoupon, setApplyingCoupon] = useState<boolean>(false);
 
   const [verifyingPayment, setVerifyingPayment] = useState<boolean>(false);
+  const [activeCheckoutUrl, setActiveCheckoutUrl] = useState<string | null>(null);
+  const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+  const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
+  const [activePlanName, setActivePlanName] = useState<string | null>(null);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
@@ -309,13 +313,22 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
       // Automatically match mode with environment (sandbox if test key, production if live key)
       const targetMode = order.cashfreeMode === 'sandbox' ? 'sandbox' : 'production';
+      const checkoutDirectUrl = order.checkoutUrl || (targetMode === 'sandbox'
+        ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${activeSession}`
+        : `https://payments.cashfree.com/forms/${activeSession}`);
+
+      setActiveCheckoutUrl(checkoutDirectUrl);
+      setActiveOrderId(order.orderId!);
+      setActivePlanCode(plan.code);
+      setActivePlanName(plan.name);
+
       const cashfree = (window as any).Cashfree({
         mode: targetMode,
       });
 
       setStatusMessage({
         type: 'info',
-        text: 'Opening Cashfree secure modal... Scan UPI QR or choose PhonePe, GPay, Paytm, Cards.',
+        text: 'Launching Cashfree secure gateway... If popup shows "temporarily down", click the Direct Checkout button above.',
       });
 
       cashfree.checkout({
@@ -426,6 +439,41 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             )}
             <span>{statusMessage.text}</span>
+          </div>
+        )}
+
+        {/* Direct Checkout Fallback (Bypasses iframe modal issues / temporarily down errors) */}
+        {activeCheckoutUrl && (
+          <div className="mx-6 my-3 p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-950 shadow-sm animate-fade-in">
+            <div className="flex items-center gap-2.5 text-xs font-medium">
+              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+              <span>
+                If popup shows "temporarily down" or is blocked by network:
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <a
+                href={activeCheckoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow transition-colors"
+              >
+                <span>Open Direct Checkout</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeOrderId && activePlanCode && activePlanName) {
+                    handleVerifyCashfreeOrder(activeOrderId, activePlanCode, activePlanName);
+                  }
+                }}
+                disabled={verifyingPayment}
+                className="px-3 py-1.5 bg-white hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-lg text-xs font-medium transition-colors"
+              >
+                {verifyingPayment ? 'Verifying...' : 'Verify Status'}
+              </button>
+            </div>
           </div>
         )}
 

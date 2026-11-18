@@ -427,6 +427,7 @@ export const api = {
       paymentSessionId?: string;
       payment_session_id?: string;
       cashfreeMode?: 'sandbox' | 'production';
+      checkoutUrl?: string;
       gateway?: string;
       amount?: number;
       originalPrice?: number;
@@ -466,6 +467,13 @@ export const api = {
     return request<{ success: boolean; merchantUpiId: string; message: string }>('/monetization/admin/merchant-upi', {
       method: 'POST',
       body: JSON.stringify({ upiId }),
+    });
+  },
+
+  updateCashfreeConfig: async (appId: string, secretKey: string, environment: string = 'PRODUCTION') => {
+    return request<{ success: boolean; message: string; cashfreeAppId: string; cashfreeMode: string; isLive: boolean }>('/monetization/admin/cashfree-config', {
+      method: 'POST',
+      body: JSON.stringify({ appId, secretKey, environment }),
     });
   },
 

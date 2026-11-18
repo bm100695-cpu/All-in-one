@@ -48,12 +48,22 @@ interface ContentItem {
 }
 
 export const AdminPricingManager: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'CONTENT_PRICING' | 'PLANS' | 'AUDIT_LOGS' | 'TRANSACTIONS'>('CONTENT_PRICING');
+  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'CONTENT_PRICING' | 'PLANS' | 'AUDIT_LOGS' | 'TRANSACTIONS' | 'GATEWAY_CONFIG'>('CONTENT_PRICING');
   const [loading, setLoading] = useState<boolean>(true);
   const [overview, setOverview] = useState<any>(null);
   const [contentList, setContentList] = useState<ContentItem[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [actionMessage, setActionMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
+  // Cashfree Gateway Form State
+  const [gatewayForm, setGatewayForm] = useState({
+    appId: '15315740b82c51c6b0bf1f74af64751351',
+    secretKey: '',
+    environment: 'PRODUCTION',
+    merchantUpiId: 'bm100695@okhdfcbank',
+  });
+  const [savingGateway, setSavingGateway] = useState<boolean>(false);
+  const [showSecretKey, setShowSecretKey] = useState<boolean>(false);
 
   // Filters
   const [filterType, setFilterType] = useState<'ALL' | 'EXAM' | 'TEST'>('ALL');
@@ -252,6 +262,32 @@ export const AdminPricingManager: React.FC = () => {
       showNotification(err.message || 'Failed to update pricing', 'error');
     } finally {
       setSavingEdit(false);
+    }
+  };
+
+  // Cashfree Gateway Settings Handler
+  const handleSaveGateway = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!gatewayForm.appId.trim() || !gatewayForm.secretKey.trim()) {
+      showNotification('Cashfree App ID and Secret Key are both required.', 'error');
+      return;
+    }
+    setSavingGateway(true);
+    try {
+      const res = await api.updateCashfreeConfig(
+        gatewayForm.appId.trim(),
+        gatewayForm.secretKey.trim(),
+        gatewayForm.environment
+      );
+      if (gatewayForm.merchantUpiId.trim()) {
+        await api.updateMerchantUpi(gatewayForm.merchantUpiId.trim());
+      }
+      showNotification(res.message || 'Cashfree Production Gateway activated successfully!');
+      await loadAllData();
+    } catch (err: any) {
+      showNotification(err.message || 'Failed to update Cashfree configuration', 'error');
+    } finally {
+      setSavingGateway(false);
     }
   };
 
@@ -521,6 +557,16 @@ export const AdminPricingManager: React.FC = () => {
           >
             <Receipt className="w-3.5 h-3.5 text-emerald-600" />
             <span>Payments & Refunds</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('GATEWAY_CONFIG')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'GATEWAY_CONFIG' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <ShieldAlert className="w-3.5 h-3.5" />
+            <span>Cashfree Gateway Settings</span>
           </button>
         </div>
 
@@ -914,6 +960,116 @@ export const AdminPricingManager: React.FC = () => {
         </div>
       )}
 
+      {/* GATEWAY CONFIGURATION VIEW */}
+      {activeTab === 'GATEWAY_CONFIG' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="p-2 rounded-xl bg-indigo-50 text-indigo-700">
+                <ShieldAlert className="w-5 h-5" />
+              </span>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Cashfree Production Gateway Credentials</h3>
+                <p className="text-xs text-slate-500">
+                  Update your live credentials directly. Saves instantly to persistent database and activates live payments without redeploying.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <form onSubmit={handleSaveGateway} className="max-w-2xl space-y-5">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div>
+                <span className="text-slate-500 font-medium">Gateway Status: </span>
+                <span className="font-bold text-slate-800">
+                  {gatewayForm.environment === 'PRODUCTION' ? '🟢 Live Production Mode' : '🟡 Sandbox Test Mode'}
+                </span>
+              </div>
+              <div className="text-[11px] text-slate-400">
+                Live URL: api.cashfree.com/pg
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                Cashfree App ID (Client ID)
+              </label>
+              <input
+                type="text"
+                value={gatewayForm.appId}
+                onChange={(e) => setGatewayForm({ ...gatewayForm, appId: e.target.value })}
+                placeholder="e.g. 15315740b82c51c6b0bf1f74af64751351"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+              <span className="text-[11px] text-slate-500 mt-1 block">
+                Production App ID typically starts with numbers (e.g. 15315740...). Sandbox App IDs start with "TEST".
+              </span>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span>Cashfree Secret Key</span>
+                <button
+                  type="button"
+                  onClick={() => setShowSecretKey(!showSecretKey)}
+                  className="text-indigo-600 hover:text-indigo-800 text-[11px] font-semibold cursor-pointer"
+                >
+                  {showSecretKey ? 'Hide Secret' : 'Show Secret'}
+                </button>
+              </label>
+              <input
+                type={showSecretKey ? 'text' : 'password'}
+                value={gatewayForm.secretKey}
+                onChange={(e) => setGatewayForm({ ...gatewayForm, secretKey: e.target.value })}
+                placeholder="Paste unmasked Secret Key from Cashfree Dashboard"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+              <span className="text-[11px] text-amber-600 mt-1 block font-medium">
+                Note: Do not paste masked strings containing "xxxx". Copy the fresh key right after clicking "Generate API Key" in Cashfree.
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Environment Mode</label>
+                <select
+                  value={gatewayForm.environment}
+                  onChange={(e) => setGatewayForm({ ...gatewayForm, environment: e.target.value })}
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="PRODUCTION">PRODUCTION (Real UPI, Cards, Netbanking)</option>
+                  <option value="TEST">TEST / SANDBOX (Developer Simulation)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Merchant UPI ID (Optional)</label>
+                <input
+                  type="text"
+                  value={gatewayForm.merchantUpiId}
+                  onChange={(e) => setGatewayForm({ ...gatewayForm, merchantUpiId: e.target.value })}
+                  placeholder="e.g. yourname@okhdfcbank"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
+            <div className="pt-3">
+              <button
+                type="submit"
+                disabled={savingGateway}
+                className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md cursor-pointer disabled:opacity-50 transition-all flex items-center gap-2"
+              >
+                <Check className="w-4 h-4" />
+                <span>{savingGateway ? 'Saving Credentials...' : 'Save & Activate Live Gateway'}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
       {/* TAB 4: TRANSACTIONS & REFUNDS */}
       {activeTab === 'TRANSACTIONS' && (
         <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
@@ -998,6 +1154,116 @@ export const AdminPricingManager: React.FC = () => {
               </table>
             </div>
           )}
+        </div>
+      )}
+
+      {/* GATEWAY CONFIGURATION VIEW */}
+      {activeTab === 'GATEWAY_CONFIG' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="p-2 rounded-xl bg-indigo-50 text-indigo-700">
+                <ShieldAlert className="w-5 h-5" />
+              </span>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Cashfree Production Gateway Credentials</h3>
+                <p className="text-xs text-slate-500">
+                  Update your live credentials directly. Saves instantly to persistent database and activates live payments without redeploying.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <form onSubmit={handleSaveGateway} className="max-w-2xl space-y-5">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div>
+                <span className="text-slate-500 font-medium">Gateway Status: </span>
+                <span className="font-bold text-slate-800">
+                  {gatewayForm.environment === 'PRODUCTION' ? '🟢 Live Production Mode' : '🟡 Sandbox Test Mode'}
+                </span>
+              </div>
+              <div className="text-[11px] text-slate-400">
+                Live URL: api.cashfree.com/pg
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                Cashfree App ID (Client ID)
+              </label>
+              <input
+                type="text"
+                value={gatewayForm.appId}
+                onChange={(e) => setGatewayForm({ ...gatewayForm, appId: e.target.value })}
+                placeholder="e.g. 15315740b82c51c6b0bf1f74af64751351"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+              <span className="text-[11px] text-slate-500 mt-1 block">
+                Production App ID typically starts with numbers (e.g. 15315740...). Sandbox App IDs start with "TEST".
+              </span>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span>Cashfree Secret Key</span>
+                <button
+                  type="button"
+                  onClick={() => setShowSecretKey(!showSecretKey)}
+                  className="text-indigo-600 hover:text-indigo-800 text-[11px] font-semibold cursor-pointer"
+                >
+                  {showSecretKey ? 'Hide Secret' : 'Show Secret'}
+                </button>
+              </label>
+              <input
+                type={showSecretKey ? 'text' : 'password'}
+                value={gatewayForm.secretKey}
+                onChange={(e) => setGatewayForm({ ...gatewayForm, secretKey: e.target.value })}
+                placeholder="Paste unmasked Secret Key from Cashfree Dashboard"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+              <span className="text-[11px] text-amber-600 mt-1 block font-medium">
+                Note: Do not paste masked strings containing "xxxx". Copy the fresh key right after clicking "Generate API Key" in Cashfree.
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Environment Mode</label>
+                <select
+                  value={gatewayForm.environment}
+                  onChange={(e) => setGatewayForm({ ...gatewayForm, environment: e.target.value })}
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="PRODUCTION">PRODUCTION (Real UPI, Cards, Netbanking)</option>
+                  <option value="TEST">TEST / SANDBOX (Developer Simulation)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Merchant UPI ID (Optional)</label>
+                <input
+                  type="text"
+                  value={gatewayForm.merchantUpiId}
+                  onChange={(e) => setGatewayForm({ ...gatewayForm, merchantUpiId: e.target.value })}
+                  placeholder="e.g. yourname@okhdfcbank"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
+            <div className="pt-3">
+              <button
+                type="submit"
+                disabled={savingGateway}
+                className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md cursor-pointer disabled:opacity-50 transition-all flex items-center gap-2"
+              >
+                <Check className="w-4 h-4" />
+                <span>{savingGateway ? 'Saving Credentials...' : 'Save & Activate Live Gateway'}</span>
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
