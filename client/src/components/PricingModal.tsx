@@ -71,6 +71,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
   const [activePlanName, setActivePlanName] = useState<string | null>(null);
   const [activeUpiQrPayload, setActiveUpiQrPayload] = useState<string | null>(null);
+  const [activeUpiQrImage, setActiveUpiQrImage] = useState<string | null>(null);
   const [activeAmount, setActiveAmount] = useState<number | null>(null);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
@@ -122,6 +123,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setAppliedCoupon(null);
       setCouponInput('');
       setActiveUpiQrPayload(null);
+      setActiveUpiQrImage(null);
       loadData();
     }
   }, [isOpen, activeExamSlug]);
@@ -365,10 +367,12 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setActivePlanName(plan.name);
       setActiveAmount(order.amount || plan.price);
 
-      // If Cashfree API returned an official dynamic UPI QR payload (upi://pay?...)
+      // If Cashfree API returned an official dynamic UPI QR payload (upi://pay?...) or QR image
       const upiPayload = (order as any).upiQrPayload || (order as any).upi_qr_payload;
-      if (upiPayload && typeof upiPayload === 'string') {
-        setActiveUpiQrPayload(upiPayload);
+      const upiImage = (order as any).upiQrImage || (order as any).upi_qr_image;
+      if (upiPayload || upiImage) {
+        setActiveUpiQrPayload(typeof upiPayload === 'string' ? upiPayload : null);
+        setActiveUpiQrImage(typeof upiImage === 'string' ? upiImage : null);
         setStatusMessage({
           type: 'info',
           text: 'Cashfree Dynamic UPI QR generated! Scan with Google Pay, PhonePe, or Paytm to pay.',
@@ -606,13 +610,14 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         )}
 
         {/* Dynamic Cashfree UPI QR & Mobile Intent Experience */}
-        {activeUpiQrPayload ? (
+        {(activeUpiQrPayload || activeUpiQrImage) ? (
           <div className="p-6 space-y-5 animate-in fade-in">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <button
                 type="button"
                 onClick={() => {
                   setActiveUpiQrPayload(null);
+                  setActiveUpiQrImage(null);
                   setStatusMessage(null);
                 }}
                 className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 cursor-pointer"
@@ -630,7 +635,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <div className="flex flex-col items-center space-y-3 shrink-0">
                 <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
                   <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(activeUpiQrPayload)}&size=240x240`}
+                    src={activeUpiQrImage || (activeUpiQrPayload ? `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(activeUpiQrPayload)}&size=240x240` : '')}
                     alt="Cashfree Dynamic UPI QR Code"
                     className="w-56 h-56 object-contain rounded-lg"
                   />
@@ -657,13 +662,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
                 {/* Android Direct Mobile UPI Intent Button */}
                 <div className="space-y-2">
-                  <a
-                    href={activeUpiQrPayload}
-                    className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-colors"
-                  >
-                    <Smartphone className="w-4 h-4" />
-                    <span>Pay with PhonePe / GPay / Paytm (Mobile Intent)</span>
-                  </a>
+                  {activeUpiQrPayload && (
+                    <a
+                      href={activeUpiQrPayload}
+                      className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-colors"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      <span>Pay with PhonePe / GPay / Paytm (Mobile Intent)</span>
+                    </a>
+                  )}
 
                   <div className="flex items-center gap-2">
                     <button

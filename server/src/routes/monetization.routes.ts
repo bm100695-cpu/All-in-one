@@ -262,7 +262,7 @@ async function getCashfreePayments(orderId: string): Promise<any[]> {
 }
 
 // Cashfree Dynamic UPI QR Generator (Official Order Sessions Pay API)
-async function generateCashfreeUpiQr(paymentSessionId: string): Promise<string | null> {
+async function generateCashfreeUpiQr(paymentSessionId: string): Promise<{ qrCodeUrl?: string; qrCodeImage?: string } | null> {
   const config = getCashfreeConfig();
   if (!config.isLive || !paymentSessionId) return null;
 
@@ -286,13 +286,34 @@ async function generateCashfreeUpiQr(paymentSessionId: string): Promise<string |
       }),
     });
 
-    if (response.ok) {
-      const data: any = await response.json();
-      const payload = data?.data?.payload || data?.payload;
-      if (payload && typeof payload === 'string' && payload.startsWith('upi://')) {
-        console.log(`[Cashfree Dynamic QR] Successfully generated dynamic UPI payload for session: ${paymentSessionId.slice(0, 15)}...`);
-        return payload;
+    const data: any = await response.json().catch(() => null);
+    if (response.ok && data) {
+      console.log(`[Cashfree Dynamic QR Success for session ${paymentSessionId.slice(0, 15)}...]:`, JSON.stringify(data));
+      const payloadObj = data?.data?.payload || data?.payload || data?.data;
+
+      let qrCodeUrl: string | undefined = undefined;
+      let qrCodeImage: string | undefined = undefined;
+
+      if (typeof payloadObj === 'string' && payloadObj.startsWith('upi://')) {
+        qrCodeUrl = payloadObj;
+      } else if (payloadObj && typeof payloadObj === 'object') {
+        if (typeof payloadObj.qrCodeUrl === 'string' && payloadObj.qrCodeUrl.startsWith('upi://')) {
+          qrCodeUrl = payloadObj.qrCodeUrl;
+        } else if (typeof payloadObj.qrcode === 'string' && payloadObj.qrcode.startsWith('upi://')) {
+          qrCodeUrl = payloadObj.qrcode;
+        }
+
+        if (typeof payloadObj.qrcode === 'string' && payloadObj.qrcode.startsWith('data:image')) {
+          qrCodeImage = payloadObj.qrcode;
+        }
       }
+
+      if (qrCodeUrl || qrCodeImage) {
+        console.log(`[Cashfree Dynamic QR] Successfully extracted QR: url=${Boolean(qrCodeUrl)}, image=${Boolean(qrCodeImage)}`);
+        return { qrCodeUrl, qrCodeImage };
+      }
+    } else {
+      console.warn(`[Cashfree Dynamic QR Status ${response.status}]:`, data);
     }
   } catch (err: any) {
     console.warn('[Cashfree Dynamic QR Notice]:', err.message);
@@ -1085,12 +1106,18 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           const existingOrder = await getCashfreeOrder(recentPendingTestPayment.orderId);
           if (existingOrder && existingOrder.order_status === 'ACTIVE' && existingOrder.payment_session_id) {
             console.log(`[Cashfree Order Reuse] Reusing existing active test order ${recentPendingTestPayment.orderId} for user ${userId}`);
+            let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
+            if (existingOrder.payment_session_id) {
+              upiQrResult = await generateCashfreeUpiQr(existingOrder.payment_session_id);
+            }
             res.json({
               order_id: recentPendingTestPayment.orderId,
               orderId: recentPendingTestPayment.orderId,
               payment_session_id: existingOrder.payment_session_id,
               paymentSessionId: existingOrder.payment_session_id,
               cashfreeMode: cfConfig.mode,
+              upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
+              upiQrImage: upiQrResult?.qrCodeImage || undefined,
               checkoutUrl: cfConfig.mode === 'sandbox'
                 ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
                 : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
@@ -1181,9 +1208,9 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         },
       });
 
-      let upiQrPayload: string | null = null;
+      let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
       if (paymentSessionId) {
-        upiQrPayload = await generateCashfreeUpiQr(paymentSessionId);
+        upiQrResult = await generateCashfreeUpiQr(paymentSessionId);
       }
 
       res.json({
@@ -1192,7 +1219,24 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         payment_session_id: paymentSessionId,
         paymentSessionId,
         cashfreeMode: cfConfig.mode,
-        upiQrPayload: upiQrPayload || undefined,
+        upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
+        upiQrImage: upiQrResult?.qrCodeImage || undefined,
+        checkoutUrl: cfConfig.mode === 'sandbox'
+          ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
+          : `https://payments.cashfree.com/forms/${paymentSessionId}`,
+        gateway: gatewayUsed,
+        amount: finalAmount,
+        originalPrice,
+        discountAmount,
+        couponCode: verifiedCouponCode,
+        amountPaise: amountInPaise,
+        currency: 'INR',
+        planName: `Single Mock Test: ${test.title}`,
+        description: `Unlock complete access & detailed analytics for ${test.title}`,
+        receipt,
+        paymentDbId: payment.id,
+        isLiveGateway: cfConfig.isLive,
+      });
         checkoutUrl: cfConfig.mode === 'sandbox'
           ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
           : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1360,12 +1404,18 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         const existingOrder = await getCashfreeOrder(recentPendingPlanPayment.orderId);
         if (existingOrder && existingOrder.order_status === 'ACTIVE' && existingOrder.payment_session_id) {
           console.log(`[Cashfree Order Reuse] Reusing existing active plan order ${recentPendingPlanPayment.orderId} for user ${userId}`);
+          let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
+          if (existingOrder.payment_session_id) {
+            upiQrResult = await generateCashfreeUpiQr(existingOrder.payment_session_id);
+          }
           res.json({
             order_id: recentPendingPlanPayment.orderId,
             orderId: recentPendingPlanPayment.orderId,
             payment_session_id: existingOrder.payment_session_id,
             paymentSessionId: existingOrder.payment_session_id,
             cashfreeMode: cfConfig.mode,
+            upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
+            upiQrImage: upiQrResult?.qrCodeImage || undefined,
             checkoutUrl: cfConfig.mode === 'sandbox'
               ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
               : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
@@ -1457,13 +1507,19 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       },
     });
 
-    let upiQrPayload: string | null = null;
+    let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
     if (paymentSessionId) {
-      upiQrPayload = await generateCashfreeUpiQr(paymentSessionId);
+      upiQrResult = await generateCashfreeUpiQr(paymentSessionId);
     }
 
     res.json({
       order_id: orderId,
+      orderId,
+      payment_session_id: paymentSessionId,
+      paymentSessionId,
+      cashfreeMode: cfConfig.mode,
+      upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
+      upiQrImage: upiQrResult?.qrCodeImage || undefined,
       orderId,
       payment_session_id: paymentSessionId,
       paymentSessionId,
