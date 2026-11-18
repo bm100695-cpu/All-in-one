@@ -18,14 +18,17 @@ export function getCashfreeConfig() {
   const secretKey = String(process.env.CASHFREE_SECRET_KEY || '')
     .replace(/^["']|["']$/g, '')
     .trim();
-  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || 'PRODUCTION')
+  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || '')
     .replace(/^["']|["']$/g, '')
     .trim()
     .toUpperCase();
 
-  // Strictly Live Production Gateway: Explicitly set to https://api.cashfree.com/pg
-  // All sandbox.cashfree.com URLs and test fallbacks are removed.
-  const baseUrl = 'https://api.cashfree.com/pg';
+  // Smart Environment Routing:
+  // If appId starts with 'TEST' or env is explicitly TEST/SANDBOX -> routes to sandbox.cashfree.com
+  // If appId is a live production key (e.g. 15315740...) -> routes to api.cashfree.com
+  const isTestKey = appId.startsWith('TEST') || appId.startsWith('test') || rawEnv === 'TEST' || rawEnv === 'SANDBOX';
+  const isProduction = !isTestKey;
+  const baseUrl = isProduction ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
   const isMasked = secretKey.includes('xxxxxxxx');
   const isLive = Boolean(
     appId &&
@@ -38,11 +41,11 @@ export function getCashfreeConfig() {
   return {
     appId,
     secretKey,
-    rawEnv: 'PRODUCTION',
-    environment: 'PRODUCTION',
-    mode: 'production' as const,
+    rawEnv: isProduction ? 'PRODUCTION' : 'TEST',
+    environment: isProduction ? 'PRODUCTION' : 'TEST',
+    mode: (isProduction ? 'production' : 'sandbox') as 'production' | 'sandbox',
     baseUrl,
-    isProduction: true,
+    isProduction,
     isLive,
     isMasked,
   };
@@ -948,6 +951,10 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
               customerPhone: (user as any)?.phone || '9999999999',
             },
             orderNote: `Mock Test: ${test.title}`,
+            orderMeta: {
+              returnUrl: `${req.headers.origin || 'https://all-in-one-brijesh17.vercel.app'}/?cf_order_id={order_id}`,
+              notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
+            },
           });
           paymentSessionId = cfRes.paymentSessionId;
           orderId = cfRes.orderId;
@@ -1162,6 +1169,10 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             customerPhone: (user as any)?.phone || '9999999999',
           },
           orderNote: `Plan: ${plan.name} (${plan.code})`,
+          orderMeta: {
+            returnUrl: `${req.headers.origin || 'https://all-in-one-brijesh17.vercel.app'}/?cf_order_id={order_id}`,
+            notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
+          },
         });
         paymentSessionId = cfRes.paymentSessionId;
         orderId = cfRes.orderId;
