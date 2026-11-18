@@ -397,10 +397,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
       if (cashfree) {
         try {
-          // Standard Cashfree redirect (no iframe blocking or ERR_CERT_AUTHORITY_INVALID)
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           await cashfree.checkout({
             paymentSessionId: activeSession,
-            redirectTarget: '_self',
+            redirectTarget: isMobile ? '_self' : '_modal',
           });
         } catch (checkoutErr: any) {
           console.warn('Cashfree checkout modal notice:', checkoutErr);
