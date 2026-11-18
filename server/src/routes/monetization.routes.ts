@@ -129,7 +129,14 @@ async function createCashfreeOrder(params: {
 
   if (!response.ok || !data.payment_session_id) {
     console.error(`[Cashfree API Error] Status ${response.status}:`, data);
-    const errorMsg = data?.message || `Cashfree order creation failed with status ${response.status}`;
+    let errorMsg = data?.message || `Cashfree order creation failed with status ${response.status}`;
+    if (response.status === 401 || errorMsg.toLowerCase().includes('authentication failed')) {
+      if (config.appId.startsWith('TEST') || config.appId.startsWith('test')) {
+        errorMsg = `Cashfree Authentication Failed: Your live server has a TEST App ID (${config.appId.slice(0, 8)}...) configured. Cashfree Live Production requires your unmasked Production App ID & Secret Key in Render Environment Variables.`;
+      } else {
+        errorMsg = 'Cashfree Authentication Failed: Live API rejected the credentials. Please verify your CASHFREE_APP_ID and CASHFREE_SECRET_KEY in Render.';
+      }
+    }
     throw new Error(errorMsg);
   }
 
