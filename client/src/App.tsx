@@ -189,10 +189,15 @@ export const App: React.FC = () => {
                   if (pSlug) {
                     setSelectedExamSlug(pSlug);
                   }
+                } else if ((vRes as any).pending) {
+                  showToast((vRes as any).message || 'Payment is in progress. Please approve in your UPI app.');
+                } else {
+                  showToast((vRes as any).message || 'Payment was not completed or failed.');
                 }
               })
               .catch((vErr) => {
                 console.warn('Cashfree return verification notice:', vErr);
+                showToast(vErr.message || 'Payment verification could not be completed.');
               });
           }
 
@@ -515,6 +520,10 @@ export const App: React.FC = () => {
         examSlug={pricingExamSlug || currentUser?.targetExamId || selectedExamSlug}
         onPaymentSuccess={handlePaymentSuccess}
         onOpenReferral={handleOpenReferral}
+        onOpenAuth={() => {
+          setIsPricingModalOpen(false);
+          setIsAuthModalOpen(true);
+        }}
       />
 
       <ReferralModal

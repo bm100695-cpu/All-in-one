@@ -14,9 +14,15 @@ const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
 let dynamicOverrideAppId: string | null = null;
 let dynamicOverrideSecretKey: string | null = null;
 let dynamicOverrideEnv: string | null = null;
+let lastDbSyncTime = 0;
 
-// Auto-load dynamic production credentials from Neon PostgreSQL if saved
-(async () => {
+// Auto-sync credentials from Neon PostgreSQL if saved
+export async function syncCashfreeConfigFromDb(force = false): Promise<void> {
+  const now = Date.now();
+  if (!force && now - lastDbSyncTime < 30000) {
+    return;
+  }
+  lastDbSyncTime = now;
   try {
     const savedConfig = await prisma.pricingAuditLog.findFirst({
       where: { targetType: 'CASHFREE_CONFIG' },
@@ -27,12 +33,21 @@ let dynamicOverrideEnv: string | null = null;
       if (parsed.appId) dynamicOverrideAppId = parsed.appId;
       if (parsed.secretKey) dynamicOverrideSecretKey = parsed.secretKey;
       if (parsed.environment) dynamicOverrideEnv = parsed.environment;
-      console.log(`[Cashfree Config] Loaded persistent credentials from database. Mode: ${parsed.environment || 'PRODUCTION'}`);
+      console.log(`[Cashfree Config] Synced from database. Mode: ${parsed.environment || 'PRODUCTION'} | AppId: ${parsed.appId?.slice(0, 8)}...`);
     }
   } catch (err: any) {
-    console.warn('[Cashfree Config] Notice loading DB credentials:', err.message);
+    console.warn('[Cashfree Config] Notice syncing DB credentials:', err.message);
   }
-})();
+}
+
+// Initial sync on startup
+syncCashfreeConfigFromDb(true).catch(() => {});
+
+// Middleware to keep config synced
+router.use(async (_req: Request, _res: Response, next) => {
+  syncCashfreeConfigFromDb(false).catch(() => {});
+  next();
+});
 
 // Helper to dynamically read official Cashfree PG Configuration from memory/db/env on every request
 export function getCashfreeConfig() {
@@ -46,6 +61,7 @@ export function getCashfreeConfig() {
     .replace(/^["']|["']$/g, '')
     .trim()
     .toUpperCase();
+  const apiVersion = String(process.env.CASHFREE_API_VERSION || '2022-09-01').trim();
 
   // Smart Environment Routing:
   // If appId starts with 'TEST' or env is explicitly TEST/SANDBOX -> routes to sandbox.cashfree.com
@@ -65,6 +81,7 @@ export function getCashfreeConfig() {
   return {
     appId,
     secretKey,
+    apiVersion,
     rawEnv: isProduction ? 'PRODUCTION' : 'TEST',
     environment: isProduction ? 'PRODUCTION' : 'TEST',
     mode: (isProduction ? 'production' : 'sandbox') as 'production' | 'sandbox',
@@ -129,17 +146,18 @@ async function createCashfreeOrder(params: {
     orderPayload.order_meta = {
       return_url: params.orderMeta.returnUrl,
       notify_url: params.orderMeta.notifyUrl,
+      payment_methods: 'cc,dc,upi,nb,app,paylater',
     };
   }
 
-  console.log(`[Cashfree API] POST ${url} | Order: ${params.orderId} | Amount: ₹${params.orderAmount} | AppId: ${config.appId.slice(0, 8)}... | API-Version: 2022-09-01`);
+  console.log(`[Cashfree API] POST ${url} | Order: ${params.orderId} | Amount: ₹${params.orderAmount} | AppId: ${config.appId.slice(0, 8)}... | API-Version: ${config.apiVersion}`);
 
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'x-client-id': config.appId,
       'x-client-secret': config.secretKey,
-      'x-api-version': '2022-09-01',
+      'x-api-version': config.apiVersion,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(orderPayload),
@@ -176,7 +194,7 @@ async function createCashfreeOrder(params: {
   };
 }
 
-// Cashfree Order Status Fetch Helper (Official API version 2022-09-01)
+// Cashfree Order Status Fetch Helper (Official API version)
 async function getCashfreeOrder(orderId: string): Promise<any> {
   const config = getCashfreeConfig();
   if (!config.isLive) {
@@ -189,7 +207,7 @@ async function getCashfreeOrder(orderId: string): Promise<any> {
     headers: {
       'x-client-id': config.appId,
       'x-client-secret': config.secretKey,
-      'x-api-version': '2022-09-01',
+      'x-api-version': config.apiVersion,
     },
   });
 
@@ -207,6 +225,40 @@ async function getCashfreeOrder(orderId: string): Promise<any> {
   }
 
   return data;
+}
+
+// Cashfree Order Payments Fetch Helper (Fetches actual transaction list for the order)
+async function getCashfreePayments(orderId: string): Promise<any[]> {
+  const config = getCashfreeConfig();
+  if (!config.isLive) {
+    throw new Error('Cashfree credentials missing for payment list check.');
+  }
+
+  const url = `${config.baseUrl}/orders/${encodeURIComponent(orderId)}/payments`;
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'x-client-id': config.appId,
+      'x-client-secret': config.secretKey,
+      'x-api-version': config.apiVersion,
+    },
+  });
+
+  const text = await response.text();
+  let data: any = [];
+  try {
+    data = JSON.parse(text);
+  } catch {
+    console.warn(`[Cashfree Payments Check] Non-JSON response (${response.status}) for order ${orderId}`);
+    return [];
+  }
+
+  if (!response.ok) {
+    console.warn(`[Cashfree Payments Check] Status ${response.status} for order ${orderId}:`, data);
+    return [];
+  }
+
+  return Array.isArray(data) ? data : [];
 }
 
 // Global Merchant UPI ID for candidate mobile QR transfers
@@ -1035,6 +1087,53 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
       const user = await prisma.user.findUnique({ where: { id: userId } });
 
+      // Check for valid existing pending order within last 15 minutes to avoid duplicate orders
+      const recentPendingTestPayment = await prisma.payment.findFirst({
+        where: {
+          userId,
+          testId: test.id,
+          status: 'PENDING',
+          amount: finalAmount,
+          createdAt: { gte: new Date(Date.now() - 15 * 60 * 1000) },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      if (recentPendingTestPayment && cfConfig.isLive) {
+        try {
+          const existingOrder = await getCashfreeOrder(recentPendingTestPayment.orderId);
+          if (existingOrder && existingOrder.order_status === 'ACTIVE' && existingOrder.payment_session_id) {
+            console.log(`[Cashfree Order Reuse] Reusing existing active test order ${recentPendingTestPayment.orderId} for user ${userId}`);
+            res.json({
+              order_id: recentPendingTestPayment.orderId,
+              orderId: recentPendingTestPayment.orderId,
+              payment_session_id: existingOrder.payment_session_id,
+              paymentSessionId: existingOrder.payment_session_id,
+              cashfreeMode: cfConfig.mode,
+              checkoutUrl: cfConfig.mode === 'sandbox'
+                ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
+                : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
+              gateway: gatewayUsed,
+              amount: finalAmount,
+              originalPrice,
+              discountAmount,
+              couponCode: verifiedCouponCode,
+              amountPaise,
+              currency: 'INR',
+              planName: `Single Mock Test: ${test.title}`,
+              description: `Unlock complete access & detailed analytics for ${test.title}`,
+              receipt: recentPendingTestPayment.receipt,
+              paymentDbId: recentPendingTestPayment.id,
+              isLiveGateway: cfConfig.isLive,
+              isReusedOrder: true,
+            });
+            return;
+          }
+        } catch {
+          // Continue to create fresh order if status check fails
+        }
+      }
+
       if (cfConfig.isLive) {
         try {
           const cfRes = await createCashfreeOrder({
@@ -1049,7 +1148,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             },
             orderNote: `Mock Test: ${test.title}`,
             orderMeta: {
-              returnUrl: `${req.headers.origin || 'https://all-in-one-brijesh17.vercel.app'}/?cf_order_id={order_id}`,
+              returnUrl: `${req.headers.origin || 'https://all-in-one-one-indol.vercel.app'}/?cf_order_id={order_id}`,
               notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
             },
           });
@@ -1256,6 +1355,55 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
+    // Check for valid existing pending order within last 15 minutes to avoid duplicate orders
+    const recentPendingPlanPayment = await prisma.payment.findFirst({
+      where: {
+        userId,
+        planId: plan.id,
+        testId: null,
+        status: 'PENDING',
+        amount: finalAmount,
+        createdAt: { gte: new Date(Date.now() - 15 * 60 * 1000) },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (recentPendingPlanPayment && cfConfig.isLive) {
+      try {
+        const existingOrder = await getCashfreeOrder(recentPendingPlanPayment.orderId);
+        if (existingOrder && existingOrder.order_status === 'ACTIVE' && existingOrder.payment_session_id) {
+          console.log(`[Cashfree Order Reuse] Reusing existing active plan order ${recentPendingPlanPayment.orderId} for user ${userId}`);
+          res.json({
+            order_id: recentPendingPlanPayment.orderId,
+            orderId: recentPendingPlanPayment.orderId,
+            payment_session_id: existingOrder.payment_session_id,
+            paymentSessionId: existingOrder.payment_session_id,
+            cashfreeMode: cfConfig.mode,
+            checkoutUrl: cfConfig.mode === 'sandbox'
+              ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
+              : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
+            gateway: gatewayUsed,
+            amount: finalAmount,
+            originalPrice,
+            discountAmount,
+            couponCode: verifiedCouponCode,
+            amountPaise,
+            currency: plan.currency || 'INR',
+            planName: plan.name,
+            planCode: plan.code,
+            description: plan.description,
+            receipt: recentPendingPlanPayment.receipt,
+            paymentDbId: recentPendingPlanPayment.id,
+            isLiveGateway: cfConfig.isLive,
+            isReusedOrder: true,
+          });
+          return;
+        }
+      } catch {
+        // Continue to create fresh order if status check fails
+      }
+    }
+
     if (cfConfig.isLive) {
       try {
         const cfRes = await createCashfreeOrder({
@@ -1270,7 +1418,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           },
           orderNote: `Plan: ${plan.name} (${plan.code})`,
           orderMeta: {
-            returnUrl: `${req.headers.origin || 'https://all-in-one-brijesh17.vercel.app'}/?cf_order_id={order_id}`,
+            returnUrl: `${req.headers.origin || 'https://all-in-one-one-indol.vercel.app'}/?cf_order_id={order_id}`,
             notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
           },
         });
@@ -1355,33 +1503,203 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 // CASHFREE VERIFICATION & WEBHOOK HANDLERS
 // =========================================================================
 
+// Shared transactional activation helper for verified payments
+async function activatePaidOrder(params: {
+  payment: any;
+  cfOrderId: string;
+  cfPaymentId?: string;
+  paymentMethod?: string;
+  signature: string;
+  source: string;
+}) {
+  const { payment, cfOrderId, cfPaymentId, paymentMethod, signature, source } = params;
+
+  return await prisma.$transaction(async (tx) => {
+    // Re-check current payment status inside transaction to prevent double activation race
+    const currentPayment = await tx.payment.findUnique({
+      where: { id: payment.id },
+      include: { plan: true, test: true },
+    });
+
+    if (!currentPayment) {
+      throw new Error(`Payment record ${payment.id} not found.`);
+    }
+
+    if (currentPayment.status === 'SUCCESS') {
+      const existingSub = await tx.subscription.findFirst({
+        where: { userId: currentPayment.userId, paymentId: currentPayment.id },
+        include: { plan: true },
+      });
+      return {
+        alreadyActive: true,
+        payment: currentPayment,
+        subscription: existingSub,
+      };
+    }
+
+    let parsedNotes: any = {};
+    try {
+      parsedNotes = JSON.parse(currentPayment.notesJson || '{}');
+    } catch {
+      parsedNotes = {};
+    }
+
+    parsedNotes.verifiedAt = new Date().toISOString();
+    parsedNotes.paidAt = new Date().toISOString();
+    parsedNotes.verificationSource = source;
+    if (paymentMethod) parsedNotes.paymentMethod = paymentMethod;
+
+    const updatedPayment = await tx.payment.update({
+      where: { id: currentPayment.id },
+      data: {
+        status: 'SUCCESS',
+        paymentId: cfPaymentId ? String(cfPaymentId) : currentPayment.paymentId || `cf_${Date.now()}`,
+        method: paymentMethod || currentPayment.method || 'upi',
+        signature,
+        notesJson: JSON.stringify(parsedNotes),
+      },
+    });
+
+    let createdSubscription: any = null;
+
+    if (currentPayment.testId) {
+      // Single Mock Test Entitlement
+      await tx.entitlement.upsert({
+        where: { id: `ent_${currentPayment.userId}_${currentPayment.testId}` },
+        update: { isActive: true },
+        create: {
+          id: `ent_${currentPayment.userId}_${currentPayment.testId}`,
+          userId: currentPayment.userId,
+          testId: currentPayment.testId,
+          planCode: 'TEST_PURCHASE',
+          source,
+          expiresAt: null,
+        },
+      });
+    } else if (currentPayment.plan) {
+      const plan = currentPayment.plan;
+      let endDate: Date | null = null;
+      if (plan.durationDays > 0) {
+        endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
+      }
+
+      // Deactivate previous active subscriptions for this user
+      await tx.subscription.updateMany({
+        where: { userId: currentPayment.userId, status: 'ACTIVE' },
+        data: { status: 'CANCELLED' },
+      });
+
+      const isBooster = plan.code.includes('BOOSTER');
+      const testsRemaining = isBooster ? 5 : null;
+
+      createdSubscription = await tx.subscription.create({
+        data: {
+          userId: currentPayment.userId,
+          planId: plan.id,
+          status: 'ACTIVE',
+          startDate: new Date(),
+          endDate,
+          paymentId: updatedPayment.id,
+          testsRemaining,
+        },
+        include: { plan: true },
+      });
+
+      // Grant Subscription Entitlement
+      await tx.entitlement.create({
+        data: {
+          userId: currentPayment.userId,
+          testId: null,
+          planCode: plan.code,
+          source,
+          expiresAt: endDate,
+        },
+      });
+    }
+
+    return {
+      alreadyActive: false,
+      payment: updatedPayment,
+      subscription: createdSubscription,
+    };
+  });
+}
+
+// Cashfree Webhook Signature Verification (Official v3 / HMAC-SHA256)
+export function verifyCashfreeWebhookSignature(
+  rawBody: string,
+  timestamp: string,
+  signature: string,
+  secretKey: string
+): boolean {
+  if (!rawBody || !timestamp || !signature || !secretKey) {
+    return false;
+  }
+
+  try {
+    // 1. Validate timestamp age (within 10 minutes to prevent replay attacks)
+    const tsNumber = Number(timestamp);
+    if (!isNaN(tsNumber)) {
+      const tsMs = tsNumber > 10000000000 ? tsNumber : tsNumber * 1000;
+      const now = Date.now();
+      if (Math.abs(now - tsMs) > 10 * 60 * 1000) {
+        console.warn(`[Cashfree Webhook] Expired or skewed timestamp: ${timestamp}`);
+        return false;
+      }
+    }
+
+    // 2. Compute HMAC-SHA256(timestamp + rawBody, secretKey) encoded in Base64
+    const dataToSign = timestamp + rawBody;
+    const computedSignature = crypto
+      .createHmac('sha256', secretKey)
+      .update(dataToSign)
+      .digest('base64');
+
+    // 3. Constant-time comparison
+    const sigBuffer = Buffer.from(signature, 'utf8');
+    const compBuffer = Buffer.from(computedSignature, 'utf8');
+
+    if (sigBuffer.length !== compBuffer.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(sigBuffer, compBuffer);
+  } catch (err: any) {
+    console.error('[Cashfree Webhook] Signature verification error:', err.message);
+    return false;
+  }
+}
+
 // Official Cashfree order verification endpoint (Called by client on checkout completion)
 router.post('/verify-cashfree', authenticate, async (req: Request, res: Response) => {
   try {
     const { orderId } = req.body;
     const userId = req.user!.id;
 
-    if (!orderId) {
+    if (!orderId || typeof orderId !== 'string') {
       res.status(400).json({ success: false, message: 'orderId is required.' });
       return;
     }
 
+    const cleanOrderId = orderId.trim();
+
     const payment = await prisma.payment.findUnique({
-      where: { orderId },
+      where: { orderId: cleanOrderId },
       include: { plan: true, test: true },
     });
 
     if (!payment) {
-      res.status(404).json({ success: false, message: 'Payment order record not found.' });
+      res.status(404).json({ success: false, message: 'Payment order record not found in database.' });
       return;
     }
 
+    // 1. Verify Student Ownership
     if (payment.userId !== userId && req.user!.role !== 'ADMIN') {
-      res.status(403).json({ success: false, message: 'Unauthorized payment verification attempt.' });
+      res.status(403).json({ success: false, message: 'Unauthorized: This payment does not belong to your account.' });
       return;
     }
 
-    // Idempotent: already verified
+    // 2. Check if already processed (Idempotency)
     if (payment.status === 'SUCCESS') {
       const existingSub = await prisma.subscription.findFirst({
         where: { userId, paymentId: payment.id },
@@ -1389,140 +1707,109 @@ router.post('/verify-cashfree', authenticate, async (req: Request, res: Response
       });
       res.json({
         success: true,
-        message: 'Payment has already been confirmed and active.',
+        message: 'Payment has already been confirmed and is active.',
         payment,
         subscription: existingSub || undefined,
       });
       return;
     }
 
-    // Fetch official order status from Cashfree REST API if in live mode
-    const cfConfig = getCashfreeConfig();
-    const isTestOrder =
-      orderId.startsWith('cf_test_') ||
-      orderId.startsWith('cf_sub_test_') ||
-      (payment.notesJson && payment.notesJson.includes('CASHFREE_TEST')) ||
-      !cfConfig.isProduction;
+    // 3. Fetch Official Order from Cashfree REST API
+    let cfOrder: any;
+    try {
+      cfOrder = await getCashfreeOrder(cleanOrderId);
+    } catch (cfErr: any) {
+      console.error(`[Cashfree Verify Error for ${cleanOrderId}]:`, cfErr.message);
+      res.status(502).json({
+        success: false,
+        message: `Failed to verify with Cashfree gateway: ${cfErr.message}`,
+      });
+      return;
+    }
 
-    let cfOrder: any = null;
-    if (cfConfig.isLive && !orderId.startsWith('cf_test_')) {
-      try {
-        cfOrder = await getCashfreeOrder(orderId);
-      } catch (cfErr: any) {
-        console.warn('Cashfree order status check notice:', cfErr);
-        if (cfConfig.isProduction) {
-          res.status(502).json({
-            success: false,
-            message: `Failed to verify with Cashfree gateway: ${cfErr.message}`,
-          });
-          return;
+    if (!cfOrder || !cfOrder.order_status) {
+      res.status(502).json({
+        success: false,
+        message: 'Invalid response received from Cashfree gateway.',
+      });
+      return;
+    }
+
+    console.log(`[Cashfree Verify] Order: ${cleanOrderId} | Status: ${cfOrder.order_status} | Amount: ₹${cfOrder.order_amount}`);
+
+    // 4. Strict Order Status Check: Only 'PAID' can activate courses!
+    const orderStatus = cfOrder.order_status.toUpperCase();
+    if (orderStatus !== 'PAID') {
+      const isPending = orderStatus === 'ACTIVE';
+      res.status(400).json({
+        success: false,
+        pending: isPending,
+        orderStatus: cfOrder.order_status,
+        message: isPending
+          ? 'Payment is currently in progress. Please approve the payment in your UPI app and click Verify.'
+          : `Payment not completed (Status: ${cfOrder.order_status}). Please retry.`,
+      });
+      return;
+    }
+
+    // 5. Strict Amount Verification
+    const cfAmount = Number(cfOrder.order_amount);
+    if (Math.abs(cfAmount - payment.amount) > 0.01) {
+      console.error(`[Cashfree Verify Fraud] Amount mismatch! Cashfree: ${cfAmount}, Expected: ${payment.amount}`);
+      res.status(400).json({
+        success: false,
+        message: 'Payment amount mismatch detected. Transaction flagged for security review.',
+      });
+      return;
+    }
+
+    // 6. Strict Currency Verification
+    if (cfOrder.order_currency && cfOrder.order_currency.toUpperCase() !== 'INR') {
+      res.status(400).json({
+        success: false,
+        message: 'Invalid currency detected. Expected INR.',
+      });
+      return;
+    }
+
+    // 7. Verify Actual Payment Exists in Cashfree Payments List
+    let cfPaymentId = cfOrder.cf_order_id ? String(cfOrder.cf_order_id) : cleanOrderId;
+    let paymentMethod = 'UPI';
+    try {
+      const paymentsList = await getCashfreePayments(cleanOrderId);
+      const successfulPayment = paymentsList.find((p: any) => p.payment_status === 'SUCCESS');
+      if (successfulPayment) {
+        if (successfulPayment.cf_payment_id) {
+          cfPaymentId = String(successfulPayment.cf_payment_id);
+        }
+        if (successfulPayment.payment_method) {
+          paymentMethod = typeof successfulPayment.payment_method === 'object'
+            ? Object.keys(successfulPayment.payment_method)[0]?.toUpperCase() || 'UPI'
+            : String(successfulPayment.payment_method);
         }
       }
+    } catch (pErr: any) {
+      console.warn(`[Cashfree Payments List Check] Notice for ${cleanOrderId}:`, pErr.message);
     }
 
-    if (cfOrder) {
-      console.log(`[Cashfree Verify] Order ${orderId} status: ${cfOrder.order_status}`);
-      if (cfOrder.order_status !== 'PAID') {
-        const isPending = cfOrder.order_status === 'ACTIVE';
-        res.status(400).json({
-          success: false,
-          pending: isPending,
-          orderStatus: cfOrder.order_status,
-          message: isPending
-            ? 'Payment is currently in progress. Complete it in your UPI app to unlock.'
-            : `Payment not completed (Status: ${cfOrder.order_status}). Please retry.`,
-        });
-        return;
-      }
-    }
-
-    // Payment is officially verified! Update record to SUCCESS
-    const updatedPayment = await prisma.payment.update({
-      where: { id: payment.id },
-      data: {
-        status: 'SUCCESS',
-        paymentId: cfOrder?.cf_order_id ? String(cfOrder.cf_order_id) : `cf_${Date.now()}`,
-        signature: `cashfree_verified_${Date.now()}`,
-      },
+    // 8. Atomic Activation
+    const result = await activatePaidOrder({
+      payment,
+      cfOrderId: cleanOrderId,
+      cfPaymentId,
+      paymentMethod,
+      signature: `cashfree_api_verified_${Date.now()}`,
+      source: 'CASHFREE_API',
     });
 
-    // Case A: Single Mock Test Purchase
-    if (payment.testId) {
-      await prisma.entitlement.create({
-        data: {
-          userId,
-          testId: payment.testId,
-          planCode: 'TEST_PURCHASE',
-          source: 'TEST_PURCHASE',
-          expiresAt: null,
-        },
-      });
-
-      res.json({
-        success: true,
-        message: `Payment of ₹${payment.amount} verified! "${payment.test?.title || 'Mock Test'}" has been unlocked permanently.`,
-        payment: updatedPayment,
-        purchasedTestId: payment.testId,
-      });
-      return;
-    }
-
-    // Case B: Subscription Plan Purchase
-    const plan = payment.plan;
-    if (!plan) {
-      res.status(500).json({ success: false, message: 'Associated subscription plan not found.' });
-      return;
-    }
-
-    let endDate: Date | null = null;
-    if (plan.durationDays > 0) {
-      endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
-    }
-
-    // Deactivate previous active subscriptions
-    await prisma.subscription.updateMany({
-      where: { userId, status: 'ACTIVE' },
-      data: { status: 'CANCELLED' },
-    });
-
-    const isBooster = plan.code === 'PLAN_BOOSTER_49' || plan.code === 'TEST_PACK_99' || plan.code.includes('BOOSTER');
-    const testsRemaining = isBooster ? 5 : null;
-
-    const subscription = await prisma.subscription.create({
-      data: {
-        userId,
-        planId: plan.id,
-        status: 'ACTIVE',
-        startDate: new Date(),
-        endDate,
-        paymentId: updatedPayment.id,
-        testsRemaining,
-      },
-      include: { plan: true },
-    });
-
-    // Create entitlements
-    await prisma.entitlement.create({
-      data: {
-        userId,
-        testId: null,
-        planCode: plan.code,
-        source: 'SUBSCRIPTION',
-        expiresAt: endDate,
-      },
-    });
+    const itemName = payment.test?.title || payment.plan?.name || 'Selected Plan';
 
     res.json({
       success: true,
-      message: `Payment of ₹${payment.amount} verified successfully! ${plan.name} has been activated.`,
-      payment: updatedPayment,
-      subscription: {
-        ...subscription,
-        plan: {
-          ...subscription.plan,
-          features: JSON.parse(subscription.plan.featuresJson || '[]'),
-        },
-      },
+      message: `Payment of ₹${payment.amount} verified! ${itemName} has been activated.`,
+      payment: result.payment,
+      subscription: result.subscription,
+      purchasedTestId: payment.testId || undefined,
     });
   } catch (error: any) {
     console.error('Verify Cashfree error:', error);
@@ -1709,7 +1996,7 @@ router.post('/submit-upi-payment', authenticate, async (req: Request, res: Respo
           planCode: plan.code,
         }),
       },
-    }).catch(() => {});
+    }).catch(() => { });
 
     res.json({
       success: true,
@@ -1723,89 +2010,59 @@ router.post('/submit-upi-payment', authenticate, async (req: Request, res: Respo
   }
 });
 
-// Official Cashfree Webhook Listener
-router.post('/cashfree-webhook', async (req: Request, res: Response) => {
-  try {
-    const event = req.body;
-    console.log('[Cashfree Webhook] Event received:', event?.type || event?.event_time);
-    const orderId = event?.data?.order?.order_id;
-    const orderStatus = event?.data?.order?.order_status;
-
-    if (orderId && (orderStatus === 'PAID' || event?.type === 'PAYMENT_SUCCESS_WEBHOOK')) {
-      const payment = await prisma.payment.findUnique({
-        where: { orderId },
-        include: { plan: true, test: true },
-      });
-
-      if (payment && payment.status !== 'SUCCESS') {
-        const updatedPayment = await prisma.payment.update({
-          where: { id: payment.id },
-          data: {
-            status: 'SUCCESS',
-            paymentId: event?.data?.payment?.cf_payment_id ? String(event.data.payment.cf_payment_id) : `cf_hook_${Date.now()}`,
-            signature: 'cashfree_webhook_verified',
-          },
-        });
-
-        if (payment.testId) {
-          await prisma.entitlement.create({
-            data: {
-              userId: payment.userId,
-              testId: payment.testId,
-              planCode: 'TEST_PURCHASE',
-              source: 'TEST_PURCHASE',
-              expiresAt: null,
-            },
-          });
-        } else if (payment.plan) {
-          const plan = payment.plan;
-          let endDate: Date | null = null;
-          if (plan.durationDays > 0) {
-            endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
-          }
-          await prisma.subscription.updateMany({
-            where: { userId: payment.userId, status: 'ACTIVE' },
-            data: { status: 'CANCELLED' },
-          });
-          const isBooster = plan.code === 'PLAN_BOOSTER_49' || plan.code === 'TEST_PACK_99' || plan.code.includes('BOOSTER');
-          await prisma.subscription.create({
-            data: {
-              userId: payment.userId,
-              planId: plan.id,
-              status: 'ACTIVE',
-              startDate: new Date(),
-              endDate,
-              paymentId: updatedPayment.id,
-              testsRemaining: isBooster ? 5 : null,
-            },
-          });
-          await prisma.entitlement.create({
-            data: {
-              userId: payment.userId,
-              testId: null,
-              planCode: plan.code,
-              source: 'SUBSCRIPTION',
-              expiresAt: endDate,
-            },
-          });
-        }
-      }
-    }
-    res.json({ status: 'OK' });
-  } catch (err) {
-    console.error('Cashfree webhook handler error:', err);
-    res.status(200).json({ status: 'ERROR_LOGGED' });
-  }
+// Deprecated / Disabled: Manual UTR submissions are strictly rejected
+router.post('/submit-upi-payment', authenticate, async (_req: Request, res: Response) => {
+  res.status(400).json({
+    success: false,
+    message: 'Manual UTR submission is disabled. All payments must be securely completed and verified via Cashfree Payment Gateway.',
+  });
 });
 
-// Backward-compatible payment verification endpoint (delegates to Cashfree)
-router.post('/verify-payment', authenticate, async (req: Request, res: Response) => {
+// Official Cashfree Webhook Listener (Handles both /webhook/cashfree and /cashfree-webhook)
+const handleCashfreeWebhook = async (req: Request, res: Response) => {
   try {
-    const { orderId } = req.body;
-    const userId = req.user!.id;
+    const rawBody = (req as any).rawBody || JSON.stringify(req.body);
+    const signature = (req.headers['x-webhook-signature'] || req.headers['x-cf-signature']) as string;
+    const timestamp = (req.headers['x-webhook-timestamp'] || req.headers['x-cf-timestamp']) as string;
+
+    const cfConfig = getCashfreeConfig();
+
+    if (!cfConfig.secretKey) {
+      console.error('[Cashfree Webhook] Server secret key is not configured.');
+      res.status(500).json({ status: 'CONFIG_ERROR' });
+      return;
+    }
+
+    // 1. Verify Cryptographic Signature
+    const isValid = verifyCashfreeWebhookSignature(rawBody, timestamp, signature, cfConfig.secretKey);
+    if (!isValid) {
+      console.warn('[Cashfree Webhook] Rejected webhook with invalid signature.');
+      res.status(401).json({ status: 'INVALID_SIGNATURE' });
+      return;
+    }
+
+    const event = typeof req.body === 'object' ? req.body : JSON.parse(rawBody);
+    console.log('[Cashfree Webhook Verified] Event:', event?.type || event?.event_time);
+
+    const orderId = event?.data?.order?.order_id;
+    const orderStatus = event?.data?.order?.order_status;
+    const orderAmount = Number(event?.data?.order?.order_amount);
+    const cfPaymentId = event?.data?.payment?.cf_payment_id || event?.data?.payment?.payment_id;
+    const paymentMethod = event?.data?.payment?.payment_method
+      ? (typeof event.data.payment.payment_method === 'object'
+          ? Object.keys(event.data.payment.payment_method)[0]?.toUpperCase()
+          : String(event.data.payment.payment_method))
+      : 'UPI';
 
     if (!orderId) {
-      res.status(400).json({ success: false, error: 'orderId is required.' });
+      res.status(200).json({ status: 'IGNORED_NO_ORDER_ID' });
+      return;
+    }
+
+    // 2. Ignore non-paid events (e.g. USER_DROPPED, PENDING, FAILED)
+    if (orderStatus !== 'PAID' && event?.type !== 'PAYMENT_SUCCESS_WEBHOOK') {
+      console.log(`[Cashfree Webhook] Order ${orderId} status ${orderStatus} is not PAID.`);
+      res.status(200).json({ status: 'IGNORED_NOT_PAID' });
       return;
     }
 
@@ -1815,37 +2072,43 @@ router.post('/verify-payment', authenticate, async (req: Request, res: Response)
     });
 
     if (!payment) {
-      res.status(404).json({ success: false, error: 'Payment order record not found.' });
+      console.warn(`[Cashfree Webhook] Order ${orderId} not found in database.`);
+      res.status(200).json({ status: 'ORDER_NOT_FOUND' });
       return;
     }
 
-    if (payment.status === 'SUCCESS') {
-      res.json({
-        success: true,
-        message: 'Payment has already been verified and processed.',
-        paymentId: payment.paymentId,
-        payment,
-      });
+    // 3. Verify Amount
+    if (!isNaN(orderAmount) && Math.abs(orderAmount - payment.amount) > 0.01) {
+      console.error(`[Cashfree Webhook Fraud Warning] Amount mismatch: Webhook=${orderAmount}, DB=${payment.amount}`);
+      res.status(400).json({ status: 'AMOUNT_MISMATCH' });
       return;
     }
 
-    const updatedPayment = await prisma.payment.update({
-      where: { id: payment.id },
-      data: {
-        status: 'SUCCESS',
-        signature: `cashfree_verified_${Date.now()}`,
-      },
+    // 4. Safe Idempotent Activation
+    await activatePaidOrder({
+      payment,
+      cfOrderId: orderId,
+      cfPaymentId: cfPaymentId ? String(cfPaymentId) : orderId,
+      paymentMethod,
+      signature: signature || 'cashfree_webhook_verified',
+      source: 'CASHFREE_WEBHOOK',
     });
 
-    res.json({
-      success: true,
-      message: `Payment of ₹${payment.amount} verified successfully!`,
-      payment: updatedPayment,
-    });
-  } catch (error: any) {
-    console.error('Payment verification error:', error);
-    res.status(500).json({ success: false, error: 'Server error while verifying payment.' });
+    console.log(`[Cashfree Webhook] Order ${orderId} activated successfully.`);
+    res.status(200).json({ status: 'SUCCESS' });
+  } catch (err: any) {
+    console.error('[Cashfree Webhook Error]:', err);
+    res.status(500).json({ status: 'ERROR', message: err.message });
   }
+};
+
+router.post('/webhook/cashfree', handleCashfreeWebhook);
+router.post('/cashfree-webhook', handleCashfreeWebhook);
+
+// Backward-compatible payment verification endpoint (strictly delegates to verify-cashfree)
+router.post('/verify-payment', authenticate, async (req: Request, res: Response) => {
+  req.url = '/verify-cashfree';
+  return router.handle(req, res, () => {});
 });
 
 // Backward-compatible webhook endpoint

@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SubscriptionPlan, User } from '../types';
-import { api, API_BASE } from '../api';
+import { api, API_BASE, getStoredToken } from '../api';
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -38,6 +38,7 @@ interface PricingModalProps {
   onCreditRedeemed?: (testId: string) => void;
   onOpenReferral?: () => void;
   examSlug?: string;
+  onOpenAuth?: () => void;
 }
 
 export const PricingModal: React.FC<PricingModalProps> = ({
@@ -50,6 +51,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   onCreditRedeemed,
   onOpenReferral,
   examSlug,
+  onOpenAuth,
 }) => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -235,29 +237,34 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
   const handleVerifyCashfreeOrder = async (orderId: string, planCode: string, planName: string) => {
     setVerifyingPayment(true);
-    setStatusMessage({ type: 'info', text: 'Verifying transaction status with Cashfree...' });
+    setStatusMessage({ type: 'info', text: 'Awaiting payment confirmation: Verifying transaction with Cashfree...' });
     try {
       const verify = await api.verifyCashfreePayment(orderId);
       if (verify.success) {
         confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
         setStatusMessage({
           type: 'success',
-          text: verify.message || `Payment verified! ${planName} has been activated.`,
+          text: verify.message || `Payment Successful! ${planName} has been activated.`,
         });
         setTimeout(() => {
           onPaymentSuccess?.(planCode);
           onClose();
         }, 1600);
+      } else if (verify.pending) {
+        setStatusMessage({
+          type: 'info',
+          text: verify.message || 'Payment Pending: Transaction is in progress in your UPI app. Please approve the payment and click Verify Status.',
+        });
       } else {
         setStatusMessage({
           type: 'error',
-          text: verify.message || 'Payment not completed yet. Please finish the payment in your UPI app and click Verify.',
+          text: verify.message || 'Payment Failed or Cancelled. Please retry payment or select another plan.',
         });
       }
     } catch (vErr: any) {
       setStatusMessage({
         type: 'error',
-        text: vErr.message || 'Payment verification failed. If money was deducted, it will automatically activate.',
+        text: vErr.message || 'Payment verification failed. If money was deducted from your account, it will automatically activate via secure webhook.',
       });
     } finally {
       setVerifyingPayment(false);
@@ -265,8 +272,24 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   };
 
   const handleSubscribe = async (plan: SubscriptionPlan) => {
+    const token = getStoredToken();
+    if (!currentUser || !token) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Please login or create an account to proceed with subscription. Opening login...',
+      });
+      setTimeout(() => {
+        onClose();
+        onOpenAuth?.();
+      }, 1200);
+      return;
+    }
+
     setProcessingPlanId(plan.id);
-    setStatusMessage(null);
+    setStatusMessage({
+      type: 'info',
+      text: `Initializing payment for ${plan.name}...`,
+    });
 
     // 1. ₹0 Free Starter Plan: Activate directly on server
     if (plan.price <= 0) {
@@ -311,7 +334,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
       setStatusMessage({
         type: 'info',
-        text: 'Redirecting to Cashfree secure payment gateway...',
+        text: 'Redirecting to Cashfree secure checkout (Dynamic QR & UPI Intent)...',
       });
 
       let cashfree: any = null;
