@@ -70,9 +70,40 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
   const [activePlanName, setActivePlanName] = useState<string | null>(null);
+  const [activeUpiQrPayload, setActiveUpiQrPayload] = useState<string | null>(null);
+  const [activeAmount, setActiveAmount] = useState<number | null>(null);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
+
+  // Real-time polling for background payment verification (e.g. after scanning dynamic QR or mobile UPI PIN)
+  useEffect(() => {
+    let interval: any = null;
+    if (activeOrderId && (activeUpiQrPayload || activeCheckoutUrl)) {
+      interval = setInterval(async () => {
+        try {
+          const verify = await api.verifyCashfreePayment(activeOrderId);
+          if (verify.success) {
+            clearInterval(interval);
+            confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+            setStatusMessage({
+              type: 'success',
+              text: verify.message || `Payment Successful! ${activePlanName || 'Plan'} has been activated.`,
+            });
+            setTimeout(() => {
+              onPaymentSuccess?.(activePlanCode || '');
+              onClose();
+            }, 1600);
+          }
+        } catch {
+          // Keep polling until verified or closed
+        }
+      }, 3500);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [activeOrderId, activeUpiQrPayload, activeCheckoutUrl, activePlanCode, activePlanName]);
 
   // Exam names mapping for clean display
   const examLabels: Record<string, string> = {
@@ -90,6 +121,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     if (isOpen) {
       setAppliedCoupon(null);
       setCouponInput('');
+      setActiveUpiQrPayload(null);
       loadData();
     }
   }, [isOpen, activeExamSlug]);
@@ -331,6 +363,18 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setActiveOrderId(order.orderId!);
       setActivePlanCode(plan.code);
       setActivePlanName(plan.name);
+      setActiveAmount(order.amount || plan.price);
+
+      // If Cashfree API returned an official dynamic UPI QR payload (upi://pay?...)
+      const upiPayload = (order as any).upiQrPayload || (order as any).upi_qr_payload;
+      if (upiPayload && typeof upiPayload === 'string') {
+        setActiveUpiQrPayload(upiPayload);
+        setStatusMessage({
+          type: 'info',
+          text: 'Cashfree Dynamic UPI QR generated! Scan with Google Pay, PhonePe, or Paytm to pay.',
+        });
+        return;
+      }
 
       setStatusMessage({
         type: 'info',
@@ -561,133 +605,231 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
         )}
 
-        {/* Main Content Area: Official Pricing Plans */}
-        <div className="p-6">
-          {loading ? (
-            <div className="h-64 flex flex-col items-center justify-center space-y-3">
-              <Clock className="w-8 h-8 text-blue-600 animate-spin" />
-              <p className="text-xs font-semibold text-slate-500">Loading {currentExamName} plans...</p>
+        {/* Dynamic Cashfree UPI QR & Mobile Intent Experience */}
+        {activeUpiQrPayload ? (
+          <div className="p-6 space-y-5 animate-in fade-in">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveUpiQrPayload(null);
+                  setStatusMessage(null);
+                }}
+                className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Plans</span>
+              </button>
+              <div className="text-right">
+                <span className="text-xs text-slate-500 font-medium">{activePlanName}</span>
+                <div className="text-xl font-extrabold text-slate-900">₹{activeAmount}</div>
+              </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {plans.map((plan) => {
-                const isSelected = selectedPlanCode === plan.code;
-                const isPopular = plan.price === 49;
-                const isFree = plan.price === 0;
-                
-                const couponEligible = !isFree && appliedCoupon && (!appliedCoupon.examSlug || !plan.examSlug || appliedCoupon.examSlug === plan.examSlug);
-                const effectivePrice = couponEligible ? Math.max(1, Math.round(plan.price * (100 - appliedCoupon!.discountPct) / 100)) : plan.price;
 
-                const displayPrice = isFree ? '0' : currency === 'USD' ? (effectivePrice * exchangeRate).toFixed(2) : String(effectivePrice);
-                const originalDisplayPrice = currency === 'USD' ? (plan.price * exchangeRate).toFixed(2) : String(plan.price);
+            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
+              <div className="flex flex-col items-center space-y-3 shrink-0">
+                <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(activeUpiQrPayload)}&size=240x240`}
+                    alt="Cashfree Dynamic UPI QR Code"
+                    className="w-56 h-56 object-contain rounded-lg"
+                  />
+                </div>
+                <div className="text-center space-y-0.5">
+                  <p className="text-xs font-bold text-slate-900">Scan using any UPI App</p>
+                  <p className="text-[11px] text-slate-500">Google Pay • PhonePe • Paytm • BHIM</p>
+                </div>
+              </div>
 
-                return (
-                  <div
-                    key={plan.id}
-                    onClick={() => setSelectedPlanCode(plan.code)}
-                    className={`rounded-xl border p-5 flex flex-col justify-between transition-all cursor-pointer relative ${
-                      isSelected
-                        ? 'border-blue-600 ring-2 ring-blue-100 shadow-md bg-white'
-                        : 'border-slate-200 hover:border-slate-300 bg-white'
-                    }`}
-                  >
-                    {plan.badge && (
-                      <span
-                        className={`absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-xs ${
-                          isPopular
-                            ? 'bg-blue-600 text-white'
-                            : isFree
-                            ? 'bg-slate-200 text-slate-800'
-                            : 'bg-emerald-600 text-white'
-                        }`}
-                      >
-                        {plan.badge}
-                      </span>
-                    )}
-
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900">{plan.name}</h3>
-                        <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">{plan.description}</p>
-                      </div>
-
-                      <div className="pt-2 border-t border-slate-100">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                            {currencySymbol}{displayPrice}
-                          </span>
-                          {couponEligible && (
-                            <span className="text-xs text-slate-400 line-through">
-                              {currencySymbol}{originalDisplayPrice}
-                            </span>
-                          )}
-                          <span className="text-xs text-slate-500 font-medium">
-                            {isFree ? '/ forever' : '/ one-time'}
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-400 mt-0.5">
-                          {plan.durationDays > 0 ? `${plan.durationDays} days access` : 'Lifetime access'}
-                        </p>
-                      </div>
-
-                      <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
-                        {plan.features.map((feat, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                            <span className="leading-tight">{feat}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="pt-5 mt-4 border-t border-slate-100 space-y-2">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSubscribe(plan);
-                        }}
-                        disabled={processingPlanId === plan.id}
-                        className={`w-full py-2.5 px-4 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                          isPopular
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                            : isFree
-                            ? 'bg-slate-100 hover:bg-slate-200 text-slate-800'
-                            : 'bg-slate-900 hover:bg-slate-800 text-white'
-                        }`}
-                      >
-                        <span>
-                          {processingPlanId === plan.id
-                            ? 'Processing...'
-                            : isFree
-                            ? 'Activate Free Plan'
-                            : `Get Started (${currencySymbol}${displayPrice})`}
-                        </span>
-                        {!isFree && <ArrowRight className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
+              <div className="flex-1 space-y-4 w-full max-w-md">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2 text-xs">
+                  <div className="flex items-center gap-2 font-bold text-slate-900">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>Official Cashfree Verified Merchant</span>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    1. Scan this dynamic QR code with your phone.<br />
+                    2. Check the payee name and exact amount (<b>₹{activeAmount}</b>).<br />
+                    3. Authorize with your secret UPI PIN in your banking app.<br />
+                    4. This screen automatically verifies and unlocks your course instantly!
+                  </p>
+                </div>
 
-          {/* Trust Footer */}
-          <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs text-slate-500">
-            <div className="flex items-center justify-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Official Cashfree & UPI Secure Gateway</span>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <RotateCcw className="w-4 h-4 text-blue-600" />
-              <span>7-Day Standard Refund Policy</span>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              <span>Instant Entitlement Activation</span>
+                {/* Android Direct Mobile UPI Intent Button */}
+                <div className="space-y-2">
+                  <a
+                    href={activeUpiQrPayload}
+                    className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-colors"
+                  >
+                    <Smartphone className="w-4 h-4" />
+                    <span>Pay with PhonePe / GPay / Paytm (Mobile Intent)</span>
+                  </a>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (activeOrderId && activePlanCode && activePlanName) {
+                          handleVerifyCashfreeOrder(activeOrderId, activePlanCode, activePlanName);
+                        }
+                      }}
+                      disabled={verifyingPayment}
+                      className="flex-1 py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{verifyingPayment ? 'Verifying...' : 'Verify Status Now'}</span>
+                    </button>
+
+                    {activeCheckoutUrl && (
+                      <a
+                        href={activeCheckoutUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 px-3 rounded-lg border border-slate-300 hover:bg-white text-slate-700 font-medium text-xs transition-colors flex items-center gap-1"
+                      >
+                        <span>Cards / Netbanking</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Awaiting payment confirmation. Auto-refreshing every few seconds...</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          /* Main Content Area: Official Pricing Plans */
+          <div className="p-6">
+            {loading ? (
+              <div className="h-64 flex flex-col items-center justify-center space-y-3">
+                <Clock className="w-8 h-8 text-blue-600 animate-spin" />
+                <p className="text-xs font-semibold text-slate-500">Loading {currentExamName} plans...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {plans.map((plan) => {
+                  const isSelected = selectedPlanCode === plan.code;
+                  const isPopular = plan.price === 49;
+                  const isFree = plan.price === 0;
+                  
+                  const couponEligible = !isFree && appliedCoupon && (!appliedCoupon.examSlug || !plan.examSlug || appliedCoupon.examSlug === plan.examSlug);
+                  const effectivePrice = couponEligible ? Math.max(1, Math.round(plan.price * (100 - appliedCoupon!.discountPct) / 100)) : plan.price;
+
+                  const displayPrice = isFree ? '0' : currency === 'USD' ? (effectivePrice * exchangeRate).toFixed(2) : String(effectivePrice);
+                  const originalDisplayPrice = currency === 'USD' ? (plan.price * exchangeRate).toFixed(2) : String(plan.price);
+
+                  return (
+                    <div
+                      key={plan.id}
+                      onClick={() => setSelectedPlanCode(plan.code)}
+                      className={`rounded-xl border p-5 flex flex-col justify-between transition-all cursor-pointer relative ${
+                        isSelected
+                          ? 'border-blue-600 ring-2 ring-blue-100 shadow-md bg-white'
+                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                      }`}
+                    >
+                      {plan.badge && (
+                        <span
+                          className={`absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-xs ${
+                            isPopular
+                              ? 'bg-blue-600 text-white'
+                              : isFree
+                              ? 'bg-slate-200 text-slate-800'
+                              : 'bg-emerald-600 text-white'
+                          }`}
+                        >
+                          {plan.badge}
+                        </span>
+                      )}
+
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-900">{plan.name}</h3>
+                          <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">{plan.description}</p>
+                        </div>
+
+                        <div className="pt-2 border-t border-slate-100">
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                              {currencySymbol}{displayPrice}
+                            </span>
+                            {couponEligible && (
+                              <span className="text-xs text-slate-400 line-through">
+                                {currencySymbol}{originalDisplayPrice}
+                              </span>
+                            )}
+                            <span className="text-xs text-slate-500 font-medium">
+                              {isFree ? '/ forever' : '/ one-time'}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 mt-0.5">
+                            {plan.durationDays > 0 ? `${plan.durationDays} days access` : 'Lifetime access'}
+                          </p>
+                        </div>
+
+                        <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
+                          {plan.features.map((feat, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                              <span className="leading-tight">{feat}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="pt-5 mt-4 border-t border-slate-100 space-y-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSubscribe(plan);
+                          }}
+                          disabled={processingPlanId === plan.id}
+                          className={`w-full py-2.5 px-4 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
+                            isPopular
+                              ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                              : isFree
+                              ? 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+                              : 'bg-slate-900 hover:bg-slate-800 text-white'
+                          }`}
+                        >
+                          <span>
+                            {processingPlanId === plan.id
+                              ? 'Processing...'
+                              : isFree
+                              ? 'Activate Free Plan'
+                              : `Get Started (${currencySymbol}${displayPrice})`}
+                          </span>
+                          {!isFree && <ArrowRight className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Trust Footer */}
+            <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs text-slate-500">
+              <div className="flex items-center justify-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Official Cashfree & UPI Secure Gateway</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <RotateCcw className="w-4 h-4 text-blue-600" />
+                <span>7-Day Standard Refund Policy</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <Zap className="w-4 h-4 text-amber-500" />
+                <span>Instant Entitlement Activation</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

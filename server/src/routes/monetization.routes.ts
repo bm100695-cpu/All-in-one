@@ -261,62 +261,44 @@ async function getCashfreePayments(orderId: string): Promise<any[]> {
   return Array.isArray(data) ? data : [];
 }
 
-// Global Merchant UPI ID for candidate mobile QR transfers
-let activeMerchantUpiId = process.env.MERCHANT_UPI_ID || 'bm100695@okhdfcbank';
+// Cashfree Dynamic UPI QR Generator (Official Order Sessions Pay API)
+async function generateCashfreeUpiQr(paymentSessionId: string): Promise<string | null> {
+  const config = getCashfreeConfig();
+  if (!config.isLive || !paymentSessionId) return null;
 
-// In-memory cache for official Cashfree JS SDK to bypass local firewall/ISP blockades
-let cachedCashfreeSdkContent: string | null = null;
-
-// Proxy Cashfree Web SDK to defeat ERR_CERT_AUTHORITY_INVALID from local network firewalls
-router.get('/cashfree-sdk.js', async (req: Request, res: Response) => {
   try {
-    if (!cachedCashfreeSdkContent) {
-      const resp = await fetch('https://sdk.cashfree.com/js/v3/cashfree.js');
-      if (resp.ok) {
-        cachedCashfreeSdkContent = await resp.text();
+    const url = `${config.baseUrl}/orders/sessions`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'x-client-id': config.appId,
+        'x-client-secret': config.secretKey,
+        'x-api-version': config.apiVersion,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        payment_session_id: paymentSessionId,
+        payment_method: {
+          upi: {
+            channel: 'qrcode',
+          },
+        },
+      }),
+    });
+
+    if (response.ok) {
+      const data: any = await response.json();
+      const payload = data?.data?.payload || data?.payload;
+      if (payload && typeof payload === 'string' && payload.startsWith('upi://')) {
+        console.log(`[Cashfree Dynamic QR] Successfully generated dynamic UPI payload for session: ${paymentSessionId.slice(0, 15)}...`);
+        return payload;
       }
     }
-    if (cachedCashfreeSdkContent) {
-      const host = req.get('host') || 'all-in-one-japb.onrender.com';
-      const proto = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
-      const proxyBase = `${proto}://${host}/api/monetization/cashfree-proxy`;
-      // Rewrite https://sdk.cashfree.com to our backend proxy so sub-atoms like ping_atom.js are also proxied!
-      const rewritten = cachedCashfreeSdkContent.replace(/https:\/\/sdk\.cashfree\.com/g, proxyBase);
-      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, max-age=86400');
-      res.send(rewritten);
-      return;
-    }
-    res.status(502).send('/* Cashfree SDK upstream unavailable */');
   } catch (err: any) {
-    console.error('Failed to proxy Cashfree JS SDK:', err.message);
-    res.status(502).send(`/* Cashfree SDK proxy error: ${err.message} */`);
+    console.warn('[Cashfree Dynamic QR Notice]:', err.message);
   }
-});
-
-// Proxy Cashfree Atoms, Scripts & Chunks to defeat ERR_CERT_AUTHORITY_INVALID from local network firewalls
-router.get('/cashfree-proxy/*', async (req: Request, res: Response) => {
-  try {
-    const subpath = req.params[0] || '';
-    const targetUrl = `https://sdk.cashfree.com/${subpath}`;
-    const resp = await fetch(targetUrl);
-    if (resp.ok) {
-      const contentType = resp.headers.get('content-type') || 'application/javascript; charset=utf-8';
-      res.setHeader('Content-Type', contentType);
-      res.setHeader('Cache-Control', 'public, max-age=86400');
-      const text = await resp.text();
-      res.send(text);
-      return;
-    }
-    res.status(resp.status).send('/* Cashfree upstream atom unavailable */');
-  } catch (err: any) {
-    res.status(502).send(`/* Cashfree atom proxy error: ${err.message} */`);
-  }
-});
-
-// =========================================================================
-// 1. PUBLIC CONFIGURATION & PLANS
-// =========================================================================
+  return null;
+}
 
 // Public gateway configuration status
 router.get('/config', (_req: Request, res: Response) => {
@@ -329,7 +311,6 @@ router.get('/config', (_req: Request, res: Response) => {
     cashfreeAppId: config.appId,
     cashfreeMode: config.mode,
     isMasked: config.isMasked,
-    merchantUpiId: activeMerchantUpiId,
   });
 });
 
@@ -1200,12 +1181,18 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         },
       });
 
+      let upiQrPayload: string | null = null;
+      if (paymentSessionId) {
+        upiQrPayload = await generateCashfreeUpiQr(paymentSessionId);
+      }
+
       res.json({
         order_id: orderId,
         orderId,
         payment_session_id: paymentSessionId,
         paymentSessionId,
         cashfreeMode: cfConfig.mode,
+        upiQrPayload: upiQrPayload || undefined,
         checkoutUrl: cfConfig.mode === 'sandbox'
           ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
           : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1470,12 +1457,18 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       },
     });
 
+    let upiQrPayload: string | null = null;
+    if (paymentSessionId) {
+      upiQrPayload = await generateCashfreeUpiQr(paymentSessionId);
+    }
+
     res.json({
       order_id: orderId,
       orderId,
       payment_session_id: paymentSessionId,
       paymentSessionId,
       cashfreeMode: cfConfig.mode,
+      upiQrPayload: upiQrPayload || undefined,
       checkoutUrl: cfConfig.mode === 'sandbox'
         ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
         : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1814,199 +1807,6 @@ router.post('/verify-cashfree', authenticate, async (req: Request, res: Response
   } catch (error: any) {
     console.error('Verify Cashfree error:', error);
     res.status(500).json({ success: false, message: error.message || 'Server error while verifying Cashfree payment.' });
-  }
-});
-
-// Direct UPI QR Payment Submission (Bypasses all network filters, SSL firewalls & gateway downtimes)
-router.post('/submit-upi-payment', authenticate, async (req: Request, res: Response) => {
-  try {
-    const { planId, planCode, testId, utr, amount } = req.body;
-    const userId = req.user!.id;
-
-    const cleanUtr = String(utr || '').trim().replace(/[^a-zA-Z0-9]/g, '');
-    if (!cleanUtr || cleanUtr.length < 6) {
-      res.status(400).json({ success: false, message: 'Please enter a valid 12-digit UPI Reference / UTR Number from your payment app receipt.' });
-      return;
-    }
-
-    // Check if this UTR has already been submitted to prevent duplicate claims
-    const existingUtr = await prisma.payment.findFirst({
-      where: { signature: cleanUtr },
-    });
-    if (existingUtr && existingUtr.userId !== userId) {
-      res.status(400).json({ success: false, message: 'This UPI Reference (UTR) number has already been registered.' });
-      return;
-    }
-
-    // Case 1: Single Mock Test Purchase
-    if (testId) {
-      const test = await prisma.test.findUnique({ where: { id: testId } });
-      if (!test) {
-        res.status(404).json({ success: false, message: 'Mock test not found.' });
-        return;
-      }
-
-      const orderId = `upi_test_${Date.now()}_${userId.slice(-6)}`;
-      const payment = await prisma.payment.create({
-        data: {
-          userId,
-          testId: test.id,
-          amount: Number(amount) || test.price,
-          currency: 'INR',
-          status: 'SUCCESS',
-          orderId,
-          receipt: `rcpt_upi_${Date.now()}`,
-          paymentId: `upi_${cleanUtr}`,
-          signature: cleanUtr,
-          notesJson: JSON.stringify({
-            gateway: 'UPI_DIRECT',
-            utr: cleanUtr,
-            merchantUpi: activeMerchantUpiId,
-            testTitle: test.title,
-          }),
-        },
-      });
-
-      await prisma.entitlement.create({
-        data: {
-          userId,
-          testId: test.id,
-          planCode: 'TEST_PURCHASE',
-          source: 'UPI_DIRECT',
-          expiresAt: null,
-        },
-      });
-
-      res.json({
-        success: true,
-        message: `UPI Payment verified! "${test.title}" has been unlocked permanently.`,
-        payment,
-        purchasedTestId: test.id,
-      });
-      return;
-    }
-
-    // Case 2: Subscription Plan Purchase
-    await ensureDefaultPlansExist();
-    let plan: any = null;
-    const lookupKey = String(planId || planCode || '').trim();
-
-    if (planId) {
-      plan = await prisma.subscriptionPlan.findUnique({ where: { id: planId } }).catch(() => null);
-    }
-    if (!plan && lookupKey) {
-      plan = await prisma.subscriptionPlan.findFirst({
-        where: {
-          OR: [
-            { code: lookupKey },
-            { code: lookupKey.toUpperCase() },
-            { code: `PLAN_${lookupKey.toUpperCase()}` },
-          ],
-        },
-      });
-    }
-    if (!plan && lookupKey) {
-      const lower = lookupKey.toLowerCase();
-      if (lower.includes('booster') || lower.includes('49') || lower.includes('1')) {
-        plan = await prisma.subscriptionPlan.findFirst({
-          where: { OR: [{ code: 'PLAN_BOOSTER_49' }, { code: 'PLAN_JEE_MAIN_BOOSTER_49' }, { price: 1 }, { price: 49 }] },
-        });
-      } else if (lower.includes('pro') || lower.includes('99')) {
-        plan = await prisma.subscriptionPlan.findFirst({
-          where: { OR: [{ code: 'PLAN_PRO_99' }, { code: 'PLAN_JEE_MAIN_PRO_99' }, { price: 99 }] },
-        });
-      }
-    }
-
-    if (!plan) {
-      res.status(404).json({ success: false, message: 'Subscription plan not found.' });
-      return;
-    }
-
-    const orderId = `upi_plan_${Date.now()}_${userId.slice(-6)}`;
-    const payment = await prisma.payment.create({
-      data: {
-        userId,
-        planId: plan.id,
-        amount: Number(amount) || plan.price,
-        currency: 'INR',
-        status: 'SUCCESS',
-        orderId,
-        receipt: `rcpt_upi_${Date.now()}`,
-        paymentId: `upi_${cleanUtr}`,
-        signature: cleanUtr,
-        notesJson: JSON.stringify({
-          gateway: 'UPI_DIRECT',
-          utr: cleanUtr,
-          merchantUpi: activeMerchantUpiId,
-          planName: plan.name,
-          planCode: plan.code,
-        }),
-      },
-    });
-
-    let endDate: Date | null = null;
-    if (plan.durationDays > 0) {
-      endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
-    }
-
-    // Cancel prior active subscriptions
-    await prisma.subscription.updateMany({
-      where: { userId, status: 'ACTIVE' },
-      data: { status: 'CANCELLED' },
-    });
-
-    const isBooster = plan.code.includes('BOOSTER');
-    const testsRemaining = isBooster ? 5 : null;
-
-    const subscription = await prisma.subscription.create({
-      data: {
-        userId,
-        planId: plan.id,
-        status: 'ACTIVE',
-        startDate: new Date(),
-        endDate,
-        paymentId: payment.id,
-        testsRemaining,
-      },
-      include: { plan: true },
-    });
-
-    await prisma.entitlement.create({
-      data: {
-        userId,
-        testId: null,
-        planCode: plan.code,
-        source: 'UPI_DIRECT',
-        expiresAt: endDate,
-      },
-    });
-
-    // Audit log
-    await prisma.pricingAuditLog.create({
-      data: {
-        adminId: userId,
-        targetType: 'UPI_PAYMENT',
-        targetId: payment.id,
-        targetTitle: `Direct UPI: ${plan.name} (UTR: ${cleanUtr})`,
-        notes: JSON.stringify({
-          utr: cleanUtr,
-          amount: payment.amount,
-          merchantUpi: activeMerchantUpiId,
-          planCode: plan.code,
-        }),
-      },
-    }).catch(() => { });
-
-    res.json({
-      success: true,
-      message: `UPI Payment (UTR: ${cleanUtr}) verified! ${plan.name} has been activated.`,
-      payment,
-      subscription,
-    });
-  } catch (err: any) {
-    console.error('Submit UPI Payment error:', err);
-    res.status(500).json({ success: false, message: err.message || 'Failed to process UPI payment verification.' });
   }
 });
 
