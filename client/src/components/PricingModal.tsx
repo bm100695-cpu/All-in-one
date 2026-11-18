@@ -202,21 +202,37 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         resolve(true);
         return;
       }
-      const existing = document.querySelector('script[src*="cashfree.js"]');
+      const existing = document.querySelector('script[src*="cashfree"]');
       if (existing) {
         if ((window as any).Cashfree) {
           resolve(true);
           return;
         }
-        existing.addEventListener('load', () => resolve(true));
-        existing.addEventListener('error', () => resolve(false));
+        existing.addEventListener('load', () => resolve(Boolean((window as any).Cashfree)));
+        existing.addEventListener('error', () => {
+          // Fallback to proxy script if initial script failed
+          const proxyScript = document.createElement('script');
+          proxyScript.src = '/api/monetization/cashfree-sdk.js';
+          proxyScript.async = true;
+          proxyScript.onload = () => resolve(Boolean((window as any).Cashfree));
+          proxyScript.onerror = () => resolve(false);
+          document.body.appendChild(proxyScript);
+        });
         return;
       }
+      // Load through backend proxy first to avoid network firewall/ERR_CERT_AUTHORITY_INVALID
       const script = document.createElement('script');
-      script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+      script.src = '/api/monetization/cashfree-sdk.js';
       script.async = true;
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
+      script.onload = () => resolve(Boolean((window as any).Cashfree));
+      script.onerror = () => {
+        const fallback = document.createElement('script');
+        fallback.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+        fallback.async = true;
+        fallback.onload = () => resolve(Boolean((window as any).Cashfree));
+        fallback.onerror = () => resolve(false);
+        document.body.appendChild(fallback);
+      };
       document.body.appendChild(script);
     });
   };

@@ -188,6 +188,31 @@ async function getCashfreeOrder(orderId: string): Promise<any> {
 // Global Merchant UPI ID for candidate mobile QR transfers
 let activeMerchantUpiId = process.env.MERCHANT_UPI_ID || 'bm100695@okhdfcbank';
 
+// In-memory cache for official Cashfree JS SDK to bypass local firewall/ISP blockades
+let cachedCashfreeSdkContent: string | null = null;
+
+// Proxy Cashfree Web SDK to defeat ERR_CERT_AUTHORITY_INVALID from local network firewalls
+router.get('/cashfree-sdk.js', async (_req: Request, res: Response) => {
+  try {
+    if (!cachedCashfreeSdkContent) {
+      const resp = await fetch('https://sdk.cashfree.com/js/v3/cashfree.js');
+      if (resp.ok) {
+        cachedCashfreeSdkContent = await resp.text();
+      }
+    }
+    if (cachedCashfreeSdkContent) {
+      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      res.send(cachedCashfreeSdkContent);
+      return;
+    }
+    res.status(502).send('/* Cashfree SDK upstream unavailable */');
+  } catch (err: any) {
+    console.error('Failed to proxy Cashfree JS SDK:', err.message);
+    res.status(502).send(`/* Cashfree SDK proxy error: ${err.message} */`);
+  }
+});
+
 // =========================================================================
 // 1. PUBLIC CONFIGURATION & PLANS
 // =========================================================================
