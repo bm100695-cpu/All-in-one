@@ -1155,8 +1155,10 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
               customerPhone: (user as any)?.phone || '9999999999',
             },
             orderNote: `Mock Test: ${test.title}`,
+            const rawOrigin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
+            const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
             orderMeta: {
-              returnUrl: `${req.headers.origin || 'https://all-in-one-one-indol.vercel.app'}/?cf_order_id={order_id}`,
+              returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
               notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
             },
           });
@@ -1454,8 +1456,10 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             customerPhone: (user as any)?.phone || '9999999999',
           },
           orderNote: `Plan: ${plan.name} (${plan.code})`,
+          const rawOrigin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
+          const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
           orderMeta: {
-            returnUrl: `${req.headers.origin || 'https://all-in-one-one-indol.vercel.app'}/?cf_order_id={order_id}`,
+            returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
             notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
           },
         });
