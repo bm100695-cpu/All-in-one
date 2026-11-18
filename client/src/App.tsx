@@ -173,6 +173,29 @@ export const App: React.FC = () => {
             return;
           }
 
+          // Check for Cashfree Return URL query params
+          const searchParams = new URLSearchParams(window.location.search);
+          const returnOrderId = searchParams.get('cf_order_id') || searchParams.get('order_id');
+          if (returnOrderId) {
+            const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+            window.history.replaceState({}, document.title, cleanUrl);
+
+            api.verifyCashfreePayment(returnOrderId)
+              .then((vRes) => {
+                if (vRes.success) {
+                  import('canvas-confetti').then((m) => m.default({ particleCount: 120, spread: 70, origin: { y: 0.6 } }));
+                  showToast(vRes.message || 'Payment confirmed! Your plan is now active.');
+                  const pSlug = (vRes.payment as any)?.examSlug;
+                  if (pSlug) {
+                    setSelectedExamSlug(pSlug);
+                  }
+                }
+              })
+              .catch((vErr) => {
+                console.warn('Cashfree return verification notice:', vErr);
+              });
+          }
+
           if (hash.startsWith('#/exams/') || path.startsWith('/exams/')) {
             return;
           }

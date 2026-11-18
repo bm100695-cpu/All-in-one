@@ -69,12 +69,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
   const [activePlanName, setActivePlanName] = useState<string | null>(null);
 
-  // Direct UPI QR State
-  const [selectedUpiPlan, setSelectedUpiPlan] = useState<{ plan: SubscriptionPlan; finalPrice: number } | null>(null);
-  const [upiUtrInput, setUpiUtrInput] = useState<string>('');
-  const [submittingUpi, setSubmittingUpi] = useState<boolean>(false);
-  const [copiedUpi, setCopiedUpi] = useState<boolean>(false);
-
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
 
@@ -270,43 +264,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     }
   };
 
-  const handleVerifyUpiPayment = async () => {
-    if (!selectedUpiPlan) return;
-    const cleanUtr = upiUtrInput.trim();
-    if (!cleanUtr || cleanUtr.length < 6) {
-      setStatusMessage({ type: 'error', text: 'Please enter a valid 12-digit UPI Reference / UTR Number.' });
-      return;
-    }
-    setSubmittingUpi(true);
-    setStatusMessage({ type: 'info', text: 'Verifying UPI transaction with bank reference...' });
-    try {
-      const res = await api.submitUpiPayment({
-        planId: selectedUpiPlan.plan.id,
-        planCode: selectedUpiPlan.plan.code,
-        utr: cleanUtr,
-        amount: selectedUpiPlan.finalPrice,
-        examSlug: activeExamSlug,
-      });
-      if (res.success) {
-        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-        setStatusMessage({
-          type: 'success',
-          text: res.message || `UPI Payment verified! ${selectedUpiPlan.plan.name} has been activated.`,
-        });
-        setTimeout(() => {
-          onPaymentSuccess?.(selectedUpiPlan.plan.code);
-          onClose();
-        }, 1600);
-      } else {
-        setStatusMessage({ type: 'error', text: res.message || 'UPI verification failed. Please check the UTR number.' });
-      }
-    } catch (err: any) {
-      setStatusMessage({ type: 'error', text: err.message || 'Failed to verify UPI payment.' });
-    } finally {
-      setSubmittingUpi(false);
-    }
-  };
-
   const handleSubscribe = async (plan: SubscriptionPlan) => {
     setProcessingPlanId(plan.id);
     setStatusMessage(null);
@@ -332,7 +289,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       return;
     }
 
-    // 2. Paid Plans (> ₹0): Cashfree official live production modal checkout
+    // 2. Paid Plans (> ₹0): Cashfree official checkout
     try {
       const order = await api.createPaymentOrder(plan.id, appliedCoupon?.code, activeExamSlug, plan.code);
 
@@ -352,6 +309,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setActivePlanCode(plan.code);
       setActivePlanName(plan.name);
 
+      setStatusMessage({
+        type: 'info',
+        text: 'Redirecting to Cashfree secure payment gateway...',
+      });
+
       let cashfree: any = null;
       try {
         const loaded = await loadCashfreeScript();
@@ -363,45 +325,22 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       }
 
       if (cashfree) {
-        setStatusMessage({
-          type: 'info',
-          text: 'Opening Cashfree secure gateway... If popup shows "temporarily down", click the Direct Checkout button above.',
-        });
-
         try {
+          // Standard Cashfree redirect (no iframe blocking or ERR_CERT_AUTHORITY_INVALID)
           await cashfree.checkout({
             paymentSessionId: activeSession,
-            redirectTarget: '_modal',
+            redirectTarget: '_self',
           });
-          handleVerifyCashfreeOrder(order.orderId!, plan.code, plan.name);
         } catch (checkoutErr: any) {
           console.warn('Cashfree checkout modal notice:', checkoutErr);
-          // If modal throws api Request Failed or is blocked by network, open direct checkout tab!
-          window.open(checkoutDirectUrl, '_blank');
-          setStatusMessage({
-            type: 'info',
-            text: 'Checkout opened in a new tab. Complete payment and click "Verify Status" above.',
-          });
+          window.location.href = checkoutDirectUrl;
         }
       } else {
-        // Fallback: If SDK couldn't load due to firewall, open direct checkout in new tab
-        window.open(checkoutDirectUrl, '_blank');
-        setStatusMessage({
-          type: 'info',
-          text: 'Checkout opened in a new tab. Complete payment and click "Verify Status" above.',
-        });
+        window.location.href = checkoutDirectUrl;
       }
     } catch (err: any) {
-      console.warn('Subscription gateway notice:', err);
-      // If order creation itself failed due to gateway timeout/error, automatically switch to UPI QR mode!
-      const effectivePrice = appliedCoupon && (!appliedCoupon.examSlug || appliedCoupon.examSlug === plan.examSlug)
-        ? Math.max(1, Math.round(plan.price * (100 - appliedCoupon.discountPct) / 100))
-        : plan.price;
-      setSelectedUpiPlan({ plan, finalPrice: effectivePrice });
-      setStatusMessage({
-        type: 'info',
-        text: 'Cashfree gateway is currently busy or restricted by network. Switched to Instant UPI QR Pay.',
-      });
+      console.error('Subscription error:', err);
+      setStatusMessage({ type: 'error', text: err.message || 'Failed to process payment. Please try again.' });
     } finally {
       setProcessingPlanId(null);
     }
@@ -599,139 +538,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
         )}
 
-        {/* Main Content Area: Official Pricing Plans OR Instant UPI QR Pay */}
+        {/* Main Content Area: Official Pricing Plans */}
         <div className="p-6">
-          {selectedUpiPlan ? (
-            <div className="space-y-6 animate-fade-in">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedUpiPlan(null)}
-                    className="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-1 cursor-pointer mb-1.5 transition-colors"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    <span>Back to all plans</span>
-                  </button>
-                  <h3 className="text-base font-bold text-slate-900">
-                    Direct UPI Payment: {selectedUpiPlan.plan.name}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Works on all networks & Wi-Fi. Scan QR code or tap to pay directly.
-                  </p>
-                </div>
-                <div className="sm:text-right">
-                  <span className="text-2xl font-black text-slate-900">₹{selectedUpiPlan.finalPrice}</span>
-                  <span className="text-[11px] text-slate-400 block font-medium">One-Time Fee</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                {/* Left: QR Code Card */}
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col items-center text-center space-y-3">
-                  <div className="p-3 bg-white rounded-xl shadow-xs border border-slate-200">
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=${encodeURIComponent(
-                        `upi://pay?pa=bm100695@okhdfcbank&pn=All%20In%20One&am=${selectedUpiPlan.finalPrice}&cu=INR&tn=${selectedUpiPlan.plan.code}`
-                      )}`}
-                      alt="UPI QR Code"
-                      className="w-48 h-48 rounded-lg"
-                    />
-                  </div>
-                  <div className="text-xs text-slate-600 font-medium">
-                    Scan with Google Pay, PhonePe, Paytm, BHIM, or any UPI App
-                  </div>
-
-                  {/* Copy UPI ID */}
-                  <div className="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs">
-                    <span className="text-slate-600 font-mono font-medium">bm100695@okhdfcbank</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText('bm100695@okhdfcbank');
-                        setCopiedUpi(true);
-                        setTimeout(() => setCopiedUpi(false), 2000);
-                      }}
-                      className="text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer text-[11px] flex items-center gap-1"
-                    >
-                      {copiedUpi ? <CheckCheck className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedUpi ? 'Copied' : 'Copy'}</span>
-                    </button>
-                  </div>
-
-                  {/* Mobile Direct UPI Intent */}
-                  <a
-                    href={`upi://pay?pa=bm100695@okhdfcbank&pn=All%20In%20One&am=${selectedUpiPlan.finalPrice}&cu=INR&tn=${selectedUpiPlan.plan.code}`}
-                    className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs sm:hidden flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Smartphone className="w-4 h-4" />
-                    <span>Pay with UPI App on this phone</span>
-                  </a>
-                </div>
-
-                {/* Right: Enter UTR / Verify */}
-                <div className="space-y-4">
-                  <div className="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 text-xs text-indigo-950 space-y-2">
-                    <div className="font-bold flex items-center gap-1.5 text-indigo-900">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0" />
-                      <span>Instant Activation Steps:</span>
-                    </div>
-                    <ol className="list-decimal list-inside space-y-1 text-[11px] text-indigo-800 pl-1 leading-relaxed">
-                      <li>Pay <strong>₹{selectedUpiPlan.finalPrice}</strong> using the QR code or UPI ID above.</li>
-                      <li>Find the <strong>12-digit UTR / UPI Ref No.</strong> in your payment app receipt.</li>
-                      <li>Enter it below and click <strong>Verify & Activate Plan</strong>.</li>
-                    </ol>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1.5">
-                      12-Digit UPI Reference No. / UTR
-                    </label>
-                    <input
-                      type="text"
-                      value={upiUtrInput}
-                      onChange={(e) => setUpiUtrInput(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
-                      placeholder="e.g. 432109876543"
-                      maxLength={25}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                    <span className="text-[11px] text-slate-400 mt-1 block">
-                      Labeled as "UPI Ref No.", "UTR", or "Transaction ID" in Google Pay / PhonePe / Paytm.
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleVerifyUpiPayment}
-                    disabled={submittingUpi || !upiUtrInput.trim()}
-                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-md cursor-pointer transition-all flex items-center justify-center gap-2"
-                  >
-                    {submittingUpi ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Verifying & Unlocking Plan...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Check className="w-4 h-4" />
-                        <span>Verify & Activate Plan Now</span>
-                      </>
-                    )}
-                  </button>
-
-                  <div className="pt-2 text-center">
-                    <button
-                      type="button"
-                      onClick={() => handleSubscribe(selectedUpiPlan.plan)}
-                      className="text-[11px] text-slate-500 hover:text-slate-800 underline cursor-pointer"
-                    >
-                      Or open via Cashfree Payment Gateway
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : loading ? (
+          {loading ? (
             <div className="h-64 flex flex-col items-center justify-center space-y-3">
               <Clock className="w-8 h-8 text-blue-600 animate-spin" />
               <p className="text-xs font-semibold text-slate-500">Loading {currentExamName} plans...</p>
@@ -833,20 +642,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                         </span>
                         {!isFree && <ArrowRight className="w-3.5 h-3.5" />}
                       </button>
-
-                      {!isFree && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedUpiPlan({ plan, finalPrice: effectivePrice });
-                          }}
-                          className="w-full py-2 px-3 rounded-lg text-[11px] font-semibold text-indigo-700 hover:text-indigo-800 bg-indigo-50/70 hover:bg-indigo-100 border border-indigo-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                        >
-                          <QrCode className="w-3.5 h-3.5" />
-                          <span>Pay with UPI QR / GPay / PhonePe</span>
-                        </button>
-                      )}
                     </div>
                   </div>
                 );
