@@ -39,7 +39,7 @@ const getApiBase = (): string => {
   return '/api';
 };
 
-const API_BASE = getApiBase();
+export const API_BASE = getApiBase();
 
 export function getStoredToken(): string | null {
   return localStorage.getItem('examverse_token');
@@ -460,6 +460,26 @@ export const api = {
     }>('/monetization/verify-cashfree', {
       method: 'POST',
       body: JSON.stringify({ orderId }),
+    });
+  },
+
+  submitUpiPayment: async (data: {
+    planId?: string;
+    planCode?: string;
+    testId?: string;
+    utr: string;
+    amount: number;
+    examSlug?: string;
+  }) => {
+    return request<{
+      success: boolean;
+      message: string;
+      payment?: Payment;
+      subscription?: Subscription;
+      purchasedTestId?: string;
+    }>('/monetization/submit-upi-payment', {
+      method: 'POST',
+      body: JSON.stringify(data),
     });
   },
 
