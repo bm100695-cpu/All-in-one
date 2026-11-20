@@ -11,6 +11,20 @@ const router = Router();
 
 const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
 
+// Cashfree redirects must use a trusted application origin. Never derive a
+// return destination from a request Origin/Referer header.
+function getTrustedCheckoutOrigin(): string {
+  const configured = process.env.PUBLIC_APP_URL || process.env.CLIENT_APP_URL;
+  if (configured) {
+    try {
+      return new URL(configured).origin;
+    } catch {
+      console.warn('[Cashfree] Ignoring invalid PUBLIC_APP_URL / CLIENT_APP_URL value.');
+    }
+  }
+  return 'https://all-in-one-git-main-brijesh17.vercel.app';
+}
+
 // In-memory dynamic overrides (allows instant activation of production keys from database or admin API)
 let dynamicOverrideAppId: string | null = null;
 let dynamicOverrideSecretKey: string | null = null;
@@ -147,7 +161,6 @@ async function createCashfreeOrder(params: {
     orderPayload.order_meta = {
       return_url: params.orderMeta.returnUrl,
       notify_url: params.orderMeta.notifyUrl,
-      payment_methods: 'cc,dc,upi,nb,app,paylater',
     };
   }
 
@@ -262,73 +275,13 @@ async function getCashfreePayments(orderId: string): Promise<any[]> {
   return Array.isArray(data) ? data : [];
 }
 
-// Cashfree Dynamic UPI QR Generator (Official Order Sessions Pay API)
-async function generateCashfreeUpiQr(paymentSessionId: string): Promise<{ qrCodeUrl?: string; qrCodeImage?: string } | null> {
-  const config = getCashfreeConfig();
-  if (!config.isLive || !paymentSessionId) return null;
-
-  try {
-    const url = `${config.baseUrl}/orders/sessions`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'x-client-id': config.appId,
-        'x-client-secret': config.secretKey,
-        'x-api-version': config.apiVersion,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        payment_session_id: paymentSessionId,
-        payment_method: {
-          upi: {
-            channel: 'qrcode',
-          },
-        },
-      }),
-    });
-
-    const data: any = await response.json().catch(() => null);
-    if (response.ok && data) {
-      console.log(`[Cashfree Dynamic QR Success for session ${paymentSessionId.slice(0, 15)}...]:`, JSON.stringify(data));
-      const payloadObj = data?.data?.payload || data?.payload || data?.data;
-
-      let qrCodeUrl: string | undefined = undefined;
-      let qrCodeImage: string | undefined = undefined;
-
-      if (typeof payloadObj === 'string' && payloadObj.startsWith('upi://')) {
-        qrCodeUrl = payloadObj;
-      } else if (payloadObj && typeof payloadObj === 'object') {
-        if (typeof payloadObj.qrCodeUrl === 'string' && payloadObj.qrCodeUrl.startsWith('upi://')) {
-          qrCodeUrl = payloadObj.qrCodeUrl;
-        } else if (typeof payloadObj.qrcode === 'string' && payloadObj.qrcode.startsWith('upi://')) {
-          qrCodeUrl = payloadObj.qrcode;
-        }
-
-        if (typeof payloadObj.qrcode === 'string' && payloadObj.qrcode.startsWith('data:image')) {
-          qrCodeImage = payloadObj.qrcode;
-        }
-      }
-
-      if (qrCodeUrl || qrCodeImage) {
-        console.log(`[Cashfree Dynamic QR] Successfully extracted QR: url=${Boolean(qrCodeUrl)}, image=${Boolean(qrCodeImage)}`);
-        return { qrCodeUrl, qrCodeImage };
-      }
-    } else {
-      console.warn(`[Cashfree Dynamic QR Status ${response.status}]:`, data);
-    }
-  } catch (err: any) {
-    console.warn('[Cashfree Dynamic QR Notice]:', err.message);
-  }
-  return null;
-}
-
 // Public gateway configuration status
 router.get('/config', (_req: Request, res: Response) => {
   const config = getCashfreeConfig();
   res.json({
     currency: DEFAULT_CURRENCY,
     isGatewayConfigured: config.isLive,
-    supportedCurrencies: ['INR', 'USD'],
+    supportedCurrencies: [DEFAULT_CURRENCY],
     activeGateway: 'Cashfree',
     cashfreeAppId: config.appId,
     cashfreeMode: config.mode,
@@ -1082,18 +1035,12 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           const existingOrder = await getCashfreeOrder(recentPendingTestPayment.orderId);
           if (existingOrder && existingOrder.order_status === 'ACTIVE' && existingOrder.payment_session_id) {
             console.log(`[Cashfree Order Reuse] Reusing existing active test order ${recentPendingTestPayment.orderId} for user ${userId}`);
-            let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
-            if (existingOrder.payment_session_id) {
-              upiQrResult = await generateCashfreeUpiQr(existingOrder.payment_session_id);
-            }
             res.json({
               order_id: recentPendingTestPayment.orderId,
               orderId: recentPendingTestPayment.orderId,
               payment_session_id: existingOrder.payment_session_id,
               paymentSessionId: existingOrder.payment_session_id,
               cashfreeMode: cfConfig.mode,
-              upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
-              upiQrImage: upiQrResult?.qrCodeImage || undefined,
               checkoutUrl: cfConfig.mode === 'sandbox'
                 ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
                 : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
@@ -1102,7 +1049,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
               originalPrice,
               discountAmount,
               couponCode: verifiedCouponCode,
-              amountPaise,
+              amountPaise: amountInPaise,
               currency: 'INR',
               planName: `Single Mock Test: ${test.title}`,
               description: `Unlock complete access & detailed analytics for ${test.title}`,
@@ -1120,8 +1067,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
       if (cfConfig.isLive) {
         try {
-          const rawOrigin = (req.headers.origin as string) || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
-          const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
+          const clientOrigin = getTrustedCheckoutOrigin();
           const cfRes = await createCashfreeOrder({
             orderId,
             orderAmount: finalAmount,
@@ -1186,19 +1132,12 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         },
       });
 
-      let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
-      if (paymentSessionId) {
-        upiQrResult = await generateCashfreeUpiQr(paymentSessionId);
-      }
-
       res.json({
         order_id: orderId,
         orderId,
         payment_session_id: paymentSessionId,
         paymentSessionId,
         cashfreeMode: cfConfig.mode,
-        upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
-        upiQrImage: upiQrResult?.qrCodeImage || undefined,
         checkoutUrl: cfConfig.mode === 'sandbox'
           ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
           : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1360,18 +1299,12 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         const existingOrder = await getCashfreeOrder(recentPendingPlanPayment.orderId);
         if (existingOrder && existingOrder.order_status === 'ACTIVE' && existingOrder.payment_session_id) {
           console.log(`[Cashfree Order Reuse] Reusing existing active plan order ${recentPendingPlanPayment.orderId} for user ${userId}`);
-          let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
-          if (existingOrder.payment_session_id) {
-            upiQrResult = await generateCashfreeUpiQr(existingOrder.payment_session_id);
-          }
           res.json({
             order_id: recentPendingPlanPayment.orderId,
             orderId: recentPendingPlanPayment.orderId,
             payment_session_id: existingOrder.payment_session_id,
             paymentSessionId: existingOrder.payment_session_id,
             cashfreeMode: cfConfig.mode,
-            upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
-            upiQrImage: upiQrResult?.qrCodeImage || undefined,
             checkoutUrl: cfConfig.mode === 'sandbox'
               ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
               : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
@@ -1380,7 +1313,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             originalPrice,
             discountAmount,
             couponCode: verifiedCouponCode,
-            amountPaise,
+            amountPaise: amountInPaise,
             currency: plan.currency || 'INR',
             planName: plan.name,
             planCode: plan.code,
@@ -1399,8 +1332,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
     if (cfConfig.isLive) {
       try {
-        const rawOrigin = (req.headers.origin as string) || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
-        const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
+        const clientOrigin = getTrustedCheckoutOrigin();
         const cfRes = await createCashfreeOrder({
           orderId,
           orderAmount: finalAmount,
@@ -1465,19 +1397,12 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       },
     });
 
-    let upiQrResult: { qrCodeUrl?: string; qrCodeImage?: string } | null = null;
-    if (paymentSessionId) {
-      upiQrResult = await generateCashfreeUpiQr(paymentSessionId);
-    }
-
     res.json({
       order_id: orderId,
       orderId,
       payment_session_id: paymentSessionId,
       paymentSessionId,
       cashfreeMode: cfConfig.mode,
-      upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
-      upiQrImage: upiQrResult?.qrCodeImage || undefined,
       checkoutUrl: cfConfig.mode === 'sandbox'
         ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
         : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1552,8 +1477,11 @@ async function activatePaidOrder(params: {
     parsedNotes.verificationSource = source;
     if (paymentMethod) parsedNotes.paymentMethod = paymentMethod;
 
-    const updatedPayment = await tx.payment.update({
-      where: { id: currentPayment.id },
+    // Claim the pending payment atomically. Concurrent webhook/client retries
+    // that lose this update must return the already-activated record instead
+    // of creating another subscription or entitlement.
+    const claim = await tx.payment.updateMany({
+      where: { id: currentPayment.id, status: 'PENDING' },
       data: {
         status: 'SUCCESS',
         paymentId: cfPaymentId ? String(cfPaymentId) : currentPayment.paymentId || `cf_${Date.now()}`,
@@ -1562,6 +1490,27 @@ async function activatePaidOrder(params: {
         notesJson: JSON.stringify(parsedNotes),
       },
     });
+
+    if (claim.count !== 1) {
+      const activatedPayment = await tx.payment.findUnique({
+        where: { id: currentPayment.id },
+        include: { plan: true },
+      });
+      const existingSub = await tx.subscription.findFirst({
+        where: { userId: currentPayment.userId, paymentId: currentPayment.id },
+        include: { plan: true },
+      });
+      return {
+        alreadyActive: true,
+        payment: activatedPayment || currentPayment,
+        subscription: existingSub,
+      };
+    }
+
+    const updatedPayment = await tx.payment.findUnique({ where: { id: currentPayment.id } });
+    if (!updatedPayment) {
+      throw new Error(`Payment record ${currentPayment.id} was not available after activation.`);
+    }
 
     let createdSubscription: any = null;
 
@@ -1857,6 +1806,7 @@ const handleCashfreeWebhook = async (req: Request, res: Response) => {
     const orderId = event?.data?.order?.order_id;
     const orderStatus = event?.data?.order?.order_status;
     const orderAmount = Number(event?.data?.order?.order_amount);
+    const orderCurrency = String(event?.data?.order?.order_currency || '').toUpperCase();
     const cfPaymentId = event?.data?.payment?.cf_payment_id || event?.data?.payment?.payment_id;
     const paymentMethod = event?.data?.payment?.payment_method
       ? (typeof event.data.payment.payment_method === 'object'
@@ -1891,6 +1841,25 @@ const handleCashfreeWebhook = async (req: Request, res: Response) => {
     if (!isNaN(orderAmount) && Math.abs(orderAmount - payment.amount) > 0.01) {
       console.error(`[Cashfree Webhook Fraud Warning] Amount mismatch: Webhook=${orderAmount}, DB=${payment.amount}`);
       res.status(400).json({ status: 'AMOUNT_MISMATCH' });
+      return;
+    }
+
+    if (orderCurrency && orderCurrency !== payment.currency.toUpperCase()) {
+      console.error(`[Cashfree Webhook Fraud Warning] Currency mismatch: Webhook=${orderCurrency}, DB=${payment.currency}`);
+      res.status(400).json({ status: 'CURRENCY_MISMATCH' });
+      return;
+    }
+
+    // A valid signature proves the event came from Cashfree. Fetch the order
+    // as a second source of truth before granting a subscription or test.
+    const cfOrder = await getCashfreeOrder(orderId);
+    if (
+      String(cfOrder?.order_status || '').toUpperCase() !== 'PAID' ||
+      Math.abs(Number(cfOrder?.order_amount) - payment.amount) > 0.01 ||
+      String(cfOrder?.order_currency || '').toUpperCase() !== payment.currency.toUpperCase()
+    ) {
+      console.error(`[Cashfree Webhook] Official order validation failed for ${orderId}.`);
+      res.status(400).json({ status: 'ORDER_VALIDATION_FAILED' });
       return;
     }
 

@@ -8,15 +8,10 @@ import {
   Lock,
   Gift,
   ArrowRight,
-  ArrowLeft,
   RotateCcw,
   AlertCircle,
   Clock,
   CheckCircle2,
-  QrCode,
-  Copy,
-  CheckCheck,
-  Smartphone,
   Loader2,
   ExternalLink,
 } from 'lucide-react';
@@ -55,8 +50,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 }) => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPlanCode, setSelectedPlanCode] = useState<string>('PLAN_BOOSTER_49');
-  const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
+  const [selectedPlanCode, setSelectedPlanCode] = useState<string>('');
   const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
   const [redeemingCredit, setRedeemingCredit] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
@@ -70,17 +64,14 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
   const [activePlanName, setActivePlanName] = useState<string | null>(null);
-  const [activeUpiQrPayload, setActiveUpiQrPayload] = useState<string | null>(null);
-  const [activeUpiQrImage, setActiveUpiQrImage] = useState<string | null>(null);
-  const [activeAmount, setActiveAmount] = useState<number | null>(null);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
 
-  // Real-time polling for background payment verification (e.g. after scanning dynamic QR or mobile UPI PIN)
+  // Real-time polling for the official Cashfree checkout session.
   useEffect(() => {
     let interval: any = null;
-    if (activeOrderId && (activeUpiQrPayload || activeCheckoutUrl)) {
+    if (activeOrderId && activeCheckoutUrl) {
       interval = setInterval(async () => {
         try {
           const verify = await api.verifyCashfreePayment(activeOrderId);
@@ -104,7 +95,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [activeOrderId, activeUpiQrPayload, activeCheckoutUrl, activePlanCode, activePlanName]);
+  }, [activeOrderId, activeCheckoutUrl, activePlanCode, activePlanName]);
 
   // Exam names mapping for clean display
   const examLabels: Record<string, string> = {
@@ -122,8 +113,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     if (isOpen) {
       setAppliedCoupon(null);
       setCouponInput('');
-      setActiveUpiQrPayload(null);
-      setActiveUpiQrImage(null);
       loadData();
     }
   }, [isOpen, activeExamSlug]);
@@ -137,71 +126,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         api.getMonetizationConfig().catch(() => null),
       ]);
       
-      let fetchedPlans = plansRes.plans || [];
-      
-      // Agar backend se plans na milein, toh strictly user ke exam ke according 3 simple plans set karna
-      if (fetchedPlans.length === 0) {
-        fetchedPlans = [
-          {
-            id: 'free_starter',
-            code: 'PLAN_FREE_0',
-            name: 'Free Starter Plan',
-            description: `Essential practice for ${currentExamName} with authentic shift papers and answer keys.`,
-            priceINR: 0,
-            price: 0,
-            currency: 'INR',
-            billingInterval: 'ONE_TIME',
-            durationDays: 0,
-            badge: 'Free Forever',
-            examSlug: activeExamSlug,
-            features: [
-              '2 Free Mock Tests included',
-              'Real CBT Exam Timer & Interface',
-              'Instant Scorecard & Solutions',
-            ]
-          },
-          {
-            id: 'booster_49',
-            code: 'PLAN_BOOSTER_49',
-            name: '5-Test Booster Pack',
-            description: `Unlock 5 verified shift papers for ${currentExamName} with detailed solutions.`,
-            priceINR: 49,
-            price: 49,
-            currency: 'INR',
-            billingInterval: 'ONE_TIME',
-            durationDays: 90,
-            badge: 'Top Choice',
-            examSlug: activeExamSlug,
-            features: [
-              '5 Verified Mock Tests',
-              'Detailed Step-by-Step Solutions',
-              'Subject-wise Accuracy Audit',
-              'Personal Mistake Journal Tagging'
-            ]
-          },
-          {
-            id: 'pro_99',
-            code: 'PLAN_PRO_99',
-            name: 'Premium All-Access',
-            description: `Unlock all 10 verified mock series and solutions for ${currentExamName}.`,
-            priceINR: 99,
-            price: 99,
-            currency: 'INR',
-            billingInterval: 'ONE_TIME',
-            durationDays: 180,
-            badge: 'Best Value',
-            examSlug: activeExamSlug,
-            features: [
-              '10 Full-Length Mock & PYQ Papers',
-              'Complete Historical Archive Access',
-              'Advanced Speed & Readiness Analytics',
-              'Priority Reviewer Q&A Support'
-            ]
-          }
-        ];
-      }
-
+      const fetchedPlans = plansRes.plans || [];
       setPlans(fetchedPlans);
+      setSelectedPlanCode((current) => {
+        if (fetchedPlans.some((plan: SubscriptionPlan) => plan.code === current)) return current;
+        return fetchedPlans.find((plan: SubscriptionPlan) => plan.price > 0)?.code || fetchedPlans[0]?.code || '';
+      });
+      if (fetchedPlans.length === 0) {
+        setStatusMessage({ type: 'info', text: `No published plans are currently available for ${currentExamName}.` });
+      }
       setGatewayConfig(configRes);
     } catch (err) {
       console.error('Failed to load plans:', err);
@@ -365,24 +298,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setActiveOrderId(order.orderId!);
       setActivePlanCode(plan.code);
       setActivePlanName(plan.name);
-      setActiveAmount(order.amount || plan.price);
-
-      // If Cashfree API returned an official dynamic UPI QR payload (upi://pay?...) or QR image
-      const upiPayload = (order as any).upiQrPayload || (order as any).upi_qr_payload;
-      const upiImage = (order as any).upiQrImage || (order as any).upi_qr_image;
-      if (upiPayload || upiImage) {
-        setActiveUpiQrPayload(typeof upiPayload === 'string' ? upiPayload : null);
-        setActiveUpiQrImage(typeof upiImage === 'string' ? upiImage : null);
-        setStatusMessage({
-          type: 'info',
-          text: 'Cashfree Dynamic UPI QR generated! Scan with Google Pay, PhonePe, or Paytm to pay.',
-        });
-        return;
-      }
-
       setStatusMessage({
         type: 'info',
-        text: 'Redirecting to Cashfree secure checkout (Dynamic QR & UPI Intent)...',
+        text: 'Opening Cashfree secure checkout. Available UPI apps, cards, and net banking are shown only when enabled for this merchant account.',
       });
 
       let cashfree: any = null;
@@ -436,8 +354,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     }
   };
 
-  const exchangeRate = currency === 'USD' ? 0.012 : 1;
-  const currencySymbol = currency === 'USD' ? '$' : '₹';
+  const currencySymbol = '₹';
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
@@ -463,22 +380,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center bg-slate-800 p-0.5 rounded-md border border-slate-700 text-xs">
-              <button
-                type="button"
-                onClick={() => setCurrency('INR')}
-                className={`px-2 py-1 rounded transition-colors ${currency === 'INR' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
-              >
-                ₹ INR
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrency('USD')}
-                className={`px-2 py-1 rounded transition-colors ${currency === 'USD' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
-              >
-                $ USD
-              </button>
-            </div>
+            <span className="rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 text-[11px] font-semibold text-slate-200">Secure INR checkout</span>
 
             <button
               onClick={onClose}
@@ -513,7 +415,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
         {/* Direct Checkout Fallback (Bypasses iframe modal issues / temporarily down errors) */}
         {activeCheckoutUrl && (
-          <div className="mx-6 my-3 p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-950 shadow-sm animate-fade-in">
+          <div className="mx-6 my-3 p-3.5 bg-amber-50 border border-amber-300 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-950 shadow-sm animate-fade-in">
             <div className="flex items-center gap-2.5 text-xs font-medium">
               <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
               <span>
@@ -549,7 +451,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         {/* Coupon Code Bar */}
         <div className="px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
           <div className="text-slate-600 font-medium">
-            Have a discount code? Try <code className="px-1.5 py-0.5 bg-white border border-slate-200 rounded font-mono text-slate-900">WELCOME20</code>
+            Have a discount code? Apply it before starting secure checkout.
           </div>
           <div className="flex items-center gap-2">
             <input
@@ -609,108 +511,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
         )}
 
-        {/* Dynamic Cashfree UPI QR & Mobile Intent Experience */}
-        {(activeUpiQrPayload || activeUpiQrImage) ? (
-          <div className="p-6 space-y-5 animate-in fade-in">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveUpiQrPayload(null);
-                  setActiveUpiQrImage(null);
-                  setStatusMessage(null);
-                }}
-                className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Plans</span>
-              </button>
-              <div className="text-right">
-                <span className="text-xs text-slate-500 font-medium">{activePlanName}</span>
-                <div className="text-xl font-extrabold text-slate-900">₹{activeAmount}</div>
-              </div>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
-              <div className="flex flex-col items-center space-y-3 shrink-0">
-                <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
-                  <img
-                    src={activeUpiQrImage || (activeUpiQrPayload ? `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(activeUpiQrPayload)}&size=240x240` : '')}
-                    alt="Cashfree Dynamic UPI QR Code"
-                    className="w-56 h-56 object-contain rounded-lg"
-                  />
-                </div>
-                <div className="text-center space-y-0.5">
-                  <p className="text-xs font-bold text-slate-900">Scan using any UPI App</p>
-                  <p className="text-[11px] text-slate-500">Google Pay • PhonePe • Paytm • BHIM</p>
-                </div>
-              </div>
-
-              <div className="flex-1 space-y-4 w-full max-w-md">
-                <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2 text-xs">
-                  <div className="flex items-center gap-2 font-bold text-slate-900">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Official Cashfree Verified Merchant</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">
-                    1. Scan this dynamic QR code with your phone.<br />
-                    2. Check the payee name and exact amount (<b>₹{activeAmount}</b>).<br />
-                    3. Authorize with your secret UPI PIN in your banking app.<br />
-                    4. This screen automatically verifies and unlocks your course instantly!
-                  </p>
-                </div>
-
-                {/* Android Direct Mobile UPI Intent Button */}
-                <div className="space-y-2">
-                  {activeUpiQrPayload && (
-                    <a
-                      href={activeUpiQrPayload}
-                      className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-colors"
-                    >
-                      <Smartphone className="w-4 h-4" />
-                      <span>Pay with PhonePe / GPay / Paytm (Mobile Intent)</span>
-                    </a>
-                  )}
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (activeOrderId && activePlanCode && activePlanName) {
-                          handleVerifyCashfreeOrder(activeOrderId, activePlanCode, activePlanName);
-                        }
-                      }}
-                      disabled={verifyingPayment}
-                      className="flex-1 py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{verifyingPayment ? 'Verifying...' : 'Verify Status Now'}</span>
-                    </button>
-
-                    {activeCheckoutUrl && (
-                      <a
-                        href={activeCheckoutUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="py-2 px-3 rounded-lg border border-slate-300 hover:bg-white text-slate-700 font-medium text-xs transition-colors flex items-center gap-1"
-                      >
-                        <span>Cards / Netbanking</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Awaiting payment confirmation. Auto-refreshing every few seconds...</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          /* Main Content Area: Official Pricing Plans */
-          <div className="p-6">
+        {/* Main Content Area: official plans from the current exam portal */}
+        <div className="p-6">
             {loading ? (
               <div className="h-64 flex flex-col items-center justify-center space-y-3">
                 <Clock className="w-8 h-8 text-blue-600 animate-spin" />
@@ -720,14 +522,14 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {plans.map((plan) => {
                   const isSelected = selectedPlanCode === plan.code;
-                  const isPopular = plan.price === 49;
+                  const isPopular = Boolean(plan.badge && /popular|choice|value/i.test(plan.badge));
                   const isFree = plan.price === 0;
                   
                   const couponEligible = !isFree && appliedCoupon && (!appliedCoupon.examSlug || !plan.examSlug || appliedCoupon.examSlug === plan.examSlug);
                   const effectivePrice = couponEligible ? Math.max(1, Math.round(plan.price * (100 - appliedCoupon!.discountPct) / 100)) : plan.price;
 
-                  const displayPrice = isFree ? '0' : currency === 'USD' ? (effectivePrice * exchangeRate).toFixed(2) : String(effectivePrice);
-                  const originalDisplayPrice = currency === 'USD' ? (plan.price * exchangeRate).toFixed(2) : String(plan.price);
+                  const displayPrice = String(isFree ? 0 : effectivePrice);
+                  const originalDisplayPrice = String(plan.price);
 
                   return (
                     <div
@@ -835,8 +637,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 <span>Instant Entitlement Activation</span>
               </div>
             </div>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
