@@ -14,10 +14,26 @@ import {
   CheckCircle2,
   Loader2,
   ExternalLink,
+  CreditCard,
+  Landmark,
+  Smartphone,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SubscriptionPlan, User } from '../types';
 import { api, API_BASE, getStoredToken } from '../api';
+
+type CashfreeEnvironment = 'sandbox' | 'production';
+
+interface NativeCashfreeBridge {
+  isAvailable?: () => boolean;
+  startUpiIntentCheckout: (paymentSessionId: string, orderId: string, environment: CashfreeEnvironment) => void;
+}
+
+declare global {
+  interface Window {
+    AndroidCashfree?: NativeCashfreeBridge;
+  }
+}
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -64,6 +80,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
   const [activePlanName, setActivePlanName] = useState<string | null>(null);
+  const [nativeCheckout, setNativeCheckout] = useState<{
+    paymentSessionId: string;
+    orderId: string;
+    environment: CashfreeEnvironment;
+  } | null>(null);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
@@ -96,6 +117,19 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       if (interval) clearInterval(interval);
     };
   }, [activeOrderId, activeCheckoutUrl, activePlanCode, activePlanName]);
+
+  // The native Android wrapper dispatches this only after Cashfree's Android
+  // SDK returns. The server remains the sole authority for activation.
+  useEffect(() => {
+    const onNativeCashfreeResult = (event: Event) => {
+      const detail = (event as CustomEvent<{ orderId?: string }>).detail;
+      if (!detail?.orderId || !activePlanCode || !activePlanName) return;
+      setNativeCheckout(null);
+      void handleVerifyCashfreeOrder(detail.orderId, activePlanCode, activePlanName);
+    };
+    window.addEventListener('cashfree-native-result', onNativeCashfreeResult);
+    return () => window.removeEventListener('cashfree-native-result', onNativeCashfreeResult);
+  }, [activePlanCode, activePlanName]);
 
   // Exam names mapping for clean display
   const examLabels: Record<string, string> = {
@@ -298,6 +332,19 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setActiveOrderId(order.orderId!);
       setActivePlanCode(plan.code);
       setActivePlanName(plan.name);
+      const nativeBridge = window.AndroidCashfree;
+      if (nativeBridge?.isAvailable?.()) {
+        setNativeCheckout({
+          paymentSessionId: activeSession,
+          orderId: order.orderId,
+          environment: targetMode,
+        });
+        setStatusMessage({
+          type: 'info',
+          text: 'Choose UPI apps or the secure Cashfree web checkout below.',
+        });
+        return;
+      }
       setStatusMessage({
         type: 'info',
         text: 'Opening Cashfree secure checkout. Available UPI apps, cards, and net banking are shown only when enabled for this merchant account.',
@@ -413,8 +460,67 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
         )}
 
+        {/* Only rendered inside the native Android wrapper. Individual apps are
+            discovered and launched by Cashfree's Android SDK, never by web links. */}
+        {nativeCheckout && (
+          <section className="mx-6 my-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-bold text-slate-900">Choose payment method</p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                  UPI apps are shown only when installed on this Android device. Cashfree securely opens the app you choose.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNativeCheckout(null)}
+                className="shrink-0 rounded-lg px-2 py-1 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+              >
+                Cancel
+              </button>
+            </div>
+
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => window.AndroidCashfree?.startUpiIntentCheckout(
+                  nativeCheckout.paymentSessionId,
+                  nativeCheckout.orderId,
+                  nativeCheckout.environment,
+                )}
+                className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-left transition-colors hover:border-blue-400 hover:bg-blue-100"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+                  <Smartphone className="h-4 w-4" />
+                </span>
+                <span>
+                  <span className="block text-xs font-bold text-slate-900">UPI apps</span>
+                  <span className="block text-[11px] text-slate-600">Google Pay, PhonePe, Paytm & other installed apps</span>
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeCheckoutUrl) window.location.href = activeCheckoutUrl;
+                }}
+                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left transition-colors hover:border-slate-400 hover:bg-slate-50"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-white">
+                  <CreditCard className="h-4 w-4" />
+                </span>
+                <span>
+                  <span className="block text-xs font-bold text-slate-900">Card, net banking & more</span>
+                  <span className="block text-[11px] text-slate-600">Open the secure Cashfree checkout</span>
+                </span>
+                <Landmark className="ml-auto h-4 w-4 text-slate-400" />
+              </button>
+            </div>
+          </section>
+        )}
+
         {/* Direct Checkout Fallback (Bypasses iframe modal issues / temporarily down errors) */}
-        {activeCheckoutUrl && (
+        {activeCheckoutUrl && !nativeCheckout && (
           <div className="mx-6 my-3 p-3.5 bg-amber-50 border border-amber-300 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-950 shadow-sm animate-fade-in">
             <div className="flex items-center gap-2.5 text-xs font-medium">
               <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
