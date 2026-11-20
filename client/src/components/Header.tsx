@@ -170,6 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
           id="student-sidebar"
           aria-label="Student navigation"
           className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col bg-[#111B35] py-5 text-slate-200 shadow-xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
+          style={{ backgroundColor: '#111B35', minHeight: '100vh' }}
         >
           <button
             onClick={() => handleNavClick('dashboard')}
@@ -480,7 +481,8 @@ export const Header: React.FC<HeaderProps> = ({
             role="dialog"
             aria-modal="true"
             aria-label="Student navigation"
-            className="relative flex h-full w-[min(19rem,86vw)] flex-col overflow-y-auto bg-[#111B35] px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
+            className="relative flex h-full min-h-screen w-[min(19rem,86vw)] flex-col overflow-y-auto bg-[#111B35] px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
+            style={{ backgroundColor: '#111B35' }}
           >
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -490,7 +492,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">CBT Station</p>
                 </div>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors" aria-label="Close navigation menu">
+              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 hover:bg-[#1E3055] hover:text-white transition-colors" aria-label="Close navigation menu">
                 <X className="h-5 w-5" />
               </button>
             </div>
