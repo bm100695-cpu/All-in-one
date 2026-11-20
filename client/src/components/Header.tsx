@@ -143,15 +143,15 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-tn-border shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-[68px] gap-3">
           
           {/* Left: Brand Logo */}
-          <div className="flex items-center gap-6 lg:gap-8">
+          <div className="flex min-w-0 items-center gap-4 lg:gap-7">
             <button
               onClick={() => handleNavClick(currentUser ? 'dashboard' : 'landing')}
-              className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
+              className="flex shrink-0 items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
             >
               <img
                 src="/logo.jpg"
@@ -170,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Desktop Navigation Links */}
             {!isAdminPage ? (
-              <nav className="hidden md:flex items-center gap-2">
+              <nav className="hidden md:flex min-w-0 items-center gap-1.5">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
@@ -178,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       key={item.id}
                       onClick={() => handleNavClick(item.id)}
-                      className={`px-3.5 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                      className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                         isActive
                           ? 'text-blue-600 bg-blue-50 font-semibold shadow-xs'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -216,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
             {/* Plans and Registration buttons */}
             {!isAdminPage && (
               <>
@@ -256,9 +256,9 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="relative" ref={menuRef}>
                   <button
                     onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-                    className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg border border-zinc-200/90 bg-white hover:bg-zinc-50 transition-colors text-left cursor-pointer shadow-2xs"
+                    className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg border border-tn-border bg-white hover:bg-slate-50 transition-colors text-left cursor-pointer shadow-xs"
                   >
-                    <div className="w-6 h-6 rounded-md bg-zinc-900 text-white flex items-center justify-center font-bold text-[11px]">
+                    <div className="w-6 h-6 rounded-md bg-tn-blue text-white flex items-center justify-center font-bold text-[11px]">
                       {currentUser?.name?.charAt(0) || 'U'}
                     </div>
                     <div className="hidden sm:block">

@@ -147,14 +147,15 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const referralCredits = subInfo?.referralCredits ?? currentUser?.referralCredits ?? 0;
 
   return (
-    <div className="space-y-6 pb-16">
+    <div className="space-y-7 pb-16">
       {/* 1. Welcome & Summary Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-tn-border pb-5">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl border border-tn-border bg-white px-5 py-5 sm:px-6 shadow-subtle">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-tn-navy tracking-tight">
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-tn-blue">Candidate dashboard</p>
+          <h1 className="text-2xl sm:text-[28px] font-bold text-tn-navy tracking-tight">
             Welcome back, {currentUser?.name?.split(' ')[0] || 'Candidate'}
           </h1>
-          <p className="text-xs text-tn-muted mt-0.5">
+          <p className="text-xs text-tn-muted mt-1">
             Target Exam:{' '}
             <strong className="text-tn-navy font-bold">
               {examInfo?.name || examSlug.toUpperCase()}
@@ -163,11 +164,11 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
           {flagshipTest?.id && (
             <button
               onClick={() => onStartExam(flagshipTest.id)}
-              className="px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Play className="w-3.5 h-3.5" />
               <span>Start {examInfo?.shortName || examInfo?.name || 'Exam'} Test</span>
@@ -183,25 +184,25 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                 ? onNavigateToUptet?.()
                 : onNavigateToMockTests()
             }
-            className="px-3.5 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-tn-border text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-tn-border text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
           >
             <FileCheck2 className="w-3.5 h-3.5 text-tn-blue" />
             <span>Open {examInfo?.shortName || 'Exam'} Portal ({totalExamTests} Tests)</span>
           </button>
         </div>
-      </div>
+      </section>
 
       {/* 2. Subscription Status & Referral Balance Banner */}
-      <div className="p-4 rounded-xl bg-white border border-tn-border shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-tn-navy text-white flex items-center justify-center font-bold">
-            <Zap className="w-5 h-5 text-amber-400" />
+      <section className="p-4 rounded-2xl bg-white border border-tn-border shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-start gap-3.5">
+          <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-50 border border-blue-100 text-tn-blue flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm text-tn-navy">{planName}</span>
               <span
-                className={`px-2 py-0.5 rounded text-[10px] font-bold ${isPremium
+                className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isPremium
                     ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                     : 'bg-blue-50 text-tn-blue border border-blue-200'
                   }`}
@@ -219,7 +220,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 self-end md:self-center">
+        <div className="flex flex-wrap items-center gap-2 self-end md:self-center">
           {/* Referral Button */}
           <button
             onClick={onOpenReferralModal}
@@ -233,21 +234,21 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           {!isPremium && (
             <button
               onClick={() => onOpenPricingModal?.()}
-              className="px-3.5 py-1.5 rounded-lg bg-tn-navy hover:bg-slate-800 text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-1.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Upgrade Plan</span>
             </button>
           )}
         </div>
-      </div>
+      </section>
 
       {/* 3. Resume In-Progress Attempt Banner (if any) */}
       {activeAttempt && (
         <div className="p-4 rounded-lg bg-amber-50/80 border border-amber-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-              <Clock className="w-4 h-4 animate-spin" />
+              <Clock className="w-4 h-4" />
             </div>
             <div>
               <p className="font-semibold text-amber-900">
@@ -268,39 +269,39 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       )}
 
       {/* 4. Performance Metrics Row (5 Columns) */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div className="p-4 rounded-lg border border-tn-border bg-white shadow-subtle space-y-1">
-          <p className="text-[11px] font-medium text-tn-muted">Tests Completed</p>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
+        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Completed</p><FileCheck2 className="w-4 h-4 text-tn-blue" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">{completedAttempts.length}</p>
           <p className="text-[10px] text-slate-500">Official timed attempts</p>
         </div>
 
-        <div className="p-4 rounded-lg border border-tn-border bg-white shadow-subtle space-y-1">
-          <p className="text-[11px] font-medium text-tn-muted">Average Score</p>
+        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score</p><Target className="w-4 h-4 text-tn-blue" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {avgScore} <span className="text-xs font-normal text-slate-400">/ {maxExamScore}</span>
           </p>
           <p className="text-[10px] text-slate-500">Across verified attempts</p>
         </div>
 
-        <div className="p-4 rounded-lg border border-tn-border bg-white shadow-subtle space-y-1">
-          <p className="text-[11px] font-medium text-tn-muted">Accuracy Rate</p>
+        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Accuracy Rate</p><TrendingUp className="w-4 h-4 text-emerald-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {avgAccuracy}%
           </p>
           <p className="text-[10px] text-slate-500">Correct to attempted ratio</p>
         </div>
 
-        <div className="p-4 rounded-lg border border-tn-border bg-white shadow-subtle space-y-1">
-          <p className="text-[11px] font-medium text-tn-muted">Time In Tests</p>
+        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Time In Tests</p><Clock className="w-4 h-4 text-tn-blue" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {totalHours} <span className="text-xs font-normal text-slate-400">hrs</span>
           </p>
           <p className="text-[10px] text-slate-500">Simulated test time</p>
         </div>
 
-        <div className="p-4 rounded-lg border border-tn-border bg-white shadow-subtle space-y-1">
-          <p className="text-[11px] font-medium text-tn-muted">Free vs Premium</p>
+        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Free vs Premium</p><Lock className="w-4 h-4 text-amber-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {freeExamTests} <span className="text-xs font-normal text-slate-400">/ {paidExamTests}</span>
           </p>
@@ -312,8 +313,8 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Recent Attempts (7 Cols) */}
         <div className="lg:col-span-7 space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-tn-navy uppercase tracking-wider">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="text-sm font-bold text-tn-navy">
               Recent Test Attempts
             </h2>
             <button
@@ -325,14 +326,19 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             </button>
           </div>
 
-          <div className="border border-tn-border rounded-lg bg-white overflow-hidden shadow-subtle">
+          <div className="border border-tn-border rounded-2xl bg-white overflow-hidden shadow-subtle">
             {attempts.length === 0 ? (
-              <div className="p-8 text-center space-y-3">
-                <FileCheck2 className="w-8 h-8 text-slate-300 mx-auto" />
-                <p className="text-xs font-medium text-slate-600">No tests attempted yet.</p>
+              <div className="p-8 sm:p-10 text-center space-y-3">
+                <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto">
+                  <FileCheck2 className="w-5 h-5 text-tn-blue" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-tn-navy">Your attempt history will appear here</p>
+                  <p className="text-xs text-tn-muted">Take your first timed mock to begin building a performance record.</p>
+                </div>
                 <button
                   onClick={onNavigateToMockTests}
-                  className="px-4 py-2 rounded bg-tn-blue text-white text-xs font-semibold hover:bg-tn-blue-hover transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-lg bg-tn-blue text-white text-xs font-semibold hover:bg-tn-blue-hover transition-colors cursor-pointer"
                 >
                   Attempt First Mock Paper
                 </button>
@@ -408,14 +414,14 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
         {/* Right Column: Quick Practice & Upgrade Banner (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <h2 className="text-sm font-semibold text-tn-navy uppercase tracking-wider">
+          <h2 className="px-1 text-sm font-bold text-tn-navy">
             Flagship Examination
           </h2>
 
           {/* Flagship Examination Card */}
-          <div className="p-5 rounded-lg border border-tn-blue/40 bg-white shadow-subtle space-y-3 relative overflow-hidden">
+          <div className="p-5 sm:p-6 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-4 relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-tn-navy text-white">
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-tn-blue border border-blue-100">
                 {examInfo?.shortName || examSlug.toUpperCase()} • {flagshipTest?.accessLevel === 'FREE' ? 'Free Starter Test' : 'Mock Simulation'}
               </span>
               <span className="text-[11px] font-mono text-slate-500">
@@ -423,7 +429,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               </span>
             </div>
 
-            <h3 className="text-sm font-bold text-tn-navy leading-snug">
+            <h3 className="text-base font-bold text-tn-navy leading-snug">
               {flagshipTest?.title || `${examInfo?.name || examSlug} Flagship Examination`}
             </h3>
 
@@ -431,7 +437,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               {examInfo?.portalHeadline || examInfo?.description || `Practice authentic pattern-aligned CBT examinations for ${examInfo?.name || examSlug}.`}
             </p>
 
-            <div className="pt-2 flex items-center justify-between border-t border-slate-100">
+            <div className="pt-3 flex items-center justify-between gap-3 border-t border-slate-100">
               <span className="text-[11px] text-emerald-700 font-medium flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Verified Pattern Scoring</span>
@@ -439,7 +445,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               {flagshipTest?.id ? (
                 <button
                   onClick={() => onStartExam(flagshipTest.id)}
-                  className="px-3.5 py-1.5 rounded bg-tn-navy hover:bg-slate-800 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="shrink-0 px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Play className="w-3 h-3" />
                   <span>Start Exam</span>
@@ -447,7 +453,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               ) : (
                 <button
                   onClick={() => (onOpenExamPortal ? onOpenExamPortal(examSlug) : onNavigateToMockTests())}
-                  className="px-3.5 py-1.5 rounded bg-tn-navy hover:bg-slate-800 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="shrink-0 px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <FileCheck2 className="w-3 h-3" />
                   <span>Open Portal</span>
@@ -458,7 +464,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
           {/* Exam-Wise Upgrade Banner */}
           {!isPremium && (
-            <div className="p-4 rounded-xl border border-amber-300 bg-amber-50/70 space-y-3">
+            <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50/70 space-y-3 shadow-subtle">
               <div className="flex items-center justify-between">
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-600 text-white">
                   {examInfo?.shortName || 'Exam'} Series Plans
@@ -484,7 +490,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           )}
 
           {/* Quick Shortcuts Card */}
-          <div className="p-4 rounded-lg border border-tn-border bg-white shadow-subtle space-y-2.5">
+          <div className="p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2.5">
             <p className="text-xs font-semibold text-tn-navy uppercase tracking-wider">
               Study Workspaces
             </p>
@@ -492,13 +498,13 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               {isSuperTet ? (
                 <button
                   onClick={onNavigateToSuperTet || onNavigateToMockTests}
-                  className="w-full p-2.5 rounded border border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50 transition-colors flex items-center justify-between text-left cursor-pointer"
+                  className="w-full p-2.5 rounded-xl border border-blue-100 bg-blue-50/50 hover:bg-blue-50 transition-colors flex items-center justify-between text-left cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <FileCheck2 className="w-4 h-4 text-indigo-600" />
-                    <span className="font-semibold text-indigo-950">SUPER TET (2012–2025) Archive</span>
+                    <FileCheck2 className="w-4 h-4 text-tn-blue" />
+                    <span className="font-semibold text-tn-navy">SUPER TET (2012–2025) Archive</span>
                   </div>
-                  <span className="text-[11px] font-bold text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200">14 Years</span>
+                  <span className="text-[11px] font-bold text-tn-blue bg-white px-2 py-0.5 rounded border border-blue-200">14 Years</span>
                 </button>
               ) : isUptet ? (
                 <button

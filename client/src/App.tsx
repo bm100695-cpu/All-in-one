@@ -542,7 +542,7 @@ export const App: React.FC = () => {
         onClose={() => setLegalModalType(null)}
       />
 
-      <main className={`flex-1 w-full ${isExamRunning ? 'p-0 max-w-full' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6'}`}>
+      <main className={`flex-1 w-full ${isExamRunning ? 'p-0 max-w-full' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'}`}>
         {initializing ? (
           <div className="h-[60vh] flex flex-col items-center justify-center space-y-3">
             <div className="w-10 h-10 rounded-full border-3 border-tn-border border-t-tn-blue animate-spin" />

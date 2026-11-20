@@ -7,11 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'tn-navy': '#14213D',
+        'tn-navy': '#0F172A',
         'tn-blue': '#2563EB',
         'tn-blue-hover': '#1D4ED8',
         'tn-blue-light': '#EFF6FF',
-        'tn-bg': '#F8FAFC',
+        'tn-bg': '#F7F9FC',
         'tn-surface': '#FFFFFF',
         'tn-text': '#172033',
         'tn-muted': '#64748B',
@@ -20,13 +20,13 @@ export default {
         'tn-warning': '#D97706',
         'tn-error': '#DC2626',
         tn: {
-          navy: '#14213D',
+          navy: '#0F172A',
           'navy-dark': '#0B1324',
           'navy-light': '#1E2F54',
           blue: '#2563EB',
           'blue-hover': '#1D4ED8',
           'blue-light': '#EFF6FF',
-          bg: '#F8FAFC',
+          bg: '#F7F9FC',
           surface: '#FFFFFF',
           text: '#172033',
           muted: '#64748B',
