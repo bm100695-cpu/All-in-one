@@ -770,7 +770,25 @@ router.get('/exams/:examId/tests', authenticate, requireRole(['ADMIN']), async (
       include: { _count: { select: { testQuestions: true } } },
       orderBy: { createdAt: 'desc' },
     });
-    res.json({ tests });
+
+    const total = tests.length;
+    const active = tests.filter((t) => t.status === 'ACTIVE' || t.isActive).length;
+    const published = tests.filter((t) => t.isPublished && t.status !== 'ACTIVE' && !t.isActive).length;
+    const draft = tests.filter((t) => !t.isPublished && (t.status === 'DRAFT' || !t.status)).length;
+    const inactive = tests.filter((t) => t.status === 'INACTIVE' || (!t.isActive && t.isPublished)).length;
+    const archived = tests.filter((t) => t.status === 'ARCHIVED').length;
+
+    res.json({
+      tests,
+      stats: {
+        total,
+        active,
+        published,
+        draft,
+        inactive,
+        archived,
+      },
+    });
   } catch (error) {
     console.error('Error fetching exam tests:', error);
     res.status(500).json({ error: 'Failed to fetch exam tests' });
@@ -801,6 +819,8 @@ router.post('/tests', authenticate, requireRole(['ADMIN']), async (req: Request,
         instructionsEn: instructionsEn || 'Standard All in One CBT Examination Instructions.',
         accessLevel,
         isPublished: false,
+        status: 'DRAFT',
+        isActive: false,
         sourceType: type === 'PREVIOUS_YEAR_PAPER' ? 'VERIFIED_PYQ' : 'PATTERN_PRACTICE',
       },
     });
@@ -819,14 +839,86 @@ router.patch('/tests/:id/publish', authenticate, requireRole(['ADMIN']), async (
       res.status(400).json({ error: 'Cannot publish a mock test with 0 questions.' });
       return;
     }
+    const isPub = Boolean(isPublished);
     const test = await prisma.test.update({
       where: { id: req.params.id },
-      data: { isPublished: Boolean(isPublished), totalQuestions: count },
+      data: {
+        isPublished: isPub,
+        status: isPub ? 'PUBLISHED' : 'DRAFT',
+        isActive: false, // Publishing does NOT automatically make test live to students
+        totalQuestions: count,
+      },
     });
     res.json({ success: true, test });
   } catch (error) {
     console.error('Error toggling test publish:', error);
     res.status(500).json({ error: 'Failed to update publish state' });
+  }
+});
+
+// Update test status / visibility / live activation & scheduling
+router.patch('/tests/:id/status', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, isActive, availableFrom, availableTo, singleActiveMode } = req.body;
+
+    const existingTest = await prisma.test.findUnique({
+      where: { id },
+      include: { _count: { select: { testQuestions: true } } },
+    });
+
+    if (!existingTest) {
+      res.status(404).json({ error: 'Test not found' });
+      return;
+    }
+
+    const targetStatus = status || (isActive ? 'ACTIVE' : 'INACTIVE');
+    const targetIsActive = targetStatus === 'ACTIVE' || Boolean(isActive);
+
+    if (targetIsActive) {
+      const qCount = existingTest._count?.testQuestions ?? existingTest.totalQuestions;
+      if (qCount === 0) {
+        res.status(400).json({ error: 'Cannot activate a mock test with 0 questions. Please add questions first.' });
+        return;
+      }
+    }
+
+    // If singleActiveMode is requested and activating this test, deactivate all other tests for this exam
+    if (singleActiveMode && targetIsActive) {
+      await prisma.test.updateMany({
+        where: { examId: existingTest.examId, id: { not: existingTest.id } },
+        data: {
+          status: 'INACTIVE',
+          isActive: false,
+          deactivatedAt: new Date(),
+        },
+      });
+    }
+
+    const updateData: any = {
+      status: targetStatus,
+      isActive: targetIsActive,
+      ...(targetIsActive ? { isPublished: true, activatedAt: new Date() } : {}),
+      ...(targetStatus === 'INACTIVE' ? { deactivatedAt: new Date() } : {}),
+      ...(availableFrom !== undefined ? { availableFrom: availableFrom ? new Date(availableFrom) : null } : {}),
+      ...(availableTo !== undefined ? { availableTo: availableTo ? new Date(availableTo) : null } : {}),
+    };
+
+    const updatedTest = await prisma.test.update({
+      where: { id },
+      data: updateData,
+    });
+
+    res.json({
+      success: true,
+      test: updatedTest,
+      message: targetIsActive
+        ? `Test "${updatedTest.title}" is now ACTIVE (LIVE for students).`
+        : `Test "${updatedTest.title}" is now ${targetStatus}.`,
+    });
+  } catch (error: any) {
+    console.error('Error updating test status:', error);
+    res.status(500).json({ error: error.message || 'Failed to update test status' });
   }
 });
 

@@ -22,6 +22,12 @@ import {
   Check,
   RefreshCw,
   ExternalLink,
+  Play,
+  Square,
+  Calendar,
+  Archive,
+  Radio,
+  ShieldCheck,
 } from 'lucide-react';
 import { api } from '../api';
 import { SubscriptionPlan } from '../types';
@@ -41,6 +47,14 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
   const [examTests, setExamTests] = useState<any[]>([]);
   const [selectedTest, setSelectedTest] = useState<any | null>(null);
   const [testQuestions, setTestQuestions] = useState<any[]>([]);
+
+  // Test Filter, Stats & Scheduling State
+  const [testFilter, setTestFilter] = useState<'ALL' | 'ACTIVE' | 'PUBLISHED' | 'DRAFT' | 'ARCHIVED'>('ALL');
+  const [testStats, setTestStats] = useState<{ total: number; active: number; published: number; draft: number; inactive: number; archived: number } | null>(null);
+  const [schedulingTest, setSchedulingTest] = useState<any | null>(null);
+  const [scheduleAvailableFrom, setScheduleAvailableFrom] = useState('');
+  const [scheduleAvailableTo, setScheduleAvailableTo] = useState('');
+  const [updatingTestId, setUpdatingTestId] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -184,6 +198,9 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
     try {
       const res = await api.getAdminExamTests(exam.id);
       setExamTests(res.tests || []);
+      if (res.stats) {
+        setTestStats(res.stats);
+      }
     } catch (err) {
       console.error('Error loading tests for exam:', err);
     }
@@ -370,14 +387,124 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
     }
   };
 
+  const reloadExamTests = async () => {
+    if (!selectedExam) return;
+    try {
+      const res = await api.getAdminExamTests(selectedExam.id);
+      setExamTests(res.tests || []);
+      if (res.stats) setTestStats(res.stats);
+    } catch (err) {
+      console.error('Error reloading exam tests:', err);
+    }
+  };
+
   const handleTogglePublishTest = async (test: any) => {
     setMsg(null);
     try {
       await api.publishAdminTest(test.id, !test.isPublished);
       setMsg({ type: 'success', text: `Test "${test.title}" is now ${!test.isPublished ? 'Published' : 'Unpublished'}.` });
-      selectExamRow(selectedExam);
+      await reloadExamTests();
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message || 'Failed to update publish status' });
+    }
+  };
+
+  const handleActivateTest = async (test: any, makeOnlyActive: boolean = false) => {
+    const qCount = test._count?.testQuestions ?? test.totalQuestions ?? 0;
+    if (qCount === 0) {
+      setMsg({ type: 'error', text: `Cannot activate "${test.title}" because it contains 0 questions. Please add questions first.` });
+      return;
+    }
+
+    const confirmText = makeOnlyActive
+      ? `Activate "${test.title}" as the ONLY active mock test? All other mock tests for ${selectedExam?.shortName || 'this exam'} will be set to INACTIVE.`
+      : `Make "${test.title}" ACTIVE (LIVE) for students? Students will now see and be able to take this test.`;
+
+    if (!window.confirm(confirmText)) return;
+
+    setUpdatingTestId(test.id);
+    setMsg(null);
+    try {
+      const res = await api.updateAdminTestStatus(test.id, {
+        status: 'ACTIVE',
+        isActive: true,
+        singleActiveMode: makeOnlyActive,
+      });
+      setMsg({ type: 'success', text: res.message || `Test "${test.title}" is now ACTIVE (LIVE).` });
+      await reloadExamTests();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to activate test.' });
+    } finally {
+      setUpdatingTestId(null);
+    }
+  };
+
+  const handleDeactivateTest = async (test: any) => {
+    if (!window.confirm(`Deactivate / Stop Live for "${test.title}"? Students will no longer see this test or start new attempts.`)) {
+      return;
+    }
+
+    setUpdatingTestId(test.id);
+    setMsg(null);
+    try {
+      const res = await api.updateAdminTestStatus(test.id, {
+        status: 'INACTIVE',
+        isActive: false,
+      });
+      setMsg({ type: 'success', text: res.message || `Test "${test.title}" is now INACTIVE (hidden from students).` });
+      await reloadExamTests();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to deactivate test.' });
+    } finally {
+      setUpdatingTestId(null);
+    }
+  };
+
+  const handleArchiveTest = async (test: any) => {
+    const isCurrentlyArchived = test.status === 'ARCHIVED';
+    const nextStatus = isCurrentlyArchived ? 'DRAFT' : 'ARCHIVED';
+    if (!window.confirm(`${isCurrentlyArchived ? 'Unarchive' : 'Archive'} test "${test.title}"?`)) return;
+
+    setUpdatingTestId(test.id);
+    setMsg(null);
+    try {
+      const res = await api.updateAdminTestStatus(test.id, {
+        status: nextStatus,
+        isActive: false,
+      });
+      setMsg({ type: 'success', text: res.message || `Test "${test.title}" is now ${nextStatus}.` });
+      await reloadExamTests();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to update test status.' });
+    } finally {
+      setUpdatingTestId(null);
+    }
+  };
+
+  const handleOpenScheduleModal = (test: any) => {
+    setSchedulingTest(test);
+    setScheduleAvailableFrom(test.availableFrom ? new Date(test.availableFrom).toISOString().slice(0, 16) : '');
+    setScheduleAvailableTo(test.availableTo ? new Date(test.availableTo).toISOString().slice(0, 16) : '');
+  };
+
+  const handleSaveSchedule = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!schedulingTest) return;
+
+    setUpdatingTestId(schedulingTest.id);
+    setMsg(null);
+    try {
+      const res = await api.updateAdminTestStatus(schedulingTest.id, {
+        availableFrom: scheduleAvailableFrom ? new Date(scheduleAvailableFrom).toISOString() : null,
+        availableTo: scheduleAvailableTo ? new Date(scheduleAvailableTo).toISOString() : null,
+      });
+      setMsg({ type: 'success', text: res.message || `Schedule updated for "${schedulingTest.title}".` });
+      setSchedulingTest(null);
+      await reloadExamTests();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to update schedule.' });
+    } finally {
+      setUpdatingTestId(null);
     }
   };
 
@@ -852,75 +979,281 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                 )}
               </div>
 
-              {/* Tests List for Selected Exam */}
+              {/* Tests List for Selected Exam (Mock Test Publishing & Live Activation System) */}
               <div className="p-5 rounded-xl bg-white border border-slate-200 space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h3 className="text-sm font-bold text-tn-navy flex items-center gap-2">
-                    <FileCheck2 className="w-4 h-4 text-tn-blue" />
-                    <span>Tests in {selectedExam.shortName} ({examTests.length})</span>
-                  </h3>
-                  <button
-                    onClick={() => setShowNewTestModal(true)}
-                    className="px-3 py-1.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Create Test</span>
-                  </button>
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
+                  <div>
+                    <h3 className="text-sm font-bold text-tn-navy flex items-center gap-2">
+                      <FileCheck2 className="w-4 h-4 text-tn-blue" />
+                      <span>Tests in {selectedExam.shortName} ({examTests.length})</span>
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Mock test visibility control: Only <strong>ACTIVE (LIVE)</strong> tests are visible on student dashboards.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={reloadExamTests}
+                      title="Refresh tests list"
+                      className="p-1.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-600 text-xs cursor-pointer transition-colors"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setShowNewTestModal(true)}
+                      className="px-3 py-1.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-xs"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Create Test</span>
+                    </button>
+                  </div>
                 </div>
 
-                {examTests.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-4 text-center">No tests found for this examination.</p>
-                ) : (
-                  <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
-                    {examTests.map((t) => (
-                      <div
-                        key={t.id}
-                        className={`p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${
-                          selectedTest?.id === t.id ? 'border-tn-blue bg-blue-50/40' : 'border-slate-200 bg-slate-50/50'
-                        }`}
-                      >
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-xs font-bold text-tn-navy">{t.title}</span>
-                            <span
-                              className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                                t.isPublished
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : 'bg-slate-200 text-slate-700'
-                              }`}
-                            >
-                              {t.isPublished ? 'Published' : 'Draft'}
-                            </span>
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-600">
-                              {t._count?.testQuestions ?? t.totalQuestions} Qs • {t.durationMinutes}m • {t.accessLevel}
-                            </span>
-                          </div>
-                        </div>
+                {/* Test Visibility Stats Bar */}
+                {(() => {
+                  const total = examTests.length;
+                  const active = examTests.filter((t) => t.status === 'ACTIVE' || t.isActive).length;
+                  const published = examTests.filter((t) => t.isPublished && t.status !== 'ACTIVE' && !t.isActive).length;
+                  const draft = examTests.filter((t) => !t.isPublished && t.status !== 'ARCHIVED').length;
+                  const archived = examTests.filter((t) => t.status === 'ARCHIVED').length;
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            onClick={() => loadQuestionsForTest(t)}
-                            className="px-2.5 py-1 rounded bg-white border border-slate-300 hover:border-tn-blue text-slate-700 text-[11px] font-semibold flex items-center gap-1 cursor-pointer"
-                          >
-                            <BookOpen className="w-3 h-3" />
-                            <span>Questions</span>
-                          </button>
-                          <button
-                            onClick={() => handleTogglePublishTest(t)}
-                            className={`px-2.5 py-1 rounded text-[11px] font-semibold flex items-center gap-1 cursor-pointer ${
-                              t.isPublished
-                                ? 'bg-amber-100 hover:bg-amber-200 text-amber-900'
-                                : 'bg-emerald-700 hover:bg-emerald-800 text-white'
+                  return (
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
+                      <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Tests</div>
+                        <div className="text-lg font-extrabold text-slate-800">{total}</div>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-emerald-50/70 border border-emerald-300 ring-1 ring-emerald-200/50">
+                        <div className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                          Live to Students
+                        </div>
+                        <div className="text-lg font-extrabold text-emerald-800">{active} Active</div>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-blue-50/70 border border-blue-200">
+                        <div className="text-[10px] font-bold text-blue-700 uppercase tracking-wider">Published Inactive</div>
+                        <div className="text-lg font-extrabold text-blue-800">{published}</div>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200">
+                        <div className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Draft Tests</div>
+                        <div className="text-lg font-extrabold text-amber-800">{draft}</div>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-slate-100 border border-slate-300">
+                        <div className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Archived</div>
+                        <div className="text-lg font-extrabold text-slate-700">{archived}</div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Filter Tabs */}
+                <div className="flex items-center gap-1 border-b border-slate-100 pb-2 overflow-x-auto text-xs">
+                  <span className="text-[11px] font-bold text-slate-400 mr-2 uppercase tracking-wider">Filter:</span>
+                  {[
+                    { id: 'ALL', label: 'All Tests' },
+                    { id: 'ACTIVE', label: '● Active (Live)' },
+                    { id: 'PUBLISHED', label: 'Published (Inactive)' },
+                    { id: 'DRAFT', label: 'Drafts' },
+                    { id: 'ARCHIVED', label: 'Archived' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setTestFilter(tab.id as any)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                        testFilter === tab.id
+                          ? 'bg-tn-navy text-white shadow-xs'
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Filtered Tests List */}
+                {(() => {
+                  const filtered = examTests.filter((t) => {
+                    const isLive = t.status === 'ACTIVE' || t.isActive;
+                    if (testFilter === 'ACTIVE') return isLive;
+                    if (testFilter === 'PUBLISHED') return t.isPublished && !isLive;
+                    if (testFilter === 'DRAFT') return !t.isPublished && t.status !== 'ARCHIVED';
+                    if (testFilter === 'ARCHIVED') return t.status === 'ARCHIVED';
+                    return true;
+                  });
+
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="p-8 text-center bg-slate-50 rounded-lg border border-dashed border-slate-200 space-y-1">
+                        <p className="text-xs font-semibold text-slate-600">No mock tests found in "{testFilter}" filter.</p>
+                        <p className="text-[11px] text-slate-400">
+                          {testFilter === 'ACTIVE'
+                            ? 'Activate any published test using "Activate / Make Live" to make it visible to students.'
+                            : 'Adjust your filter above to view other mock tests.'}
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
+                      {filtered.map((t) => {
+                        const isLive = t.status === 'ACTIVE' || t.isActive;
+                        const isArchived = t.status === 'ARCHIVED';
+                        const isBusy = updatingTestId === t.id;
+
+                        return (
+                          <div
+                            key={t.id}
+                            className={`p-3.5 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all ${
+                              isLive
+                                ? 'border-emerald-300 bg-emerald-50/30 ring-1 ring-emerald-200'
+                                : selectedTest?.id === t.id
+                                ? 'border-tn-blue bg-blue-50/40'
+                                : 'border-slate-200 bg-white hover:border-slate-300'
                             }`}
                           >
-                            {t.isPublished ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                            <span>{t.isPublished ? 'Unpublish' : 'Publish'}</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-xs font-extrabold text-tn-navy">{t.title}</span>
+
+                                {/* Status Pill Badge */}
+                                {isLive ? (
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-2xs">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                                    ACTIVE (LIVE)
+                                  </span>
+                                ) : t.isPublished ? (
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                                    PUBLISHED (INACTIVE)
+                                  </span>
+                                ) : isArchived ? (
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">
+                                    ARCHIVED
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                    DRAFT
+                                  </span>
+                                )}
+
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-600">
+                                  {t._count?.testQuestions ?? t.totalQuestions} Qs • {t.durationMinutes}m • {t.accessLevel}
+                                </span>
+
+                                {(t.availableFrom || t.availableTo) && (
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-50 border border-purple-200 text-purple-700 flex items-center gap-1">
+                                    <Clock className="w-2.5 h-2.5" />
+                                    <span>
+                                      {t.availableFrom ? new Date(t.availableFrom).toLocaleDateString() : 'Now'} -{' '}
+                                      {t.availableTo ? new Date(t.availableTo).toLocaleDateString() : 'Always'}
+                                    </span>
+                                  </span>
+                                )}
+                              </div>
+
+                              <p className="text-[11px] text-slate-500">
+                                {isLive ? (
+                                  <span className="text-emerald-700 font-medium">
+                                    Visible on student dashboard & accepting candidate test attempts.
+                                  </span>
+                                ) : (
+                                  <span>Hidden from student listings. Admin can edit or activate anytime.</span>
+                                )}
+                              </p>
+                            </div>
+
+                            {/* Action Buttons Toolbar */}
+                            <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                              {/* Activate / Deactivate Live Button */}
+                              {isLive ? (
+                                <button
+                                  type="button"
+                                  disabled={isBusy}
+                                  onClick={() => handleDeactivateTest(t)}
+                                  className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 text-[11px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                  title="Stop making this test live to students"
+                                >
+                                  <Square className="w-3 h-3 fill-rose-600 text-rose-600" />
+                                  <span>Stop Live</span>
+                                </button>
+                              ) : (
+                                <>
+                                  <button
+                                    type="button"
+                                    disabled={isBusy}
+                                    onClick={() => handleActivateTest(t, false)}
+                                    className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer"
+                                    title="Make this test live to students"
+                                  >
+                                    <Play className="w-3 h-3 fill-white text-white" />
+                                    <span>Make Live</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={isBusy}
+                                    onClick={() => handleActivateTest(t, true)}
+                                    className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold border border-slate-300 transition-colors cursor-pointer"
+                                    title="Deactivate all other tests and make this the only live test for this exam"
+                                  >
+                                    <span>Sole Live</span>
+                                  </button>
+                                </>
+                              )}
+
+                              {/* Questions Inspector Button */}
+                              <button
+                                type="button"
+                                onClick={() => loadQuestionsForTest(t)}
+                                className="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:border-tn-blue text-slate-700 text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                              >
+                                <BookOpen className="w-3 h-3" />
+                                <span>Questions</span>
+                              </button>
+
+                              {/* Publish / Unpublish Toggle */}
+                              <button
+                                type="button"
+                                disabled={isBusy}
+                                onClick={() => handleTogglePublishTest(t)}
+                                className={`px-2 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer ${
+                                  t.isPublished
+                                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200'
+                                    : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'
+                                }`}
+                                title={t.isPublished ? 'Unpublish to draft' : 'Approve and publish'}
+                              >
+                                {t.isPublished ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                                <span>{t.isPublished ? 'Unpublish' : 'Publish'}</span>
+                              </button>
+
+                              {/* Schedule Modal Button */}
+                              <button
+                                type="button"
+                                onClick={() => handleOpenScheduleModal(t)}
+                                className="px-2 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-600 border border-slate-300 text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                                title="Set availability window"
+                              >
+                                <Calendar className="w-3 h-3 text-slate-500" />
+                                <span>Schedule</span>
+                              </button>
+
+                              {/* Archive Toggle */}
+                              <button
+                                type="button"
+                                disabled={isBusy}
+                                onClick={() => handleArchiveTest(t)}
+                                className="p-1 rounded-lg bg-white hover:bg-slate-100 text-slate-500 border border-slate-300 text-xs transition-colors cursor-pointer"
+                                title={isArchived ? 'Restore test' : 'Archive test'}
+                              >
+                                <Archive className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Questions Inspector & Reorder for Selected Test */}
@@ -1288,6 +1621,85 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                 >
                   Create Plan for {selectedExam.shortName}
                 </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Test Scheduling Modal */}
+      {schedulingTest && (
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-sm font-bold text-tn-navy flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-tn-blue" />
+                <span>Schedule Test Visibility</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setSchedulingTest(null)}
+                className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Configure the date and time window when <strong>"{schedulingTest.title}"</strong> is accessible to students. Leave empty to allow continuous access when active.
+            </p>
+
+            <form onSubmit={handleSaveSchedule} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Available From (Start Date & Time)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={scheduleAvailableFrom}
+                  onChange={(e) => setScheduleAvailableFrom(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Available To (End / Close Date & Time)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={scheduleAvailableTo}
+                  onChange={(e) => setScheduleAvailableTo(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScheduleAvailableFrom('');
+                    setScheduleAvailableTo('');
+                  }}
+                  className="text-xs text-slate-500 hover:text-slate-700 underline cursor-pointer"
+                >
+                  Clear Window
+                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSchedulingTest(null)}
+                    className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 text-xs font-semibold cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-1.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-bold cursor-pointer shadow-xs"
+                  >
+                    Save Schedule
+                  </button>
+                </div>
               </div>
             </form>
           </div>

@@ -272,6 +272,12 @@ model Test {
   offerExpiresAt   DateTime?
   isFeatured       Boolean             @default(false)
   isPublished      Boolean             @default(true)
+  status           String              @default("INACTIVE") // DRAFT, PUBLISHED, ACTIVE, INACTIVE, ARCHIVED
+  isActive         Boolean             @default(false)
+  availableFrom    DateTime?
+  availableTo      DateTime?
+  activatedAt      DateTime?
+  deactivatedAt    DateTime?
   examYearId       String?
   cycleYear        Int?
   actualExamDate   String?

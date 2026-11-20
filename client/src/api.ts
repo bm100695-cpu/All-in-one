@@ -766,7 +766,17 @@ export const api = {
   },
 
   getAdminExamTests: async (examId: string) => {
-    return request<{ tests: any[] }>(`/admin/exams/${examId}/tests`);
+    return request<{
+      tests: any[];
+      stats?: {
+        total: number;
+        active: number;
+        published: number;
+        draft: number;
+        inactive: number;
+        archived: number;
+      };
+    }>(`/admin/exams/${examId}/tests`);
   },
 
   createAdminTest: async (data: any) => {
@@ -780,6 +790,22 @@ export const api = {
     return request<{ success: boolean; test: any }>(`/admin/tests/${testId}/publish`, {
       method: 'PATCH',
       body: JSON.stringify({ isPublished }),
+    });
+  },
+
+  updateAdminTestStatus: async (
+    testId: string,
+    data: {
+      status?: 'ACTIVE' | 'INACTIVE' | 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
+      isActive?: boolean;
+      availableFrom?: string | null;
+      availableTo?: string | null;
+      singleActiveMode?: boolean;
+    }
+  ) => {
+    return request<{ success: boolean; message: string; test: any }>(`/admin/tests/${testId}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
     });
   },
 

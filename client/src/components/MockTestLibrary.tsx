@@ -269,6 +269,14 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
           <Clock className="w-6 h-6 text-slate-400 mx-auto animate-spin" />
           <p className="text-xs text-slate-500">Loading mock test library...</p>
         </div>
+      ) : tests.length === 0 ? (
+        <div className="p-12 text-center bg-white rounded-xl border border-dashed border-slate-300 space-y-3">
+          <FileCheck2 className="w-8 h-8 text-slate-300 mx-auto" />
+          <h4 className="text-sm font-bold text-slate-800">No Active Mock Tests Live</h4>
+          <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+            There are currently no active mock tests live for {examInfo?.shortName || 'this exam'}. Administrators activate mock tests according to the official schedule. Please check back soon.
+          </p>
+        </div>
       ) : displayedTests.length === 0 ? (
         <div className="p-10 text-center bg-white rounded-xl border border-dashed border-slate-300 space-y-3">
           <p className="text-xs font-medium text-slate-600">No mock tests match your filter.</p>

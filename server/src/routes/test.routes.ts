@@ -1,8 +1,24 @@
 import { Router, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma';
 import { authenticate } from '../middleware/auth';
 
 const router = Router();
+
+function getRequesterRole(req: Request): string | null {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) return null;
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'examverse_super_secret_jwt_key_2025_prod_grade_xyz'
+    ) as any;
+    return decoded?.role || null;
+  } catch {
+    return null;
+  }
+}
 
 function resolveSubjectKey(sectionName?: string | null, qSubject?: string | null): string {
   const s = (qSubject || sectionName || 'General').toLowerCase();
@@ -48,16 +64,35 @@ function isNumericalResponseCorrect(numericalVal: number, q: any, correctAnswers
   return false;
 }
 
-// List tests for an exam
+// List tests for an exam (Students see ONLY active/live tests within valid schedule)
 router.get('/exam/:examId', async (req: Request, res: Response) => {
   try {
     const { examId } = req.params;
+    const role = getRequesterRole(req);
+    const isAdmin = role === 'ADMIN' || role === 'CONTENT_REVIEWER';
+    const now = new Date();
+
+    const whereClause: any = {
+      examId,
+    };
+
+    if (isAdmin && req.query.all === 'true') {
+      // Admin previewing all tests
+    } else {
+      // Student-facing: strictly ACTIVE and LIVE tests
+      whereClause.isPublished = true;
+      whereClause.isActive = true;
+      whereClause.status = 'ACTIVE';
+      whereClause.OR = [
+        { availableFrom: null, availableTo: null },
+        { availableFrom: { lte: now }, availableTo: null },
+        { availableFrom: null, availableTo: { gte: now } },
+        { availableFrom: { lte: now }, availableTo: { gte: now } },
+      ];
+    }
 
     const tests = await prisma.test.findMany({
-      where: {
-        examId,
-        isPublished: true,
-      },
+      where: whereClause,
       include: {
         patternVersion: {
           include: {
@@ -82,6 +117,8 @@ router.get('/exam/:examId', async (req: Request, res: Response) => {
 router.get('/:testId/info', async (req: Request, res: Response) => {
   try {
     const { testId } = req.params;
+    const role = getRequesterRole(req);
+    const isAdmin = role === 'ADMIN' || role === 'CONTENT_REVIEWER';
 
     const test = await prisma.test.findUnique({
       where: { id: testId },
@@ -103,6 +140,33 @@ router.get('/:testId/info', async (req: Request, res: Response) => {
     if (!test) {
       res.status(404).json({ error: 'Test not found' });
       return;
+    }
+
+    // Strict visibility check for students
+    if (!isAdmin) {
+      const isLive = test.isPublished && (test.status === 'ACTIVE' || test.isActive);
+      if (!isLive) {
+        res.status(403).json({
+          error: 'TEST_INACTIVE',
+          message: 'This mock test is currently inactive or not yet published by administrators.',
+        });
+        return;
+      }
+      const now = new Date();
+      if (test.availableFrom && now < test.availableFrom) {
+        res.status(403).json({
+          error: 'TEST_NOT_YET_AVAILABLE',
+          message: `This mock test is scheduled to begin at ${test.availableFrom.toISOString()}.`,
+        });
+        return;
+      }
+      if (test.availableTo && now > test.availableTo) {
+        res.status(403).json({
+          error: 'TEST_EXPIRED',
+          message: `This mock test window closed at ${test.availableTo.toISOString()}.`,
+        });
+        return;
+      }
     }
 
     const questionCount = test.testQuestions ? test.testQuestions.length : (test._count?.testQuestions ?? 0);
@@ -285,6 +349,34 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
     });
 
     if (!attempt) {
+      // Validate that the test is ACTIVE/LIVE and available before starting a new attempt
+      const isAdmin = req.user?.role === 'ADMIN' || req.user?.role === 'CONTENT_REVIEWER';
+      if (!isAdmin) {
+        const isLive = test.isPublished && (test.status === 'ACTIVE' || test.isActive);
+        if (!isLive) {
+          res.status(403).json({
+            error: 'TEST_INACTIVE',
+            message: 'This mock test is currently inactive and not accepting new student attempts.',
+          });
+          return;
+        }
+        const now = new Date();
+        if (test.availableFrom && now < test.availableFrom) {
+          res.status(403).json({
+            error: 'TEST_NOT_YET_AVAILABLE',
+            message: `This mock test is scheduled to begin at ${test.availableFrom.toISOString()}.`,
+          });
+          return;
+        }
+        if (test.availableTo && now > test.availableTo) {
+          res.status(403).json({
+            error: 'TEST_EXPIRED',
+            message: `This mock test window closed at ${test.availableTo.toISOString()}.`,
+          });
+          return;
+        }
+      }
+
       // Create new attempt
       attempt = await prisma.testAttempt.create({
         data: {

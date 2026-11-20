@@ -108,6 +108,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
 
+    const now = new Date();
     const exam = await prisma.exam.findUnique({
       where: { slug },
       include: {
@@ -124,7 +125,17 @@ router.get('/:slug', async (req: Request, res: Response) => {
           orderBy: { weightagePct: 'desc' },
         },
         tests: {
-          where: { isPublished: true },
+          where: {
+            isPublished: true,
+            status: 'ACTIVE',
+            isActive: true,
+            OR: [
+              { availableFrom: null, availableTo: null },
+              { availableFrom: { lte: now }, availableTo: null },
+              { availableFrom: null, availableTo: { gte: now } },
+              { availableFrom: { lte: now }, availableTo: { gte: now } },
+            ],
+          },
           select: {
             id: true,
             title: true,
@@ -135,6 +146,10 @@ router.get('/:slug', async (req: Request, res: Response) => {
             pyqReference: true,
             accessLevel: true,
             isFeatured: true,
+            status: true,
+            isActive: true,
+            availableFrom: true,
+            availableTo: true,
           },
         },
       },
@@ -150,7 +165,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
       exam.slug === 'super-tet'
         ? prisma.superTetQuestion.count({ where: { isPYQ: true, isActive: true } })
         : prisma.question.count({ where: { examId: exam.id, isPYQ: true, isPublished: true } }),
-      prisma.test.count({ where: { examId: exam.id, isPublished: true, sourceType: 'PATTERN_PRACTICE' } }),
+      prisma.test.count({ where: { examId: exam.id, isPublished: true, status: 'ACTIVE', isActive: true } }),
       prisma.subscriptionPlan.findMany({
         where: {
           isPublished: true,
