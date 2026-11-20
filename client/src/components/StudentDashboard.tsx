@@ -149,7 +149,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   return (
     <div className="space-y-6 pb-16">
       {/* 1. Welcome & Summary Bar */}
-      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl border border-slate-200 bg-white px-5 py-5 sm:px-6 shadow-card">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl border border-blue-100 bg-white px-5 py-5 sm:px-6 shadow-card">
         <div>
           <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-tn-blue">Candidate dashboard</p>
           <h1 className="text-2xl sm:text-[28px] font-bold text-tn-navy tracking-tight">
@@ -168,7 +168,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           {flagshipTest?.id && (
             <button
               onClick={() => onStartExam(flagshipTest.id)}
-            className="px-3.5 py-2 rounded-xl bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold shadow-card transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white text-xs font-semibold shadow-card transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Play className="w-3.5 h-3.5" />
               <span>Start {examInfo?.shortName || examInfo?.name || 'Exam'} Test</span>
@@ -193,24 +193,24 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       </section>
 
       {/* 2. Subscription Status & Referral Balance Banner */}
-      <section className="p-4 sm:p-5 rounded-2xl border border-blue-100 border-l-4 border-l-tn-blue bg-white shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <section className="p-4 sm:p-5 rounded-2xl border border-slate-700 border-l-4 border-l-blue-400 bg-tn-navy shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-50 border border-blue-100 text-tn-blue flex items-center justify-center">
+          <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-500/15 border border-blue-400/30 text-blue-200 flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-tn-navy">{planName}</span>
+              <span className="font-bold text-sm text-white">{planName}</span>
               <span
                 className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isPremium
                     ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                    : 'bg-blue-50 text-tn-blue border border-blue-100'
+                    : 'bg-blue-500/20 text-blue-100 border border-blue-400/30'
                   }`}
               >
                 {isPremium ? 'All-Access Active' : 'Active Tier'}
               </span>
             </div>
-            <p className="text-xs text-tn-muted mt-0.5">
+            <p className="text-xs text-slate-300 mt-0.5">
               {subInfo?.subscription?.testsRemaining != null
                 ? `${subInfo.subscription.testsRemaining} test unlock${subInfo.subscription.testsRemaining !== 1 ? 's' : ''} remaining in pack`
                 : isPremium
@@ -234,7 +234,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           {!isPremium && (
             <button
               onClick={() => onOpenPricingModal?.()}
-              className="px-3.5 py-1.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Upgrade Plan</span>
@@ -270,21 +270,21 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
       {/* 4. Performance Metrics Row (5 Columns) */}
       <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3.5">
-        <div className="min-h-[132px] p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Completed</p><FileCheck2 className="w-4 h-4 text-tn-blue" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Completed</p><FileCheck2 className="w-4 h-4 text-[#1e3a8a]" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">{completedAttempts.length}</p>
           <p className="text-[10px] text-tn-muted">Official timed attempts</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score</p><Target className="w-4 h-4 text-tn-blue" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score</p><Target className="w-4 h-4 text-[#1e3a8a]" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {avgScore} <span className="text-xs font-normal text-slate-400">/ {maxExamScore}</span>
           </p>
           <p className="text-[10px] text-tn-muted">Across verified attempts</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2">
+        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Accuracy Rate</p><TrendingUp className="w-4 h-4 text-emerald-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {avgAccuracy}%
@@ -292,15 +292,15 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           <p className="text-[10px] text-tn-muted">Correct to attempted ratio</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Time In Tests</p><Clock className="w-4 h-4 text-tn-blue" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Time In Tests</p><Clock className="w-4 h-4 text-[#1e3a8a]" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {totalHours} <span className="text-xs font-normal text-slate-400">hrs</span>
           </p>
           <p className="text-[10px] text-tn-muted">Simulated test time</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2">
+        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Free vs Premium</p><Lock className="w-4 h-4 text-amber-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {freeExamTests} <span className="text-xs font-normal text-slate-400">/ {paidExamTests}</span>

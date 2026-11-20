@@ -195,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => handleNavClick(item.id)}
                   className={`w-full flex items-center rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'} ${
                     isActive
-                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-950/30'
+                      ? 'bg-gradient-to-r from-[#172554] to-[#2563eb] text-white shadow-lg shadow-blue-950/30'
                       : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                   }`}
                   aria-label={item.label.replace(`${examBadge} `, '')}
@@ -505,7 +505,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => handleNavClick(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
                   isActive
-                    ? 'text-white bg-gradient-to-r from-violet-600 to-indigo-600 shadow-lg shadow-violet-950/30'
+                    ? 'text-white bg-gradient-to-r from-[#172554] to-[#2563eb] shadow-lg shadow-blue-950/30'
                     : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                 }`}
               >
