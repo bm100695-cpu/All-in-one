@@ -1144,6 +1144,8 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
       if (cfConfig.isLive) {
         try {
+          const rawOrigin = (req.headers.origin as string) || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
+          const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
           const cfRes = await createCashfreeOrder({
             orderId,
             orderAmount: finalAmount,
@@ -1155,8 +1157,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
               customerPhone: (user as any)?.phone || '9999999999',
             },
             orderNote: `Mock Test: ${test.title}`,
-            const rawOrigin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
-            const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
             orderMeta: {
               returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
               notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
@@ -1223,22 +1223,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         cashfreeMode: cfConfig.mode,
         upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
         upiQrImage: upiQrResult?.qrCodeImage || undefined,
-        checkoutUrl: cfConfig.mode === 'sandbox'
-          ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
-          : `https://payments.cashfree.com/forms/${paymentSessionId}`,
-        gateway: gatewayUsed,
-        amount: finalAmount,
-        originalPrice,
-        discountAmount,
-        couponCode: verifiedCouponCode,
-        amountPaise: amountInPaise,
-        currency: 'INR',
-        planName: `Single Mock Test: ${test.title}`,
-        description: `Unlock complete access & detailed analytics for ${test.title}`,
-        receipt,
-        paymentDbId: payment.id,
-        isLiveGateway: cfConfig.isLive,
-      });
         checkoutUrl: cfConfig.mode === 'sandbox'
           ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
           : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1445,6 +1429,8 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
     if (cfConfig.isLive) {
       try {
+        const rawOrigin = (req.headers.origin as string) || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
+        const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
         const cfRes = await createCashfreeOrder({
           orderId,
           orderAmount: finalAmount,
@@ -1456,8 +1442,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             customerPhone: (user as any)?.phone || '9999999999',
           },
           orderNote: `Plan: ${plan.name} (${plan.code})`,
-          const rawOrigin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer as string).origin : '');
-          const clientOrigin = rawOrigin || 'https://all-in-one-git-main-brijesh17.vercel.app';
           orderMeta: {
             returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
             notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
@@ -1524,11 +1508,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       cashfreeMode: cfConfig.mode,
       upiQrPayload: upiQrResult?.qrCodeUrl || undefined,
       upiQrImage: upiQrResult?.qrCodeImage || undefined,
-      orderId,
-      payment_session_id: paymentSessionId,
-      paymentSessionId,
-      cashfreeMode: cfConfig.mode,
-      upiQrPayload: upiQrPayload || undefined,
       checkoutUrl: cfConfig.mode === 'sandbox'
         ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
         : `https://payments.cashfree.com/forms/${paymentSessionId}`,
@@ -1546,6 +1525,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       paymentDbId: payment.id,
       isLiveGateway: cfConfig.isLive,
     });
+    return;
   } catch (error) {
     console.error('Create order error:', error);
     res.status(500).json({ error: 'Failed to initiate payment order' });
