@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ShieldAlert, ArrowLeft, LogOut, Lock } from 'lucide-react';
 import { User } from '../types';
+import { AdminLogin } from './AdminLogin';
+import { api } from '../api';
 
 interface AdminRouteProps {
   currentUser: User | null;
@@ -14,8 +17,8 @@ interface AdminRouteProps {
 /**
  * Protected Admin Route Wrapper (RBAC)
  * Strictly verifies ADMIN role.
- * - If not authenticated: Redirects to /login
- * - If logged in as STUDENT: Silently bounces them to /dashboard (Admin portal is 100% invisible)
+ * - If not authenticated: Renders AdminLogin portal
+ * - If logged in as STUDENT: Displays clear Access Gate with option to switch to Admin account
  * - If ADMIN: Renders protected children
  */
 export const AdminRoute: React.FC<AdminRouteProps> = ({
@@ -23,29 +26,97 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
   children,
   fallback,
   onRedirectToStudent,
-  onRedirectToLogin,
+  onSwitchToAdmin,
+  onUserRefreshed,
 }) => {
-  // 1. Not authenticated -> Redirect to /login
-  if (!currentUser) {
-    if (fallback) {
-      return <>{fallback}</>;
-    }
-    if (onRedirectToLogin) {
-      onRedirectToLogin();
-    } else {
-      window.location.hash = '/login';
-    }
-    return null;
-  }
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
 
-  // 2. Authenticated as STUDENT -> Silently redirect to Student Dashboard
-  if (currentUser.role !== 'ADMIN') {
+  const handleAdminSuccess = (adminUser: User) => {
+    setShowAdminLogin(false);
+    if (onUserRefreshed) {
+      onUserRefreshed(adminUser);
+    }
+  };
+
+  const handleExit = () => {
     if (onRedirectToStudent) {
       onRedirectToStudent();
     } else {
       window.location.hash = '/dashboard';
     }
-    return null;
+  };
+
+  // 1. Not authenticated -> Render AdminLogin directly
+  if (!currentUser) {
+    if (fallback) {
+      return <>{fallback}</>;
+    }
+    return <AdminLogin onSuccess={handleAdminSuccess} onExit={handleExit} />;
+  }
+
+  // If user clicked "Switch to Administrator Account"
+  if (showAdminLogin) {
+    return (
+      <AdminLogin
+        onSuccess={handleAdminSuccess}
+        onExit={() => setShowAdminLogin(false)}
+      />
+    );
+  }
+
+  // 2. Authenticated as STUDENT -> Show clear Access Gate with 1-click Switch
+  if (currentUser.role !== 'ADMIN') {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm text-center space-y-5">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center mx-auto shadow-2xs">
+            <ShieldAlert className="w-7 h-7" />
+          </div>
+
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+              Administrative Access Required
+            </h2>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              You are currently authenticated as{' '}
+              <span className="font-semibold text-slate-800">{currentUser.email}</span> with role{' '}
+              <span className="inline-block px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-bold text-[10px]">
+                STUDENT
+              </span>
+              .
+            </p>
+            <p className="text-[11px] text-slate-500">
+              The Academic Governance & Multi-Exam Control Center is strictly restricted to verified administrators.
+            </p>
+          </div>
+
+          <div className="space-y-2 pt-1">
+            <button
+              onClick={() => {
+                api.logout();
+                if (onSwitchToAdmin) {
+                  onSwitchToAdmin();
+                } else {
+                  setShowAdminLogin(true);
+                }
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>Sign In with Administrator Account</span>
+            </button>
+
+            <button
+              onClick={handleExit}
+              className="w-full py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Student Portal</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // 3. Authenticated as ADMIN -> Access Granted

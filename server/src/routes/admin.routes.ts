@@ -542,19 +542,41 @@ router.put('/users/:id/role', authenticate, requireRole(['ADMIN']), async (req: 
 // ----------------------------------------------------------------------------
 // Centralized Multi-Exam Management (Add Exam, Edit Notice/Pattern, Tests, Question CRUD & Reorder)
 // ----------------------------------------------------------------------------
+const DEFAULT_CATEGORIES = [
+  { name: 'Engineering Entrance', code: 'ENG', description: 'Undergraduate engineering admissions across IITs, NITs, IIITs and top universities.', icon: 'Cpu', displayOrder: 1 },
+  { name: 'Medical Entrance', code: 'MED', description: 'National Eligibility cum Entrance Test for MBBS, BDS, and allied sciences.', icon: 'Activity', displayOrder: 2 },
+  { name: 'Civil Services & UPSC', code: 'CIVIL', description: 'Prestigious national recruitment examinations for IAS, IPS, IFS and Central Services.', icon: 'Landmark', displayOrder: 3 },
+  { name: 'Teaching & Eligibility', code: 'TET', description: 'Central and state teacher eligibility examinations (CTET, UPTET, SUPER TET).', icon: 'GraduationCap', displayOrder: 4 },
+  { name: 'SSC & Government Recruitment', code: 'SSC', description: 'Staff Selection Commission exams (CGL, CHSL, MTS, CPO).', icon: 'Award', displayOrder: 5 },
+  { name: 'Banking & Insurance', code: 'BANK', description: 'IBPS, SBI, RBI recruitment for Probationary Officers and Clerical cadres.', icon: 'Briefcase', displayOrder: 6 },
+  { name: 'Graduate Aptitude & Masters', code: 'GATE', description: 'GATE CS, DA, ME, EC for admissions and PSU recruitment.', icon: 'BookOpen', displayOrder: 7 },
+];
+
 router.get('/exams', authenticate, requireRole(['ADMIN']), async (_req: Request, res: Response) => {
   try {
-    const [categories, exams] = await Promise.all([
-      prisma.examCategory.findMany({ orderBy: { displayOrder: 'asc' } }),
-      prisma.exam.findMany({
-        include: {
-          category: true,
-          patternVersions: { include: { sections: { orderBy: { order: 'asc' } } } },
-          _count: { select: { tests: true, questions: true } },
-        },
-        orderBy: { createdAt: 'asc' },
-      }),
-    ]);
+    let categories = await prisma.examCategory.findMany({ orderBy: { displayOrder: 'asc' } });
+    
+    // Auto-seed standard categories if empty
+    if (categories.length === 0) {
+      for (const cat of DEFAULT_CATEGORIES) {
+        await prisma.examCategory.upsert({
+          where: { code: cat.code },
+          update: {},
+          create: cat,
+        });
+      }
+      categories = await prisma.examCategory.findMany({ orderBy: { displayOrder: 'asc' } });
+    }
+
+    const exams = await prisma.exam.findMany({
+      include: {
+        category: true,
+        patternVersions: { include: { sections: { orderBy: { order: 'asc' } } } },
+        _count: { select: { tests: true, questions: true } },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+
     res.json({ categories, exams });
   } catch (error) {
     console.error('Error loading admin exams:', error);
@@ -586,12 +608,33 @@ router.post('/exams', authenticate, requireRole(['ADMIN']), async (req: Request,
       sections = [],
     } = req.body;
 
-    if (!slug || !title || !shortName || !categoryId) {
-      res.status(400).json({ error: 'slug, title, shortName, and categoryId are required.' });
+    if (!slug || !title || !shortName) {
+      res.status(400).json({ error: 'slug, title, and shortName are required.' });
       return;
     }
 
     const cleanSlug = String(slug).trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
+    const existing = await prisma.exam.findUnique({ where: { slug: cleanSlug } });
+    if (existing) {
+      res.status(409).json({ error: `An exam portal with slug "${cleanSlug}" already exists.` });
+      return;
+    }
+
+    // Resolve category
+    let validCategoryId = categoryId;
+    if (!validCategoryId) {
+      const firstCat = await prisma.examCategory.findFirst({ orderBy: { displayOrder: 'asc' } });
+      validCategoryId = firstCat?.id;
+    }
+
+    if (!validCategoryId) {
+      const defaultCat = await prisma.examCategory.create({
+        data: DEFAULT_CATEGORIES[0],
+      });
+      validCategoryId = defaultCat.id;
+    }
+
     const exam = await prisma.exam.create({
       data: {
         slug: cleanSlug,
@@ -601,7 +644,7 @@ router.post('/exams', authenticate, requireRole(['ADMIN']), async (req: Request,
         officialWebsite: String(officialWebsite).trim(),
         description: String(description || title).trim(),
         eligibilitySummary: String(eligibilitySummary || 'Refer to official notification').trim(),
-        categoryId,
+        categoryId: validCategoryId,
         status,
         isComingSoon: Boolean(isComingSoon),
         portalHeadline: portalHeadline || `Prepare for ${shortName} with structured mock tests.`,
@@ -625,13 +668,13 @@ router.post('/exams', authenticate, requireRole(['ADMIN']), async (req: Request,
       },
     });
 
-    if (Array.isArray(sections)) {
+    if (Array.isArray(sections) && sections.length > 0) {
       for (let i = 0; i < sections.length; i++) {
         const s = sections[i];
         await prisma.examSection.create({
           data: {
             patternVersionId: pv.id,
-            name: String(s.name),
+            name: String(s.name || `Section ${i + 1}`),
             order: i + 1,
             totalQuestions: Number(s.totalQuestions || 30),
             maxToAttempt: Number(s.maxToAttempt || s.totalQuestions || 30),
@@ -656,6 +699,7 @@ router.put('/exams/:id', authenticate, requireRole(['ADMIN']), async (req: Reque
       title,
       shortName,
       conductingBody,
+      officialWebsite,
       description,
       eligibilitySummary,
       status,
@@ -665,6 +709,8 @@ router.put('/exams/:id', authenticate, requireRole(['ADMIN']), async (req: Reque
       notificationDate,
       officialNoticeUrl,
       accentColor,
+      accessMode,
+      categoryId,
     } = req.body;
 
     const updated = await prisma.exam.update({
@@ -673,6 +719,7 @@ router.put('/exams/:id', authenticate, requireRole(['ADMIN']), async (req: Reque
         ...(title !== undefined ? { title } : {}),
         ...(shortName !== undefined ? { shortName } : {}),
         ...(conductingBody !== undefined ? { conductingBody } : {}),
+        ...(officialWebsite !== undefined ? { officialWebsite } : {}),
         ...(description !== undefined ? { description } : {}),
         ...(eligibilitySummary !== undefined ? { eligibilitySummary } : {}),
         ...(status !== undefined ? { status } : {}),
@@ -682,12 +729,37 @@ router.put('/exams/:id', authenticate, requireRole(['ADMIN']), async (req: Reque
         ...(notificationDate !== undefined ? { notificationDate } : {}),
         ...(officialNoticeUrl !== undefined ? { officialNoticeUrl } : {}),
         ...(accentColor !== undefined ? { accentColor } : {}),
+        ...(accessMode !== undefined ? { accessMode } : {}),
+        ...(categoryId !== undefined ? { categoryId } : {}),
       },
     });
     res.json({ success: true, exam: updated });
   } catch (error) {
     console.error('Error updating exam:', error);
     res.status(500).json({ error: 'Failed to update exam' });
+  }
+});
+
+router.patch('/exams/:id/publish', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const { status, isComingSoon, accessMode } = req.body;
+
+    const exam = await prisma.exam.update({
+      where: { id },
+      data: {
+        ...(status !== undefined ? { status } : {}),
+        ...(isComingSoon !== undefined ? { isComingSoon: Boolean(isComingSoon) } : {}),
+        ...(accessMode !== undefined ? { accessMode } : {}),
+      },
+    });
+
+    res.json({ success: true, message: `Exam status updated to ${exam.status}`, exam });
+  } catch (error: any) {
+    console.error('Error updating exam publish status:', error);
+    res.status(500).json({ error: error.message || 'Failed to update exam status' });
+  }
+});
   }
 });
 

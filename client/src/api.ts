@@ -161,7 +161,11 @@ export const api = {
   },
 
   getCurrentUser: async () => {
-    return request<{ user: User }>('/auth/me');
+    const res = await request<{ user: User; token?: string }>('/auth/me');
+    if (res.token) {
+      setStoredToken(res.token);
+    }
+    return res;
   },
 
   getAdminUsers: async (role?: string, search?: string) => {
@@ -750,6 +754,13 @@ export const api = {
   updateAdminExam: async (id: string, data: any) => {
     return request<{ success: boolean; exam: Exam }>(`/admin/exams/${id}`, {
       method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  publishAdminExam: async (id: string, data: { status?: string; isComingSoon?: boolean; accessMode?: string }) => {
+    return request<{ success: boolean; message: string; exam: Exam }>(`/admin/exams/${id}/publish`, {
+      method: 'PATCH',
       body: JSON.stringify(data),
     });
   },

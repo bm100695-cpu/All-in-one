@@ -707,8 +707,6 @@ export const App: React.FC = () => {
                 onSwitchToAdmin={() => {
                   api.logout();
                   setCurrentUser(null);
-                  setAuthModalMode('login');
-                  setIsAuthModalOpen(true);
                 }}
                 onUserRefreshed={(refreshedUser) => {
                   setCurrentUser(refreshedUser);

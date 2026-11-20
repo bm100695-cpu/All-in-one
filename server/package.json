@@ -10,6 +10,7 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
+    "admin:bootstrap": "tsx src/scripts/bootstrap_admin.ts",
     "test": "tsx test/api.test.ts"
   },
   "dependencies": {

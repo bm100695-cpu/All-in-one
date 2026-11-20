@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 import { prisma } from '../prisma';
-import { generateToken, authenticate, AuthUser } from '../middleware/auth';
+import { generateToken, authenticate, AuthUser, isAdminEmail } from '../middleware/auth';
 import { login } from '../controllers/auth.controller';
 
 const router = Router();
@@ -364,6 +364,14 @@ router.post('/google', async (req: Request, res: Response) => {
       }
     }
 
+    // Auto-sync ADMIN role if this Google account is a configured administrator
+    if (isAdminEmail(user.email) && user.role !== 'ADMIN') {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { role: 'ADMIN' },
+      });
+    }
+
     // Generate JWT token with RBAC role information (Requirement 11, 12)
     const authPayload: AuthUser = {
       userId: user.id,
@@ -470,12 +478,14 @@ router.post('/admin-login', async (req: Request, res: Response) => {
 
     const cleanEmail = String(email).trim().toLowerCase();
 
-    // Auto-bootstrap Admin user for bm100695@gmail.com
-    if (cleanEmail === 'bm100695@gmail.com' && password === 'brijesh@1234') {
-      const passwordHash = await bcrypt.hash('brijesh@1234', 10);
-      const existingAdmin = await prisma.user.findUnique({ where: { email: cleanEmail } });
-      if (!existingAdmin) {
-        await prisma.user.create({
+    // Check if user exists
+    let user = await prisma.user.findUnique({ where: { email: cleanEmail } });
+
+    // Secure Auto-sync for authorized admin email
+    if (isAdminEmail(cleanEmail)) {
+      if (!user) {
+        const passwordHash = await bcrypt.hash(password, 10);
+        user = await prisma.user.create({
           data: {
             email: cleanEmail,
             name: 'Brijesh Maurya (Admin)',
@@ -484,19 +494,22 @@ router.post('/admin-login', async (req: Request, res: Response) => {
             authProvider: 'local',
           },
         });
-      } else if (existingAdmin.role !== 'ADMIN' || !existingAdmin.passwordHash) {
-        await prisma.user.update({
-          where: { id: existingAdmin.id },
-          data: {
-            role: 'ADMIN',
-            passwordHash,
-            name: 'Brijesh Maurya (Admin)',
-          },
-        });
+      } else {
+        const updateData: any = {};
+        if (user.role !== 'ADMIN') {
+          updateData.role = 'ADMIN';
+        }
+        if (!user.passwordHash) {
+          updateData.passwordHash = await bcrypt.hash(password, 10);
+        }
+        if (Object.keys(updateData).length > 0) {
+          user = await prisma.user.update({
+            where: { id: user.id },
+            data: updateData,
+          });
+        }
       }
     }
-
-    const user = await prisma.user.findUnique({ where: { email: cleanEmail } });
 
     if (!user || !user.passwordHash) {
       res.status(401).json({ error: 'Invalid administrative credentials.' });
@@ -513,7 +526,7 @@ router.post('/admin-login', async (req: Request, res: Response) => {
     if (user.role !== 'ADMIN') {
       res.status(403).json({
         error: 'ACCESS_DENIED',
-        message: 'Forbidden. This portal is restricted to authorized administrative personnel only.',
+        message: 'Forbidden. This account is registered as STUDENT. Administrator access required.',
       });
       return;
     }
@@ -523,7 +536,7 @@ router.post('/admin-login', async (req: Request, res: Response) => {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role as AuthUser['role'],
+      role: 'ADMIN',
       studentId: user.studentId || undefined,
       referralCode: user.referralCode || undefined,
       referralCredits: user.referralCredits || 0,
@@ -631,7 +644,17 @@ router.get('/me', authenticate, async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ user });
+    const freshToken = generateToken({
+      id: user.id,
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      studentId: user.studentId || undefined,
+      targetExamId: user.targetExamId || undefined,
+    });
+
+    res.json({ user, token: freshToken });
   } catch (error) {
     console.error('Profile fetch error:', error);
     res.status(500).json({ error: 'Failed to fetch profile' });
