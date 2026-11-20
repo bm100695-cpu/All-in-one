@@ -23,6 +23,7 @@ import { SubscriptionPlan, User } from '../types';
 import { api, API_BASE, getStoredToken } from '../api';
 
 type CashfreeEnvironment = 'sandbox' | 'production';
+type CheckoutMethod = 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER_UPI' | 'UPI_QR' | 'CARD' | 'NETBANKING';
 
 interface NativeCashfreeBridge {
   isAvailable?: () => boolean;
@@ -92,6 +93,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     environment: CashfreeEnvironment;
   } | null>(null);
   const [nativeUpiApps, setNativeUpiApps] = useState<string[]>([]);
+  const [checkoutPlan, setCheckoutPlan] = useState<SubscriptionPlan | null>(null);
+  const [selectedCheckoutMethod, setSelectedCheckoutMethod] = useState<CheckoutMethod | null>(null);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
@@ -293,7 +296,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     }
   };
 
-  const handleSubscribe = async (plan: SubscriptionPlan) => {
+  const handleSubscribe = async (plan: SubscriptionPlan, paymentMethod?: CheckoutMethod) => {
     const token = getStoredToken();
     if (!currentUser || !token) {
       setStatusMessage({
@@ -334,8 +337,18 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       return;
     }
 
-    // 2. Paid Plans (> ₹0): Cashfree official checkout
+    // 2. Paid plans first open the LMS payment selector. The order is created
+    // only after the student chooses a Cashfree-backed payment route.
+    if (!paymentMethod) {
+      setCheckoutPlan(plan);
+      setProcessingPlanId(null);
+      setStatusMessage(null);
+      return;
+    }
+
+    // 3. Paid plans: create the secure server-side Cashfree order.
     try {
+      setSelectedCheckoutMethod(paymentMethod);
       const order = await api.createPaymentOrder(plan.id, appliedCoupon?.code, activeExamSlug, plan.code);
 
       const activeSession = order.payment_session_id || order.paymentSessionId;
@@ -354,7 +367,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setActivePlanCode(plan.code);
       setActivePlanName(plan.name);
       const nativeBridge = window.AndroidCashfree;
-      if (nativeBridge?.isAvailable?.()) {
+      const nativePreferredApp = paymentMethod === 'OTHER_UPI' || paymentMethod === 'UPI_QR'
+        ? 'OTHER'
+        : paymentMethod;
+      if (
+        nativeBridge?.isAvailable?.() &&
+        ['GOOGLE_PAY', 'PHONEPE', 'PAYTM', 'OTHER'].includes(nativePreferredApp)
+      ) {
         setNativeCheckout({
           paymentSessionId: activeSession,
           orderId: order.orderId,
@@ -362,13 +381,19 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         });
         setStatusMessage({
           type: 'info',
-          text: 'Choose UPI apps or the secure Cashfree web checkout below.',
+          text: 'Opening the selected UPI app through Cashfree…',
         });
+        window.AndroidCashfree?.startUpiIntentCheckout(
+          activeSession,
+          order.orderId,
+          targetMode,
+          nativePreferredApp as 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER',
+        );
         return;
       }
       setStatusMessage({
         type: 'info',
-        text: 'Opening Cashfree secure checkout. Available UPI apps, cards, and net banking are shown only when enabled for this merchant account.',
+        text: `Opening Cashfree secure checkout for ${paymentMethod.replace('_', ' ').toLowerCase()}. Available options are controlled by this merchant account.`,
       });
 
       let cashfree: any = null;
@@ -423,14 +448,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   };
 
   const currencySymbol = '₹';
-  const launchNativeUpi = (preferredApp: 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER') => {
-    if (!nativeCheckout) return;
-    window.AndroidCashfree?.startUpiIntentCheckout(
-      nativeCheckout.paymentSessionId,
-      nativeCheckout.orderId,
-      nativeCheckout.environment,
-      preferredApp,
-    );
+  const startSelectedMethod = (method: CheckoutMethod) => {
+    if (checkoutPlan) void handleSubscribe(checkoutPlan, method);
   };
 
   return (
@@ -490,88 +509,72 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
         )}
 
-        {/* Only rendered inside the native Android wrapper. Individual apps are
-            discovered and launched by Cashfree's Android SDK, never by web links. */}
-        {nativeCheckout && (
+        {/* Branded LMS payment selection. Cashfree is initiated only after a choice. */}
+        {checkoutPlan && !nativeCheckout && (() => {
+          const couponEligible = checkoutPlan.price > 0 && appliedCoupon &&
+            (!appliedCoupon.examSlug || !checkoutPlan.examSlug || appliedCoupon.examSlug === checkoutPlan.examSlug);
+          const finalAmount = couponEligible
+            ? Math.max(1, Math.round(checkoutPlan.price * (100 - appliedCoupon!.discountPct) / 100))
+            : checkoutPlan.price;
+          const isNative = Boolean(window.AndroidCashfree?.isAvailable?.());
+          const methods: Array<{ id: CheckoutMethod; title: string; detail: string; visible: boolean; icon: React.ReactNode; tone: string }> = [
+            { id: 'GOOGLE_PAY', title: 'Google Pay', detail: 'Open Google Pay via Cashfree', visible: isNative && nativeUpiApps.includes('GOOGLE_PAY'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-blue-200 bg-blue-50 hover:bg-blue-100' },
+            { id: 'PHONEPE', title: 'PhonePe', detail: 'Open PhonePe via Cashfree', visible: isNative && nativeUpiApps.includes('PHONEPE'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-purple-200 bg-purple-50 hover:bg-purple-100' },
+            { id: 'PAYTM', title: 'Paytm', detail: 'Open Paytm via Cashfree', visible: isNative && nativeUpiApps.includes('PAYTM'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-cyan-200 bg-cyan-50 hover:bg-cyan-100' },
+            { id: 'OTHER_UPI', title: 'Other UPI apps', detail: isNative ? 'Show installed Cashfree-supported apps' : 'Continue to Cashfree UPI checkout', visible: true, icon: <Smartphone className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'UPI_QR', title: 'UPI QR', detail: 'Use Cashfree dynamic QR on desktop', visible: true, icon: <Smartphone className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'CARD', title: 'Debit / Credit Card', detail: 'Secure card payment through Cashfree', visible: true, icon: <CreditCard className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'NETBANKING', title: 'Net Banking', detail: 'Secure bank payment through Cashfree', visible: true, icon: <Landmark className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+          ];
+          return (
           <section className="mx-6 my-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
-                <p className="text-sm font-bold text-slate-900">Choose payment method</p>
+                <p className="text-sm font-bold text-slate-900">Complete your purchase</p>
                 <p className="mt-1 text-xs leading-relaxed text-slate-600">
-                  Only apps installed on this Android device are shown. Cashfree prioritises your selection and handles the secure UPI handoff.
+                  Choose a secure payment method. Your plan activates only after server-side Cashfree verification.
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => setNativeCheckout(null)}
+                onClick={() => { setCheckoutPlan(null); setSelectedCheckoutMethod(null); }}
                 className="shrink-0 rounded-lg px-2 py-1 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800"
               >
-                Cancel
+                Back
               </button>
             </div>
 
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
-              {nativeUpiApps.includes('GOOGLE_PAY') && (
-                <button
-                  type="button"
-                  onClick={() => launchNativeUpi('GOOGLE_PAY')}
-                  className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-left transition-colors hover:border-blue-400 hover:bg-blue-100"
-                >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white"><Smartphone className="h-4 w-4" /></span>
-                  <span><span className="block text-xs font-bold text-slate-900">Google Pay</span><span className="block text-[11px] text-slate-600">Continue with Google Pay</span></span>
-                </button>
-              )}
-
-              {nativeUpiApps.includes('PHONEPE') && (
-                <button
-                  type="button"
-                  onClick={() => launchNativeUpi('PHONEPE')}
-                  className="flex items-center gap-3 rounded-lg border border-purple-200 bg-purple-50 p-3 text-left transition-colors hover:border-purple-400 hover:bg-purple-100"
-                >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-700 text-white"><Smartphone className="h-4 w-4" /></span>
-                  <span><span className="block text-xs font-bold text-slate-900">PhonePe</span><span className="block text-[11px] text-slate-600">Continue with PhonePe</span></span>
-                </button>
-              )}
-
-              {nativeUpiApps.includes('PAYTM') && (
-                <button
-                  type="button"
-                  onClick={() => launchNativeUpi('PAYTM')}
-                  className="flex items-center gap-3 rounded-lg border border-cyan-200 bg-cyan-50 p-3 text-left transition-colors hover:border-cyan-400 hover:bg-cyan-100"
-                >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-700 text-white"><Smartphone className="h-4 w-4" /></span>
-                  <span><span className="block text-xs font-bold text-slate-900">Paytm</span><span className="block text-[11px] text-slate-600">Continue with Paytm</span></span>
-                </button>
-              )}
-
-              <button
-                type="button"
-                onClick={() => launchNativeUpi('OTHER')}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left transition-colors hover:border-slate-400 hover:bg-slate-50"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-700 text-white"><Smartphone className="h-4 w-4" /></span>
-                <span><span className="block text-xs font-bold text-slate-900">Other UPI apps</span><span className="block text-[11px] text-slate-600">Show Cashfree-supported installed apps</span></span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (activeCheckoutUrl) window.location.href = activeCheckoutUrl;
-                }}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left transition-colors hover:border-slate-400 hover:bg-slate-50"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-white">
-                  <CreditCard className="h-4 w-4" />
-                </span>
-                <span>
-                  <span className="block text-xs font-bold text-slate-900">Card, net banking & more</span>
-                  <span className="block text-[11px] text-slate-600">Open the secure Cashfree checkout</span>
-                </span>
-                <Landmark className="ml-auto h-4 w-4 text-slate-400" />
-              </button>
+            <div className="mt-4 grid gap-3 lg:grid-cols-[0.9fr_1.1fr]">
+              <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs">
+                <p className="font-semibold text-slate-500">ORDER SUMMARY</p>
+                <p className="mt-2 text-sm font-bold text-slate-900">{checkoutPlan.name}</p>
+                <dl className="mt-4 space-y-2 text-slate-600">
+                  <div className="flex justify-between"><dt>Original price</dt><dd>₹{checkoutPlan.price}</dd></div>
+                  <div className="flex justify-between text-emerald-700"><dt>Discount</dt><dd>-₹{checkoutPlan.price - finalAmount}</dd></div>
+                  <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-bold text-slate-900"><dt>Payable now</dt><dd>₹{finalAmount}</dd></div>
+                </dl>
+              </aside>
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Payment method</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {methods.filter((method) => method.visible).map((method) => (
+                    <button
+                      key={method.id}
+                      type="button"
+                      onClick={() => startSelectedMethod(method.id)}
+                      disabled={processingPlanId === checkoutPlan.id}
+                      className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-colors disabled:cursor-wait disabled:opacity-60 ${method.tone}`}
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-white">{method.icon}</span>
+                      <span><span className="block text-xs font-bold text-slate-900">{method.title}</span><span className="block text-[11px] text-slate-600">{selectedCheckoutMethod === method.id && processingPlanId ? 'Starting secure payment…' : method.detail}</span></span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
-        )}
+          );
+        })()}
 
         {/* Direct Checkout Fallback (Bypasses iframe modal issues / temporarily down errors) */}
         {activeCheckoutUrl && !nativeCheckout && (

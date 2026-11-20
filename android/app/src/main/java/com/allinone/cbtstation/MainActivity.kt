@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
                     }
                     if (selectedApp != null && !isInstalled(packageNameFor(selectedApp))) {
                         Toast.makeText(this@MainActivity, "Selected UPI app is not installed. Choose another method.", Toast.LENGTH_LONG).show()
+                        notifyWebsiteToVerify(orderId)
                         return@runOnUiThread
                     }
 
@@ -152,6 +153,7 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
                         "UPI apps could not be opened. Please use secure checkout instead.",
                         Toast.LENGTH_LONG,
                     ).show()
+                    notifyWebsiteToVerify(orderId)
                 }
             }
         }
