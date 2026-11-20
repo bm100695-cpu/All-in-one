@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma';
 import { authenticate } from '../middleware/auth';
+import { canAccessMockTest, consumeTestPackIfNeeded, getMockAccessType, isStaffRole } from '../test-access';
 
 const router = Router();
 
@@ -184,6 +185,7 @@ router.get('/:testId/info', async (req: Request, res: Response) => {
         totalQuestions: test.totalQuestions,
         instructionsEn: test.instructionsEn,
         instructionsHi: test.instructionsHi,
+        accessType: getMockAccessType(test),
         accessLevel: test.accessLevel,
         type: test.type,
         pyqReference: test.pyqReference,
@@ -258,84 +260,17 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
       return;
     }
 
-    // Entitlement Check for PREMIUM tests (Backend-Controlled Access & Payment Protection)
-    if (test.accessLevel === 'PREMIUM' && req.user!.role !== 'ADMIN' && req.user!.role !== 'CONTENT_REVIEWER') {
-      // 1. Check for active subscription
-      const activeSub = await prisma.subscription.findFirst({
-        where: {
-          userId,
-          status: 'ACTIVE',
-          OR: [{ endDate: null }, { endDate: { gt: new Date() } }],
-        },
-        include: { plan: true },
-        orderBy: { createdAt: 'desc' },
+    // Authoritative, server-side policy check. This applies even when a user
+    // tries to open a test directly rather than through the library UI.
+    if (!(await canAccessMockTest(userId, req.user!.role, test))) {
+      res.status(403).json({
+        error: 'PREMIUM_LOCKED',
+        message: `"${test.title}" is a Premium Mock Test. Please upgrade your plan to unlock it.`,
+        testTitle: test.title,
+        testId: test.id,
+        accessType: getMockAccessType(test),
       });
-
-      // 2. Check for explicit entitlement (individual unlock, referral credit, or paid subscription unlock)
-      const entitlement = await prisma.entitlement.findFirst({
-        where: {
-          userId,
-          isActive: true,
-          AND: [
-            { OR: [{ testId: test.id }, { testId: null, planCode: { not: 'PLAN_FREE_0' } }] },
-            { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-          ],
-        },
-      });
-
-      const isPaidSub = Boolean(
-        activeSub &&
-        activeSub.plan &&
-        activeSub.plan.price > 0 &&
-        !activeSub.plan.code.includes('FREE')
-      );
-
-      const isSubUnlimited = Boolean(
-        isPaidSub &&
-          (activeSub!.plan.code === 'PREMIUM_MONTHLY_149' ||
-           activeSub!.plan.code === 'PLAN_YEARLY_199' ||
-           activeSub!.plan.code === 'PLAN_LIFETIME_499' ||
-           activeSub!.plan.code === 'PLAN_PRO_99' ||
-           (activeSub!.plan.examSlug && activeSub!.plan.examSlug === test.exam.slug && activeSub!.testsRemaining === null))
-      );
-      const hasSpecificEntitlement = Boolean(entitlement);
-
-      if (!isSubUnlimited && !hasSpecificEntitlement) {
-        // Check if student has a Booster Pack / Test Pack with remaining tests
-        const hasRemainingPack = Boolean(
-          isPaidSub &&
-          (activeSub!.plan.code === 'PLAN_BOOSTER_49' || activeSub!.plan.code === 'TEST_PACK_99' || activeSub!.plan.code.includes('BOOSTER')) &&
-          (activeSub!.testsRemaining ?? 0) > 0
-        );
-
-        if (hasRemainingPack) {
-          // Consume 1 test and grant entitlement
-          await prisma.$transaction([
-            prisma.subscription.update({
-              where: { id: activeSub!.id },
-              data: { testsRemaining: activeSub!.testsRemaining! - 1 },
-            }),
-            prisma.entitlement.create({
-              data: {
-                userId,
-                testId: test.id,
-                planCode: activeSub!.plan.code,
-                source: 'TEST_PACK',
-                expiresAt: activeSub!.endDate,
-              },
-            }),
-          ]);
-        } else {
-          res.status(403).json({
-            error: 'PREMIUM_LOCKED',
-            message: `"${test.title}" is a Premium Mock Test. Please upgrade your plan or complete payment with Cashfree to unlock.`,
-            testTitle: test.title,
-            testId: test.id,
-            accessLevel: test.accessLevel,
-          });
-          return;
-        }
-      }
+      return;
     }
 
     // Check for an existing in-progress attempt
@@ -350,7 +285,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
 
     if (!attempt) {
       // Validate that the test is ACTIVE/LIVE and available before starting a new attempt
-      const isAdmin = req.user?.role === 'ADMIN' || req.user?.role === 'CONTENT_REVIEWER';
+      const isAdmin = isStaffRole(req.user?.role);
       if (!isAdmin) {
         const isLive = test.isPublished && (test.status === 'ACTIVE' || test.isActive);
         if (!isLive) {
@@ -375,6 +310,17 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
           });
           return;
         }
+      }
+
+      // A newly started pack-based test consumes exactly one remaining unlock.
+      if (!isStaffRole(req.user?.role) && !(await consumeTestPackIfNeeded(userId, test))) {
+        res.status(403).json({
+          error: 'PREMIUM_LOCKED',
+          message: 'Your test pack no longer has an available premium test unlock.',
+          testId: test.id,
+          accessType: getMockAccessType(test),
+        });
+        return;
       }
 
       // Create new attempt
@@ -443,6 +389,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
         totalQuestions: test.totalQuestions,
         instructionsEn: test.instructionsEn,
         instructionsHi: test.instructionsHi,
+        accessType: getMockAccessType(test),
         accessLevel: test.accessLevel,
         exam: {
           id: test.exam.id,
@@ -539,6 +486,7 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
       include: {
         test: {
           include: {
+            exam: { select: { slug: true } },
             testQuestions: {
               include: {
                 question: true,
@@ -566,6 +514,18 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
     }
 
     const test = attempt.test;
+    // Re-check the live database policy before grading. An admin changing a
+    // test to premium takes effect immediately and cannot be bypassed with an
+    // already-known submit URL.
+    if (!(await canAccessMockTest(userId, req.user!.role, test))) {
+      res.status(403).json({
+        error: 'PREMIUM_LOCKED',
+        message: 'This mock test now requires an active premium subscription before it can be submitted.',
+        testId: test.id,
+        accessType: getMockAccessType(test),
+      });
+      return;
+    }
     const pattern = test.patternVersion;
 
     // Map section rules by name

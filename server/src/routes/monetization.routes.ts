@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { prisma } from '../prisma';
+import { canAccessMockTest, getMockAccessType, isStaffRole } from '../test-access';
 import { authenticate, requireRole } from '../middleware/auth';
 
 dotenv.config();
@@ -856,6 +857,7 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       select: {
         id: true,
         title: true,
+        accessType: true,
         accessLevel: true,
         accessMode: true,
         price: true,
@@ -871,12 +873,16 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       return;
     }
 
-    // 1. Free test is accessible to everyone immediately (DYNAMIC PRICING CHECK)
-    if (test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.price === 0) {
+    const accessType = getMockAccessType(test);
+
+    // Free/premium policy is controlled only by access_type; price is display
+    // metadata and must never turn a premium test into a free one.
+    if (accessType === 'free') {
       res.json({
         entitled: true,
         accessMode: 'FREE',
         accessLevel: 'FREE',
+        accessType,
         price: 0,
         reason: 'Free Mock Test',
       });
@@ -884,40 +890,31 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
     }
 
     // 2. Admins and Content Reviewers bypass paywall
-    if (req.user!.role === 'ADMIN' || req.user!.role === 'CONTENT_REVIEWER') {
+    if (isStaffRole(req.user!.role)) {
       res.json({
         entitled: true,
         accessMode: test.accessMode || 'PAID',
         accessLevel: 'PREMIUM',
+        accessType,
         price: test.price,
         reason: 'Admin / Staff privileges',
       });
       return;
     }
 
-    // 3. Check for specific entitlement (e.g. single test purchased, booster consumed, or referral redeemed)
-    const specificEntitlement = await prisma.entitlement.findFirst({
-      where: {
-        userId,
-        isActive: true,
-        AND: [
-          { OR: [{ testId }, { testId: null, planCode: { not: 'PLAN_FREE_0' } }] },
-          { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-        ],
-      },
-    });
-
-    if (specificEntitlement) {
+    // Keep this endpoint aligned with the enforcement used by start/submit.
+    if (await canAccessMockTest(userId, req.user!.role, test)) {
       res.json({
         entitled: true,
-        accessMode: test.accessMode || 'PAID',
+        accessMode: 'PREMIUM',
         accessLevel: 'PREMIUM',
-        reason: `Unlocked via ${specificEntitlement.source}`,
+        accessType,
+        reason: 'Active premium subscription or test entitlement',
       });
       return;
     }
 
-    // 4. Check for active paid subscription that includes this test or exam
+    // The remaining fields provide payment-screen context only.
     const activeSub = await prisma.subscription.findFirst({
       where: {
         userId,
@@ -934,35 +931,6 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       activeSub.plan.price > 0 &&
       !activeSub.plan.code.includes('FREE')
     );
-
-    if (isPaidSub && activeSub) {
-      const plan = activeSub.plan;
-      const isBooster = plan.code === 'PLAN_BOOSTER_49' || plan.code === 'TEST_PACK_99' || plan.code.includes('BOOSTER');
-
-      if (!isBooster) {
-        // Unlimited all-access plans (e.g. Yearly 199, Lifetime 499, or Global Unlimited)
-        if (plan.code === 'PREMIUM_MONTHLY_149' || plan.code === 'PLAN_YEARLY_199' || plan.code === 'PLAN_LIFETIME_499' || plan.price >= 199 || !plan.examSlug) {
-          res.json({
-            entitled: true,
-            accessMode: test.accessMode || 'PAID',
-            accessLevel: 'PREMIUM',
-            reason: `Active ${plan.name} Subscription`,
-          });
-          return;
-        }
-
-        // Exam-scoped unlimited plan (e.g. PLAN_PRO_99 for jee-main)
-        if (plan.examSlug && test.exam?.slug && plan.examSlug === test.exam.slug) {
-          res.json({
-            entitled: true,
-            accessMode: test.accessMode || 'PAID',
-            accessLevel: 'PREMIUM',
-            reason: `Included in ${plan.name}`,
-          });
-          return;
-        }
-      }
-    }
 
     // Check if test pack / booster has remaining unlocks
     const isBoosterPack = Boolean(
@@ -991,6 +959,7 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       entitled: false,
       accessMode: test.accessMode || 'PAID',
       accessLevel: 'PREMIUM',
+      accessType,
       price: effectivePrice,
       originalPrice: test.originalPrice || test.price,
       discountPct: test.discountPct || 0,
@@ -1029,8 +998,10 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         return;
       }
 
-      // Check if test is free
-      if (test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.price <= 0) {
+      // Only the canonical access type can grant a free test entitlement.
+      // A premium test with a promotional/zero display price must still pass
+      // the subscription gate in the start and submit endpoints.
+      if (getMockAccessType(test) === 'free') {
         // Automatically grant entitlement
         await prisma.entitlement.upsert({
           where: { id: `free_${userId}_${test.id}` },

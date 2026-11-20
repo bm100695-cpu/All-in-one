@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { prisma } from '../prisma';
 import { authenticate, requireRole } from '../middleware/auth';
+import { getMockAccessType, MockAccessType } from '../test-access';
 
 const router = Router();
 
@@ -760,8 +761,6 @@ router.patch('/exams/:id/publish', authenticate, requireRole(['ADMIN']), async (
     res.status(500).json({ error: error.message || 'Failed to update exam status' });
   }
 });
-  }
-});
 
 router.get('/exams/:examId/tests', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
@@ -797,9 +796,17 @@ router.get('/exams/:examId/tests', authenticate, requireRole(['ADMIN']), async (
 
 router.post('/tests', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
-    const { examId, title, type = 'FULL_MOCK', durationMinutes = 120, totalMarks = 100, accessLevel = 'FREE', instructionsEn } = req.body;
+    const { examId, title, type = 'FULL_MOCK', durationMinutes = 120, totalMarks = 100, accessType, accessLevel, instructionsEn } = req.body;
     if (!examId || !title) {
       res.status(400).json({ error: 'examId and title are required' });
+      return;
+    }
+    // Accept the former accessLevel payload during the rollout so existing
+    // admin clients keep creating the same kind of test.
+    const requestedAccessType = accessType ?? (String(accessLevel).toUpperCase() === 'PREMIUM' ? 'premium' : 'free');
+    const normalizedAccessType = String(requestedAccessType).toLowerCase() as MockAccessType;
+    if (!['free', 'premium'].includes(normalizedAccessType)) {
+      res.status(400).json({ error: 'accessType must be either "free" or "premium".' });
       return;
     }
     const pv = await prisma.examPatternVersion.findFirst({ where: { examId } });
@@ -817,7 +824,10 @@ router.post('/tests', authenticate, requireRole(['ADMIN']), async (req: Request,
         totalMarks: Number(totalMarks),
         totalQuestions: 0,
         instructionsEn: instructionsEn || 'Standard All in One CBT Examination Instructions.',
-        accessLevel,
+        accessType: normalizedAccessType,
+        // Keep legacy consumers in sync while they move to accessType.
+        accessLevel: normalizedAccessType === 'premium' ? 'PREMIUM' : 'FREE',
+        accessMode: normalizedAccessType === 'premium' ? 'PREMIUM' : 'FREE',
         isPublished: false,
         status: 'DRAFT',
         isActive: false,
@@ -828,6 +838,35 @@ router.post('/tests', authenticate, requireRole(['ADMIN']), async (req: Request,
   } catch (error) {
     console.error('Error creating test:', error);
     res.status(500).json({ error: 'Failed to create test' });
+  }
+});
+
+// Update the canonical Free/Premium policy for a mock test. This intentionally
+// has its own endpoint so visibility/scheduling changes cannot alter access.
+router.patch('/tests/:id/access', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const normalizedAccessType = String(req.body.accessType || '').toLowerCase() as MockAccessType;
+    if (!['free', 'premium'].includes(normalizedAccessType)) {
+      res.status(400).json({ error: 'accessType must be either "free" or "premium".' });
+      return;
+    }
+
+    const test = await prisma.test.update({
+      where: { id: req.params.id as string },
+      data: {
+        accessType: normalizedAccessType,
+        accessLevel: normalizedAccessType === 'premium' ? 'PREMIUM' : 'FREE',
+        accessMode: normalizedAccessType === 'premium' ? 'PREMIUM' : 'FREE',
+      },
+    });
+    res.json({ success: true, test: { ...test, accessType: getMockAccessType(test) } });
+  } catch (error: any) {
+    if (error?.code === 'P2025') {
+      res.status(404).json({ error: 'Test not found' });
+      return;
+    }
+    console.error('Error updating mock test access:', error);
+    res.status(500).json({ error: 'Failed to update mock test access' });
   }
 });
 

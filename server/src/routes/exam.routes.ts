@@ -144,6 +144,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
             totalMarks: true,
             totalQuestions: true,
             pyqReference: true,
+            accessType: true,
             accessLevel: true,
             isFeatured: true,
             status: true,

@@ -37,6 +37,13 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   const [viewMode, setViewMode] = useState<'rows' | 'grid'>('rows');
   const [visibleCount, setVisibleCount] = useState<number>(30);
   const [checkingEntitlementId, setCheckingEntitlementId] = useState<string | null>(null);
+  const [isPremiumSubscriber, setIsPremiumSubscriber] = useState(false);
+
+  const getAccessType = (test: any): 'free' | 'premium' => (
+    test.accessType === 'premium' || test.accessLevel === 'PREMIUM' || test.accessMode === 'PREMIUM' || test.accessMode === 'PAID'
+      ? 'premium'
+      : 'free'
+  );
 
   useEffect(() => {
     loadTests();
@@ -45,13 +52,17 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   const loadTests = async () => {
     setLoading(true);
     try {
-      const res = await api.getExamProfile(examSlug || 'jee-main');
+      const [res, subscription] = await Promise.all([
+        api.getExamProfile(examSlug || 'jee-main'),
+        api.getMySubscription().catch(() => null),
+      ]);
       if (res?.exam) {
         setExamInfo(res.exam);
         if (res.exam.tests) {
           setTests(res.exam.tests);
         }
       }
+      setIsPremiumSubscriber(Boolean(subscription?.isPremium));
     } catch (err) {
       console.error('Failed to load mock tests:', err);
     } finally {
@@ -59,9 +70,8 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
     }
   };
 
-  const handleTestClick = async (test: any, index: number) => {
-    // Dynamic Access Check: If marked FREE, price is 0, or default first 5
-    const isFreeTest = test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.priceINR === 0 || (test.accessMode == null && index < 5);
+  const handleTestClick = async (test: any) => {
+    const isFreeTest = getAccessType(test) === 'free';
 
     if (test.accessMode === 'COMING_SOON') {
       alert('This mock test is scheduled to be released soon! Please check back shortly.');
@@ -90,9 +100,9 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
     }
   };
 
-  const filteredTests = tests.filter((t, index) => {
+  const filteredTests = tests.filter((t) => {
     if (t.accessMode === 'DISABLED') return false;
-    const isFreeTest = t.accessMode === 'FREE' || t.accessLevel === 'FREE' || t.priceINR === 0 || (t.accessMode == null && index < 5);
+    const isFreeTest = getAccessType(t) === 'free';
 
     // Shift filter
     if (shiftFilter !== 'ALL') {
@@ -101,7 +111,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
       }
     }
 
-    // Access Level filter (First 5 are Free, rest are Premium)
+    // Access level is managed per test by administrators.
     if (accessFilter !== 'ALL') {
       if (accessFilter === 'FREE' && !isFreeTest) return false;
       if (accessFilter === 'PREMIUM' && isFreeTest) return false;
@@ -120,9 +130,8 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
 
   const displayedTests = filteredTests.slice(0, visibleCount);
 
-  // Total tests mein se pehle 5 free, baaki premium
-  const freeCount = Math.min(5, tests.length);
-  const premiumCount = Math.max(0, tests.length - 5);
+  const freeCount = tests.filter((test) => getAccessType(test) === 'free').length;
+  const premiumCount = tests.length - freeCount;
 
   return (
     <div className="space-y-6 pb-16">
@@ -294,10 +303,10 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
       ) : viewMode === 'rows' ? (
         <div className="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-xs divide-y divide-slate-100">
           {displayedTests.map((test, index) => {
-            const isFree = test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.priceINR === 0 || (test.accessMode == null && index < 5);
-            const isPaid = test.accessMode === 'PAID' || (test.priceINR && test.priceINR > 0);
+            const isFree = getAccessType(test) === 'free';
             const isComingSoon = test.accessMode === 'COMING_SOON';
             const isChecking = checkingEntitlementId === test.id;
+            const isLocked = !isFree && !isPremiumSubscriber;
 
             return (
               <div
@@ -317,11 +326,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     ) : isComingSoon ? (
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
                         COMING SOON
-                      </span>
-                    ) : isPaid ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-                        <Lock className="w-2.5 h-2.5" />
-                        PAID • ₹{test.priceINR}
                       </span>
                     ) : (
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
@@ -347,14 +351,12 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                 <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
                   <button
                     disabled={isChecking || isComingSoon}
-                    onClick={() => handleTestClick(test, index)}
+                    onClick={() => handleTestClick(test)}
                     className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                       isFree
                         ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                         : isComingSoon
                         ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
-                        : isPaid
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
                         : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                     }`}
                   >
@@ -365,15 +367,15 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       </>
                     ) : (
                       <>
-                        {!isFree ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
+                        {isLocked ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
                         <span>
                           {isFree
                             ? 'Start Test'
                             : isComingSoon
                             ? 'Coming Soon'
-                            : isPaid
-                            ? `Unlock (₹${test.priceINR})`
-                            : 'Unlock Test'}
+                            : isPremiumSubscriber
+                            ? 'Start Test'
+                            : 'Unlock Premium'}
                         </span>
                       </>
                     )}
@@ -386,10 +388,10 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {displayedTests.map((test, index) => {
-            const isFree = test.accessMode === 'FREE' || test.accessLevel === 'FREE' || test.priceINR === 0 || (test.accessMode == null && index < 5);
-            const isPaid = test.accessMode === 'PAID' || (test.priceINR && test.priceINR > 0);
+            const isFree = getAccessType(test) === 'free';
             const isComingSoon = test.accessMode === 'COMING_SOON';
             const isChecking = checkingEntitlementId === test.id;
+            const isLocked = !isFree && !isPremiumSubscriber;
 
             return (
               <div
@@ -409,11 +411,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       ) : isComingSoon ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
                           COMING SOON
-                        </span>
-                      ) : isPaid ? (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-                          <Lock className="w-2.5 h-2.5" />
-                          PAID • ₹{test.priceINR}
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
@@ -443,14 +440,12 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                   </span>
                   <button
                     disabled={isChecking || isComingSoon}
-                    onClick={() => handleTestClick(test, index)}
+                    onClick={() => handleTestClick(test)}
                     className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                       isFree
                         ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                         : isComingSoon
                         ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
-                        : isPaid
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
                         : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                     }`}
                   >
@@ -461,15 +456,15 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       </>
                     ) : (
                       <>
-                        {!isFree ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
+                        {isLocked ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
                         <span>
                           {isFree
                             ? 'Start Test'
                             : isComingSoon
                             ? 'Coming Soon'
-                            : isPaid
-                            ? `Unlock (₹${test.priceINR})`
-                            : 'Unlock Test'}
+                            : isPremiumSubscriber
+                            ? 'Start Test'
+                            : 'Unlock Premium'}
                         </span>
                       </>
                     )}

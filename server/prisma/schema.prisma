@@ -266,6 +266,9 @@ model Test {
   pyqReference     String?
   accessLevel      String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
   accessMode       String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
+  // Canonical student access policy for full mock tests. Legacy accessLevel/accessMode
+  // are retained while older pricing and entitlement screens are transitioned.
+  accessType       String              @default("free") @map("access_type") // free, premium
   price            Float               @default(0.0)
   originalPrice    Float?
   discountPct      Int                 @default(0)

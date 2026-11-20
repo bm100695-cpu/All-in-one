@@ -109,6 +109,8 @@ export interface Exam {
     totalMarks: number;
     totalQuestions: number;
     pyqReference?: string;
+    accessType?: 'free' | 'premium';
+    accessLevel?: string;
   }[];
 }
 

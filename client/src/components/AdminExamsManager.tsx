@@ -97,7 +97,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
     type: 'FULL_MOCK',
     durationMinutes: 180,
     totalMarks: 300,
-    accessLevel: 'FREE',
+    accessType: 'free' as 'free' | 'premium',
   });
 
   // Add Question State
@@ -380,7 +380,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
       });
       setMsg({ type: 'success', text: `Test "${newTest.title}" created in ${selectedExam.shortName}. Add questions before publishing.` });
       setShowNewTestModal(false);
-      setNewTest({ title: '', type: 'FULL_MOCK', durationMinutes: 180, totalMarks: 300, accessLevel: 'FREE' });
+      setNewTest({ title: '', type: 'FULL_MOCK', durationMinutes: 180, totalMarks: 300, accessType: 'free' });
       selectExamRow(selectedExam);
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message || 'Failed to create test' });
@@ -406,6 +406,21 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
       await reloadExamTests();
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message || 'Failed to update publish status' });
+    }
+  };
+
+  const handleUpdateTestAccess = async (test: any, accessType: 'free' | 'premium') => {
+    if ((test.accessType || (test.accessLevel === 'PREMIUM' ? 'premium' : 'free')) === accessType) return;
+    setUpdatingTestId(test.id);
+    setMsg(null);
+    try {
+      await api.updateAdminTestAccess(test.id, accessType);
+      setMsg({ type: 'success', text: `Test "${test.title}" is now ${accessType === 'free' ? 'FREE' : 'PREMIUM'}.` });
+      await reloadExamTests();
+    } catch (err: any) {
+      setMsg({ type: 'error', text: err.message || 'Failed to update test access.' });
+    } finally {
+      setUpdatingTestId(null);
     }
   };
 
@@ -1136,8 +1151,11 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                                   </span>
                                 )}
 
+                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${t.accessType === 'premium' || t.accessLevel === 'PREMIUM' ? 'bg-purple-50 border-purple-200 text-purple-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
+                                  {t.accessType === 'premium' || t.accessLevel === 'PREMIUM' ? 'PREMIUM' : 'FREE'}
+                                </span>
                                 <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-600">
-                                  {t._count?.testQuestions ?? t.totalQuestions} Qs • {t.durationMinutes}m • {t.accessLevel}
+                                  {t._count?.testQuestions ?? t.totalQuestions} Qs • {t.durationMinutes}m
                                 </span>
 
                                 {(t.availableFrom || t.availableTo) && (
@@ -1164,6 +1182,18 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
 
                             {/* Action Buttons Toolbar */}
                             <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                              <label className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white border border-slate-300 text-[10px] font-semibold text-slate-600" title="Change student access">
+                                <span className="sr-only">Mock test access</span>
+                                <select
+                                  value={t.accessType || (t.accessLevel === 'PREMIUM' ? 'premium' : 'free')}
+                                  disabled={isBusy}
+                                  onChange={(e) => handleUpdateTestAccess(t, e.target.value as 'free' | 'premium')}
+                                  className="bg-transparent outline-none cursor-pointer disabled:cursor-not-allowed"
+                                >
+                                  <option value="free">Free</option>
+                                  <option value="premium">Premium</option>
+                                </select>
+                              </label>
                               {/* Activate / Deactivate Live Button */}
                               {isLive ? (
                                 <button
@@ -1410,9 +1440,9 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                 </div>
                 <div>
                   <label className="block font-semibold mb-1">Access</label>
-                  <select value={newTest.accessLevel} onChange={(e) => setNewTest({ ...newTest, accessLevel: e.target.value })} className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
-                    <option value="FREE">FREE</option>
-                    <option value="PREMIUM">PREMIUM</option>
+                  <select value={newTest.accessType} onChange={(e) => setNewTest({ ...newTest, accessType: e.target.value as 'free' | 'premium' })} className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
+                    <option value="free">FREE</option>
+                    <option value="premium">PREMIUM</option>
                   </select>
                 </div>
                 <div>

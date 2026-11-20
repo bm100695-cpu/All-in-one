@@ -786,6 +786,13 @@ export const api = {
     });
   },
 
+  updateAdminTestAccess: async (testId: string, accessType: 'free' | 'premium') => {
+    return request<{ success: boolean; test: any }>(`/admin/tests/${testId}/access`, {
+      method: 'PATCH',
+      body: JSON.stringify({ accessType }),
+    });
+  },
+
   publishAdminTest: async (testId: string, isPublished: boolean) => {
     return request<{ success: boolean; test: any }>(`/admin/tests/${testId}/publish`, {
       method: 'PATCH',
