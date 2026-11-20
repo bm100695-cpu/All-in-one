@@ -4,6 +4,9 @@
 ALTER TABLE "Test"
 ADD COLUMN IF NOT EXISTS "access_type" TEXT NOT NULL DEFAULT 'free';
 
+ALTER TABLE "Test"
+ADD COLUMN IF NOT EXISTS "description" TEXT NOT NULL DEFAULT '';
+
 UPDATE "Test"
 SET "access_type" = CASE
   WHEN "accessLevel" IN ('PREMIUM', 'PAID') OR "accessMode" IN ('PREMIUM', 'PAID') THEN 'premium'

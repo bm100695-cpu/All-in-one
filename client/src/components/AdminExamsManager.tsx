@@ -55,6 +55,8 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
   const [scheduleAvailableFrom, setScheduleAvailableFrom] = useState('');
   const [scheduleAvailableTo, setScheduleAvailableTo] = useState('');
   const [updatingTestId, setUpdatingTestId] = useState<string | null>(null);
+  const [editingTest, setEditingTest] = useState<any | null>(null);
+  const [editTestForm, setEditTestForm] = useState<any>({});
 
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -423,6 +425,8 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
       setUpdatingTestId(null);
     }
   };
+  const openEditTest = (test: any) => { setEditingTest(test); setEditTestForm({ title: test.title || '', description: test.description || '', instructionsEn: test.instructionsEn || '', durationMinutes: test.durationMinutes || 0, totalMarks: test.totalMarks || 0, totalQuestions: test.totalQuestions || 0, accessType: test.accessType || (test.accessLevel === 'PREMIUM' ? 'premium' : 'free') }); };
+  const saveTestChanges = async (e: React.FormEvent) => { e.preventDefault(); if (!editingTest) return; try { await api.updateAdminTest(editingTest.id, { ...editTestForm, durationMinutes: Number(editTestForm.durationMinutes), totalMarks: Number(editTestForm.totalMarks), totalQuestions: Number(editTestForm.totalQuestions) }); setEditingTest(null); setMsg({ type: 'success', text: 'Test changes saved. Its publish/live state was not changed.' }); await reloadExamTests(); } catch (err: any) { setMsg({ type: 'error', text: err.message || 'Failed to save test changes.' }); } };
 
   const handleActivateTest = async (test: any, makeOnlyActive: boolean = false) => {
     const qCount = test._count?.testQuestions ?? test.totalQuestions ?? 0;
@@ -1182,6 +1186,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
 
                             {/* Action Buttons Toolbar */}
                             <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                              <button type="button" onClick={() => openEditTest(t)} className="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:border-tn-blue text-slate-700 text-[11px] font-semibold flex items-center gap-1 cursor-pointer"><Edit3 className="w-3 h-3" />Edit Test</button>
                               <label className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white border border-slate-300 text-[10px] font-semibold text-slate-600" title="Change student access">
                                 <span className="sr-only">Mock test access</span>
                                 <select
@@ -1417,6 +1422,23 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
       )}
 
       {/* Modal: Create Test */}
+      {editingTest && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4 overflow-y-auto">
+          <form onSubmit={saveTestChanges} className="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-xl my-6 text-xs">
+            <div className="flex items-center justify-between border-b pb-3"><h3 className="text-sm font-bold text-tn-navy">Edit Test</h3><button type="button" onClick={() => setEditingTest(null)}><X className="w-4 h-4" /></button></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label>Test Name<input required value={editTestForm.title} onChange={(e) => setEditTestForm({...editTestForm, title:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg" /></label>
+              <label>Access Type<select value={editTestForm.accessType} onChange={(e) => setEditTestForm({...editTestForm, accessType:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg"><option value="free">FREE</option><option value="premium">PREMIUM</option></select></label>
+              <label>Duration (minutes)<input required min="1" type="number" value={editTestForm.durationMinutes} onChange={(e) => setEditTestForm({...editTestForm, durationMinutes:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg" /></label>
+              <label>Total Marks<input required min="0" type="number" value={editTestForm.totalMarks} onChange={(e) => setEditTestForm({...editTestForm, totalMarks:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg" /></label>
+              <label>Total Questions<input required min="0" type="number" value={editTestForm.totalQuestions} onChange={(e) => setEditTestForm({...editTestForm, totalQuestions:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg" /></label>
+            </div>
+            <label className="block">Description<textarea rows={2} value={editTestForm.description} onChange={(e) => setEditTestForm({...editTestForm, description:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg" /></label>
+            <label className="block">Test Instructions<textarea rows={5} value={editTestForm.instructionsEn} onChange={(e) => setEditTestForm({...editTestForm, instructionsEn:e.target.value})} className="w-full mt-1 px-3 py-2 border rounded-lg" /></label>
+            <div className="flex justify-end gap-2"><button type="button" onClick={() => setEditingTest(null)} className="px-4 py-2 border rounded-lg">Cancel</button><button type="submit" className="px-4 py-2 rounded-lg bg-tn-blue text-white font-bold">Save Changes</button></div>
+          </form>
+        </div>
+      )}
       {showNewTestModal && selectedExam && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
           <form onSubmit={handleCreateTest} className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">

@@ -870,6 +870,31 @@ router.patch('/tests/:id/access', authenticate, requireRole(['ADMIN']), async (r
   }
 });
 
+router.put('/tests/:id', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { title, description, instructionsEn, durationMinutes, totalMarks, totalQuestions, accessType, availableFrom, availableTo } = req.body;
+    if (title !== undefined && !String(title).trim()) {
+      res.status(400).json({ error: 'Test title cannot be empty.' }); return;
+    }
+    if (accessType !== undefined && !['free', 'premium'].includes(String(accessType).toLowerCase())) {
+      res.status(400).json({ error: 'accessType must be either "free" or "premium".' }); return;
+    }
+    const normalized = accessType ? String(accessType).toLowerCase() as MockAccessType : undefined;
+    const test = await prisma.test.update({ where: { id: req.params.id as string }, data: {
+      ...(title !== undefined ? { title: String(title).trim() } : {}),
+      ...(description !== undefined ? { description: String(description) } : {}),
+      ...(instructionsEn !== undefined ? { instructionsEn: String(instructionsEn) } : {}),
+      ...(durationMinutes !== undefined ? { durationMinutes: Number(durationMinutes) } : {}),
+      ...(totalMarks !== undefined ? { totalMarks: Number(totalMarks) } : {}),
+      ...(totalQuestions !== undefined ? { totalQuestions: Number(totalQuestions) } : {}),
+      ...(availableFrom !== undefined ? { availableFrom: availableFrom ? new Date(availableFrom) : null } : {}),
+      ...(availableTo !== undefined ? { availableTo: availableTo ? new Date(availableTo) : null } : {}),
+      ...(normalized ? { accessType: normalized, accessLevel: normalized === 'premium' ? 'PREMIUM' : 'FREE', accessMode: normalized === 'premium' ? 'PREMIUM' : 'FREE' } : {}),
+    }});
+    res.json({ success: true, test });
+  } catch (error: any) { res.status(500).json({ error: error.message || 'Failed to save test changes' }); }
+});
+
 router.patch('/tests/:id/publish', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
     const { isPublished } = req.body;
@@ -1051,6 +1076,21 @@ router.delete('/questions/:id', authenticate, requireRole(['ADMIN']), async (req
     console.error('Error deleting question:', error);
     res.status(500).json({ error: 'Failed to delete question' });
   }
+});
+
+router.put('/questions/:id', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { contentEn, options, correctAnswer, explanationEn, subject, topic, marks, negativeMarks } = req.body;
+    const question = await prisma.question.update({ where: { id: req.params.id as string }, data: {
+      ...(contentEn !== undefined ? { contentEn: String(contentEn) } : {}),
+      ...(options !== undefined ? { optionsJson: JSON.stringify(options) } : {}),
+      ...(correctAnswer !== undefined ? { correctAnswerJson: JSON.stringify([correctAnswer]) } : {}),
+      ...(explanationEn !== undefined ? { explanationEn: String(explanationEn) } : {}),
+      ...(subject !== undefined ? { subject: String(subject) } : {}), ...(topic !== undefined ? { topic: String(topic) } : {}),
+    }});
+    if (marks !== undefined || negativeMarks !== undefined) await prisma.testQuestion.updateMany({ where: { questionId: question.id }, data: { ...(marks !== undefined ? { marks: Number(marks) } : {}), ...(negativeMarks !== undefined ? { negativeMarks: Number(negativeMarks) } : {}) } });
+    res.json({ success: true, question });
+  } catch (error: any) { res.status(500).json({ error: error.message || 'Failed to update question' }); }
 });
 
 // Exchange / Swap two question positions inside a test

@@ -792,6 +792,8 @@ export const api = {
       body: JSON.stringify({ accessType }),
     });
   },
+  updateAdminTest: async (testId: string, data: any) => request<{ success: boolean; test: any }>(`/admin/tests/${testId}`, { method: 'PUT', body: JSON.stringify(data) }),
+  updateAdminQuestion: async (id: string, data: any) => request<{ success: boolean; question: any }>(`/admin/questions/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
 
   publishAdminTest: async (testId: string, isPublished: boolean) => {
     return request<{ success: boolean; test: any }>(`/admin/tests/${testId}/publish`, {

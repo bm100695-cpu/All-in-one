@@ -255,6 +255,7 @@ model QuestionReview {
 model Test {
   id               String              @id @default(cuid())
   title            String
+  description      String?             @default("")
   examId           String
   patternVersionId String
   type             String              @default("FULL_MOCK") // FULL_MOCK, PREVIOUS_YEAR_PAPER, SECTIONAL_PRACTICE, AI_DIAGNOSTIC
