@@ -147,11 +147,11 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const referralCredits = subInfo?.referralCredits ?? currentUser?.referralCredits ?? 0;
 
   return (
-    <div className="space-y-7 pb-16">
+    <div className="space-y-6 pb-16">
       {/* 1. Welcome & Summary Bar */}
-      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl border border-tn-border bg-white px-5 py-5 sm:px-6 shadow-subtle">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl border border-slate-200 bg-white px-5 py-5 sm:px-6 shadow-card">
         <div>
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-tn-blue">Candidate dashboard</p>
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-violet-600">Candidate dashboard</p>
           <h1 className="text-2xl sm:text-[28px] font-bold text-tn-navy tracking-tight">
             Welcome back, {currentUser?.name?.split(' ')[0] || 'Candidate'}
           </h1>
@@ -168,7 +168,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           {flagshipTest?.id && (
             <button
               onClick={() => onStartExam(flagshipTest.id)}
-              className="px-3.5 py-2 rounded-xl bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-xs font-semibold shadow-card transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Play className="w-3.5 h-3.5" />
               <span>Start {examInfo?.shortName || examInfo?.name || 'Exam'} Test</span>
@@ -193,24 +193,24 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       </section>
 
       {/* 2. Subscription Status & Referral Balance Banner */}
-      <section className="p-4 rounded-2xl bg-white border border-tn-border shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <section className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 border border-violet-500 shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-50 border border-blue-100 text-tn-blue flex items-center justify-center">
+          <div className="w-10 h-10 shrink-0 rounded-xl bg-white/15 border border-white/25 text-white flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-tn-navy">{planName}</span>
+              <span className="font-bold text-sm text-white">{planName}</span>
               <span
                 className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isPremium
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-blue-50 text-tn-blue border border-blue-200'
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                    : 'bg-white/15 text-white border border-white/25'
                   }`}
               >
                 {isPremium ? 'All-Access Active' : 'Active Tier'}
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-violet-100 mt-0.5">
               {subInfo?.subscription?.testsRemaining != null
                 ? `${subInfo.subscription.testsRemaining} test unlock${subInfo.subscription.testsRemaining !== 1 ? 's' : ''} remaining in pack`
                 : isPremium
@@ -224,7 +224,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           {/* Referral Button */}
           <button
             onClick={onOpenReferralModal}
-            className="px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-3 py-1.5 rounded-lg border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
           >
             <Gift className="w-3.5 h-3.5 text-amber-600" />
             <span>Refer & Earn ({referralCredits} Credit{referralCredits !== 1 ? 's' : ''})</span>
@@ -234,7 +234,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           {!isPremium && (
             <button
               onClick={() => onOpenPricingModal?.()}
-              className="px-3.5 py-1.5 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-violet-50 text-violet-700 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Upgrade Plan</span>
@@ -270,42 +270,42 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
       {/* 4. Performance Metrics Row (5 Columns) */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
-        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Completed</p><FileCheck2 className="w-4 h-4 text-tn-blue" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-violet-100 bg-violet-50 shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-violet-700">Tests Completed</p><FileCheck2 className="w-4 h-4 text-violet-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">{completedAttempts.length}</p>
-          <p className="text-[10px] text-slate-500">Official timed attempts</p>
+          <p className="text-[10px] text-violet-700/70">Official timed attempts</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score</p><Target className="w-4 h-4 text-tn-blue" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-blue-50 shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-blue-700">Average Score</p><Target className="w-4 h-4 text-blue-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {avgScore} <span className="text-xs font-normal text-slate-400">/ {maxExamScore}</span>
           </p>
-          <p className="text-[10px] text-slate-500">Across verified attempts</p>
+          <p className="text-[10px] text-blue-700/70">Across verified attempts</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
+        <div className="min-h-[132px] p-4 rounded-2xl border border-emerald-100 bg-emerald-50 shadow-subtle space-y-2">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Accuracy Rate</p><TrendingUp className="w-4 h-4 text-emerald-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {avgAccuracy}%
           </p>
-          <p className="text-[10px] text-slate-500">Correct to attempted ratio</p>
+          <p className="text-[10px] text-emerald-700/70">Correct to attempted ratio</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Time In Tests</p><Clock className="w-4 h-4 text-tn-blue" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-amber-100 bg-amber-50 shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-amber-700">Time In Tests</p><Clock className="w-4 h-4 text-amber-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {totalHours} <span className="text-xs font-normal text-slate-400">hrs</span>
           </p>
-          <p className="text-[10px] text-slate-500">Simulated test time</p>
+          <p className="text-[10px] text-amber-700/70">Simulated test time</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-xl border border-tn-border bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Free vs Premium</p><Lock className="w-4 h-4 text-amber-600" /></div>
+        <div className="min-h-[132px] p-4 rounded-2xl border border-rose-100 bg-rose-50 shadow-subtle space-y-2">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-rose-700">Free vs Premium</p><Lock className="w-4 h-4 text-rose-600" /></div>
           <p className="text-2xl font-bold text-tn-navy tabular-nums">
             {freeExamTests} <span className="text-xs font-normal text-slate-400">/ {paidExamTests}</span>
           </p>
-          <p className="text-[10px] text-emerald-700 font-medium">Free / Premium tests</p>
+          <p className="text-[10px] text-rose-700/70 font-medium">Free / Premium tests</p>
         </div>
       </div>
 
@@ -326,7 +326,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             </button>
           </div>
 
-          <div className="border border-tn-border rounded-2xl bg-white overflow-hidden shadow-subtle">
+          <div className="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-card">
             {attempts.length === 0 ? (
               <div className="p-8 sm:p-10 text-center space-y-3">
                 <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto">
@@ -419,25 +419,26 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           </h2>
 
           {/* Flagship Examination Card */}
-          <div className="p-5 sm:p-6 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-4 relative overflow-hidden">
+          <div className="p-5 sm:p-6 rounded-2xl border border-violet-100 bg-white shadow-card space-y-4 relative overflow-hidden">
+            <div className="absolute right-0 top-0 h-24 w-24 rounded-bl-[4rem] bg-violet-50" />
             <div className="flex items-center justify-between">
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-tn-blue border border-blue-100">
+              <span className="relative px-2 py-0.5 rounded-md text-[10px] font-bold bg-violet-50 text-violet-700 border border-violet-100">
                 {examInfo?.shortName || examSlug.toUpperCase()} • {flagshipTest?.accessLevel === 'FREE' ? 'Free Starter Test' : 'Mock Simulation'}
               </span>
-              <span className="text-[11px] font-mono text-slate-500">
+              <span className="relative text-[11px] font-mono text-slate-500">
                 {flagshipTest?.durationMinutes || examInfo?.patterns?.[0]?.durationMinutes || 180} Mins • {maxExamScore} Marks
               </span>
             </div>
 
-            <h3 className="text-base font-bold text-tn-navy leading-snug">
+            <h3 className="relative text-base font-bold text-tn-navy leading-snug">
               {flagshipTest?.title || `${examInfo?.name || examSlug} Flagship Examination`}
             </h3>
 
-            <p className="text-xs text-tn-muted leading-relaxed">
+            <p className="relative text-xs text-tn-muted leading-relaxed">
               {examInfo?.portalHeadline || examInfo?.description || `Practice authentic pattern-aligned CBT examinations for ${examInfo?.name || examSlug}.`}
             </p>
 
-            <div className="pt-3 flex items-center justify-between gap-3 border-t border-slate-100">
+            <div className="relative pt-3 flex items-center justify-between gap-3 border-t border-slate-100">
               <span className="text-[11px] text-emerald-700 font-medium flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Verified Pattern Scoring</span>
@@ -445,7 +446,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               {flagshipTest?.id ? (
                 <button
                   onClick={() => onStartExam(flagshipTest.id)}
-                  className="shrink-0 px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="shrink-0 px-3.5 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Play className="w-3 h-3" />
                   <span>Start Exam</span>
@@ -453,7 +454,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               ) : (
                 <button
                   onClick={() => (onOpenExamPortal ? onOpenExamPortal(examSlug) : onNavigateToMockTests())}
-                  className="shrink-0 px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="shrink-0 px-3.5 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <FileCheck2 className="w-3 h-3" />
                   <span>Open Portal</span>
@@ -464,24 +465,24 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
           {/* Exam-Wise Upgrade Banner */}
           {!isPremium && (
-            <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50/70 space-y-3 shadow-subtle">
+            <div className="p-4 rounded-2xl border border-violet-100 bg-violet-50/80 space-y-3 shadow-subtle">
               <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-600 text-white">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-violet-600 text-white">
                   {examInfo?.shortName || 'Exam'} Series Plans
                 </span>
-                <span className="text-xs font-extrabold text-amber-900">Use Coupon WELCOME20</span>
+                <span className="text-xs font-extrabold text-violet-800">Use Coupon WELCOME20</span>
               </div>
               <div>
-                <h4 className="text-xs font-bold text-amber-950">
+                <h4 className="text-xs font-bold text-violet-950">
                   Unlock Full {examInfo?.name || examSlug} Test Series
                 </h4>
-                <p className="text-[11px] text-amber-800/90 mt-0.5">
+                <p className="text-[11px] text-violet-800/90 mt-0.5">
                   Get verified solutions, deep error diagnostics, and full mock test access tailored to {examInfo?.name || examSlug}.
                 </p>
               </div>
               <button
                 onClick={() => onOpenPricingModal?.()}
-                className="w-full py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                className="w-full py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>View {examInfo?.shortName || 'Exam'} Plans</span>
@@ -490,7 +491,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           )}
 
           {/* Quick Shortcuts Card */}
-          <div className="p-4 rounded-2xl border border-tn-border bg-white shadow-subtle space-y-2.5">
+          <div className="p-4 rounded-2xl border border-slate-200 bg-white shadow-card space-y-2.5">
             <p className="text-xs font-semibold text-tn-navy uppercase tracking-wider">
               Study Workspaces
             </p>

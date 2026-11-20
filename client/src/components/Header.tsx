@@ -88,6 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   // Yeh pata lagane ke liye ki abhi admin page par hain ya nahi
   const isAdminPage = activeTab === 'admin' || activeTab === 'control-center';
+  const showStudentSidebar = currentUser?.role === 'STUDENT' && !isAdminPage;
 
   const targetExam = (
     activeExamSlug ||
@@ -144,7 +145,55 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-tn-border shadow-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {showStudentSidebar && (
+        <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:w-64 lg:flex-col bg-[#111827] px-4 py-5 text-slate-200 shadow-2xl">
+          <button
+            onClick={() => handleNavClick('dashboard')}
+            className="flex items-center gap-3 px-2 text-left cursor-pointer"
+          >
+            <img src="/logo.jpg" alt="All in One Logo" className="h-10 w-10 rounded-xl bg-white p-0.5" />
+            <div>
+              <p className="text-sm font-extrabold tracking-tight text-white">All in <span className="text-violet-300">One</span></p>
+              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">CBT Station</p>
+            </div>
+          </button>
+
+          <div className="mt-9 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Learning space</div>
+          <nav className="mt-3 space-y-1.5">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${
+                    isActive
+                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-950/30'
+                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  <Icon className={`h-4 w-4 ${(item as any).isLive && !isActive ? 'text-rose-400' : ''}`} />
+                  <span className="flex-1">{item.label.replace(`${examBadge} `, '')}</span>
+                  {(item as any).isLive && <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />}
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="mt-auto space-y-3 rounded-2xl border border-slate-700 bg-slate-800/80 p-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">Your preparation</p>
+            <button onClick={onOpenPricingModal} className="flex w-full items-center gap-2 rounded-xl bg-violet-500/15 px-2.5 py-2 text-left text-xs font-semibold text-violet-200 hover:bg-violet-500/25 cursor-pointer">
+              <Sparkles className="h-4 w-4 text-violet-300" /> Plans & access
+            </button>
+            <button onClick={onOpenReferralModal} className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left text-xs font-semibold text-slate-300 hover:bg-slate-700 cursor-pointer">
+              <Gift className="h-4 w-4 text-amber-300" /> Refer & earn
+            </button>
+          </div>
+        </aside>
+      )}
+
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${showStudentSidebar ? 'lg:ml-[272px] lg:max-w-none' : ''}`}>
         <div className="flex items-center justify-between h-[68px] gap-3">
           
           {/* Left: Brand Logo */}
@@ -170,7 +219,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Desktop Navigation Links */}
             {!isAdminPage ? (
-              <nav className="hidden md:flex min-w-0 items-center gap-1.5">
+              <nav className={`${showStudentSidebar ? 'hidden' : 'hidden md:flex'} min-w-0 items-center gap-1.5`}>
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
