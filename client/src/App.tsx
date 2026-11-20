@@ -352,7 +352,7 @@ export const App: React.FC = () => {
 
   const handleStartLiveExam = async (scheduleId: string, testId: string, isUptetOrSuperTet: boolean) => {
     try {
-      const session = await api.startLiveTestSession(scheduleId);
+      const session = await api.startLiveTestSession(scheduleId, selectedExamSlug);
       showToast(`Live examination session active: ${session.test.title}`);
       setActiveTestId(testId);
       setSubmittedAttemptId(null);
@@ -689,6 +689,7 @@ export const App: React.FC = () => {
             {activeTab === 'live-tests' && (
               <StudentLiveTests
                 currentUser={currentUser}
+                portalSlug={selectedExamSlug}
                 onOpenAuthModal={(mode) => {
                   setAuthModalMode(mode);
                   setIsAuthModalOpen(true);

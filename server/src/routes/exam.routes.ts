@@ -170,7 +170,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
       prisma.subscriptionPlan.findMany({
         where: {
           isPublished: true,
-          OR: [{ examSlug: exam.slug }, { examSlug: null }],
+          examSlug: exam.slug,
         },
         orderBy: { displayOrder: 'asc' },
       }),

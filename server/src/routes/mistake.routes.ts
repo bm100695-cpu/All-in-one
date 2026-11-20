@@ -8,7 +8,7 @@ const router = Router();
 router.get('/', authenticate, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    const { status, tag, examId } = req.query;
+    const { status, tag, examId, examSlug } = req.query;
 
     const whereClause: any = { userId };
 
@@ -18,8 +18,19 @@ router.get('/', authenticate, async (req: Request, res: Response) => {
     if (tag) {
       whereClause.mistakeTag = String(tag);
     }
-    if (examId) {
-      whereClause.question = { examId: String(examId) };
+    if (examId || examSlug) {
+      const exam = examSlug
+        ? await prisma.exam.findUnique({ where: { slug: String(examSlug).trim().toLowerCase() }, select: { id: true } })
+        : { id: String(examId) };
+      if (!exam) {
+        res.status(404).json({ error: 'Examination portal not found.' });
+        return;
+      }
+      if (examId && String(examId) !== exam.id) {
+        res.status(400).json({ error: 'examId and examSlug refer to different examination portals.' });
+        return;
+      }
+      whereClause.question = { examId: exam.id };
     }
 
     const mistakes = await prisma.mistakeJournalEntry.findMany({

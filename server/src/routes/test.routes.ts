@@ -21,6 +21,24 @@ function getRequesterRole(req: Request): string | null {
   }
 }
 
+function assertPortalAccess(req: Request, res: Response, examSlug: string): boolean {
+  const activePortal = String(req.header('x-portal-slug') || '').trim().toLowerCase();
+  if (!activePortal) {
+    res.status(400).json({ error: 'X-Portal-Slug is required for exam-scoped test access.' });
+    return false;
+  }
+  if (activePortal !== examSlug.toLowerCase()) {
+    res.status(403).json({ error: 'This test belongs to a different examination portal.' });
+    return false;
+  }
+  const targetExam = req.user?.targetExamId?.trim().toLowerCase();
+  if (req.user?.role === 'STUDENT' && targetExam && targetExam !== examSlug.toLowerCase()) {
+    res.status(403).json({ error: 'Your account is not authorized for this examination portal.' });
+    return false;
+  }
+  return true;
+}
+
 function resolveSubjectKey(sectionName?: string | null, qSubject?: string | null): string {
   const s = (qSubject || sectionName || 'General').toLowerCase();
   if (s.includes('phys')) return 'Physics';
@@ -143,6 +161,8 @@ router.get('/:testId/info', async (req: Request, res: Response) => {
       return;
     }
 
+    if (!assertPortalAccess(req, res, test.exam.slug)) return;
+
     // Strict visibility check for students
     if (!isAdmin) {
       const isLive = test.isPublished && (test.status === 'ACTIVE' || test.isActive);
@@ -253,6 +273,8 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
       res.status(404).json({ error: 'Test not found' });
       return;
     }
+
+    if (!assertPortalAccess(req, res, test.exam.slug)) return;
 
     const questionCount = test.testQuestions ? test.testQuestions.length : (test._count?.testQuestions ?? 0);
     if (questionCount === 0) {
@@ -419,6 +441,7 @@ router.post('/attempts/:attemptId/autosave', authenticate, async (req: Request, 
       include: {
         test: {
           include: {
+            exam: { select: { slug: true } },
             patternVersion: { include: { sections: true } },
             testQuestions: { include: { question: { select: { id: true, questionType: true, subject: true } } } },
           },
@@ -430,6 +453,8 @@ router.post('/attempts/:attemptId/autosave', authenticate, async (req: Request, 
       res.status(404).json({ error: 'Active test attempt not found' });
       return;
     }
+
+    if (!assertPortalAccess(req, res, attempt.test.exam.slug)) return;
 
     // Backend enforcement: check numerical limit per subject (e.g., max 5 out of 10)
     const respArr = Array.isArray(responses) ? responses : [];
@@ -507,6 +532,8 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
       res.status(404).json({ error: 'Attempt not found' });
       return;
     }
+
+    if (!assertPortalAccess(req, res, attempt.test.exam.slug)) return;
 
     if (attempt.status === 'COMPLETED') {
       res.json({ message: 'Attempt already submitted', attemptId });

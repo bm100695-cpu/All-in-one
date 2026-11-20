@@ -814,6 +814,11 @@ router.post('/tests', authenticate, requireRole(['ADMIN']), async (req: Request,
       res.status(400).json({ error: 'No ExamPatternVersion configured for this exam' });
       return;
     }
+    const exam = await prisma.exam.findUnique({ where: { id: String(examId) }, select: { id: true } });
+    if (!exam) {
+      res.status(404).json({ error: 'Examination portal not found.' });
+      return;
+    }
     const test = await prisma.test.create({
       data: {
         examId,
@@ -1022,6 +1027,14 @@ router.post('/questions', authenticate, requireRole(['ADMIN']), async (req: Requ
     if (!examId || !contentEn || !Array.isArray(options) || options.length < 4) {
       res.status(400).json({ error: 'examId, contentEn, and 4 options are required' });
       return;
+    }
+
+    if (testId) {
+      const test = await prisma.test.findFirst({ where: { id: String(testId), examId: String(examId) }, select: { id: true } });
+      if (!test) {
+        res.status(400).json({ error: 'Questions can only be attached to a test in the same examination portal.' });
+        return;
+      }
     }
 
     const q = await prisma.question.create({

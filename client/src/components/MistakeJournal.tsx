@@ -20,11 +20,12 @@ import { api } from '../api';
 
 interface MistakeJournalProps {
   language: 'en' | 'hi';
+  examId?: string;
   examSlug?: string;
   examName?: string;
 }
 
-export const MistakeJournal: React.FC<MistakeJournalProps> = ({ language, examSlug, examName }) => {
+export const MistakeJournal: React.FC<MistakeJournalProps> = ({ language, examId, examSlug, examName }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [mistakes, setMistakes] = useState<MistakeEntry[]>([]);
   const [summary, setSummary] = useState<any>(null);
@@ -43,16 +44,9 @@ export const MistakeJournal: React.FC<MistakeJournalProps> = ({ language, examSl
   const loadMistakes = async () => {
     setLoading(true);
     try {
-      const res = await api.getMistakes({ status: statusFilter, tag: tagFilter });
+      const res = await api.getMistakes({ status: statusFilter, tag: tagFilter, examId, examSlug });
       const rawMistakes = res.mistakes || [];
-      const filtered = examSlug
-        ? rawMistakes.filter((m: any) => {
-            const mExamSlug = m.question?.exam?.slug || m.examSlug;
-            if (mExamSlug) return mExamSlug === examSlug;
-            return true;
-          })
-        : rawMistakes;
-      setMistakes(filtered);
+      setMistakes(rawMistakes);
       setSummary(res.summary);
     } catch (err) {
       console.error('Error loading mistake journal:', err);

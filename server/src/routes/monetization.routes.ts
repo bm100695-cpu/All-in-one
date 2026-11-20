@@ -614,7 +614,6 @@ function formatSubscriptionPlan(p: any) {
 // Get all published subscription plans (optionally filtered and prioritized by examSlug)
 router.get('/plans', async (req: Request, res: Response) => {
   try {
-    await ensureDefaultPlansExist();
     const { examSlug, all } = req.query;
     const cleanSlug = examSlug && String(examSlug).trim() && String(examSlug) !== 'ALL'
       ? String(examSlug).trim().toLowerCase()
@@ -622,6 +621,8 @@ router.get('/plans', async (req: Request, res: Response) => {
 
     if (cleanSlug) {
       await ensureExamPlansExist(cleanSlug);
+    } else {
+      await ensureDefaultPlansExist();
     }
 
     const where: any = {};
@@ -631,27 +632,15 @@ router.get('/plans', async (req: Request, res: Response) => {
 
     let plans: any[] = [];
     if (cleanSlug) {
-      // Prioritize exam-specific plans
-      const examPlans = await prisma.subscriptionPlan.findMany({
+      // A portal never inherits plans from another portal or global fallback.
+      // Global plans can still be requested only by an unscoped platform view.
+      plans = await prisma.subscriptionPlan.findMany({
         where: {
           ...where,
           examSlug: cleanSlug,
         },
         orderBy: { displayOrder: 'asc' },
       });
-
-      if (examPlans.length > 0) {
-        plans = examPlans;
-      } else {
-        // Fallback to global plans
-        plans = await prisma.subscriptionPlan.findMany({
-          where: {
-            ...where,
-            examSlug: null,
-          },
-          orderBy: { displayOrder: 'asc' },
-        });
-      }
     } else {
       plans = await prisma.subscriptionPlan.findMany({
         where,
@@ -723,12 +712,23 @@ router.post('/validate-coupon', authenticate, async (req: Request, res: Response
     if (planId) {
       const plan = await prisma.subscriptionPlan.findUnique({ where: { id: String(planId) } });
       if (plan) {
+        if (examSlug && plan.examSlug !== String(examSlug).trim().toLowerCase()) {
+          res.status(400).json({ error: 'The selected plan belongs to a different examination portal.' });
+          return;
+        }
         originalPrice = plan.price;
         discountedPrice = Math.max(1, Math.round(plan.price * (1 - coupon.discountPct / 100)));
       }
     } else if (testId) {
-      const test = await prisma.test.findUnique({ where: { id: String(testId) } });
+      const test = await prisma.test.findUnique({
+        where: { id: String(testId) },
+        include: { exam: { select: { slug: true } } },
+      });
       if (test) {
+        if (examSlug && test.exam.slug !== String(examSlug).trim().toLowerCase()) {
+          res.status(400).json({ error: 'The selected test belongs to a different examination portal.' });
+          return;
+        }
         originalPrice = test.price;
         discountedPrice = Math.max(1, Math.round(test.price * (1 - coupon.discountPct / 100)));
       }
@@ -998,6 +998,11 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         return;
       }
 
+      if (examSlug && test.exam.slug !== String(examSlug).trim().toLowerCase()) {
+        res.status(400).json({ error: 'The selected test belongs to a different examination portal.' });
+        return;
+      }
+
       // Only the canonical access type can grant a free test entitlement.
       // A premium test with a promotional/zero display price must still pass
       // the subscription gate in the start and submit endpoints.
@@ -1219,7 +1224,11 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       return;
     }
 
-    await ensureDefaultPlansExist();
+    if (examSlug) {
+      await ensureExamPlansExist(String(examSlug).trim().toLowerCase());
+    } else {
+      await ensureDefaultPlansExist();
+    }
 
     let plan: any = null;
     const lookupKey = String(planId || planCode || '').trim();
@@ -1259,26 +1268,16 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       }
     }
 
-    // 4. Auto-generate plan if somehow still missing so user is NEVER blocked
+    // Never fabricate an unscoped plan during checkout. It would make a plan
+    // visible in the wrong portal and overwrite the administrator's catalog.
     if (!plan) {
-      const is99 = lookupKey.includes('99');
-      const is49 = lookupKey.includes('49');
-      const price = is49 ? 49 : is99 ? 99 : 49;
-      const code = is49 ? 'PLAN_BOOSTER_49' : is99 ? 'PLAN_PRO_99' : `PLAN_${lookupKey.toUpperCase().replace(/[^A-Z0-9_]/g, '_')}`;
-      const name = is49 ? '5-Test Booster Pack' : is99 ? 'Premium All-Access' : 'Standard Exam Pass';
+      res.status(404).json({ error: 'Subscription plan not found for the selected examination portal.' });
+      return;
+    }
 
-      plan = await prisma.subscriptionPlan.create({
-        data: {
-          name,
-          code,
-          description: `Access plan for ${examSlug || 'all exams'}`,
-          price,
-          currency: 'INR',
-          billingInterval: 'ONCE',
-          durationDays: 90,
-          isPublished: true,
-        },
-      });
+    if (examSlug && plan.examSlug !== String(examSlug).trim().toLowerCase()) {
+      res.status(400).json({ error: 'The selected subscription plan belongs to a different examination portal.' });
+      return;
     }
 
     if (!plan.isPublished) {

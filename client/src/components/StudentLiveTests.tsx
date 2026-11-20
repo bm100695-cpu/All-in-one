@@ -22,12 +22,14 @@ import { User } from '../types';
 
 interface StudentLiveTestsProps {
   currentUser: User | null;
+  portalSlug: string;
   onOpenAuthModal: (mode: 'login' | 'register') => void;
   onStartLiveExam: (scheduleId: string, testId: string, isUptetOrSuperTet: boolean) => void;
 }
 
 export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
   currentUser,
+  portalSlug,
   onOpenAuthModal,
   onStartLiveExam,
 }) => {
@@ -63,8 +65,14 @@ export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
 
   // Auto-refresh timer
   const refreshTimerRef = useRef<any>(null);
+  const requestVersionRef = useRef(0);
 
   useEffect(() => {
+    requestVersionRef.current += 1;
+    setSchedulesData({ liveNow: [], registrationOpen: [], myRegistered: [], upcoming: [], completed: [] });
+    setActiveSubTab('OPEN');
+    setResultsModalSchedule(null);
+    setResultsData(null);
     syncServerTime();
     loadSchedules();
 
@@ -76,7 +84,7 @@ export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
     return () => {
       if (refreshTimerRef.current) clearInterval(refreshTimerRef.current);
     };
-  }, []);
+  }, [portalSlug]);
 
   const syncServerTime = async () => {
     try {
@@ -91,9 +99,11 @@ export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
   };
 
   const loadSchedules = async (silent = false) => {
+    const requestVersion = requestVersionRef.current;
     if (!silent) setLoading(true);
     try {
-      const data = await api.getStudentLiveSchedules();
+      const data = await api.getStudentLiveSchedules(portalSlug);
+      if (requestVersion !== requestVersionRef.current) return;
       const categories = data.categories || {
         liveNow: [],
         registrationOpen: [],
@@ -110,9 +120,10 @@ export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
         }
       }
     } catch (err: any) {
+      if (requestVersion !== requestVersionRef.current) return;
       console.error('Failed to load live mock test schedules:', err);
     } finally {
-      if (!silent) setLoading(false);
+      if (!silent && requestVersion === requestVersionRef.current) setLoading(false);
     }
   };
 
@@ -129,7 +140,7 @@ export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
     setRegisterSubmitting(true);
     setFeedbackMsg(null);
     try {
-      const res = await api.registerForLiveTest(registeringSchedule.id);
+      const res = await api.registerForLiveTest(registeringSchedule.id, portalSlug);
       setFeedbackMsg({
         text: res.message || 'Registration confirmed! Seat reserved successfully.',
         type: 'success',
@@ -150,7 +161,7 @@ export const StudentLiveTests: React.FC<StudentLiveTestsProps> = ({
     setResultsModalSchedule(sched);
     setResultsLoading(true);
     try {
-      const data = await api.getLiveTestResults(sched.id);
+      const data = await api.getLiveTestResults(sched.id, portalSlug);
       setResultsData(data);
     } catch (err: any) {
       console.error('Failed to load live test results:', err);

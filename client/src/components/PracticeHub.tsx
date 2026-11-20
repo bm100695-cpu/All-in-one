@@ -62,7 +62,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({
 
       {/* 2. Active Workspace */}
       {subTab === 'mistakes' ? (
-        <MistakeJournal language={language} examSlug={examSlug} examName={examName} />
+        <MistakeJournal language={language} examId={examId} examSlug={examSlug} examName={examName} />
       ) : (
         <ExamDirectory onStartExam={onStartExam} language={language} examSlug={examSlug} />
       )}

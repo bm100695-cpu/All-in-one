@@ -70,6 +70,14 @@ async function request<T>(endpoint: string, options: RequestInit = {}, retryCoun
     headers['Authorization'] = `Bearer ${token}`;
   }
 
+  // Every authenticated content request carries the persisted active portal.
+  // The backend treats this as an assertion and validates it against both the
+  // requested record and the student's target examination.
+  const activePortal = localStorage.getItem('selected_exam_slug')?.trim().toLowerCase();
+  if (activePortal && !isAuthEndpoint) {
+    headers['X-Portal-Slug'] = activePortal;
+  }
+
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
     headers,
@@ -258,11 +266,12 @@ export const api = {
   },
 
   // Mistakes
-  getMistakes: async (params?: { status?: string; tag?: string; examId?: string }) => {
+  getMistakes: async (params?: { status?: string; tag?: string; examId?: string; examSlug?: string }) => {
     const query = new URLSearchParams();
     if (params?.status) query.append('status', params.status);
     if (params?.tag) query.append('tag', params.tag);
     if (params?.examId) query.append('examId', params.examId);
+    if (params?.examSlug) query.append('examSlug', params.examSlug);
     return request<{
       mistakes: MistakeEntry[];
       summary: {
@@ -875,8 +884,11 @@ export const api = {
     return request<{ schedules: any[]; serverTime: string; timezone: string }>(`/live-tests/admin/schedules${qs}`);
   },
 
-  getAdminLiveCalendar: async (referenceDate?: string) => {
-    const qs = referenceDate ? `?referenceDate=${encodeURIComponent(referenceDate)}` : '';
+  getAdminLiveCalendar: async (referenceDate?: string, examId?: string) => {
+    const query = new URLSearchParams();
+    if (referenceDate) query.append('referenceDate', referenceDate);
+    if (examId) query.append('examId', examId);
+    const qs = query.toString() ? `?${query.toString()}` : '';
     return request<{ weekStart: string; weekEnd: string; timezone: string; calendarDays: any[] }>(`/live-tests/admin/calendar${qs}`);
   },
 
@@ -933,7 +945,7 @@ export const api = {
   },
 
   // Student API
-  getStudentLiveSchedules: async () => {
+  getStudentLiveSchedules: async (portalSlug: string) => {
     return request<{
       serverTime: string;
       timezone: string;
@@ -945,23 +957,25 @@ export const api = {
         completed: any[];
       };
       allSchedules: any[];
-    }>('/live-tests/student/schedules');
+    }>(`/live-tests/student/schedules?portalSlug=${encodeURIComponent(portalSlug)}`);
   },
 
-  registerForLiveTest: async (id: string) => {
+  registerForLiveTest: async (id: string, portalSlug: string) => {
     return request<{ success: boolean; message: string; registration: any; startAtIST?: string }>(`/live-tests/student/schedules/${id}/register`, {
       method: 'POST',
+      body: JSON.stringify({ portalSlug }),
     });
   },
 
-  startLiveTestSession: async (id: string) => {
+  startLiveTestSession: async (id: string, portalSlug: string) => {
     return request<any>(`/live-tests/student/schedules/${id}/start`, {
       method: 'POST',
+      body: JSON.stringify({ portalSlug }),
     });
   },
 
-  getLiveTestResults: async (id: string) => {
-    return request<any>(`/live-tests/student/schedules/${id}/results`);
+  getLiveTestResults: async (id: string, portalSlug: string) => {
+    return request<any>(`/live-tests/student/schedules/${id}/results?portalSlug=${encodeURIComponent(portalSlug)}`);
   },
 
   getSystemTime: async () => {

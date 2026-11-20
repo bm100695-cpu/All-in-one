@@ -462,6 +462,7 @@ export const ExamPortalView: React.FC<ExamPortalViewProps> = ({
           onStartExam={(id) => onStartExam(id, examSlug === 'uptet' || examSlug === 'super-tet')}
           language={language}
           examId={exam.id}
+          examSlug={examSlug}
           examName={exam.shortName}
         />
       )}

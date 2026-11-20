@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma';
 import { authenticate, requireRole } from '../middleware/auth';
 
@@ -12,6 +13,49 @@ const TIMEZONE_IST = 'Asia/Kolkata';
 
 function getUserId(req: Request): string {
   return req.user?.id || (req.user as any)?.userId || '';
+}
+
+/** Resolve the stable Exam.id from the active portal slug for all student live-test operations. */
+async function resolvePortal(req: Request, res: Response) {
+  const rawSlug = req.query.portalSlug ?? req.body?.portalSlug ?? req.header('x-portal-slug');
+  const slug = typeof rawSlug === 'string' ? rawSlug.trim().toLowerCase() : '';
+  if (!slug) {
+    res.status(400).json({ error: 'portalSlug is required for portal-scoped live test access.' });
+    return null;
+  }
+  const exam = await prisma.exam.findUnique({
+    where: { slug },
+    select: { id: true, slug: true, title: true, shortName: true },
+  });
+  if (!exam) {
+    res.status(404).json({ error: 'Requested examination portal was not found.' });
+    return null;
+  }
+  const targetExamSlug = req.user?.targetExamId?.trim().toLowerCase();
+  if (req.user?.role === 'STUDENT' && targetExamSlug && targetExamSlug !== slug) {
+    res.status(403).json({ error: 'This live test belongs to a different examination portal.' });
+    return null;
+  }
+  return exam;
+}
+
+// Public browsing is allowed, but decode a valid token so registration state
+// and selected-portal authorization are evaluated consistently.
+function optionalAuthenticate(req: Request, _res: Response, next: () => void) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) return next();
+  try {
+    const decoded = jwt.verify(
+      authHeader.slice('Bearer '.length),
+      process.env.JWT_SECRET || 'examverse_super_secret_jwt_key_2025_prod_grade_xyz'
+    ) as any;
+    if (decoded?.id || decoded?.userId) {
+      req.user = { ...decoded, id: decoded.id || decoded.userId, userId: decoded.id || decoded.userId };
+    }
+  } catch {
+    // Protected operations still use authenticate; browsing remains anonymous.
+  }
+  next();
 }
 
 export function formatToIST(date: Date | string): string {
@@ -206,7 +250,7 @@ router.get('/admin/schedules', authenticate, requireRole(['ADMIN', 'CONTENT_REVI
 // 2. Get Weekly Calendar matrix (Monday through Sunday)
 router.get('/admin/calendar', authenticate, requireRole(['ADMIN', 'CONTENT_REVIEWER']), async (req: Request, res: Response) => {
   try {
-    const { referenceDate } = req.query;
+    const { referenceDate, examId } = req.query;
     const ref = referenceDate ? new Date(String(referenceDate)) : new Date();
 
     // Calculate Monday of the reference week in IST
@@ -222,6 +266,7 @@ router.get('/admin/calendar', authenticate, requireRole(['ADMIN', 'CONTENT_REVIE
 
     const schedules = await prisma.liveTestSchedule.findMany({
       where: {
+        ...(examId && examId !== 'all' ? { examId: String(examId) } : {}),
         startAt: {
           gte: monday,
           lte: sunday,
@@ -341,6 +386,11 @@ router.post('/admin/schedules', authenticate, requireRole(['ADMIN', 'CONTENT_REV
       return;
     }
 
+    if (testRecord.examId !== examId) {
+      res.status(400).json({ error: 'The selected mock test belongs to a different examination portal.' });
+      return;
+    }
+
     if (testRecord.testQuestions.length === 0) {
       res.status(400).json({ error: 'Selected mock test currently has 0 questions loaded and cannot be scheduled for live examination.' });
       return;
@@ -439,6 +489,17 @@ router.put('/admin/schedules/:id', authenticate, requireRole(['ADMIN', 'CONTENT_
     if (existing._count.attempts > 0 && req.body.testId && req.body.testId !== existing.testId) {
       res.status(400).json({ error: 'Cannot change base test while students have already attempted or are attempting this live exam.' });
       return;
+    }
+
+    if (req.body.testId && req.body.testId !== existing.testId) {
+      const replacementTest = await prisma.test.findFirst({
+        where: { id: String(req.body.testId), examId: existing.examId },
+        select: { id: true },
+      });
+      if (!replacementTest) {
+        res.status(400).json({ error: 'The replacement mock test belongs to a different examination portal.' });
+        return;
+      }
     }
 
     const {
@@ -718,6 +779,15 @@ router.post('/admin/schedules/recurring', authenticate, requireRole(['ADMIN', 'C
       return;
     }
 
+    const baseTest = await prisma.test.findFirst({
+      where: { id: String(testId), examId: String(examId) },
+      select: { id: true },
+    });
+    if (!baseTest) {
+      res.status(400).json({ error: 'The selected recurring-series test belongs to a different examination portal.' });
+      return;
+    }
+
     const baseStart = new Date(firstStartAt);
     const duration = Number(durationMinutes) || 180;
     const seriesId = `series_${Date.now()}`;
@@ -905,14 +975,18 @@ router.post('/admin/schedules/:id/publish-results', authenticate, requireRole(['
 // ============================================================================
 
 // 1. Get Live Tests list for Students (Categorized)
-router.get('/student/schedules', async (req: Request, res: Response) => {
+router.get('/student/schedules', optionalAuthenticate, async (req: Request, res: Response) => {
   try {
     const now = new Date();
     const userId = (req as any).user?.id || null;
+    const portal = await resolvePortal(req, res);
+    if (!portal) return;
 
     const schedules = await prisma.liveTestSchedule.findMany({
       where: {
+        examId: portal.id,
         visibility: { in: ['PUBLIC', 'UNLISTED'] },
+        test: { examId: portal.id },
       },
       include: {
         exam: {
@@ -1005,9 +1079,11 @@ router.post('/student/schedules/:id/register', authenticate, async (req: Request
     const { id } = req.params;
     const userId = getUserId(req);
     const now = new Date();
+    const portal = await resolvePortal(req, res);
+    if (!portal) return;
 
-    const schedule = await prisma.liveTestSchedule.findUnique({
-      where: { id },
+    const schedule = await prisma.liveTestSchedule.findFirst({
+      where: { id, examId: portal.id, test: { examId: portal.id } },
       include: {
         exam: { select: { shortName: true } },
         _count: { select: { registrations: true } },
@@ -1122,9 +1198,11 @@ router.post('/student/schedules/:id/start', authenticate, async (req: Request, r
     const userId = getUserId(req);
     const now = new Date();
     const currentTime = now.getTime();
+    const portal = await resolvePortal(req, res);
+    if (!portal) return;
 
-    const schedule = await prisma.liveTestSchedule.findUnique({
-      where: { id },
+    const schedule = await prisma.liveTestSchedule.findFirst({
+      where: { id, examId: portal.id, test: { examId: portal.id } },
       include: {
         exam: true,
         test: {
@@ -1368,13 +1446,15 @@ router.post('/student/schedules/:id/start', authenticate, async (req: Request, r
 });
 
 // 4. Student Live Test Results & Official Leaderboard
-router.get('/student/schedules/:id/results', async (req: Request, res: Response) => {
+router.get('/student/schedules/:id/results', optionalAuthenticate, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const userId = (req as any).user?.id || null;
+    const portal = await resolvePortal(req, res);
+    if (!portal) return;
 
-    const schedule = await prisma.liveTestSchedule.findUnique({
-      where: { id },
+    const schedule = await prisma.liveTestSchedule.findFirst({
+      where: { id, examId: portal.id, test: { examId: portal.id } },
       include: {
         exam: { select: { shortName: true, title: true } },
         test: { select: { totalMarks: true, totalQuestions: true } },

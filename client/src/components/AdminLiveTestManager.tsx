@@ -31,6 +31,7 @@ export const AdminLiveTestManager: React.FC = () => {
   const [calendarData, setCalendarData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [exams, setExams] = useState<any[]>([]);
+  const [selectedExamId, setSelectedExamId] = useState<string>('');
   const [availableTests, setAvailableTests] = useState<any[]>([]);
 
   // Monitoring State
@@ -89,7 +90,6 @@ export const AdminLiveTestManager: React.FC = () => {
   });
 
   useEffect(() => {
-    loadData();
     loadExamsAndTests();
   }, []);
 
@@ -98,12 +98,13 @@ export const AdminLiveTestManager: React.FC = () => {
     setTimeout(() => setNotificationMsg(null), 4000);
   };
 
-  const loadData = async () => {
+  const loadData = async (examId = selectedExamId) => {
+    if (!examId) return;
     setLoading(true);
     try {
       const [schedRes, calRes] = await Promise.all([
-        api.getAdminLiveSchedules(),
-        api.getAdminLiveCalendar(),
+        api.getAdminLiveSchedules({ examId }),
+        api.getAdminLiveCalendar(undefined, examId),
       ]);
       setSchedules(schedRes.schedules || []);
       setCalendarData(calRes);
@@ -120,9 +121,12 @@ export const AdminLiveTestManager: React.FC = () => {
       const examRes = await api.getExamDirectory();
       setExams(examRes.exams || []);
       if (examRes.exams && examRes.exams.length > 0) {
-        setFormData((prev: any) => ({ ...prev, examId: examRes.exams[0].id }));
-        setRecurringData((prev: any) => ({ ...prev, examId: examRes.exams[0].id }));
-        loadTestsForExam(examRes.exams[0].id);
+        const initialExamId = examRes.exams[0].id;
+        setSelectedExamId(initialExamId);
+        setFormData((prev: any) => ({ ...prev, examId: initialExamId }));
+        setRecurringData((prev: any) => ({ ...prev, examId: initialExamId }));
+        loadTestsForExam(initialExamId);
+        loadData(initialExamId);
       }
     } catch (e) {
       console.warn('Exams directory load error');
@@ -144,8 +148,11 @@ export const AdminLiveTestManager: React.FC = () => {
   };
 
   const handleExamChange = (newExamId: string) => {
+    setSelectedExamId(newExamId);
     setFormData((prev: any) => ({ ...prev, examId: newExamId }));
+    setRecurringData((prev: any) => ({ ...prev, examId: newExamId }));
     loadTestsForExam(newExamId);
+    loadData(newExamId);
   };
 
   const openMonitor = async (scheduleId: string) => {
@@ -815,10 +822,7 @@ export const AdminLiveTestManager: React.FC = () => {
                 <label className="block text-slate-700 font-bold mb-1">Target Examination</label>
                 <select
                   value={recurringData.examId}
-                  onChange={(e) => {
-                    setRecurringData((prev: any) => ({ ...prev, examId: e.target.value }));
-                    loadTestsForExam(e.target.value);
-                  }}
+                  onChange={(e) => handleExamChange(e.target.value)}
                   className="w-full p-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 text-xs font-medium"
                 >
                   {exams.map((ex) => (
