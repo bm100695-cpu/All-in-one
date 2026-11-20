@@ -28,6 +28,26 @@
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Student navigation is a single, full-height navy surface. Keep the
+     structural wrappers transparent so a nested section cannot paint grey. */
+  .student-sidebar-root {
+    height: 100vh;
+    min-height: 100vh;
+    background-color: #111B35;
+    color: #FFFFFF;
+  }
+
+  .student-sidebar-root > .student-sidebar-header,
+  .student-sidebar-root > .student-sidebar-navigation,
+  .student-sidebar-root > .student-sidebar-footer,
+  .student-mobile-sidebar-root {
+    background-color: transparent;
+  }
+
+  .student-mobile-sidebar-root {
+    background-color: #111B35;
+  }
 }
 
 /* Official CBT Question Palette Buttons */

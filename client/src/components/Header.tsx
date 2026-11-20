@@ -169,12 +169,11 @@ export const Header: React.FC<HeaderProps> = ({
         <aside
           id="student-sidebar"
           aria-label="Student navigation"
-          className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col bg-[#111B35] py-5 text-slate-200 shadow-xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
-          style={{ backgroundColor: '#111B35', minHeight: '100vh' }}
+          className={`student-sidebar-root hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col py-5 text-slate-200 shadow-xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
         >
           <button
             onClick={() => handleNavClick('dashboard')}
-            className={`flex items-center px-2 text-left cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'}`}
+            className={`student-sidebar-header flex items-center px-2 text-left cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'}`}
             aria-label="Open dashboard"
             title={sidebarCollapsed ? 'Dashboard' : undefined}
           >
@@ -186,7 +185,7 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <div className={`mt-9 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 ${sidebarCollapsed ? 'hidden' : ''}`}>Learning space</div>
-          <nav className="mt-3 space-y-1.5">
+          <nav className="student-sidebar-navigation mt-3 space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id || (item.id === 'dashboard' && ((isSuperTet && activeTab === 'super-tet') || (isUptet && activeTab === 'uptet')));
@@ -210,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          <div className={`mt-auto space-y-1 border-t border-slate-700 pt-4 ${sidebarCollapsed ? 'px-1' : 'px-2'}`}>
+          <div className={`student-sidebar-footer mt-auto space-y-1 border-t border-slate-700 pt-4 ${sidebarCollapsed ? 'px-1' : 'px-2'}`}>
             <p className={`text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 ${sidebarCollapsed ? 'hidden' : ''}`}>Your preparation</p>
             <button onClick={onOpenPricingModal} aria-label="Plans and access" title={sidebarCollapsed ? 'Plans & access' : undefined} className={`flex w-full items-center rounded-xl px-2.5 py-2.5 text-left text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
               <Sparkles className="h-4 w-4 text-amber-300" /> <span className={sidebarCollapsed ? 'hidden' : ''}>Plans & access</span>
@@ -481,8 +480,7 @@ export const Header: React.FC<HeaderProps> = ({
             role="dialog"
             aria-modal="true"
             aria-label="Student navigation"
-            className="relative flex h-full min-h-screen w-[min(19rem,86vw)] flex-col overflow-y-auto bg-[#111B35] px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
-            style={{ backgroundColor: '#111B35' }}
+            className="student-mobile-sidebar-root relative flex h-full min-h-screen w-[min(19rem,86vw)] flex-col overflow-y-auto px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
           >
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3">
