@@ -50,6 +50,8 @@ interface HeaderProps {
   onOpenPricingModal?: () => void;
   onOpenReferralModal?: () => void;
   onLogout?: () => void;
+  sidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -67,6 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPricingModal,
   onOpenReferralModal,
   onLogout,
+  sidebarCollapsed = false,
+  onToggleSidebar,
 }) => {
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -85,6 +89,17 @@ export const Header: React.FC<HeaderProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [roleMenuOpen]);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setRoleMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   // Yeh pata lagane ke liye ki abhi admin page par hain ya nahi
   const isAdminPage = activeTab === 'admin' || activeTab === 'control-center';
@@ -134,11 +149,16 @@ export const Header: React.FC<HeaderProps> = ({
     : [];
 
   const handleNavClick = (tab: NavTab) => {
-    setActiveTab(tab);
+    const destination = tab === 'dashboard' && isSuperTet
+      ? 'super-tet'
+      : tab === 'dashboard' && isUptet
+        ? 'uptet'
+        : tab;
+    setActiveTab(destination);
     setMobileMenuOpen(false);
-    if (tab === 'live-tests') {
+    if (destination === 'live-tests') {
       window.location.hash = '/live-tests';
-    } else if (tab === 'control-center') {
+    } else if (destination === 'control-center') {
       window.location.hash = '/control-center';
     }
   };
@@ -146,58 +166,89 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-tn-border shadow-xs">
       {showStudentSidebar && (
-        <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:w-64 lg:flex-col bg-[#0f172a] px-4 py-5 text-slate-200 shadow-2xl">
+        <aside
+          id="student-sidebar"
+          aria-label="Student navigation"
+          className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col bg-[#0f172a] py-5 text-slate-200 shadow-2xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
+        >
           <button
             onClick={() => handleNavClick('dashboard')}
-            className="flex items-center gap-3 px-2 text-left cursor-pointer"
+            className={`flex items-center px-2 text-left cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'}`}
+            aria-label="Open dashboard"
+            title={sidebarCollapsed ? 'Dashboard' : undefined}
           >
             <img src="/logo.jpg" alt="All in One Logo" className="h-10 w-10 rounded-xl bg-white p-0.5" />
-            <div>
+            <div className={sidebarCollapsed ? 'hidden' : ''}>
               <p className="text-sm font-extrabold tracking-tight text-white">All in <span className="text-blue-300">One</span></p>
               <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">CBT Station</p>
             </div>
           </button>
 
-          <div className="mt-9 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Learning space</div>
+          <div className={`mt-9 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 ${sidebarCollapsed ? 'hidden' : ''}`}>Learning space</div>
           <nav className="mt-3 space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive = activeTab === item.id || (item.id === 'dashboard' && ((isSuperTet && activeTab === 'super-tet') || (isUptet && activeTab === 'uptet')));
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`w-full flex items-center rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'} ${
                     isActive
-                      ? 'bg-[#2563eb] text-white shadow-md shadow-blue-950/20'
+                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-950/30'
                       : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                   }`}
+                  aria-label={item.label.replace(`${examBadge} `, '')}
+                  title={sidebarCollapsed ? item.label.replace(`${examBadge} `, '') : undefined}
                 >
                   <Icon className={`h-4 w-4 ${(item as any).isLive && !isActive ? 'text-rose-400' : ''}`} />
-                  <span className="flex-1">{item.label.replace(`${examBadge} `, '')}</span>
-                  {(item as any).isLive && <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />}
+                  <span className={sidebarCollapsed ? 'hidden' : 'flex-1'}>{item.label.replace(`${examBadge} `, '')}</span>
+                  {(item as any).isLive && <span className={`${sidebarCollapsed ? 'absolute ml-5 -mt-4' : ''} h-1.5 w-1.5 rounded-full bg-rose-400`} />}
                 </button>
               );
             })}
           </nav>
 
-          <div className="mt-auto space-y-3 rounded-2xl border border-slate-700 bg-slate-800/80 p-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">Your preparation</p>
-            <button onClick={onOpenPricingModal} className="flex w-full items-center gap-2 rounded-xl bg-blue-500/15 px-2.5 py-2 text-left text-xs font-semibold text-blue-100 hover:bg-blue-500/25 cursor-pointer">
-              <Sparkles className="h-4 w-4 text-blue-200" /> Plans & access
+          <div className={`mt-auto space-y-3 rounded-2xl border border-slate-700 bg-slate-800/80 ${sidebarCollapsed ? 'p-2' : 'p-3'}`}>
+            <p className={`text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 ${sidebarCollapsed ? 'hidden' : ''}`}>Your preparation</p>
+            <button onClick={onOpenPricingModal} aria-label="Plans and access" title={sidebarCollapsed ? 'Plans & access' : undefined} className={`flex w-full items-center rounded-xl bg-blue-500/15 px-2.5 py-2 text-left text-xs font-semibold text-blue-100 hover:bg-blue-500/25 cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
+              <Sparkles className="h-4 w-4 text-blue-200" /> <span className={sidebarCollapsed ? 'hidden' : ''}>Plans & access</span>
             </button>
-            <button onClick={onOpenReferralModal} className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left text-xs font-semibold text-slate-300 hover:bg-slate-700 cursor-pointer">
-              <Gift className="h-4 w-4 text-amber-300" /> Refer & earn
+            <button onClick={onOpenReferralModal} aria-label="Refer and earn" title={sidebarCollapsed ? 'Refer & earn' : undefined} className={`flex w-full items-center rounded-xl px-2.5 py-2 text-left text-xs font-semibold text-slate-300 hover:bg-slate-700 cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
+              <Gift className="h-4 w-4 text-amber-300" /> <span className={sidebarCollapsed ? 'hidden' : ''}>Refer & earn</span>
             </button>
           </div>
         </aside>
       )}
 
-      <div className={showStudentSidebar ? 'w-full px-4 sm:px-6 lg:pl-[288px] lg:pr-8' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
+      <div className={showStudentSidebar ? `w-full px-4 sm:px-6 lg:pr-8 transition-[padding] duration-200 ${sidebarCollapsed ? 'lg:pl-[112px]' : 'lg:pl-[288px]'}` : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
         <div className="flex items-center justify-between h-[68px] gap-3">
           
           {/* Left: Brand Logo */}
           <div className="flex min-w-0 items-center gap-4 lg:gap-7">
+            {showStudentSidebar && (
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="inline-flex lg:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
+                aria-label="Open navigation menu"
+                aria-expanded={mobileMenuOpen}
+                aria-controls="student-mobile-sidebar"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            )}
+            {showStudentSidebar && (
+              <button
+                onClick={onToggleSidebar}
+                className="hidden lg:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
+                aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                aria-expanded={!sidebarCollapsed}
+                aria-controls="student-sidebar"
+                title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            )}
             <button
               onClick={() => handleNavClick(currentUser ? 'dashboard' : 'landing')}
               className="flex shrink-0 items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
@@ -222,7 +273,7 @@ export const Header: React.FC<HeaderProps> = ({
               <nav className={`${showStudentSidebar ? 'hidden' : 'hidden md:flex'} min-w-0 items-center gap-1.5`}>
                 {navItems.map((item) => {
                   const Icon = item.icon;
-                  const isActive = activeTab === item.id;
+                  const isActive = activeTab === item.id || (item.id === 'dashboard' && ((isSuperTet && activeTab === 'super-tet') || (isUptet && activeTab === 'uptet')));
                   return (
                     <button
                       key={item.id}
@@ -402,10 +453,10 @@ export const Header: React.FC<HeaderProps> = ({
             )}
 
             {/* Mobile Hamburger Menu Button */}
-            {!isAdminPage && (
+            {!isAdminPage && !showStudentSidebar && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+                className="lg:hidden p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -417,22 +468,49 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && !isAdminPage && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-4 space-y-1">
+        <div className="fixed inset-0 z-[60] lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-950/45 transition-opacity duration-200"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close navigation menu"
+          />
+          <aside
+            id="student-mobile-sidebar"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Student navigation"
+            className="relative flex h-full w-[min(19rem,86vw)] flex-col overflow-y-auto bg-[#0f172a] px-4 pb-6 pt-5 text-slate-200 shadow-2xl animate-in slide-in-from-left duration-200"
+          >
+            <div className="mb-7 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img src="/logo.jpg" alt="All in One Logo" className="h-10 w-10 rounded-xl bg-white p-0.5" />
+                <div>
+                  <p className="text-sm font-extrabold tracking-tight text-white">All in <span className="text-blue-300">One</span></p>
+                  <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">CBT Station</p>
+                </div>
+              </div>
+              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors" aria-label="Close navigation menu">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Learning space</p>
+            <div className="space-y-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = activeTab === item.id || (item.id === 'dashboard' && ((isSuperTet && activeTab === 'super-tet') || (isUptet && activeTab === 'uptet')));
             return (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
                   isActive
-                    ? 'text-blue-600 bg-blue-50 font-semibold'
-                    : 'text-slate-600 hover:bg-slate-50'
+                    ? 'text-white bg-gradient-to-r from-violet-600 to-indigo-600 shadow-lg shadow-violet-950/30'
+                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Icon className={`w-4 h-4 ${(item as any).isLive ? 'text-red-600' : ''}`} />
+                  <Icon className={`w-4 h-4 ${(item as any).isLive ? 'text-rose-400' : ''}`} />
                   <span>{item.label}</span>
                 </div>
                 {(item as any).isLive && (
@@ -445,15 +523,16 @@ export const Header: React.FC<HeaderProps> = ({
             );
           })}
 
-          <div className="pt-2 border-t border-slate-200 mt-2 space-y-1">
+            </div>
+          <div className="mt-auto pt-5 border-t border-slate-700 space-y-2">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenPricingModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-amber-800 bg-amber-50 rounded-lg border border-amber-200 cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-blue-100 bg-blue-500/15 hover:bg-blue-500/25 rounded-xl transition-colors cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-amber-600" />
+              <Sparkles className="w-4 h-4 text-blue-200" />
               <span>Plans & Pricing</span>
             </button>
             <button
@@ -461,9 +540,9 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenReferralModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-emerald-800 bg-emerald-50 rounded-lg border border-emerald-200 cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
             >
-              <Gift className="w-4 h-4 text-emerald-600" />
+              <Gift className="w-4 h-4 text-amber-300" />
               <span>Refer Friends & Earn Free Tests</span>
             </button>
 
@@ -474,9 +553,9 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('profile');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-zinc-800 hover:bg-zinc-100/80 rounded-lg transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
                 >
-                  <UserIcon className="w-4 h-4 text-zinc-600 shrink-0" />
+                  <UserIcon className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>Candidate Profile</span>
                 </button>
 
@@ -485,13 +564,13 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('settings');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-zinc-800 hover:bg-zinc-100/80 rounded-lg transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
                 >
-                  <Settings className="w-4 h-4 text-zinc-600 shrink-0" />
+                  <Settings className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>CBT Simulator Settings</span>
                 </button>
 
-                <div className="my-1 border-t border-zinc-100" />
+                <div className="my-1 border-t border-slate-700" />
 
                 <button
                   onClick={() => {
@@ -529,6 +608,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
           </div>
+          </aside>
         </div>
       )}
     </header>
