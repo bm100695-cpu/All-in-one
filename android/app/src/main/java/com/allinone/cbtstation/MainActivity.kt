@@ -17,6 +17,7 @@ import com.cashfree.pg.core.api.utils.CFErrorResponse
 import com.cashfree.pg.ui.api.upi.intent.CFIntentTheme
 import com.cashfree.pg.ui.api.upi.intent.CFUPIIntentCheckout
 import com.cashfree.pg.ui.api.upi.intent.CFUPIIntentCheckoutPayment
+import org.json.JSONArray
 
 /**
  * Native shell for the existing LMS. Authentication, plans, order creation,
@@ -93,7 +94,18 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
         fun isAvailable(): Boolean = true
 
         @JavascriptInterface
-        fun startUpiIntentCheckout(paymentSessionId: String, orderId: String, mode: String) {
+        fun getAvailableUpiApps(): String {
+            val availableApps = listOf(
+                "GOOGLE_PAY" to "com.google.android.apps.nbu.paisa.user",
+                "PHONEPE" to "com.phonepe.app",
+                "PAYTM" to "net.one97.paytm",
+            ).filter { (_, packageName) -> isInstalled(packageName) }
+                .map { (name, _) -> name }
+            return JSONArray(availableApps).toString()
+        }
+
+        @JavascriptInterface
+        fun startUpiIntentCheckout(paymentSessionId: String, orderId: String, mode: String, preferredApp: String) {
             runOnUiThread {
                 try {
                     val session = CFSession.CFSessionBuilder()
@@ -102,10 +114,25 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
                         .setOrderId(orderId)
                         .build()
 
-                    // Do not manufacture app links or hard-code package names.
-                    // Cashfree reads the device's installed UPI apps and presents
-                    // only those it can launch for this order.
-                    val intentConfig = CFUPIIntentCheckout.CFUPIIntentBuilder().build()
+                    val selectedApp = when (preferredApp) {
+                        "GOOGLE_PAY" -> CFUPIIntentCheckout.CFUPIApps.GOOGLE_PAY
+                        "PHONEPE" -> CFUPIIntentCheckout.CFUPIApps.PHONEPE
+                        "PAYTM" -> CFUPIIntentCheckout.CFUPIApps.PAYTM
+                        else -> null
+                    }
+                    if (selectedApp != null && !isInstalled(packageNameFor(selectedApp))) {
+                        Toast.makeText(this@MainActivity, "Selected UPI app is not installed. Choose another method.", Toast.LENGTH_LONG).show()
+                        return@runOnUiThread
+                    }
+
+                    // Cashfree owns the intent payload and app handoff. Supplying
+                    // one official SDK enum prioritises that selected app without
+                    // creating a raw UPI URI that Android could route to Samsung Pay.
+                    val checkoutBuilder = CFUPIIntentCheckout.CFUPIIntentBuilder()
+                    if (selectedApp != null) {
+                        checkoutBuilder.setOrder(listOf(selectedApp))
+                    }
+                    val intentConfig = checkoutBuilder.build()
                     val theme = CFIntentTheme.CFIntentThemeBuilder()
                         .setBackgroundColor("#FFFFFF")
                         .setPrimaryTextColor("#0F172A")
@@ -127,6 +154,20 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
                     ).show()
                 }
             }
+        }
+
+        private fun isInstalled(packageName: String): Boolean = try {
+            packageManager.getApplicationInfo(packageName, 0)
+            true
+        } catch (_: Exception) {
+            false
+        }
+
+        private fun packageNameFor(app: CFUPIIntentCheckout.CFUPIApps): String = when (app) {
+            CFUPIIntentCheckout.CFUPIApps.GOOGLE_PAY -> "com.google.android.apps.nbu.paisa.user"
+            CFUPIIntentCheckout.CFUPIApps.PHONEPE -> "com.phonepe.app"
+            CFUPIIntentCheckout.CFUPIApps.PAYTM -> "net.one97.paytm"
+            else -> ""
         }
     }
 }

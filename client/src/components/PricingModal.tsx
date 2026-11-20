@@ -26,7 +26,13 @@ type CashfreeEnvironment = 'sandbox' | 'production';
 
 interface NativeCashfreeBridge {
   isAvailable?: () => boolean;
-  startUpiIntentCheckout: (paymentSessionId: string, orderId: string, environment: CashfreeEnvironment) => void;
+  getAvailableUpiApps?: () => string;
+  startUpiIntentCheckout: (
+    paymentSessionId: string,
+    orderId: string,
+    environment: CashfreeEnvironment,
+    preferredApp?: 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER',
+  ) => void;
 }
 
 declare global {
@@ -85,6 +91,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     orderId: string;
     environment: CashfreeEnvironment;
   } | null>(null);
+  const [nativeUpiApps, setNativeUpiApps] = useState<string[]>([]);
 
   // User ke active exam slug ya target exam ko dynamically detect karna
   const activeExamSlug = examSlug || currentUser?.targetExamId || 'jee-main';
@@ -130,6 +137,20 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     window.addEventListener('cashfree-native-result', onNativeCashfreeResult);
     return () => window.removeEventListener('cashfree-native-result', onNativeCashfreeResult);
   }, [activePlanCode, activePlanName]);
+
+  useEffect(() => {
+    if (!isOpen || !window.AndroidCashfree?.isAvailable?.()) {
+      setNativeUpiApps([]);
+      return;
+    }
+    try {
+      const available = JSON.parse(window.AndroidCashfree.getAvailableUpiApps?.() || '[]');
+      setNativeUpiApps(Array.isArray(available) ? available : []);
+    } catch {
+      // The Cashfree native selector remains available as a safe fallback.
+      setNativeUpiApps([]);
+    }
+  }, [isOpen]);
 
   // Exam names mapping for clean display
   const examLabels: Record<string, string> = {
@@ -402,6 +423,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   };
 
   const currencySymbol = '₹';
+  const launchNativeUpi = (preferredApp: 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER') => {
+    if (!nativeCheckout) return;
+    window.AndroidCashfree?.startUpiIntentCheckout(
+      nativeCheckout.paymentSessionId,
+      nativeCheckout.orderId,
+      nativeCheckout.environment,
+      preferredApp,
+    );
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
@@ -468,7 +498,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               <div>
                 <p className="text-sm font-bold text-slate-900">Choose payment method</p>
                 <p className="mt-1 text-xs leading-relaxed text-slate-600">
-                  UPI apps are shown only when installed on this Android device. Cashfree securely opens the app you choose.
+                  Only apps installed on this Android device are shown. Cashfree prioritises your selection and handles the secure UPI handoff.
                 </p>
               </div>
               <button
@@ -481,22 +511,46 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             </div>
 
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {nativeUpiApps.includes('GOOGLE_PAY') && (
+                <button
+                  type="button"
+                  onClick={() => launchNativeUpi('GOOGLE_PAY')}
+                  className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-left transition-colors hover:border-blue-400 hover:bg-blue-100"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white"><Smartphone className="h-4 w-4" /></span>
+                  <span><span className="block text-xs font-bold text-slate-900">Google Pay</span><span className="block text-[11px] text-slate-600">Continue with Google Pay</span></span>
+                </button>
+              )}
+
+              {nativeUpiApps.includes('PHONEPE') && (
+                <button
+                  type="button"
+                  onClick={() => launchNativeUpi('PHONEPE')}
+                  className="flex items-center gap-3 rounded-lg border border-purple-200 bg-purple-50 p-3 text-left transition-colors hover:border-purple-400 hover:bg-purple-100"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-700 text-white"><Smartphone className="h-4 w-4" /></span>
+                  <span><span className="block text-xs font-bold text-slate-900">PhonePe</span><span className="block text-[11px] text-slate-600">Continue with PhonePe</span></span>
+                </button>
+              )}
+
+              {nativeUpiApps.includes('PAYTM') && (
+                <button
+                  type="button"
+                  onClick={() => launchNativeUpi('PAYTM')}
+                  className="flex items-center gap-3 rounded-lg border border-cyan-200 bg-cyan-50 p-3 text-left transition-colors hover:border-cyan-400 hover:bg-cyan-100"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-700 text-white"><Smartphone className="h-4 w-4" /></span>
+                  <span><span className="block text-xs font-bold text-slate-900">Paytm</span><span className="block text-[11px] text-slate-600">Continue with Paytm</span></span>
+                </button>
+              )}
+
               <button
                 type="button"
-                onClick={() => window.AndroidCashfree?.startUpiIntentCheckout(
-                  nativeCheckout.paymentSessionId,
-                  nativeCheckout.orderId,
-                  nativeCheckout.environment,
-                )}
-                className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-left transition-colors hover:border-blue-400 hover:bg-blue-100"
+                onClick={() => launchNativeUpi('OTHER')}
+                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left transition-colors hover:border-slate-400 hover:bg-slate-50"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <Smartphone className="h-4 w-4" />
-                </span>
-                <span>
-                  <span className="block text-xs font-bold text-slate-900">UPI apps</span>
-                  <span className="block text-[11px] text-slate-600">Google Pay, PhonePe, Paytm & other installed apps</span>
-                </span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-700 text-white"><Smartphone className="h-4 w-4" /></span>
+                <span><span className="block text-xs font-bold text-slate-900">Other UPI apps</span><span className="block text-[11px] text-slate-600">Show Cashfree-supported installed apps</span></span>
               </button>
 
               <button
