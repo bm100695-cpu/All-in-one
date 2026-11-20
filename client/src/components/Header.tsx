@@ -169,7 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
         <aside
           id="student-sidebar"
           aria-label="Student navigation"
-          className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col bg-[#0f172a] py-5 text-slate-200 shadow-2xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
+          className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col bg-[#111B35] py-5 text-slate-200 shadow-xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
         >
           <button
             onClick={() => handleNavClick('dashboard')}
@@ -184,7 +184,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </button>
 
-          <div className={`mt-9 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 ${sidebarCollapsed ? 'hidden' : ''}`}>Learning space</div>
+          <div className={`mt-9 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 ${sidebarCollapsed ? 'hidden' : ''}`}>Learning space</div>
           <nav className="mt-3 space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -195,8 +195,8 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => handleNavClick(item.id)}
                   className={`w-full flex items-center rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'} ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#172554] to-[#2563eb] text-white shadow-lg shadow-blue-950/30'
-                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                      ? 'bg-[#2563EB] text-white shadow-sm shadow-blue-950/30'
+                      : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
                   }`}
                   aria-label={item.label.replace(`${examBadge} `, '')}
                   title={sidebarCollapsed ? item.label.replace(`${examBadge} `, '') : undefined}
@@ -209,12 +209,12 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          <div className={`mt-auto space-y-3 rounded-2xl border border-slate-700 bg-slate-800/80 ${sidebarCollapsed ? 'p-2' : 'p-3'}`}>
+          <div className={`mt-auto space-y-1 border-t border-slate-700 pt-4 ${sidebarCollapsed ? 'px-1' : 'px-2'}`}>
             <p className={`text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 ${sidebarCollapsed ? 'hidden' : ''}`}>Your preparation</p>
-            <button onClick={onOpenPricingModal} aria-label="Plans and access" title={sidebarCollapsed ? 'Plans & access' : undefined} className={`flex w-full items-center rounded-xl bg-blue-500/15 px-2.5 py-2 text-left text-xs font-semibold text-blue-100 hover:bg-blue-500/25 cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
-              <Sparkles className="h-4 w-4 text-blue-200" /> <span className={sidebarCollapsed ? 'hidden' : ''}>Plans & access</span>
+            <button onClick={onOpenPricingModal} aria-label="Plans and access" title={sidebarCollapsed ? 'Plans & access' : undefined} className={`flex w-full items-center rounded-xl px-2.5 py-2.5 text-left text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
+              <Sparkles className="h-4 w-4 text-amber-300" /> <span className={sidebarCollapsed ? 'hidden' : ''}>Plans & access</span>
             </button>
-            <button onClick={onOpenReferralModal} aria-label="Refer and earn" title={sidebarCollapsed ? 'Refer & earn' : undefined} className={`flex w-full items-center rounded-xl px-2.5 py-2 text-left text-xs font-semibold text-slate-300 hover:bg-slate-700 cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
+            <button onClick={onOpenReferralModal} aria-label="Refer and earn" title={sidebarCollapsed ? 'Refer & earn' : undefined} className={`flex w-full items-center rounded-xl px-2.5 py-2.5 text-left text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-2'}`}>
               <Gift className="h-4 w-4 text-amber-300" /> <span className={sidebarCollapsed ? 'hidden' : ''}>Refer & earn</span>
             </button>
           </div>
@@ -251,7 +251,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
             <button
               onClick={() => handleNavClick(currentUser ? 'dashboard' : 'landing')}
-              className="flex shrink-0 items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
+              className={`flex shrink-0 items-center gap-2.5 text-left group cursor-pointer focus:outline-none ${showStudentSidebar ? 'lg:hidden' : ''}`}
             >
               <img
                 src="/logo.jpg"
@@ -480,7 +480,7 @@ export const Header: React.FC<HeaderProps> = ({
             role="dialog"
             aria-modal="true"
             aria-label="Student navigation"
-            className="relative flex h-full w-[min(19rem,86vw)] flex-col overflow-y-auto bg-[#0f172a] px-4 pb-6 pt-5 text-slate-200 shadow-2xl animate-in slide-in-from-left duration-200"
+            className="relative flex h-full w-[min(19rem,86vw)] flex-col overflow-y-auto bg-[#111B35] px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
           >
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -494,7 +494,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Learning space</p>
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Learning space</p>
             <div className="space-y-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -505,8 +505,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => handleNavClick(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
                   isActive
-                    ? 'text-white bg-gradient-to-r from-[#172554] to-[#2563eb] shadow-lg shadow-blue-950/30'
-                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                    ? 'text-white bg-[#2563EB] shadow-sm shadow-blue-950/30'
+                    : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
@@ -530,7 +530,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenPricingModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-blue-100 bg-blue-500/15 hover:bg-blue-500/25 rounded-xl transition-colors cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-blue-200" />
               <span>Plans & Pricing</span>
@@ -540,7 +540,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenReferralModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
             >
               <Gift className="w-4 h-4 text-amber-300" />
               <span>Refer Friends & Earn Free Tests</span>
@@ -553,7 +553,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('profile');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
                 >
                   <UserIcon className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>Candidate Profile</span>
@@ -564,7 +564,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('settings');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
                 >
                   <Settings className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>CBT Simulator Settings</span>
@@ -577,7 +577,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onLogout?.();
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-semibold text-rose-300 hover:bg-rose-500/15 rounded-xl transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
                   <span>Sign Out</span>

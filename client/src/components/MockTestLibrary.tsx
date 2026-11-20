@@ -136,33 +136,33 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   return (
     <div className="space-y-6 pb-16">
       {/* 1. Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-tn-border pb-5">
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-semibold border border-emerald-200 mb-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
             <span>Official Syllabus & Pattern Aligned CBT Station</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-tn-navy tracking-tight">
             Mock Tests & Practice Library
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-tn-muted mt-0.5">
             Attempt official-pattern mock tests with strict exam timers, palette controls, and instant evaluations.
           </p>
         </div>
 
         {/* Metric Badges */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs text-slate-700 font-medium">
-            <strong className="text-slate-900 font-bold">{tests.length}</strong> Total Mock Tests
+          <div className="px-3 py-1.5 rounded-lg bg-white border border-tn-border text-xs text-slate-700 font-medium shadow-xs">
+            <strong className="text-tn-navy font-bold">{tests.length}</strong> Total Mock Tests
           </div>
           <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium">
-            <strong className="text-emerald-900 font-bold">5 Free</strong> Tests Available
+            <strong className="text-emerald-900 font-bold">{freeCount} Free</strong> Tests Available
           </div>
         </div>
       </div>
 
       {/* 2. Filter Bar */}
-      <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs space-y-3">
+      <div className="p-4 sm:p-5 rounded-xl bg-white border border-tn-border shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           
           {/* Access Filter Pills */}
@@ -175,7 +175,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                 onClick={() => setAccessFilter('ALL')}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   accessFilter === 'ALL'
-                    ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                    ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -185,8 +185,8 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                 onClick={() => setAccessFilter('FREE')}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1 ${
                   accessFilter === 'FREE'
-                    ? 'bg-emerald-600 text-white font-semibold shadow-xs'
-                    : 'text-emerald-700 hover:text-emerald-900'
+                    ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
+                    : 'text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800'
                 }`}
               >
                 <span>Free ({freeCount})</span>
@@ -195,7 +195,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                 onClick={() => setAccessFilter('PREMIUM')}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1 ${
                   accessFilter === 'PREMIUM'
-                    ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                    ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
                     : 'text-blue-700 hover:text-blue-900'
                 }`}
               >
@@ -210,7 +210,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
             <button
               onClick={() => setViewMode('rows')}
               className={`p-1.5 rounded-md cursor-pointer ${
-                viewMode === 'rows' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-400 hover:text-slate-700'
+                viewMode === 'rows' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-400 hover:text-slate-700'
               }`}
               title="Compact rows view"
             >
@@ -219,7 +219,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
             <button
               onClick={() => setViewMode('grid')}
               className={`p-1.5 rounded-md cursor-pointer ${
-                viewMode === 'grid' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-400 hover:text-slate-700'
+                viewMode === 'grid' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-400 hover:text-slate-700'
               }`}
               title="Card grid view"
             >
@@ -301,7 +301,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
           </button>
         </div>
       ) : viewMode === 'rows' ? (
-        <div className="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-xs divide-y divide-slate-100">
+        <div className="border border-tn-border rounded-xl bg-white overflow-hidden shadow-xs divide-y divide-slate-100">
           {displayedTests.map((test, index) => {
             const isFree = getAccessType(test) === 'free';
             const isComingSoon = test.accessMode === 'COMING_SOON';
@@ -311,7 +311,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
             return (
               <div
                 key={test.id}
-                className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
+                className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
               >
                 <div className="space-y-1 min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -328,7 +328,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                         COMING SOON
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
                         <Lock className="w-2.5 h-2.5" />
                         PREMIUM
                       </span>
@@ -354,10 +354,10 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     onClick={() => handleTestClick(test)}
                     className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                       isFree
-                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                        ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
                         : isComingSoon
                         ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
-                        : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                        : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
                     }`}
                   >
                     {isChecking ? (
@@ -396,7 +396,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
             return (
               <div
                 key={test.id}
-                className="p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors flex flex-col justify-between space-y-3"
+                className="p-5 rounded-xl border border-tn-border bg-white shadow-xs hover:border-blue-200 transition-colors flex flex-col justify-between space-y-3"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-2">
@@ -413,7 +413,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                           COMING SOON
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
                           <Lock className="w-2.5 h-2.5" />
                           PREMIUM
                         </span>
@@ -443,10 +443,10 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     onClick={() => handleTestClick(test)}
                     className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                       isFree
-                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                        ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
                         : isComingSoon
                         ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
-                        : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                        : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
                     }`}
                   >
                     {isChecking ? (
