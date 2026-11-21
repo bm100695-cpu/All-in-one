@@ -440,7 +440,6 @@ export const api = {
       paymentSessionId?: string;
       payment_session_id?: string;
       cashfreeMode?: 'sandbox' | 'production';
-      checkoutUrl?: string;
       gateway?: string;
       amount?: number;
       originalPrice?: number;

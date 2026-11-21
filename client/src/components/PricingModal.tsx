@@ -13,14 +13,13 @@ import {
   Clock,
   CheckCircle2,
   Loader2,
-  ExternalLink,
   CreditCard,
   Landmark,
   Smartphone,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SubscriptionPlan, User } from '../types';
-import { api, API_BASE, getStoredToken } from '../api';
+import { api, getStoredToken } from '../api';
 
 type CashfreeEnvironment = 'sandbox' | 'production';
 type CheckoutMethod = 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER_UPI' | 'UPI_QR' | 'CARD' | 'NETBANKING';
@@ -83,7 +82,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   const [applyingCoupon, setApplyingCoupon] = useState<boolean>(false);
 
   const [verifyingPayment, setVerifyingPayment] = useState<boolean>(false);
-  const [activeCheckoutUrl, setActiveCheckoutUrl] = useState<string | null>(null);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [activePlanCode, setActivePlanCode] = useState<string | null>(null);
   const [activePlanName, setActivePlanName] = useState<string | null>(null);
@@ -102,7 +100,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   // Real-time polling for the official Cashfree checkout session.
   useEffect(() => {
     let interval: any = null;
-    if (activeOrderId && activeCheckoutUrl) {
+    if (activeOrderId) {
       interval = setInterval(async () => {
         try {
           const verify = await api.verifyCashfreePayment(activeOrderId);
@@ -126,7 +124,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [activeOrderId, activeCheckoutUrl, activePlanCode, activePlanName]);
+  }, [activeOrderId, activePlanCode, activePlanName, onClose, onPaymentSuccess]);
 
   // The native Android wrapper dispatches this only after Cashfree's Android
   // SDK returns. The server remains the sole authority for activation.
@@ -233,7 +231,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         resolve(true);
         return;
       }
-      const existing = document.querySelector('script[src*="cashfree"]');
+      const existing = document.querySelector('script[data-cashfree-sdk="v3"]');
       if (existing) {
         if ((window as any).Cashfree) {
           resolve(true);
@@ -243,19 +241,14 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         existing.addEventListener('error', () => resolve(false));
         return;
       }
-      // Load through backend proxy first to avoid network firewall/ERR_CERT_AUTHORITY_INVALID
+      // Cashfree's hosted SDK is the only supported way to hand a session to
+      // checkout. Do not proxy it and do not build a checkout URL ourselves.
       const script = document.createElement('script');
-      script.src = `${API_BASE}/monetization/cashfree-sdk.js`;
+      script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+      script.dataset.cashfreeSdk = 'v3';
       script.async = true;
       script.onload = () => resolve(Boolean((window as any).Cashfree));
-      script.onerror = () => {
-        const fallback = document.createElement('script');
-        fallback.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-        fallback.async = true;
-        fallback.onload = () => resolve(Boolean((window as any).Cashfree));
-        fallback.onerror = () => resolve(false);
-        document.body.appendChild(fallback);
-      };
+      script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
   };
@@ -356,18 +349,14 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         throw new Error(order.message || 'Payment session could not be established. Please retry.');
       }
 
-      // Automatically match mode with environment (sandbox if test key, production if live key)
+      // The backend chooses the same explicitly configured Cashfree environment
+      // that it used to create the session.
       const targetMode = order.cashfreeMode === 'sandbox' ? 'sandbox' : 'production';
-      const checkoutDirectUrl = order.checkoutUrl || (targetMode === 'sandbox'
-        ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${activeSession}`
-        : `https://payments.cashfree.com/forms/${activeSession}`);
-
-      setActiveCheckoutUrl(checkoutDirectUrl);
       setActiveOrderId(order.orderId!);
       setActivePlanCode(plan.code);
       setActivePlanName(plan.name);
       const nativeBridge = window.AndroidCashfree;
-      const nativePreferredApp = paymentMethod === 'OTHER_UPI' || paymentMethod === 'UPI_QR'
+      const nativePreferredApp = paymentMethod === 'OTHER_UPI'
         ? 'OTHER'
         : paymentMethod;
       if (
@@ -393,7 +382,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       }
       setStatusMessage({
         type: 'info',
-        text: `Opening Cashfree secure checkout for ${paymentMethod.replace('_', ' ').toLowerCase()}. Available options are controlled by this merchant account.`,
+        text: 'Opening Cashfree secure checkout. Available payment methods are provided by this merchant account.',
       });
 
       let cashfree: any = null;
@@ -406,20 +395,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         console.warn('Cashfree SDK initialization notice:', sdkErr);
       }
 
-      if (cashfree) {
-        try {
-          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-          await cashfree.checkout({
-            paymentSessionId: activeSession,
-            redirectTarget: isMobile ? '_self' : '_modal',
-          });
-        } catch (checkoutErr: any) {
-          console.warn('Cashfree checkout modal notice:', checkoutErr);
-          window.location.href = checkoutDirectUrl;
-        }
-      } else {
-        window.location.href = checkoutDirectUrl;
+      if (!cashfree) {
+        throw new Error('The secure Cashfree checkout could not be loaded. Check your connection and retry; no payment was started.');
       }
+      // Redirect checkout is reliable across desktop, Android browsers and
+      // Safari/iOS. Cashfree renders only methods enabled for this merchant,
+      // including its desktop QR where eligible.
+      await cashfree.checkout({ paymentSessionId: activeSession, redirectTarget: '_self' });
     } catch (err: any) {
       console.error('Subscription error:', err);
       setStatusMessage({ type: 'error', text: err.message || 'Failed to process payment. Please try again.' });
@@ -505,7 +487,25 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             ) : (
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             )}
-            <span>{statusMessage.text}</span>
+            <span className="flex-1">{statusMessage.text}</span>
+            {statusMessage.type === 'error' && checkoutPlan && (
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={() => startSelectedMethod(selectedCheckoutMethod || 'OTHER_UPI')}
+                  className="rounded-md bg-rose-700 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-800"
+                >
+                  Retry payment
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setCheckoutPlan(null); setSelectedCheckoutMethod(null); setActiveOrderId(null); }}
+                  className="rounded-md border border-rose-300 bg-white px-2.5 py-1 text-[11px] font-bold text-rose-800 hover:bg-rose-100"
+                >
+                  Back to plans
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -576,40 +576,6 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           );
         })()}
 
-        {/* Direct Checkout Fallback (Bypasses iframe modal issues / temporarily down errors) */}
-        {activeCheckoutUrl && !nativeCheckout && (
-          <div className="mx-6 my-3 p-3.5 bg-amber-50 border border-amber-300 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-950 shadow-sm animate-fade-in">
-            <div className="flex items-center gap-2.5 text-xs font-medium">
-              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
-              <span>
-                If popup shows "temporarily down" or is blocked by network:
-              </span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <a
-                href={activeCheckoutUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow transition-colors"
-              >
-                <span>Open Direct Checkout</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-              <button
-                type="button"
-                onClick={() => {
-                  if (activeOrderId && activePlanCode && activePlanName) {
-                    handleVerifyCashfreeOrder(activeOrderId, activePlanCode, activePlanName);
-                  }
-                }}
-                disabled={verifyingPayment}
-                className="px-3 py-1.5 bg-white hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-lg text-xs font-medium transition-colors"
-              >
-                {verifyingPayment ? 'Verifying...' : 'Verify Status'}
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Coupon Code Bar */}
         <div className="px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">

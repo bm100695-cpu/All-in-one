@@ -25,6 +25,25 @@ function getTrustedCheckoutOrigin(): string {
   return 'https://all-in-one-git-main-brijesh17.vercel.app';
 }
 
+// Cashfree calls this endpoint asynchronously.  Keep it deployment-configured:
+// a stale hard-coded Render URL silently drops live payment confirmations.
+function getCashfreeWebhookUrl(): string | undefined {
+  const configured = process.env.CASHFREE_WEBHOOK_URL || process.env.PUBLIC_API_URL;
+  if (!configured) return undefined;
+  try {
+    const url = new URL(configured);
+    const basePath = url.pathname.replace(/\/$/, '');
+    if (basePath.endsWith('/webhook/cashfree')) {
+      return `${url.origin}${basePath}`;
+    }
+    const apiPath = basePath.endsWith('/api') ? basePath : `${basePath}/api`;
+    return `${url.origin}${apiPath}/monetization/webhook/cashfree`;
+  } catch {
+    console.warn('[Cashfree] Ignoring invalid CASHFREE_WEBHOOK_URL / PUBLIC_API_URL value.');
+    return undefined;
+  }
+}
+
 // In-memory dynamic overrides (allows instant activation of production keys from database or admin API)
 let dynamicOverrideAppId: string | null = null;
 let dynamicOverrideSecretKey: string | null = null;
@@ -78,13 +97,14 @@ export function getCashfreeConfig() {
     .toUpperCase();
   const apiVersion = String(process.env.CASHFREE_API_VERSION || '2022-09-01').trim();
 
-  // Smart Environment Routing:
-  // If appId starts with 'TEST' or env is explicitly TEST/SANDBOX -> routes to sandbox.cashfree.com
-  // If appId is a live production key (e.g. 15315740...) -> routes to api.cashfree.com
-  const isTestKey = appId.startsWith('TEST') || appId.startsWith('test') || rawEnv === 'TEST' || rawEnv === 'SANDBOX';
-  const isProduction = !isTestKey;
+  // The selected environment is the single source of truth.  Never infer it
+  // from a credential prefix: doing so can pair a production SDK with sandbox
+  // API credentials (one common cause of an empty checkout).
+  const isSandbox = rawEnv === 'TEST' || rawEnv === 'SANDBOX';
+  const isProduction = !isSandbox;
   const baseUrl = isProduction ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
-  const isMasked = secretKey.includes('xxxxxxxx');
+  const isMasked = /x{4,}/i.test(secretKey);
+  const isEnvironmentMismatch = isProduction && /^test/i.test(appId);
   const isLive = Boolean(
     appId &&
     secretKey &&
@@ -104,6 +124,7 @@ export function getCashfreeConfig() {
     isProduction,
     isLive,
     isMasked,
+    isEnvironmentMismatch,
   };
 }
 
@@ -133,6 +154,9 @@ async function createCashfreeOrder(params: {
       );
     }
     throw new Error('Cashfree credentials (CASHFREE_APP_ID or CASHFREE_SECRET_KEY) are missing in environment variables.');
+  }
+  if (config.isEnvironmentMismatch) {
+    throw new Error('Cashfree environment is PRODUCTION but the configured App ID looks like a sandbox key. Set both credentials and CASHFREE_ENVIRONMENT to the same environment.');
   }
 
   const url = `${config.baseUrl}/orders`;
@@ -280,10 +304,9 @@ router.get('/config', (_req: Request, res: Response) => {
   const config = getCashfreeConfig();
   res.json({
     currency: DEFAULT_CURRENCY,
-    isGatewayConfigured: config.isLive,
+    isGatewayConfigured: config.isLive && !config.isEnvironmentMismatch,
     supportedCurrencies: [DEFAULT_CURRENCY],
     activeGateway: 'Cashfree',
-    cashfreeAppId: config.appId,
     cashfreeMode: config.mode,
     isMasked: config.isMasked,
   });
@@ -1041,9 +1064,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
               payment_session_id: existingOrder.payment_session_id,
               paymentSessionId: existingOrder.payment_session_id,
               cashfreeMode: cfConfig.mode,
-              checkoutUrl: cfConfig.mode === 'sandbox'
-                ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
-                : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
               gateway: gatewayUsed,
               amount: finalAmount,
               originalPrice,
@@ -1081,7 +1101,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             orderNote: `Mock Test: ${test.title}`,
             orderMeta: {
               returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
-              notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
+              notifyUrl: getCashfreeWebhookUrl(),
             },
           });
           paymentSessionId = cfRes.paymentSessionId;
@@ -1138,9 +1158,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         payment_session_id: paymentSessionId,
         paymentSessionId,
         cashfreeMode: cfConfig.mode,
-        checkoutUrl: cfConfig.mode === 'sandbox'
-          ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
-          : `https://payments.cashfree.com/forms/${paymentSessionId}`,
         gateway: gatewayUsed,
         amount: finalAmount,
         originalPrice,
@@ -1305,9 +1322,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             payment_session_id: existingOrder.payment_session_id,
             paymentSessionId: existingOrder.payment_session_id,
             cashfreeMode: cfConfig.mode,
-            checkoutUrl: cfConfig.mode === 'sandbox'
-              ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${existingOrder.payment_session_id}`
-              : `https://payments.cashfree.com/forms/${existingOrder.payment_session_id}`,
             gateway: gatewayUsed,
             amount: finalAmount,
             originalPrice,
@@ -1346,7 +1360,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           orderNote: `Plan: ${plan.name} (${plan.code})`,
           orderMeta: {
             returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
-            notifyUrl: 'https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree',
+            notifyUrl: getCashfreeWebhookUrl(),
           },
         });
         paymentSessionId = cfRes.paymentSessionId;
@@ -1403,9 +1417,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       payment_session_id: paymentSessionId,
       paymentSessionId,
       cashfreeMode: cfConfig.mode,
-      checkoutUrl: cfConfig.mode === 'sandbox'
-        ? `https://sandbox.cashfree.com/pg/view/sessions/checkout?payment_session_id=${paymentSessionId}`
-        : `https://payments.cashfree.com/forms/${paymentSessionId}`,
       gateway: gatewayUsed,
       amount: finalAmount,
       originalPrice,
