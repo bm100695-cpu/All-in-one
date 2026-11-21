@@ -33,6 +33,7 @@ import {
   Settings,
   LayoutDashboard,
   CalendarDays,
+  ClipboardCheck,
   FileText,
   SlidersHorizontal,
 } from 'lucide-react';

@@ -31,13 +31,14 @@ interface DashboardData {
   students: number;
   attempts: number;
   subscriptions: number;
+  transactions: number;
   reviewCount: number;
   activities: Array<{ id: string; title: string; detail: string; createdAt?: string }>;
 }
 
 const initialData: DashboardData = {
   portals: 0, tests: 0, published: 0, drafts: 0, liveSchedules: 0,
-  students: 0, attempts: 0, subscriptions: 0, reviewCount: 0, activities: [],
+  students: 0, attempts: 0, subscriptions: 0, transactions: 0, reviewCount: 0, activities: [],
 };
 
 export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({ currentUser, onNavigate }) => {
@@ -90,6 +91,7 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({ 
             students: studentResult?.summary?.totalStudents || 0,
             attempts: studentResult?.summary?.completedAttempts || 0,
             subscriptions: pricingResult?.stats?.totalSubscribers || pricingResult?.activePaidSubscriptionsCount || 0,
+            transactions: pricingResult?.stats?.successfulTransactions || 0,
             reviewCount: queueResult.questions?.length || auditResult?.metrics?.pendingQuestions || 0,
             activities,
           });
@@ -112,6 +114,7 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({ 
         ['Registered students', data.students, Users, 'text-sky-700 bg-sky-50'],
         ['Completed attempts', data.attempts, Activity, 'text-indigo-700 bg-indigo-50'],
         ['Active subscriptions', data.subscriptions, CreditCard, 'text-emerald-700 bg-emerald-50'],
+        ['Payment transactions', data.transactions, CreditCard, 'text-blue-700 bg-blue-50'],
       ]
     : [
         ['Questions awaiting review', data.reviewCount, ClipboardCheck, 'text-amber-700 bg-amber-50'],
