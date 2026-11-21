@@ -28,16 +28,28 @@ import {
   TrendingUp,
   Receipt,
   Zap,
+  Menu,
+  X as CloseIcon,
+  Settings,
+  LayoutDashboard,
+  CalendarDays,
+  FileText,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { api } from '../api';
+import { User } from '../types';
 import { AdminSuperTetManager } from './AdminSuperTetManager';
 import { AdminExamsManager } from './AdminExamsManager';
 import { AdminStudentActivity } from './AdminStudentActivity';
 import { AdminLiveTestManager } from './AdminLiveTestManager';
 import { AdminPricingManager } from './AdminPricingManager';
+import { AdminDashboardOverview, AdminSection } from './AdminDashboardOverview';
 
-export const AdminPortal: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'LIVE_TESTS' | 'EXAMS_MANAGER' | 'STUDENTS_ACTIVITY' | 'JEE_PYQ' | 'SUPER_TET_PYQ' | 'QUEUE' | 'AI_GENERATOR' | 'AUDIT' | 'MONETIZATION'>('LIVE_TESTS');
+export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUser }) => {
+  const isReviewerOnly = currentUser?.role === 'CONTENT_REVIEWER';
+  const [activeTab, setActiveTab] = useState<AdminSection>(() => isReviewerOnly ? 'QUEUE' : 'OVERVIEW');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [queue, setQueue] = useState<any[]>([]);
   const [auditMetrics, setAuditMetrics] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,6 +61,7 @@ export const AdminPortal: React.FC = () => {
   const [selectedExam, setSelectedExam] = useState<any | null>(null);
 
   useEffect(() => {
+    if (isReviewerOnly) return;
     const fetchAdminExams = async () => {
       try {
         const res = await api.getAdminExams();
@@ -64,7 +77,7 @@ export const AdminPortal: React.FC = () => {
       }
     };
     fetchAdminExams();
-  }, []);
+  }, [isReviewerOnly]);
 
   const handleSelectExam = (exam: any) => {
     setSelectedExam(exam);
@@ -231,191 +244,60 @@ export const AdminPortal: React.FC = () => {
     }
   };
 
+  const navigation = [
+    { id: 'OVERVIEW' as const, label: 'Dashboard overview', icon: LayoutDashboard },
+    { id: 'EXAM_PORTALS' as const, label: 'Exam portals', icon: Layers, admin: true },
+    { id: 'MOCK_TESTS' as const, label: 'Mock test management', icon: FileText, admin: true },
+    { id: 'LIVE_TESTS' as const, label: 'Weekly live exams', icon: CalendarDays, admin: true },
+    { id: 'STUDENTS_ACTIVITY' as const, label: 'Students & results', icon: Users },
+    { id: 'MONETIZATION' as const, label: 'Pricing & plans', icon: IndianRupee, admin: true },
+    { id: 'TRANSACTIONS' as const, label: 'Payment transactions', icon: Receipt, admin: true },
+    { id: 'QUEUE' as const, label: 'Review queue', icon: FileCheck },
+    { id: 'AI_GENERATOR' as const, label: 'AI synthesizer', icon: Sparkles },
+    { id: 'AUDIT' as const, label: 'Coverage audit', icon: ClipboardCheck },
+    { id: 'SETTINGS' as const, label: 'Settings', icon: Settings, admin: true },
+  ].filter((item) => !item.admin || !isReviewerOnly);
+  const titles: Record<AdminSection, string> = {
+    OVERVIEW: 'Dashboard overview', EXAM_PORTALS: 'Exam portals', MOCK_TESTS: 'Mock test management', LIVE_TESTS: 'Weekly live exams',
+    STUDENTS_ACTIVITY: 'Students & results', MONETIZATION: 'Pricing & plans', TRANSACTIONS: 'Payment transactions', QUEUE: 'Review queue', AI_GENERATOR: 'AI synthesizer',
+    AUDIT: 'Coverage audit', JEE_PYQ: 'Question bank', SUPER_TET_PYQ: 'SUPER TET archive', SETTINGS: 'Settings',
+  };
+  const navigate = (section: AdminSection) => { setActiveTab(section); setSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+
   return (
-    <div className="space-y-6 pb-16">
-      {/* 1. Bespoke Architectural Header Surface (Clean Light SaaS Canvas) */}
-      <div className="rounded-2xl bg-white border border-zinc-200/80 p-6 sm:p-8 shadow-xs">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-700 text-xs font-semibold border border-zinc-200/80">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-              <span className="text-[11px] font-medium tracking-tight">Academic Integrity • Content Governance Portal</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-950 tracking-[-0.02em]">
-              Reviewer & Admin Control Center
-            </h1>
-            <p className="text-zinc-600 text-xs sm:text-sm leading-relaxed max-w-2xl">
-              Maintain transparent exam provenance, verify questions, audit official syllabus coverage, and inspect schema-validated AI practice variants before publishing.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="px-3 py-1.5 rounded-lg bg-zinc-50 border border-zinc-200/80 text-zinc-600 text-xs font-mono tabular-nums flex items-center gap-2 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="font-medium text-zinc-700">Governance Engine Active</span>
-            </div>
-          </div>
+    <div className="min-h-[calc(100vh-5rem)] bg-[#F7F9FC] lg:flex">
+      {sidebarOpen && <button aria-label="Close navigation" onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-40 bg-slate-950/45 lg:hidden" />}
+      <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-[#111B35] text-slate-200 transition-transform lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-72'}`}>
+        <div className="flex h-16 items-center border-b border-white/10 px-4">
+          <div className={`flex min-w-0 items-center gap-3 ${sidebarCollapsed ? 'lg:justify-center' : ''}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-sm font-bold text-white">A1</span>{!sidebarCollapsed && <div className="min-w-0"><p className="truncate text-sm font-bold text-white">All in One CBT</p><p className="text-xs text-slate-400">Admin control center</p></div>}</div>
+          <button onClick={() => setSidebarOpen(false)} className="ml-auto rounded p-1 text-slate-300 lg:hidden"><CloseIcon className="h-5 w-5" /></button>
         </div>
-      </div>
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Admin navigation">
+          {navigation.map((item) => { const Icon = item.icon; const active = activeTab === item.id; return <button key={item.id} onClick={() => navigate(item.id)} title={sidebarCollapsed ? item.label : undefined} className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium ${active ? 'bg-white/12 text-white' : 'text-slate-300 hover:bg-white/8 hover:text-white'} ${sidebarCollapsed ? 'lg:justify-center lg:px-2' : ''}`}><Icon className="h-4 w-4 shrink-0" />{!sidebarCollapsed && <span className="truncate">{item.label}</span>}{item.id === 'QUEUE' && !sidebarCollapsed && queue.length > 0 && <span className="ml-auto rounded bg-amber-400/15 px-1.5 py-0.5 text-xs text-amber-200">{queue.length}</span>}</button>; })}
+        </nav>
+        <div className="border-t border-white/10 p-3"><button onClick={() => setSidebarCollapsed((value) => !value)} className="hidden w-full rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/8 lg:block">{sidebarCollapsed ? 'Expand' : 'Collapse sidebar'}</button><p className={`mt-2 text-xs text-slate-500 ${sidebarCollapsed ? 'hidden' : ''}`}>{isReviewerOnly ? 'Reviewer access' : 'Administrator access'}</p></div>
+      </aside>
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#E2E8F0] bg-white px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3"><button onClick={() => setSidebarOpen(true)} className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"><Menu className="h-5 w-5" /></button><div className="min-w-0"><p className="truncate text-sm font-semibold text-[#0F172A]">{titles[activeTab]}</p><p className="hidden text-xs text-[#64748B] sm:block">All in One CBT Station</p></div></div>
+          {adminExams.length > 0 && !isReviewerOnly && <label className="flex items-center gap-2 text-sm text-[#64748B]"><span className="hidden sm:inline">Active portal</span><select value={selectedExam?.id || ''} onChange={(e) => { const target = adminExams.find((exam) => exam.id === e.target.value); if (target) handleSelectExam(target); }} className="max-w-36 rounded-lg border border-[#E2E8F0] bg-white px-2 py-1.5 text-sm font-medium text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-blue-200">{adminExams.map((exam) => <option key={exam.id} value={exam.id}>{exam.shortName}</option>)}</select></label>}
+        </header>
+        <main className="mx-auto w-full max-w-[1600px] p-4 sm:p-6 lg:p-8">
 
-      {/* 2. Refined Segmented Sub-Navigation Track */}
-      <div className="bg-zinc-100/90 p-1.5 rounded-xl border border-zinc-200/80 shadow-2xs overflow-hidden">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5">
-          <button
-            onClick={() => setActiveTab('LIVE_TESTS')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'LIVE_TESTS'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <Zap className={`w-3.5 h-3.5 ${activeTab === 'LIVE_TESTS' ? 'text-amber-600' : 'text-zinc-400'}`} />
-            <span>Weekly Live Tests</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block" />
-          </button>
+      {activeTab === 'OVERVIEW' && <AdminDashboardOverview currentUser={currentUser} onNavigate={navigate} />}
 
-          <button
-            onClick={() => setActiveTab('EXAMS_MANAGER')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'EXAMS_MANAGER'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <Layers className={`w-3.5 h-3.5 ${activeTab === 'EXAMS_MANAGER' ? 'text-emerald-700' : 'text-zinc-400'}`} />
-            <span>All Exams & Tests Manager</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('STUDENTS_ACTIVITY')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'STUDENTS_ACTIVITY'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <Users className={`w-3.5 h-3.5 ${activeTab === 'STUDENTS_ACTIVITY' ? 'text-emerald-700' : 'text-zinc-400'}`} />
-            <span>Live Students & Exam History</span>
-          </button>
-
-          <button
-            onClick={() => {
-              if (selectedExam?.slug === 'super-tet') {
-                setActiveTab('SUPER_TET_PYQ');
-              } else {
-                setActiveTab('JEE_PYQ');
-              }
-            }}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'JEE_PYQ' || (activeTab === 'SUPER_TET_PYQ' && selectedExam?.slug === 'super-tet')
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <FileCheck className={`w-3.5 h-3.5 ${activeTab === 'JEE_PYQ' || (activeTab === 'SUPER_TET_PYQ' && selectedExam?.slug === 'super-tet') ? 'text-emerald-700' : 'text-zinc-400'}`} />
-            <span>
-              {selectedExam ? selectedExam.shortName : 'JEE Main'} PYQ (
-              {selectedExam?.slug === 'jee-main'
-                ? pyqQuestions.length
-                : selectedExam?.slug === 'super-tet'
-                ? '2012–25'
-                : selectedExam?._count?.questions || selectedExam?._count?.tests || 0}
-              )
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('QUEUE')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === 'QUEUE'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            Review Queue ({queue.length})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('AI_GENERATOR')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'AI_GENERATOR'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <Sparkles className={`w-3.5 h-3.5 ${activeTab === 'AI_GENERATOR' ? 'text-amber-600' : 'text-zinc-400'}`} />
-            <span>AI Synthesizer</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('AUDIT')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === 'AUDIT'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            Coverage Audit
-          </button>
-
-          <button
-            onClick={() => setActiveTab('MONETIZATION')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'MONETIZATION'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <IndianRupee className={`w-3.5 h-3.5 ${activeTab === 'MONETIZATION' ? 'text-emerald-700' : 'text-zinc-400'}`} />
-            <span>Monetization & Pricing</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('SUPER_TET_PYQ')}
-            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-              activeTab === 'SUPER_TET_PYQ'
-                ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/80 font-bold'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
-            }`}
-          >
-            <ShieldCheck className={`w-3.5 h-3.5 ${activeTab === 'SUPER_TET_PYQ' ? 'text-emerald-700' : 'text-zinc-400'}`} />
-            <span>SUPER TET (2012–25)</span>
-          </button>
-
-          {/* Active Exam Quick Switcher Dropdown in Sub-Navbar */}
-          {adminExams.length > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-zinc-200/90 shadow-2xs text-xs ml-auto shrink-0">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider whitespace-nowrap">
-                Active Exam:
-              </span>
-              <select
-                value={selectedExam?.id || ''}
-                onChange={(e) => {
-                  const target = adminExams.find((x) => x.id === e.target.value);
-                  if (target) handleSelectExam(target);
-                }}
-                className="font-bold text-emerald-800 bg-transparent focus:outline-none cursor-pointer text-xs"
-              >
-                {adminExams.map((ex) => (
-                  <option key={ex.id} value={ex.id}>
-                    {ex.shortName}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Tab: Weekly Live Mock Tests Scheduler & Telemetry */}
+      {/* Dedicated live-exam workspace; scheduling behavior stays in its existing component. */}
       {activeTab === 'LIVE_TESTS' && <AdminLiveTestManager />}
 
-      {/* Tab: Multi-Exam Manager */}
-      {activeTab === 'EXAMS_MANAGER' && (
-        <AdminExamsManager
-          selectedExamId={selectedExam?.id}
-          onExamSelected={handleSelectExam}
-        />
+      {/* Exam portals and mock-test workflows retain their existing CRUD component. */}
+      {(activeTab === 'EXAM_PORTALS' || activeTab === 'MOCK_TESTS') && (
+        <div className="space-y-5">
+          <div className="rounded-xl border border-[#E2E8F0] bg-white px-5 py-4">
+            <h1 className="text-lg font-semibold text-[#0F172A]">{activeTab === 'MOCK_TESTS' ? 'Mock test management' : 'Exam portal management'}</h1>
+            <p className="mt-1 text-sm text-[#64748B]">{activeTab === 'MOCK_TESTS' ? 'Search, edit, publish, schedule, archive, and manage questions without altering records until you save.' : 'Configure each exam portal, its visibility, notices, test catalog, and portal-specific plans.'}</p>
+          </div>
+          <AdminExamsManager selectedExamId={selectedExam?.id} onExamSelected={handleSelectExam} />
+        </div>
       )}
 
       {/* Tab: Live Students & Exam History */}
@@ -447,7 +329,7 @@ export const AdminPortal: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => setActiveTab('EXAMS_MANAGER')}
+                onClick={() => setActiveTab('EXAM_PORTALS')}
                 className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
               >
                 <Layers className="w-3.5 h-3.5" />
@@ -1144,8 +1026,12 @@ export const AdminPortal: React.FC = () => {
 
       {/* Tab 4: Dynamic Monetization & Pricing Control Center */}
       {activeTab === 'MONETIZATION' && (
-        <AdminPricingManager />
+        <AdminPricingManager initialTab="PLANS" />
       )}
+      {activeTab === 'TRANSACTIONS' && <AdminPricingManager initialTab="TRANSACTIONS" />}
+      {activeTab === 'SETTINGS' && <AdminPricingManager initialTab="GATEWAY_CONFIG" />}
+        </main>
+      </div>
     </div>
   );
 };

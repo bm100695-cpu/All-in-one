@@ -16,7 +16,8 @@ interface AdminRouteProps {
 
 /**
  * Protected Admin Route Wrapper (RBAC)
- * Strictly verifies ADMIN role.
+ * Verifies the two roles that are authorised by the corresponding backend
+ * routes. Reviewer-only users still see only reviewer-safe navigation.
  * - If not authenticated: Renders AdminLogin portal
  * - If logged in as STUDENT: Displays clear Access Gate with option to switch to Admin account
  * - If ADMIN: Renders protected children
@@ -64,8 +65,10 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
     );
   }
 
-  // 2. Authenticated as STUDENT -> Show clear Access Gate with 1-click Switch
-  if (currentUser.role !== 'ADMIN') {
+  // 2. A student (or another unprivileged role) gets an explicit access gate.
+  // Never turn this into a client-side role bypass: API authorization remains
+  // enforced by requireRole on every protected route.
+  if (currentUser.role !== 'ADMIN' && currentUser.role !== 'CONTENT_REVIEWER') {
     return (
       <div className="min-h-[80vh] flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm text-center space-y-5">
@@ -80,9 +83,7 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
             <p className="text-xs text-slate-600 leading-relaxed">
               You are currently authenticated as{' '}
               <span className="font-semibold text-slate-800">{currentUser.email}</span> with role{' '}
-              <span className="inline-block px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-bold text-[10px]">
-                STUDENT
-              </span>
+              <span className="inline-block px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-bold text-[10px]">{currentUser.role}</span>
               .
             </p>
             <p className="text-[11px] text-slate-500">
@@ -119,7 +120,7 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
     );
   }
 
-  // 3. Authenticated as ADMIN -> Access Granted
+  // 3. Authenticated as ADMIN or CONTENT_REVIEWER -> Access Granted.
   return <>{children}</>;
 };
 

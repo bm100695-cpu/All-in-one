@@ -444,6 +444,7 @@ export const App: React.FC = () => {
   };
 
   const isExamRunning = activeTab === 'test' && activeTestId;
+  const isAdminCenter = activeTab === 'admin' || activeTab === 'control-center';
   const useStudentSidebar = Boolean(currentUser && currentUser.role === 'STUDENT' && !isExamRunning && activeTab !== 'admin' && activeTab !== 'control-center');
 
   return (
@@ -550,7 +551,7 @@ export const App: React.FC = () => {
         onClose={() => setLegalModalType(null)}
       />
 
-      <main className={`flex-1 min-w-0 transition-[padding] duration-200 ${isExamRunning ? 'w-full p-0 max-w-full' : useStudentSidebar ? `w-full px-4 py-6 sm:px-6 sm:py-8 lg:pr-8 ${studentSidebarCollapsed ? 'lg:pl-[112px]' : 'lg:pl-[288px]'}` : 'w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8'}`}>
+      <main className={`flex-1 min-w-0 transition-[padding] duration-200 ${isExamRunning || isAdminCenter ? 'w-full p-0 max-w-full' : useStudentSidebar ? `w-full px-4 py-6 sm:px-6 sm:py-8 lg:pr-8 ${studentSidebarCollapsed ? 'lg:pl-[112px]' : 'lg:pl-[288px]'}` : 'w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8'}`}>
         {initializing ? (
           <div className="h-[60vh] flex flex-col items-center justify-center space-y-3">
             <div className="w-10 h-10 rounded-full border-3 border-tn-border border-t-tn-blue animate-spin" />
@@ -732,7 +733,7 @@ export const App: React.FC = () => {
                   window.location.hash = '/dashboard';
                 }}
               >
-                <AdminPortal />
+                <AdminPortal currentUser={currentUser} />
               </AdminRoute>
             )}
 

@@ -4,19 +4,6 @@ import { prisma } from '../prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'examverse_super_secret_jwt_key_2025_prod_grade_xyz';
 
-const DEFAULT_ADMIN_EMAILS = ['bm100695@gmail.com', 'admin@examverse.ai'];
-
-export function isAdminEmail(email?: string | null): boolean {
-  if (!email) return false;
-  const clean = email.toLowerCase().trim();
-  const envAdmins = (process.env.ADMIN_EMAILS || '')
-    .split(',')
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  const allAdmins = [...DEFAULT_ADMIN_EMAILS, ...envAdmins];
-  return allAdmins.includes(clean);
-}
-
 export interface AuthUser {
   userId?: string;
   id: string;
@@ -94,16 +81,9 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
         return;
       }
 
-      let effectiveRole = dbUser.role as AuthUser['role'];
-
-      // Auto-sync authorized admin email if role was previously set as STUDENT
-      if (isAdminEmail(dbUser.email) && effectiveRole !== 'ADMIN') {
-        await prisma.user.update({
-          where: { id: dbUser.id },
-          data: { role: 'ADMIN' },
-        });
-        effectiveRole = 'ADMIN';
-      }
+      // The database is the sole authority for roles. A matching email address
+      // or stale JWT must never promote a student into an administrator.
+      const effectiveRole = dbUser.role as AuthUser['role'];
 
       req.user = {
         userId: dbUser.id,
@@ -121,14 +101,10 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
       next();
       return;
     } catch (dbErr: any) {
-      // If DB is unreachable (e.g. offline testing), fallback to verified JWT payload
-      console.warn('[Auth Middleware] DB lookup notice, falling back to verified JWT payload:', dbErr.message);
-      req.user = {
-        ...decoded,
-        id: userId,
-        userId,
-      };
-      next();
+      // Fail closed. Falling back to an old JWT would preserve a role after it
+      // has been revoked in the database, which is unsafe for admin routes.
+      console.error('[Auth Middleware] Database role validation failed:', dbErr.message);
+      res.status(503).json({ error: 'Authorization service is temporarily unavailable. Please try again.' });
       return;
     }
   } catch (err) {

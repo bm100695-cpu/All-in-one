@@ -30,6 +30,8 @@ import {
 } from 'lucide-react';
 import { api } from '../api';
 
+type PricingTab = 'OVERVIEW' | 'CONTENT_PRICING' | 'PLANS' | 'AUDIT_LOGS' | 'TRANSACTIONS' | 'GATEWAY_CONFIG';
+
 interface ContentItem {
   id: string;
   type: 'EXAM' | 'TEST';
@@ -47,8 +49,8 @@ interface ContentItem {
   offerEndAt?: string;
 }
 
-export const AdminPricingManager: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'CONTENT_PRICING' | 'PLANS' | 'AUDIT_LOGS' | 'TRANSACTIONS' | 'GATEWAY_CONFIG'>('CONTENT_PRICING');
+export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ initialTab = 'CONTENT_PRICING' }) => {
+  const [activeTab, setActiveTab] = useState<PricingTab>(initialTab);
   const [loading, setLoading] = useState<boolean>(true);
   const [overview, setOverview] = useState<any>(null);
   const [contentList, setContentList] = useState<ContentItem[]>([]);
@@ -79,6 +81,10 @@ export const AdminPricingManager: React.FC = () => {
   const [editIsPublished, setEditIsPublished] = useState<boolean>(true);
   const [editNotes, setEditNotes] = useState<string>('');
   const [savingEdit, setSavingEdit] = useState<boolean>(false);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   // Plan Modal State
   const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
