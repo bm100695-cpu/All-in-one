@@ -54,6 +54,8 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const [activeAttempt, setActiveAttempt] = useState<any>(null);
   const [subInfo, setSubInfo] = useState<any>(null);
   const [examInfo, setExamInfo] = useState<any>(null);
+  const [availableTests, setAvailableTests] = useState<any[]>([]);
+  const [checkingDashboardTestId, setCheckingDashboardTestId] = useState<string | null>(null);
 
   const examSlug = (currentUser?.targetExamId || 'jee-main').toLowerCase();
   const isSuperTet = examSlug === 'super-tet';
@@ -65,6 +67,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
   const loadDashboardData = async () => {
     setLoading(true);
+    setAvailableTests([]);
     try {
       const [attemptsRes, profileRes, subRes] = await Promise.all([
         api.getMyAttempts().catch(() => ({ attempts: [] })),
@@ -72,8 +75,17 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
         api.getMySubscription().catch(() => null),
       ]);
 
+      let visiblePortalTests: any[] = profileRes?.exam?.tests || [];
       if (profileRes?.exam) {
         setExamInfo(profileRes.exam);
+        try {
+          const visibleTests = await api.getExamTests(profileRes.exam.id);
+          visiblePortalTests = visibleTests?.tests || [];
+          setAvailableTests(visiblePortalTests);
+        } catch {
+          // The profile endpoint remains a safe display-only fallback.
+          setAvailableTests(visiblePortalTests);
+        }
       }
 
       const myAttempts = attemptsRes?.attempts || [];
@@ -104,11 +116,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           const uptetRes = await api.getUptetTests();
           const flag = uptetRes.tests.find((t: any) => t.title?.includes('2025 Benchmark')) || uptetRes.tests[0];
           setFlagshipTest(flag);
+          setAvailableTests(uptetRes.tests || []);
         } catch {
           // ignore
         }
-      } else if (profileRes?.exam?.tests?.length) {
-        const flag = profileRes.exam.tests.find((t: any) => t.accessLevel === 'FREE') || profileRes.exam.tests[0];
+      } else if (visiblePortalTests.length) {
+        const flag = visiblePortalTests.find((t: any) => t.accessLevel === 'FREE') || visiblePortalTests[0];
         setFlagshipTest(flag);
       } else {
         setFlagshipTest(null);
@@ -139,8 +152,10 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
     'jee-main': 300,
   };
   const maxExamScore = examInfo?.patterns?.[0]?.totalMarks || defaultMaxMap[examSlug] || 100;
-  const totalExamTests = examInfo?.tests?.length || 0;
-  const freeExamTests = examInfo?.tests?.filter((t: any) => t.accessLevel === 'FREE').length || 0;
+  const isFreeTest = (test: any) => test.accessType !== 'premium' && test.accessLevel !== 'PREMIUM' && test.accessMode !== 'PREMIUM' && test.accessMode !== 'PAID';
+  const displayTests = availableTests.filter((test) => test.accessMode !== 'DISABLED');
+  const totalExamTests = displayTests.length;
+  const freeExamTests = displayTests.filter(isFreeTest).length;
   const paidExamTests = Math.max(0, totalExamTests - freeExamTests);
   const isPremium = subInfo?.isPremium || false;
   const planName = subInfo?.subscription?.plan?.name || subInfo?.effectivePlan?.name || 'Free Starter Plan';
@@ -153,9 +168,29 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
     : isPremium
       ? 'Premium access is active'
       : 'Free access is active';
+  const attemptsByTestId = new Map(attempts.map((attempt) => [attempt.testId, attempt]));
+
+  const handleDashboardTestAction = async (test: any) => {
+    const existingAttempt = attemptsByTestId.get(test.id);
+    if (existingAttempt?.status === 'IN_PROGRESS') return onStartExam(test.id);
+    if (existingAttempt?.status === 'COMPLETED') return onOpenAttemptReview(existingAttempt.id);
+    if (isFreeTest(test)) return onStartExam(test.id);
+
+    setCheckingDashboardTestId(test.id);
+    try {
+      const entitlement = await api.checkTestEntitlement(test.id);
+      if (entitlement.entitled) onStartExam(test.id);
+      else onOpenPricingModal?.({ id: test.id, title: test.title, priceINR: test.priceINR ?? test.price });
+    } catch {
+      // A failed entitlement check must never unlock a premium paper.
+      onOpenPricingModal?.({ id: test.id, title: test.title, priceINR: test.priceINR ?? test.price });
+    } finally {
+      setCheckingDashboardTestId(null);
+    }
+  };
 
   return (
-    <div className="space-y-6 pb-16">
+    <div className="mx-auto w-full max-w-[1440px] space-y-6 pb-8">
       {/* 1. Welcome & Summary Bar */}
       <section className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white px-5 py-6 shadow-card sm:px-7 sm:py-7">
         <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-blue-50" aria-hidden="true" />
@@ -174,7 +209,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap xl:justify-end">
             <button
-              onClick={() => activeAttempt?.testId ? onStartExam(activeAttempt.testId) : flagshipTest?.id ? onStartExam(flagshipTest.id) : onNavigateToMockTests()}
+              onClick={() => activeAttempt?.testId ? onStartExam(activeAttempt.testId) : flagshipTest?.id ? handleDashboardTestAction(flagshipTest) : onNavigateToMockTests()}
               className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-tn-blue px-3.5 py-2.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-tn-blue-hover"
             >
               <Play className="w-3.5 h-3.5" />
@@ -307,6 +342,58 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
         <div className="flex items-center justify-between gap-3 sm:pl-4"><span className="text-tn-muted">Premium tests</span><span className="font-semibold tabular-nums text-violet-700">{paidExamTests}</span></div>
       </div>
 
+      <section className="space-y-3">
+        <div className="flex items-center justify-between gap-4 px-1">
+          <div>
+            <h2 className="text-sm font-bold text-tn-navy">Available Mock Tests</h2>
+            <p className="mt-0.5 text-xs text-tn-muted">Live papers available for your selected exam portal.</p>
+          </div>
+          <button onClick={onNavigateToMockTests} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-tn-blue hover:underline">
+            View all <ChevronRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {[0, 1, 2].map((item) => <div key={item} className="h-44 animate-pulse rounded-xl border border-slate-200 bg-white" />)}
+          </div>
+        ) : displayTests.length === 0 ? (
+          <div className="rounded-xl border border-slate-200 bg-white px-5 py-8 text-center shadow-subtle">
+            <FileCheck2 className="mx-auto h-5 w-5 text-tn-blue" />
+            <p className="mt-2 text-sm font-semibold text-tn-navy">No live mock tests are available for this portal.</p>
+            <p className="mt-1 text-xs text-tn-muted">A paper appears here after it is published and activated by the administrator.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {displayTests.slice(0, 6).map((test) => {
+              const attempt = attemptsByTestId.get(test.id);
+              const isPremiumTest = !isFreeTest(test);
+              const isComingSoon = test.accessMode === 'COMING_SOON';
+              const isChecking = checkingDashboardTestId === test.id;
+              const actionLabel = attempt?.status === 'IN_PROGRESS' ? 'Resume' : attempt?.status === 'COMPLETED' ? 'View Result' : isPremiumTest ? 'Unlock & Start' : 'Start Test';
+              return (
+                <article key={test.id} className="flex min-h-44 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="rounded-md border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-tn-blue">{examInfo?.shortName || examSlug.toUpperCase()}</span>
+                    <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold ${isPremiumTest ? 'border-violet-200 bg-violet-50 text-violet-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+                      {isPremiumTest ? <Lock className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}{isPremiumTest ? 'Premium' : 'Free'}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 line-clamp-2 text-sm font-bold leading-snug text-tn-navy">{test.title}</h3>
+                  <p className="mt-1 text-[11px] text-tn-muted">{test._count?.testQuestions ?? test.totalQuestions ?? 0} questions <span aria-hidden="true">·</span> {test.durationMinutes || 0} min <span aria-hidden="true">·</span> {test.totalMarks || 0} marks</p>
+                  <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+                    <span className="text-[11px] font-medium text-slate-500">{isComingSoon ? 'Releases soon' : attempt?.status === 'COMPLETED' ? 'Completed' : attempt?.status === 'IN_PROGRESS' ? 'In progress' : 'Ready to attempt'}</span>
+                    <button type="button" disabled={isChecking || isComingSoon} onClick={() => handleDashboardTestAction(test)} className="inline-flex min-h-8 shrink-0 items-center gap-1 rounded-lg bg-tn-blue px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-tn-blue-hover disabled:cursor-not-allowed disabled:opacity-60">
+                      {isChecking ? 'Checking…' : <><Play className="h-3 w-3" />{isComingSoon ? 'Coming Soon' : actionLabel}</>}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
       {/* 5. Main Dashboard Grid (2 Columns: Recent Attempts & Study Navigation) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Recent Attempts (7 Cols) */}
@@ -342,7 +429,8 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                 </button>
               </div>
             ) : (
-              <div className="overflow-x-auto">
+              <>
+              <div className="hidden overflow-x-auto sm:block">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-medium">
                     <tr>
@@ -368,7 +456,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                         <td className="py-2.5 px-3 font-mono font-semibold tabular-nums">
                           {att.totalScore != null ? (
                             <span className={att.totalScore > 0 ? 'text-emerald-700' : 'text-slate-600'}>
-                              {att.totalScore} / 300
+                              {att.totalScore} / {maxExamScore}
                             </span>
                           ) : (
                             '—'
@@ -406,6 +494,26 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                   </tbody>
                 </table>
               </div>
+              <div className="divide-y divide-slate-100 sm:hidden">
+                {attempts.slice(0, 5).map((att) => (
+                  <div key={att.id} className="space-y-2 p-3.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-semibold text-tn-text">{att.test?.title || 'Mock Test'}</p>
+                        <p className="mt-0.5 text-[11px] text-tn-muted">{new Date(att.startedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
+                      </div>
+                      <span className={`shrink-0 rounded border px-2 py-0.5 text-[10px] font-semibold ${att.status === 'COMPLETED' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>
+                        {att.status === 'COMPLETED' ? 'Submitted' : 'In Progress'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-mono text-xs font-semibold text-tn-navy">{att.totalScore != null ? `${att.totalScore} / ${maxExamScore}` : 'Score pending'}</span>
+                      {att.status === 'COMPLETED' ? <button onClick={() => onOpenAttemptReview(att.id)} className="text-xs font-semibold text-tn-blue hover:underline">Scorecard</button> : <button onClick={() => onStartExam(att.testId)} className="text-xs font-semibold text-amber-700 hover:underline">Resume</button>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              </>
             )}
           </div>
         </div>
@@ -442,11 +550,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               </span>
               {flagshipTest?.id ? (
                 <button
-                  onClick={() => onStartExam(flagshipTest.id)}
-                  className="shrink-0 px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  onClick={() => handleDashboardTestAction(flagshipTest)}
+                  disabled={checkingDashboardTestId === flagshipTest.id}
+                  className="shrink-0 px-3.5 py-2 rounded-lg bg-tn-blue hover:bg-tn-blue-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Play className="w-3 h-3" />
-                  <span>Start Exam</span>
+                  <span>{checkingDashboardTestId === flagshipTest.id ? 'Checking…' : 'Start Exam'}</span>
                 </button>
               ) : (
                 <button

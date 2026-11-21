@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({
   ];
 
   return (
-    <footer className="bg-white border-t border-tn-border mt-16 text-xs text-tn-muted">
+    <footer className="mt-8 border-t border-tn-border bg-white text-xs text-tn-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-slate-100">
           {/* Col 1: Brand Info */}

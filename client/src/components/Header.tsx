@@ -169,7 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
         <aside
           id="student-sidebar"
           aria-label="Student navigation"
-          className={`student-sidebar-root hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col py-5 text-slate-200 shadow-xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-20 lg:px-3' : 'lg:w-64 lg:px-4'}`}
+          className={`student-sidebar-root hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:flex-col py-5 text-slate-200 shadow-xl transition-[width,padding] duration-200 ease-out ${sidebarCollapsed ? 'lg:w-[72px] lg:px-3' : 'lg:w-60 lg:px-4'}`}
         >
           <button
             onClick={() => handleNavClick('dashboard')}
@@ -221,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
         </aside>
       )}
 
-      <div className={showStudentSidebar ? `w-full px-4 sm:px-6 lg:pr-8 transition-[padding] duration-200 ${sidebarCollapsed ? 'lg:pl-[112px]' : 'lg:pl-[288px]'}` : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
+      <div className={showStudentSidebar ? `w-full px-4 sm:px-6 lg:pr-8 transition-[padding] duration-200 ${sidebarCollapsed ? 'lg:pl-[104px]' : 'lg:pl-[272px]'}` : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
         <div className="flex items-center justify-between h-[68px] gap-3">
           
           {/* Left: Brand Logo */}
