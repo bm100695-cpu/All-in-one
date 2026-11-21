@@ -379,6 +379,7 @@ export const api = {
       isGatewayConfigured: boolean;
       supportedCurrencies: string[];
       activeGateway: string;
+      supportedPaymentMethods?: string[];
     }>('/monetization/config');
   },
 

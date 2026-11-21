@@ -22,7 +22,7 @@ import { SubscriptionPlan, User } from '../types';
 import { api, getStoredToken } from '../api';
 
 type CashfreeEnvironment = 'sandbox' | 'production';
-type CheckoutMethod = 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER_UPI' | 'UPI_QR' | 'CARD' | 'NETBANKING';
+type CheckoutMethod = 'HOSTED_CHECKOUT' | 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER_UPI' | 'UPI_QR' | 'CARD' | 'NETBANKING';
 
 interface NativeCashfreeBridge {
   isAvailable?: () => boolean;
@@ -517,14 +517,19 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             ? Math.max(1, Math.round(checkoutPlan.price * (100 - appliedCoupon!.discountPct) / 100))
             : checkoutPlan.price;
           const isNative = Boolean(window.AndroidCashfree?.isAvailable?.());
+          const enabledMethods = Array.isArray(gatewayConfig?.supportedPaymentMethods)
+            ? gatewayConfig.supportedPaymentMethods.map((method: string) => method.toUpperCase())
+            : [];
+          const isMerchantEnabled = (method: CheckoutMethod) => enabledMethods.includes(method);
           const methods: Array<{ id: CheckoutMethod; title: string; detail: string; visible: boolean; icon: React.ReactNode; tone: string }> = [
-            { id: 'GOOGLE_PAY', title: 'Google Pay', detail: 'Open Google Pay via Cashfree', visible: isNative && nativeUpiApps.includes('GOOGLE_PAY'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-blue-200 bg-blue-50 hover:bg-blue-100' },
-            { id: 'PHONEPE', title: 'PhonePe', detail: 'Open PhonePe via Cashfree', visible: isNative && nativeUpiApps.includes('PHONEPE'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-purple-200 bg-purple-50 hover:bg-purple-100' },
-            { id: 'PAYTM', title: 'Paytm', detail: 'Open Paytm via Cashfree', visible: isNative && nativeUpiApps.includes('PAYTM'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-cyan-200 bg-cyan-50 hover:bg-cyan-100' },
-            { id: 'OTHER_UPI', title: 'Other UPI apps', detail: isNative ? 'Show installed Cashfree-supported apps' : 'Continue to Cashfree UPI checkout', visible: true, icon: <Smartphone className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
-            { id: 'UPI_QR', title: 'UPI QR', detail: 'Use Cashfree dynamic QR on desktop', visible: true, icon: <Smartphone className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
-            { id: 'CARD', title: 'Debit / Credit Card', detail: 'Secure card payment through Cashfree', visible: true, icon: <CreditCard className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
-            { id: 'NETBANKING', title: 'Net Banking', detail: 'Secure bank payment through Cashfree', visible: true, icon: <Landmark className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'HOSTED_CHECKOUT', title: 'Secure payment options', detail: 'View methods available for this order', visible: true, icon: <Lock className="h-4 w-4" />, tone: 'border-blue-200 bg-blue-50 hover:bg-blue-100' },
+            { id: 'GOOGLE_PAY', title: 'Google Pay', detail: 'Open Google Pay via Cashfree', visible: isMerchantEnabled('GOOGLE_PAY') && isNative && nativeUpiApps.includes('GOOGLE_PAY'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-blue-200 bg-blue-50 hover:bg-blue-100' },
+            { id: 'PHONEPE', title: 'PhonePe', detail: 'Open PhonePe via Cashfree', visible: isMerchantEnabled('PHONEPE') && isNative && nativeUpiApps.includes('PHONEPE'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-purple-200 bg-purple-50 hover:bg-purple-100' },
+            { id: 'PAYTM', title: 'Paytm', detail: 'Open Paytm via Cashfree', visible: isMerchantEnabled('PAYTM') && isNative && nativeUpiApps.includes('PAYTM'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-cyan-200 bg-cyan-50 hover:bg-cyan-100' },
+            { id: 'OTHER_UPI', title: 'Other UPI apps', detail: isNative ? 'Show installed Cashfree-supported apps' : 'Continue to Cashfree UPI checkout', visible: isMerchantEnabled('OTHER_UPI'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'UPI_QR', title: 'UPI QR', detail: 'Use Cashfree dynamic QR on desktop', visible: isMerchantEnabled('UPI_QR'), icon: <Smartphone className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'CARD', title: 'Debit / Credit Card', detail: 'Secure card payment through Cashfree', visible: isMerchantEnabled('CARD'), icon: <CreditCard className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
+            { id: 'NETBANKING', title: 'Net Banking', detail: 'Secure bank payment through Cashfree', visible: isMerchantEnabled('NETBANKING'), icon: <Landmark className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
           ];
           return (
           <section className="mx-6 my-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">

@@ -10,6 +10,19 @@ dotenv.config();
 const router = Router();
 
 const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
+const CASHFREE_PAYMENT_METHODS = new Set([
+  'GOOGLE_PAY', 'PHONEPE', 'PAYTM', 'OTHER_UPI', 'UPI_QR', 'CARD', 'NETBANKING',
+]);
+
+// Cashfree Checkout remains authoritative at payment time. This optional
+// allow-list prevents the LMS from advertising a method that the merchant has
+// not enabled. Leave it empty to show only the generic hosted-checkout entry.
+function getConfiguredCashfreePaymentMethods(): string[] {
+  return String(process.env.CASHFREE_ENABLED_PAYMENT_METHODS || '')
+    .split(',')
+    .map((method) => method.trim().toUpperCase())
+    .filter((method) => CASHFREE_PAYMENT_METHODS.has(method));
+}
 
 // Cashfree redirects must use a trusted application origin. Never derive a
 // return destination from a request Origin/Referer header.
@@ -309,6 +322,7 @@ router.get('/config', (_req: Request, res: Response) => {
     activeGateway: 'Cashfree',
     cashfreeMode: config.mode,
     isMasked: config.isMasked,
+    supportedPaymentMethods: getConfiguredCashfreePaymentMethods(),
   });
 });
 
