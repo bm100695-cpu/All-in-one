@@ -5,13 +5,18 @@ services:
     rootDir: server
     plan: free
     region: singapore
-    buildCommand: npm install && npx prisma generate
+    # Apply only committed, additive Prisma migrations before generating the
+    # client. A migration failure stops deployment rather than letting the app
+    # start against an unknown schema.
+    buildCommand: npm install && npx prisma migrate deploy && npx prisma generate
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        value: file:./dev.db
+        # Production PostgreSQL connection is configured securely in Render;
+        # never replace it with the local SQLite development path.
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: PORT

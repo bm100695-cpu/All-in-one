@@ -81,24 +81,7 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-async function syncDatabaseSchema() {
-  try {
-    await prisma.$executeRawUnsafe(`
-      ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "status" TEXT DEFAULT 'INACTIVE';
-      ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "isActive" BOOLEAN DEFAULT false;
-      ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "availableFrom" TIMESTAMP(3);
-      ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "availableTo" TIMESTAMP(3);
-      ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "activatedAt" TIMESTAMP(3);
-      ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "deactivatedAt" TIMESTAMP(3);
-    `);
-    console.log('✅ [Database Schema] Test status and visibility columns verified.');
-  } catch (err: any) {
-    console.warn('⚠️ [Database Schema Notice]:', err.message);
-  }
-}
-
 app.listen(PORT, () => {
   console.log(`🚀 All in One AI Server running at http://localhost:${PORT}`);
   console.log(`📡 Health check accessible at http://localhost:${PORT}/health`);
-  syncDatabaseSchema();
 });
