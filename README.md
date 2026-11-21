@@ -97,11 +97,7 @@ npx prisma db push
 npm run prisma:seed
 ```
 
-The seed script creates ready-to-test accounts for all four platform roles:
-- **Student**: `student@examverse.ai` (Password: `Student@123`)
-- **Content Reviewer**: `reviewer@examverse.ai` (Password: `Reviewer@123`)
-- **Platform Admin**: `admin@examverse.ai` (Password: `Admin@123`)
-- **Institution Admin**: `institution@examverse.ai` (Password: `Inst@123`)
+The seed script creates ready-to-test accounts for all four platform roles
 
 *Note: The UI also includes a 1-click Demo Role Switcher in the top right header for instant role switching during pairing and demonstrations.*
 
