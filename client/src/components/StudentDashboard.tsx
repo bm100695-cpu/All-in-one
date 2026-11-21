@@ -145,50 +145,56 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const isPremium = subInfo?.isPremium || false;
   const planName = subInfo?.subscription?.plan?.name || subInfo?.effectivePlan?.name || 'Free Starter Plan';
   const referralCredits = subInfo?.referralCredits ?? currentUser?.referralCredits ?? 0;
+  const subscriptionEndDate = subInfo?.subscription?.endDate
+    ? new Date(subInfo.subscription.endDate)
+    : null;
+  const subscriptionDetail = subscriptionEndDate && !Number.isNaN(subscriptionEndDate.getTime())
+    ? `Valid through ${subscriptionEndDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+    : isPremium
+      ? 'Premium access is active'
+      : 'Free access is active';
 
   return (
     <div className="space-y-6 pb-16">
       {/* 1. Welcome & Summary Bar */}
-      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl border border-blue-100 bg-white px-5 py-5 sm:px-6 shadow-card">
-        <div>
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-tn-blue">Candidate dashboard</p>
-          <h1 className="text-2xl sm:text-[28px] font-bold text-tn-navy tracking-tight">
+      <section className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white px-5 py-6 shadow-card sm:px-7 sm:py-7">
+        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-blue-50" aria-hidden="true" />
+        <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+          <div className="min-w-0">
+            <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-tn-blue">Student dashboard</p>
+            <h1 className="text-2xl font-bold tracking-tight text-tn-navy sm:text-[28px]">
             Welcome back, {currentUser?.name?.split(' ')[0] || 'Candidate'}
-          </h1>
-          <p className="text-xs text-tn-muted mt-1">
-            Target Exam:{' '}
-            <strong className="text-tn-navy font-bold">
-              {examInfo?.name || examSlug.toUpperCase()}
-            </strong>
-            {examInfo?.conductingBody ? ` • ${examInfo.conductingBody}` : ''}
-          </p>
-        </div>
+            </h1>
+            <p className="mt-1 text-sm text-tn-muted">Continue your preparation and track your exam progress.</p>
+            <div className="mt-3 inline-flex max-w-full items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600">
+              <Target className="h-3.5 w-3.5 shrink-0 text-tn-blue" />
+              <span className="truncate">Preparing for <strong className="font-semibold text-tn-navy">{examInfo?.name || examSlug.toUpperCase()}</strong>{examInfo?.conductingBody ? ` · ${examInfo.conductingBody}` : ''}</span>
+            </div>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
-          {flagshipTest?.id && (
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap xl:justify-end">
             <button
-              onClick={() => onStartExam(flagshipTest.id)}
-            className="px-3.5 py-2 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white text-xs font-semibold shadow-card transition-colors flex items-center gap-1.5 cursor-pointer"
+              onClick={() => activeAttempt?.testId ? onStartExam(activeAttempt.testId) : flagshipTest?.id ? onStartExam(flagshipTest.id) : onNavigateToMockTests()}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-tn-blue px-3.5 py-2.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-tn-blue-hover"
             >
               <Play className="w-3.5 h-3.5" />
-              <span>Start {examInfo?.shortName || examInfo?.name || 'Exam'} Test</span>
+              <span>Continue Preparation</span>
             </button>
-          )}
-          <button
-            onClick={() =>
-              onOpenExamPortal
-                ? onOpenExamPortal(examSlug)
-                : isSuperTet
-                ? onNavigateToSuperTet?.()
-                : isUptet
-                ? onNavigateToUptet?.()
-                : onNavigateToMockTests()
-            }
-            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-tn-border text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <FileCheck2 className="w-3.5 h-3.5 text-tn-blue" />
-            <span>Open {examInfo?.shortName || 'Exam'} Portal ({totalExamTests} Tests)</span>
-          </button>
+            <button
+              onClick={() => onOpenExamPortal ? onOpenExamPortal(examSlug) : isSuperTet ? onNavigateToSuperTet?.() : isUptet ? onNavigateToUptet?.() : onNavigateToMockTests()}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-tn-border bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-700 shadow-xs transition-colors hover:bg-slate-50"
+            >
+              <FileCheck2 className="w-3.5 h-3.5 text-tn-blue" />
+              <span>Explore Mock Tests</span>
+            </button>
+            <button
+              onClick={onNavigateToPerformance}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+            >
+              <BarChart2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>View Results</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -268,45 +274,37 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
         </div>
       )}
 
-      {/* 4. Performance Metrics Row (5 Columns) */}
-      <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3.5">
-        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Completed</p><FileCheck2 className="w-4 h-4 text-[#1e3a8a]" /></div>
-          <p className="text-2xl font-bold text-tn-navy tabular-nums">{completedAttempts.length}</p>
-          <p className="text-[10px] text-tn-muted">Official timed attempts</p>
+      {/* 4. Student Overview — values are derived from the existing portal, attempt and subscription APIs. */}
+      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Available Mock Tests</p><FileCheck2 className="h-4 w-4 text-tn-blue" /></div>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{totalExamTests}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">For {examInfo?.shortName || examSlug.toUpperCase()}</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score</p><Target className="w-4 h-4 text-[#1e3a8a]" /></div>
-          <p className="text-2xl font-bold text-tn-navy tabular-nums">
-            {avgScore} <span className="text-xs font-normal text-slate-400">/ {maxExamScore}</span>
-          </p>
-          <p className="text-[10px] text-tn-muted">Across verified attempts</p>
+        <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Attempted</p><RotateCcw className="h-4 w-4 text-tn-blue" /></div>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{attempts.length}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{completedAttempts.length} completed submission{completedAttempts.length === 1 ? '' : 's'}</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Accuracy Rate</p><TrendingUp className="w-4 h-4 text-emerald-600" /></div>
-          <p className="text-2xl font-bold text-tn-navy tabular-nums">
-            {avgAccuracy}%
-          </p>
-          <p className="text-[10px] text-tn-muted">Correct to attempted ratio</p>
+        <div className="min-h-[142px] rounded-xl border border-emerald-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score / Accuracy</p><TrendingUp className="h-4 w-4 text-emerald-600" /></div>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{avgAccuracy}%</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{avgScore} / {maxExamScore} average score</p>
         </div>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Time In Tests</p><Clock className="w-4 h-4 text-[#1e3a8a]" /></div>
-          <p className="text-2xl font-bold text-tn-navy tabular-nums">
-            {totalHours} <span className="text-xs font-normal text-slate-400">hrs</span>
-          </p>
-          <p className="text-[10px] text-tn-muted">Simulated test time</p>
+        <div className="min-h-[142px] rounded-xl border border-violet-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Current Subscription</p><ShieldCheck className="h-4 w-4 text-violet-600" /></div>
+          <p className="mt-5 truncate text-lg font-bold text-tn-navy" title={planName}>{planName}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{subscriptionDetail}</p>
         </div>
+      </section>
 
-        <div className="min-h-[132px] p-4 rounded-2xl border border-blue-100 bg-white shadow-subtle space-y-2">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Free vs Premium</p><Lock className="w-4 h-4 text-amber-600" /></div>
-          <p className="text-2xl font-bold text-tn-navy tabular-nums">
-            {freeExamTests} <span className="text-xs font-normal text-slate-400">/ {paidExamTests}</span>
-          </p>
-          <p className="text-[10px] text-tn-muted font-medium">Free / Premium tests</p>
-        </div>
+      <div className="grid grid-cols-1 gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs sm:grid-cols-3">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4"><span className="text-tn-muted">Time in tests</span><span className="font-semibold tabular-nums text-tn-navy">{totalHours} hrs</span></div>
+        <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:px-4"><span className="text-tn-muted">Free tests</span><span className="font-semibold tabular-nums text-emerald-700">{freeExamTests}</span></div>
+        <div className="flex items-center justify-between gap-3 sm:pl-4"><span className="text-tn-muted">Premium tests</span><span className="font-semibold tabular-nums text-violet-700">{paidExamTests}</span></div>
       </div>
 
       {/* 5. Main Dashboard Grid (2 Columns: Recent Attempts & Study Navigation) */}
