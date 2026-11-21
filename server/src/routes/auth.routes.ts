@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 import { prisma } from '../prisma';
 import { generateToken, authenticate, AuthUser } from '../middleware/auth';
+import { login } from '../controllers/auth.controller';
 
 const router = Router();
 

@@ -130,14 +130,26 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   // SDK returns. The server remains the sole authority for activation.
   useEffect(() => {
     const onNativeCashfreeResult = (event: Event) => {
-      const detail = (event as CustomEvent<{ orderId?: string }>).detail;
+      const detail = (event as CustomEvent<{ orderId?: string; fallbackToHosted?: boolean }>).detail;
       if (!detail?.orderId || !activePlanCode || !activePlanName) return;
+      if (detail.fallbackToHosted && nativeCheckout?.orderId === detail.orderId) {
+        const fallbackSession = nativeCheckout.paymentSessionId;
+        const fallbackMode = nativeCheckout.environment;
+        setNativeCheckout(null);
+        void openHostedCashfreeCheckout(fallbackSession, fallbackMode).catch((error: any) => {
+          setStatusMessage({
+            type: 'error',
+            text: error?.message || 'The selected UPI app was unavailable and secure checkout could not be opened. Please retry.',
+          });
+        });
+        return;
+      }
       setNativeCheckout(null);
       void handleVerifyCashfreeOrder(detail.orderId, activePlanCode, activePlanName);
     };
     window.addEventListener('cashfree-native-result', onNativeCashfreeResult);
     return () => window.removeEventListener('cashfree-native-result', onNativeCashfreeResult);
-  }, [activePlanCode, activePlanName]);
+  }, [activePlanCode, activePlanName, nativeCheckout]);
 
   useEffect(() => {
     if (!isOpen || !window.AndroidCashfree?.isAvailable?.()) {
@@ -253,6 +265,30 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     });
   };
 
+  const openHostedCashfreeCheckout = async (paymentSessionId: string, mode: CashfreeEnvironment) => {
+    setStatusMessage({
+      type: 'info',
+      text: 'Opening Cashfree secure checkout. The gateway will show only the payment methods enabled for this merchant account.',
+    });
+
+    const loaded = await loadCashfreeScript();
+    const cashfreeFactory = (window as any).Cashfree;
+    if (!loaded || !cashfreeFactory) {
+      throw new Error('The secure Cashfree checkout could not be loaded. Check your connection and retry; no payment was started.');
+    }
+
+    // Never construct or navigate to an internal Cashfree checkout URL. The
+    // official SDK validates the server-created payment session and owns the
+    // desktop QR, card, net-banking, and mobile-web fallbacks.
+    const checkoutResult = await cashfreeFactory({ mode }).checkout({
+      paymentSessionId,
+      redirectTarget: '_self',
+    });
+    if (checkoutResult?.error) {
+      throw new Error(checkoutResult.error.message || 'Cashfree could not open secure checkout for this order. Please retry.');
+    }
+  };
+
   const handleVerifyCashfreeOrder = async (orderId: string, planCode: string, planName: string) => {
     setVerifyingPayment(true);
     setStatusMessage({ type: 'info', text: 'Awaiting payment confirmation: Verifying transaction with Cashfree...' });
@@ -339,6 +375,24 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       return;
     }
 
+    if (gatewayConfig && !gatewayConfig.isGatewayConfigured) {
+      setProcessingPlanId(null);
+      setStatusMessage({
+        type: 'error',
+        text: 'Secure payments are temporarily unavailable because the Cashfree merchant configuration is incomplete. No order was created and no amount was charged.',
+      });
+      return;
+    }
+
+    if (gatewayConfig && !gatewayConfig.webhookConfigured) {
+      setProcessingPlanId(null);
+      setStatusMessage({
+        type: 'error',
+        text: 'Secure payment confirmation is not configured yet. Please try again after the merchant enables the Cashfree webhook.',
+      });
+      return;
+    }
+
     // 3. Paid plans: create the secure server-side Cashfree order.
     try {
       setSelectedCheckoutMethod(paymentMethod);
@@ -380,28 +434,12 @@ export const PricingModal: React.FC<PricingModalProps> = ({
         );
         return;
       }
-      setStatusMessage({
-        type: 'info',
-        text: 'Opening Cashfree secure checkout. Available payment methods are provided by this merchant account.',
-      });
-
-      let cashfree: any = null;
       try {
-        const loaded = await loadCashfreeScript();
-        if (loaded && (window as any).Cashfree) {
-          cashfree = (window as any).Cashfree({ mode: targetMode });
-        }
+        await openHostedCashfreeCheckout(activeSession, targetMode);
       } catch (sdkErr) {
         console.warn('Cashfree SDK initialization notice:', sdkErr);
+        throw sdkErr;
       }
-
-      if (!cashfree) {
-        throw new Error('The secure Cashfree checkout could not be loaded. Check your connection and retry; no payment was started.');
-      }
-      // Redirect checkout is reliable across desktop, Android browsers and
-      // Safari/iOS. Cashfree renders only methods enabled for this merchant,
-      // including its desktop QR where eligible.
-      await cashfree.checkout({ paymentSessionId: activeSession, redirectTarget: '_self' });
     } catch (err: any) {
       console.error('Subscription error:', err);
       setStatusMessage({ type: 'error', text: err.message || 'Failed to process payment. Please try again.' });
@@ -561,6 +599,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
               </aside>
               <div>
                 <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Payment method</p>
+                {enabledMethods.length === 0 && (
+                  <p className="mb-3 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-[11px] leading-relaxed text-blue-800">
+                    Secure checkout is available. Specific UPI, QR, card, and net-banking options will appear only after they are enabled in the Cashfree merchant account.
+                  </p>
+                )}
                 <div className="grid gap-2 sm:grid-cols-2">
                   {methods.filter((method) => method.visible).map((method) => (
                     <button

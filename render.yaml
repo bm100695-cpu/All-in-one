@@ -16,3 +16,9 @@ services:
         generateValue: true
       - key: PORT
         value: 10000
+      # Public Cashfree return/webhook destinations. Credentials remain
+      # private server environment variables, never frontend configuration.
+      - key: PUBLIC_APP_URL
+        value: https://all-in-one-git-main-brijesh17.vercel.app
+      - key: PUBLIC_API_URL
+        value: https://all-in-one-japb.onrender.com

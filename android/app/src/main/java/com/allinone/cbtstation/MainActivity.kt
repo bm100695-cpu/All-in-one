@@ -72,11 +72,11 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
         notifyWebsiteToVerify(orderId)
     }
 
-    private fun notifyWebsiteToVerify(orderId: String) {
+    private fun notifyWebsiteToVerify(orderId: String, fallbackToHosted: Boolean = false) {
         val escapedOrderId = orderId.replace("\\", "\\\\").replace("'", "\\'")
         runOnUiThread {
             portal.evaluateJavascript(
-                "window.dispatchEvent(new CustomEvent('cashfree-native-result', { detail: { orderId: '$escapedOrderId' } }));",
+                "window.dispatchEvent(new CustomEvent('cashfree-native-result', { detail: { orderId: '$escapedOrderId', fallbackToHosted: $fallbackToHosted } }));",
                 null,
             )
         }
@@ -122,7 +122,11 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
                     }
                     if (selectedApp != null && !isInstalled(packageNameFor(selectedApp))) {
                         Toast.makeText(this@MainActivity, "Selected UPI app is not installed. Choose another method.", Toast.LENGTH_LONG).show()
-                        notifyWebsiteToVerify(orderId)
+                        // Do not hand Android a generic raw intent (which could
+                        // open another wallet). Return to the web app so its
+                        // official Cashfree hosted-checkout fallback can show
+                        // the merchant-approved payment methods instead.
+                        notifyWebsiteToVerify(orderId, fallbackToHosted = true)
                         return@runOnUiThread
                     }
 
@@ -153,7 +157,7 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
                         "UPI apps could not be opened. Please use secure checkout instead.",
                         Toast.LENGTH_LONG,
                     ).show()
-                    notifyWebsiteToVerify(orderId)
+                    notifyWebsiteToVerify(orderId, fallbackToHosted = true)
                 }
             }
         }

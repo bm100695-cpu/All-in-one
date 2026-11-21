@@ -57,6 +57,22 @@ function getCashfreeWebhookUrl(): string | undefined {
   }
 }
 
+/**
+ * A successful browser redirect is not proof of payment. Requiring a public
+ * notify URL when creating a Cashfree order ensures that the signed webhook
+ * can complete verification even when the customer closes checkout before
+ * returning to the LMS.
+ */
+function getRequiredCashfreeWebhookUrl(): string {
+  const webhookUrl = getCashfreeWebhookUrl();
+  if (!webhookUrl) {
+    throw new Error(
+      'Cashfree webhook is not configured. Set CASHFREE_WEBHOOK_URL or PUBLIC_API_URL on the server before accepting payments.'
+    );
+  }
+  return webhookUrl;
+}
+
 // In-memory dynamic overrides (allows instant activation of production keys from database or admin API)
 let dynamicOverrideAppId: string | null = null;
 let dynamicOverrideSecretKey: string | null = null;
@@ -315,6 +331,7 @@ async function getCashfreePayments(orderId: string): Promise<any[]> {
 // Public gateway configuration status
 router.get('/config', (_req: Request, res: Response) => {
   const config = getCashfreeConfig();
+  const webhookConfigured = Boolean(getCashfreeWebhookUrl());
   res.json({
     currency: DEFAULT_CURRENCY,
     isGatewayConfigured: config.isLive && !config.isEnvironmentMismatch,
@@ -322,6 +339,8 @@ router.get('/config', (_req: Request, res: Response) => {
     activeGateway: 'Cashfree',
     cashfreeMode: config.mode,
     isMasked: config.isMasked,
+    webhookConfigured,
+    browserCheckout: 'HOSTED_CHECKOUT',
     supportedPaymentMethods: getConfiguredCashfreePaymentMethods(),
   });
 });
@@ -1102,6 +1121,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       if (cfConfig.isLive) {
         try {
           const clientOrigin = getTrustedCheckoutOrigin();
+          const notifyUrl = getRequiredCashfreeWebhookUrl();
           const cfRes = await createCashfreeOrder({
             orderId,
             orderAmount: finalAmount,
@@ -1115,7 +1135,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
             orderNote: `Mock Test: ${test.title}`,
             orderMeta: {
               returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
-              notifyUrl: getCashfreeWebhookUrl(),
+              notifyUrl,
             },
           });
           paymentSessionId = cfRes.paymentSessionId;
@@ -1361,6 +1381,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     if (cfConfig.isLive) {
       try {
         const clientOrigin = getTrustedCheckoutOrigin();
+        const notifyUrl = getRequiredCashfreeWebhookUrl();
         const cfRes = await createCashfreeOrder({
           orderId,
           orderAmount: finalAmount,
@@ -1374,7 +1395,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           orderNote: `Plan: ${plan.name} (${plan.code})`,
           orderMeta: {
             returnUrl: `${clientOrigin}/?cf_order_id={order_id}`,
-            notifyUrl: getCashfreeWebhookUrl(),
+            notifyUrl,
           },
         });
         paymentSessionId = cfRes.paymentSessionId;
