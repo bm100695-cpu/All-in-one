@@ -22,3 +22,5 @@ services:
         value: https://all-in-one-git-main-brijesh17.vercel.app
       - key: PUBLIC_API_URL
         value: https://all-in-one-japb.onrender.com
+      - key: CASHFREE_WEBHOOK_URL
+        value: https://all-in-one-japb.onrender.com/api/monetization/webhook/cashfree

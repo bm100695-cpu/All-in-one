@@ -10,6 +10,11 @@ dotenv.config();
 const router = Router();
 
 const DEFAULT_CURRENCY = process.env.DEFAULT_CURRENCY || 'INR';
+// This is the public Render service already used by the production frontend
+// (see client/src/api.ts and render.yaml). It is a production-only safety net
+// for services created before the Render blueprint environment variables were
+// synced; local and staging environments must configure their own URL.
+const PRODUCTION_API_ORIGIN = 'https://all-in-one-japb.onrender.com';
 const CASHFREE_PAYMENT_METHODS = new Set([
   'GOOGLE_PAY', 'PHONEPE', 'PAYTM', 'OTHER_UPI', 'UPI_QR', 'CARD', 'NETBANKING',
 ]);
@@ -38,10 +43,12 @@ function getTrustedCheckoutOrigin(): string {
   return 'https://all-in-one-git-main-brijesh17.vercel.app';
 }
 
-// Cashfree calls this endpoint asynchronously.  Keep it deployment-configured:
-// a stale hard-coded Render URL silently drops live payment confirmations.
+// Cashfree calls this endpoint asynchronously. Deployment configuration wins;
+// the known production origin is only a migration fallback for this service.
 function getCashfreeWebhookUrl(): string | undefined {
-  const configured = process.env.CASHFREE_WEBHOOK_URL || process.env.PUBLIC_API_URL;
+  const configured = process.env.CASHFREE_WEBHOOK_URL
+    || process.env.PUBLIC_API_URL
+    || (process.env.NODE_ENV === 'production' ? PRODUCTION_API_ORIGIN : '');
   if (!configured) return undefined;
   try {
     const url = new URL(configured);
