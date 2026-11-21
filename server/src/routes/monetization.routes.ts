@@ -18,6 +18,55 @@ const PRODUCTION_API_ORIGIN = 'https://all-in-one-japb.onrender.com';
 const CASHFREE_PAYMENT_METHODS = new Set([
   'GOOGLE_PAY', 'PHONEPE', 'PAYTM', 'OTHER_UPI', 'UPI_QR', 'CARD', 'NETBANKING',
 ]);
+const MIN_CASHFREE_AMOUNT_PAISE = 100; // Cashfree orders must be at least ₹1.
+
+function paiseToInr(paise: number): number {
+  return Number((paise / 100).toFixed(2));
+}
+
+function toPaise(value: unknown, field = 'price'): number {
+  const numeric = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(numeric) || numeric < 0) {
+    throw new Error(`${field} must be a valid non-negative INR amount.`);
+  }
+  const paise = Math.round(numeric * 100);
+  if (!Number.isSafeInteger(paise)) throw new Error(`${field} is outside the supported range.`);
+  return paise;
+}
+
+function storedPaise(record: { price?: number | null; pricePaise?: number | null }): number {
+  const paise = Number(record.pricePaise);
+  return Number.isSafeInteger(paise) && paise >= 0 ? paise : toPaise(record.price || 0);
+}
+
+function validatePremiumPrice(pricePaise: number, accessMode: string): number {
+  if (accessMode === 'FREE') return 0;
+  if (pricePaise < MIN_CASHFREE_AMOUNT_PAISE) {
+    throw new Error('Premium price must be at least ₹1.00 for Cashfree checkout.');
+  }
+  return pricePaise;
+}
+
+async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | null): Promise<string[]> {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.some((id) => typeof id !== 'string' || !id.trim())) {
+    throw new Error('includedMockTests must be an array of mock-test IDs.');
+  }
+  const ids = [...new Set(value.map((id) => id.trim()))];
+  if (ids.length > 300) throw new Error('A plan can include at most 300 mock tests.');
+  if (ids.length === 0) return [];
+
+  const tests = await prisma.test.findMany({
+    where: { id: { in: ids } },
+    select: { id: true, exam: { select: { slug: true } } },
+  });
+  if (tests.length !== ids.length) throw new Error('One or more selected mock tests no longer exist.');
+  const normalizedSlug = examSlug?.trim().toLowerCase() || null;
+  if (normalizedSlug && tests.some((test) => test.exam.slug !== normalizedSlug)) {
+    throw new Error('Selected mock tests must belong to the selected exam portal.');
+  }
+  return ids;
+}
 
 // Cashfree Checkout remains authoritative at payment time. This optional
 // allow-list prevents the LMS from advertising a method that the merchant has
@@ -820,6 +869,7 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
         accessLevel: true,
         accessMode: true,
         price: true,
+        pricePaise: true,
         originalPrice: true,
         discountPct: true,
         offerExpiresAt: true,
@@ -843,6 +893,7 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
         accessLevel: 'FREE',
         accessType,
         price: 0,
+        pricePaise: 0,
         reason: 'Free Mock Test',
       });
       return;
@@ -856,6 +907,7 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
         accessLevel: 'PREMIUM',
         accessType,
         price: test.price,
+        pricePaise: storedPaise(test),
         reason: 'Admin / Staff privileges',
       });
       return;
@@ -907,11 +959,12 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
     const canRedeemCredit = (user?.referralCredits || 0) > 0;
 
     // Calculate effective discounted price if promotional offer is active
-    let effectivePrice = test.price;
+    const basePricePaise = storedPaise(test);
+    let effectivePricePaise = basePricePaise;
     const isOfferActive = test.offerExpiresAt ? new Date(test.offerExpiresAt) > new Date() : true;
     if (test.discountPct > 0 && isOfferActive) {
-      const discount = Math.round((test.price * test.discountPct) / 100);
-      effectivePrice = Math.max(1, test.price - discount);
+      const discount = Math.round((basePricePaise * test.discountPct) / 100);
+      effectivePricePaise = Math.max(MIN_CASHFREE_AMOUNT_PAISE, basePricePaise - discount);
     }
 
     res.json({
@@ -919,7 +972,8 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
       accessMode: test.accessMode || 'PAID',
       accessLevel: 'PREMIUM',
       accessType,
-      price: effectivePrice,
+      price: paiseToInr(effectivePricePaise),
+      pricePaise: effectivePricePaise,
       originalPrice: test.originalPrice || test.price,
       discountPct: test.discountPct || 0,
       offerExpiresAt: test.offerExpiresAt,
@@ -956,6 +1010,10 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         res.status(404).json({ error: 'Mock test not found.' });
         return;
       }
+      if (!test.isPublished) {
+        res.status(400).json({ error: 'This mock test is not currently available for purchase.' });
+        return;
+      }
 
       if (examSlug && test.exam.slug !== String(examSlug).trim().toLowerCase()) {
         res.status(400).json({ error: 'The selected test belongs to a different examination portal.' });
@@ -987,16 +1045,19 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       }
 
       // Server-side price calculation
-      const originalPrice = test.originalPrice && test.originalPrice > test.price ? test.originalPrice : test.price;
-      let finalAmount = test.price;
-      let discountAmount = 0;
+      const basePricePaise = storedPaise(test);
+      const originalPricePaise = test.originalPrice && test.originalPrice > test.price
+        ? toPaise(test.originalPrice)
+        : basePricePaise;
+      let finalAmountPaise = basePricePaise;
+      let discountAmountPaise = 0;
       let verifiedCouponCode: string | null = null;
 
       // Apply promotional discount if active
       const isOfferActive = test.offerExpiresAt ? new Date(test.offerExpiresAt) > new Date() : true;
       if (test.discountPct > 0 && isOfferActive) {
-        discountAmount = Math.round((test.price * test.discountPct) / 100);
-        finalAmount = Math.max(1, test.price - discountAmount);
+        discountAmountPaise = Math.round((basePricePaise * test.discountPct) / 100);
+        finalAmountPaise = Math.max(MIN_CASHFREE_AMOUNT_PAISE, basePricePaise - discountAmountPaise);
       }
 
       // Apply coupon code if provided
@@ -1006,16 +1067,19 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         });
         if (coupon && coupon.isActive && (!coupon.expiresAt || coupon.expiresAt > new Date())) {
           if (!coupon.examSlug || coupon.examSlug === (test.exam?.slug || examSlug)) {
-            const couponDiscount = Math.round((finalAmount * coupon.discountPct) / 100);
-            discountAmount += couponDiscount;
-            finalAmount = Math.max(1, finalAmount - couponDiscount);
+            const couponDiscountPaise = Math.round((finalAmountPaise * coupon.discountPct) / 100);
+            discountAmountPaise += couponDiscountPaise;
+            finalAmountPaise = Math.max(MIN_CASHFREE_AMOUNT_PAISE, finalAmountPaise - couponDiscountPaise);
             verifiedCouponCode = coupon.code;
           }
         }
       }
 
+      const originalPrice = paiseToInr(originalPricePaise);
+      const finalAmount = paiseToInr(finalAmountPaise);
+      const discountAmount = paiseToInr(discountAmountPaise);
       const cfConfig = getCashfreeConfig();
-      const amountInPaise = Math.round(finalAmount * 100);
+      const amountInPaise = finalAmountPaise;
       const receipt = `rcpt_${Date.now()}_${userId.slice(-6)}`;
       const orderPrefix = cfConfig.isProduction ? 'order_' : 'test_order_';
       let orderId = `${orderPrefix}${Date.now()}_${userId.slice(-6)}`;
@@ -1031,6 +1095,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           testId: test.id,
           status: 'PENDING',
           amount: finalAmount,
+          amountPaise: finalAmountPaise,
           createdAt: { gte: new Date(Date.now() - 15 * 60 * 1000) },
         },
         orderBy: { createdAt: 'desc' },
@@ -1116,9 +1181,12 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
           planId: null,
           examSlug: test.exam?.slug || examSlug || null,
           originalPrice,
+          originalPricePaise,
           discountAmount,
+          discountAmountPaise,
           couponCode: verifiedCouponCode,
           amount: finalAmount,
+          amountPaise: finalAmountPaise,
           currency: 'INR',
           status: 'PENDING',
           orderId,
@@ -1220,14 +1288,14 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       return;
     }
 
+    // A disabled plan must never become purchasable merely because a stale
+    // client still has its identifier. Only an administrator can publish it.
     if (!plan.isPublished) {
-      plan = await prisma.subscriptionPlan.update({
-        where: { id: plan.id },
-        data: { isPublished: true },
-      });
+      res.status(400).json({ error: 'This plan is not currently available for purchase.' });
+      return;
     }
 
-    if (plan.price <= 0) {
+    if (storedPaise(plan) <= 0) {
       // Free plan: immediately activate
       await prisma.subscription.create({
         data: {
@@ -1246,16 +1314,19 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     }
 
     // Backend price & coupon validation + originalPrice snapshot
-    const originalPrice = plan.originalPrice && plan.originalPrice > plan.price ? plan.originalPrice : plan.price;
-    let finalAmount = plan.price;
-    let discountAmount = 0;
+    const basePricePaise = storedPaise(plan);
+    const originalPricePaise = plan.originalPrice && plan.originalPrice > plan.price
+      ? toPaise(plan.originalPrice)
+      : basePricePaise;
+    let finalAmountPaise = basePricePaise;
+    let discountAmountPaise = 0;
     let verifiedCouponCode: string | null = null;
 
     // Apply plan promotional discount if active
     const isOfferActive = plan.offerExpiresAt ? new Date(plan.offerExpiresAt) > new Date() : true;
     if (plan.discountPct > 0 && isOfferActive) {
-      discountAmount = Math.round((plan.price * plan.discountPct) / 100);
-      finalAmount = Math.max(1, plan.price - discountAmount);
+      discountAmountPaise = Math.round((basePricePaise * plan.discountPct) / 100);
+      finalAmountPaise = Math.max(MIN_CASHFREE_AMOUNT_PAISE, basePricePaise - discountAmountPaise);
     }
 
     if (couponCode && typeof couponCode === 'string' && couponCode.trim()) {
@@ -1264,16 +1335,19 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       });
       if (coupon && coupon.isActive && (!coupon.expiresAt || coupon.expiresAt > new Date())) {
         if (!coupon.examSlug || coupon.examSlug === (plan.examSlug || examSlug)) {
-          const couponDiscount = Math.round((finalAmount * coupon.discountPct) / 100);
-          discountAmount += couponDiscount;
-          finalAmount = Math.max(1, finalAmount - couponDiscount);
+          const couponDiscountPaise = Math.round((finalAmountPaise * coupon.discountPct) / 100);
+          discountAmountPaise += couponDiscountPaise;
+          finalAmountPaise = Math.max(MIN_CASHFREE_AMOUNT_PAISE, finalAmountPaise - couponDiscountPaise);
           verifiedCouponCode = coupon.code;
         }
       }
     }
 
+    const originalPrice = paiseToInr(originalPricePaise);
+    const finalAmount = paiseToInr(finalAmountPaise);
+    const discountAmount = paiseToInr(discountAmountPaise);
     const cfConfig = getCashfreeConfig();
-    const amountInPaise = Math.round(finalAmount * 100);
+    const amountInPaise = finalAmountPaise;
     const receipt = `rcpt_${Date.now()}_${userId.slice(-6)}`;
     const orderPrefix = cfConfig.isProduction ? 'order_' : 'test_order_';
     let orderId = `${orderPrefix}${Date.now()}_${userId.slice(-6)}`;
@@ -1290,6 +1364,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         testId: null,
         status: 'PENDING',
         amount: finalAmount,
+        amountPaise: finalAmountPaise,
         createdAt: { gte: new Date(Date.now() - 15 * 60 * 1000) },
       },
       orderBy: { createdAt: 'desc' },
@@ -1376,9 +1451,12 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
         testId: null,
         examSlug: plan.examSlug || examSlug || null,
         originalPrice,
+        originalPricePaise,
         discountAmount,
+        discountAmountPaise,
         couponCode: verifiedCouponCode,
         amount: finalAmount,
+        amountPaise: finalAmountPaise,
         currency: plan.currency || 'INR',
         status: 'PENDING',
         orderId,
@@ -1531,14 +1609,32 @@ async function activatePaidOrder(params: {
         endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
       }
 
+      let includedTestIds: string[] = [];
+      try {
+        const parsed = JSON.parse(plan.includedMockTestsJson || '[]');
+        includedTestIds = Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+      } catch {
+        includedTestIds = [];
+      }
+      if (includedTestIds.length === 0 && plan.examSlug && plan.testAccessLimit <= 0) {
+        const scopedTests = await tx.test.findMany({
+          where: { exam: { slug: plan.examSlug } },
+          select: { id: true },
+        });
+        includedTestIds = scopedTests.map((test) => test.id);
+      }
+
       // Deactivate previous active subscriptions for this user
       await tx.subscription.updateMany({
         where: { userId: currentPayment.userId, status: 'ACTIVE' },
         data: { status: 'CANCELLED' },
       });
 
-      const isBooster = plan.code.includes('BOOSTER');
-      const testsRemaining = isBooster ? 5 : null;
+      // A named selected-test pack grants every selected test for its duration.
+      // The optional limit is only used for an open-ended scoped pack.
+      const testsRemaining = includedTestIds.length === 0 && plan.testAccessLimit > 0
+        ? plan.testAccessLimit
+        : null;
 
       createdSubscription = await tx.subscription.create({
         data: {
@@ -1553,16 +1649,39 @@ async function activatePaidOrder(params: {
         include: { plan: true },
       });
 
-      // Grant Subscription Entitlement
-      await tx.entitlement.create({
-        data: {
-          userId: currentPayment.userId,
-          testId: null,
-          planCode: plan.code,
-          source,
-          expiresAt: endDate,
-        },
-      });
+      // A selected-test plan grants only those tests. An exam-scoped plan is
+      // snapshotted into direct entitlements so a later admin price/scope edit
+      // cannot revoke a student's completed purchase. All-access plans keep a
+      // global entitlement, matching the historic entitlement behaviour.
+      if (includedTestIds.length > 0) {
+        for (const testId of [...new Set(includedTestIds)]) {
+          await tx.entitlement.upsert({
+            where: { id: `plan_${currentPayment.id}_${testId}` },
+            update: { isActive: true, expiresAt: endDate },
+            create: {
+              id: `plan_${currentPayment.id}_${testId}`,
+              userId: currentPayment.userId,
+              testId,
+              planCode: plan.code,
+              source,
+              expiresAt: endDate,
+            },
+          });
+        }
+      } else if (!plan.examSlug && plan.testAccessLimit <= 0) {
+        await tx.entitlement.upsert({
+          where: { id: `plan_${currentPayment.id}_all` },
+          update: { isActive: true, expiresAt: endDate },
+          create: {
+            id: `plan_${currentPayment.id}_all`,
+            userId: currentPayment.userId,
+            testId: null,
+            planCode: plan.code,
+            source,
+            expiresAt: endDate,
+          },
+        });
+      }
     }
 
     return {
@@ -2276,6 +2395,7 @@ router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async
     const targetId = req.body.targetId || req.body.contentId;
     const accessMode = req.body.accessMode;
     const price = req.body.price !== undefined ? req.body.price : req.body.priceINR;
+    const pricePaiseInput = req.body.pricePaise;
     const originalPrice = req.body.originalPrice !== undefined ? req.body.originalPrice : req.body.originalPriceINR;
     const discountPct = req.body.discountPct !== undefined ? req.body.discountPct : req.body.discountPercent;
     const offerExpiresAt = req.body.offerExpiresAt;
@@ -2337,19 +2457,35 @@ router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async
         return;
       }
 
-      const newAccessMode = accessMode || existingTest.accessMode;
-      const newPrice = price !== undefined ? Number(price) : existingTest.price;
-      const newAccessLevel = newAccessMode === 'FREE' || newPrice === 0 ? 'FREE' : 'PREMIUM';
+      const newAccessMode = String(accessMode || existingTest.accessMode || 'FREE').toUpperCase();
+      if (!['FREE', 'PAID', 'PREMIUM', 'PRIVATE', 'COMING_SOON', 'DISABLED'].includes(newAccessMode)) {
+        res.status(400).json({ error: 'Mock test access mode is invalid.' });
+        return;
+      }
+      const requestedPaise = pricePaiseInput !== undefined
+        ? Number(pricePaiseInput)
+        : price !== undefined ? toPaise(price) : storedPaise(existingTest);
+      if (!Number.isSafeInteger(requestedPaise) || requestedPaise < 0) {
+        res.status(400).json({ error: 'pricePaise must be a non-negative integer.' });
+        return;
+      }
+      const newPricePaise = validatePremiumPrice(requestedPaise, newAccessMode);
+      const newPrice = paiseToInr(newPricePaise);
+      const newAccessLevel = newAccessMode === 'FREE' ? 'FREE' : newAccessMode;
+      const newAccessType = newAccessMode === 'FREE' ? 'free' : 'premium';
 
       const updatedTest = await prisma.test.update({
         where: { id: targetId },
         data: {
           accessMode: newAccessMode,
           accessLevel: newAccessLevel,
+          accessType: newAccessType,
           price: newPrice,
+          pricePaise: newPricePaise,
           originalPrice: originalPrice !== undefined ? Number(originalPrice) : existingTest.originalPrice,
           discountPct: discountPct !== undefined ? Number(discountPct) : existingTest.discountPct,
           offerExpiresAt: offerExpiresAt !== undefined ? (offerExpiresAt ? new Date(offerExpiresAt) : null) : existingTest.offerExpiresAt,
+          ...(req.body.isPublished !== undefined && { isPublished: Boolean(req.body.isPublished) }),
         },
       });
 
@@ -2364,7 +2500,7 @@ router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async
           newPrice: updatedTest.price,
           previousAccess: existingTest.accessMode,
           newAccess: updatedTest.accessMode,
-          notes: notes || `Updated pricing for mock test ${existingTest.title}`,
+          notes: notes || `Updated pricing for mock test ${existingTest.title} to ${newAccessMode} (${newPricePaise} paise)`,
         },
       });
 
@@ -2383,18 +2519,29 @@ router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async
         return;
       }
 
-      const newAccessMode = accessMode || 'PAID';
-      const newPrice = price !== undefined ? Number(price) : 0;
-      const newAccessLevel = newAccessMode === 'FREE' || newPrice === 0 ? 'FREE' : 'PREMIUM';
+      const newAccessMode = String(accessMode || 'PAID').toUpperCase();
+      if (!['FREE', 'PAID', 'PREMIUM', 'PRIVATE', 'COMING_SOON', 'DISABLED'].includes(newAccessMode)) {
+        res.status(400).json({ error: 'Mock test access mode is invalid.' });
+        return;
+      }
+      const requestedPaise = pricePaiseInput !== undefined
+        ? Number(pricePaiseInput)
+        : price !== undefined ? toPaise(price) : 0;
+      const newPricePaise = validatePremiumPrice(requestedPaise, newAccessMode);
+      const newPrice = paiseToInr(newPricePaise);
+      const newAccessLevel = newAccessMode === 'FREE' ? 'FREE' : newAccessMode;
 
       const updateData: any = {
         accessMode: newAccessMode,
         accessLevel: newAccessLevel,
+        accessType: newAccessMode === 'FREE' ? 'free' : 'premium',
+        pricePaise: newPricePaise,
       };
-      if (price !== undefined) updateData.price = newPrice;
+      if (price !== undefined || pricePaiseInput !== undefined || newAccessMode === 'FREE') updateData.price = newPrice;
       if (originalPrice !== undefined) updateData.originalPrice = Number(originalPrice);
       if (discountPct !== undefined) updateData.discountPct = Number(discountPct);
       if (offerExpiresAt !== undefined) updateData.offerExpiresAt = offerExpiresAt ? new Date(offerExpiresAt) : null;
+      if (req.body.isPublished !== undefined) updateData.isPublished = Boolean(req.body.isPublished);
 
       const updatedBatch = await prisma.test.updateMany({
         where: { id: { in: bulkTestIds } },
@@ -2408,8 +2555,8 @@ router.put('/admin/content-pricing', authenticate, requireRole(['ADMIN']), async
           targetType: 'BULK_TESTS',
           targetId: bulkTestIds.join(','),
           targetTitle: `${bulkTestIds.length} tests bulk updated`,
-          previousPrice: null,
-          newPrice: price !== undefined ? Number(price) : null,
+          previousPrice: 0,
+          newPrice: price !== undefined ? Number(price) : 0,
           previousAccess: 'MULTIPLE',
           newAccess: newAccessMode,
           notes: notes || `Bulk updated ${bulkTestIds.length} tests to ${newAccessMode} (₹${newPrice})`,
@@ -2449,17 +2596,29 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
       badge,
       displayOrder,
       offerExpiresAt,
+      testAccessLimit,
     } = req.body;
 
     const price = req.body.price !== undefined ? req.body.price : req.body.priceINR;
+    const pricePaiseInput = req.body.pricePaise;
     const originalPrice = req.body.originalPrice !== undefined ? req.body.originalPrice : req.body.originalPriceINR;
     const discountPct = req.body.discountPct !== undefined ? req.body.discountPct : req.body.discountPercent;
     const isPublished = req.body.isPublished !== undefined ? req.body.isPublished : (req.body.isActive !== undefined ? req.body.isActive : true);
 
-    if (!name || price === undefined) {
+    if (!name || (price === undefined && pricePaiseInput === undefined)) {
       res.status(400).json({ error: 'Plan name and price are required.' });
       return;
     }
+
+    const pricePaise = pricePaiseInput !== undefined ? Number(pricePaiseInput) : toPaise(price);
+    if (!Number.isSafeInteger(pricePaise) || pricePaise < 0) {
+      res.status(400).json({ error: 'pricePaise must be a non-negative integer.' });
+      return;
+    }
+    const payablePaise = validatePremiumPrice(pricePaise, pricePaise === 0 ? 'FREE' : 'PREMIUM');
+    const originalPricePaise = originalPrice !== undefined ? toPaise(originalPrice) : payablePaise;
+    const normalizedExamSlug = examSlug ? String(examSlug).trim().toLowerCase() : null;
+    const normalizedIncludedMockTests = await normalizeIncludedMockTestIds(includedMockTests || [], normalizedExamSlug);
 
     const planCode = code
       ? code.trim().toUpperCase()
@@ -2470,17 +2629,20 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
         name,
         code: planCode,
         description: description || '',
-        price: Number(price),
-        originalPrice: originalPrice ? Number(originalPrice) : Number(price),
+        price: paiseToInr(payablePaise),
+        pricePaise: payablePaise,
+        originalPrice: paiseToInr(originalPricePaise),
+        originalPricePaise,
         discountPct: discountPct ? Number(discountPct) : 0,
         currency: 'INR',
         durationDays: Number(durationDays) || 30,
+        testAccessLimit: Math.max(0, Number(testAccessLimit) || 0),
         billingInterval: billingInterval || 'MONTHLY',
         featuresJson: JSON.stringify(features || []),
         includedExamsJson: JSON.stringify(includedExams || []),
         includedPapersJson: JSON.stringify(includedPapers || []),
-        includedMockTestsJson: JSON.stringify(includedMockTests || []),
-        examSlug: examSlug || null,
+        includedMockTestsJson: JSON.stringify(normalizedIncludedMockTests),
+        examSlug: normalizedExamSlug,
         badge: badge || null,
         isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
         displayOrder: Number(displayOrder) || 10,
@@ -2494,9 +2656,9 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
         targetType: 'PLAN',
         targetId: newPlan.id,
         targetTitle: newPlan.name,
-        previousPrice: null,
+        previousPrice: 0,
         newPrice: newPlan.price,
-        previousAccess: null,
+        previousAccess: 'NONE',
         newAccess: newPlan.isPublished ? 'ACTIVE' : 'INACTIVE',
         notes: `Created new pricing plan: ${newPlan.name} (₹${newPlan.price})`,
       },
@@ -2538,9 +2700,11 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
       badge,
       displayOrder,
       offerExpiresAt,
+      testAccessLimit,
     } = req.body;
 
     const price = req.body.price !== undefined ? req.body.price : req.body.priceINR;
+    const pricePaiseInput = req.body.pricePaise;
     const originalPrice = req.body.originalPrice !== undefined ? req.body.originalPrice : req.body.originalPriceINR;
     const discountPct = req.body.discountPct !== undefined ? req.body.discountPct : req.body.discountPercent;
     const isPublished = req.body.isPublished !== undefined ? req.body.isPublished : (req.body.isActive !== undefined ? req.body.isActive : undefined);
@@ -2551,21 +2715,37 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
       return;
     }
 
+    const nextPricePaise = pricePaiseInput !== undefined
+      ? Number(pricePaiseInput)
+      : price !== undefined ? toPaise(price) : storedPaise(existingPlan);
+    if (!Number.isSafeInteger(nextPricePaise) || nextPricePaise < 0) {
+      res.status(400).json({ error: 'pricePaise must be a non-negative integer.' });
+      return;
+    }
+    const validatedPricePaise = validatePremiumPrice(nextPricePaise, nextPricePaise === 0 ? 'FREE' : 'PREMIUM');
+    const normalizedExamSlug = examSlug !== undefined
+      ? (examSlug ? String(examSlug).trim().toLowerCase() : null)
+      : existingPlan.examSlug;
+    const normalizedIncludedMockTests = includedMockTests !== undefined
+      ? await normalizeIncludedMockTestIds(includedMockTests, normalizedExamSlug)
+      : undefined;
+
     const updated = await prisma.subscriptionPlan.update({
       where: { id },
       data: {
         ...(name && { name }),
         ...(description !== undefined && { description }),
-        ...(price !== undefined && { price: Number(price) }),
-        ...(originalPrice !== undefined && { originalPrice: Number(originalPrice) }),
+        ...((price !== undefined || pricePaiseInput !== undefined) && { price: paiseToInr(validatedPricePaise), pricePaise: validatedPricePaise }),
+        ...(originalPrice !== undefined && { originalPrice: paiseToInr(toPaise(originalPrice)), originalPricePaise: toPaise(originalPrice) }),
         ...(discountPct !== undefined && { discountPct: Number(discountPct) }),
         ...(durationDays !== undefined && { durationDays: Number(durationDays) }),
+        ...(testAccessLimit !== undefined && { testAccessLimit: Math.max(0, Number(testAccessLimit) || 0) }),
         ...(billingInterval && { billingInterval }),
         ...(features && { featuresJson: JSON.stringify(features) }),
         ...(includedExams && { includedExamsJson: JSON.stringify(includedExams) }),
         ...(includedPapers && { includedPapersJson: JSON.stringify(includedPapers) }),
-        ...(includedMockTests && { includedMockTestsJson: JSON.stringify(includedMockTests) }),
-        ...(examSlug !== undefined && { examSlug: examSlug || null }),
+        ...(normalizedIncludedMockTests !== undefined && { includedMockTestsJson: JSON.stringify(normalizedIncludedMockTests) }),
+        ...(examSlug !== undefined && { examSlug: normalizedExamSlug }),
         ...(badge !== undefined && { badge }),
         ...(isPublished !== undefined && { isPublished: Boolean(isPublished) }),
         ...(displayOrder !== undefined && { displayOrder: Number(displayOrder) }),

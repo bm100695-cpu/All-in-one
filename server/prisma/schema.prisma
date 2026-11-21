@@ -271,6 +271,7 @@ model Test {
   // are retained while older pricing and entitlement screens are transitioned.
   accessType       String              @default("free") @map("access_type") // free, premium
   price            Float               @default(0.0)
+  pricePaise       Int                 @default(0) @map("price_paise")
   originalPrice    Float?
   discountPct      Int                 @default(0)
   offerExpiresAt   DateTime?
@@ -385,7 +386,9 @@ model SubscriptionPlan {
   name            String
   description     String
   price           Float          @default(0.0)
+  pricePaise      Int            @default(0) @map("price_paise")
   originalPrice   Float?
+  originalPricePaise Int?        @map("original_price_paise")
   discountPct     Int            @default(0)
   currency        String         @default("INR")
   billingInterval String         @default("ONCE") // ONCE, MONTHLY, QUARTERLY, YEARLY, LIFETIME
@@ -441,9 +444,12 @@ model Payment {
   testId          String?
   examSlug        String?
   originalPrice   Float?
+  originalPricePaise Int?        @map("original_price_paise")
   discountAmount  Float            @default(0.0)
+  discountAmountPaise Int          @default(0) @map("discount_amount_paise")
   couponCode      String?
   amount          Float
+  amountPaise     Int              @default(0) @map("amount_paise")
   currency        String           @default("INR")
   status          String           @default("PENDING") // PENDING, SUCCESS, FAILED, REFUNDED
   orderId         String           @unique // Cashfree / Gateway Order ID (e.g. order_xxx)

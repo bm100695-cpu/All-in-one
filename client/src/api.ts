@@ -559,6 +559,7 @@ export const api = {
     contentId: string;
     accessMode: string;
     priceINR?: number;
+    pricePaise?: number;
     originalPriceINR?: number;
     discountPercent?: number;
     isPublished?: boolean;

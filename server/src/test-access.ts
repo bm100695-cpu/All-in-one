@@ -10,6 +10,21 @@ type AccessControlledTest = {
   exam?: { slug?: string | null } | null;
 };
 
+function includedTestIds(plan: { includedMockTestsJson?: string | null }): string[] {
+  try {
+    const parsed = JSON.parse(plan.includedMockTestsJson || '[]');
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function planAppliesToTest(plan: { examSlug?: string | null; includedMockTestsJson?: string | null }, test: AccessControlledTest): boolean {
+  const selectedTests = includedTestIds(plan);
+  if (selectedTests.length > 0) return selectedTests.includes(test.id);
+  return !plan.examSlug || plan.examSlug === test.exam?.slug;
+}
+
 /**
  * The new access_type is authoritative. The legacy fields are only a safe
  * fallback for installations that have not applied the migration yet.
@@ -55,17 +70,18 @@ export async function canAccessMockTest(
     }),
   ]);
 
+  // Direct entitlements include individual-test and scoped-plan purchases.
+  // Existing global entitlements remain valid so past purchases are never
+  // revoked by a later pricing or plan-scope edit.
   if (entitlement) return true;
   if (!activeSubscription?.plan || activeSubscription.plan.price <= 0 || activeSubscription.plan.code.includes('FREE')) {
     return false;
   }
 
   const plan = activeSubscription.plan;
-  const isTestPack = plan.code === 'PLAN_BOOSTER_49' || plan.code === 'TEST_PACK_99' || plan.code.includes('BOOSTER');
-  if (isTestPack) return (activeSubscription.testsRemaining ?? 0) > 0;
-
-  // Global plans apply everywhere. Exam-scoped plans apply only to their exam.
-  return !plan.examSlug || plan.examSlug === test.exam?.slug;
+  if (!planAppliesToTest(plan, test)) return false;
+  if (plan.testAccessLimit > 0) return (activeSubscription.testsRemaining ?? 0) > 0;
+  return true;
 }
 
 /** Consume a pack slot exactly once, then persist an entitlement for the test. */
@@ -87,8 +103,7 @@ export async function consumeTestPackIfNeeded(
 
   if (!activeSubscription?.plan) return true;
   const plan = activeSubscription.plan;
-  const isTestPack = plan.code === 'PLAN_BOOSTER_49' || plan.code === 'TEST_PACK_99' || plan.code.includes('BOOSTER');
-  if (!isTestPack) return true;
+  if (plan.testAccessLimit <= 0 || !planAppliesToTest(plan, test)) return true;
 
   const hasEntitlement = await prisma.entitlement.findFirst({
     where: {
