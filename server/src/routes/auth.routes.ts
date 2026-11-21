@@ -2,8 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 import { prisma } from '../prisma';
-import { generateToken, authenticate, AuthUser, isAdminEmail } from '../middleware/auth';
-import { login } from '../controllers/auth.controller';
+import { generateToken, authenticate, AuthUser } from '../middleware/auth';
 
 const router = Router();
 
@@ -364,14 +363,6 @@ router.post('/google', async (req: Request, res: Response) => {
       }
     }
 
-    // Auto-sync ADMIN role if this Google account is a configured administrator
-    if (isAdminEmail(user.email) && user.role !== 'ADMIN') {
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: { role: 'ADMIN' },
-      });
-    }
-
     // Generate JWT token with RBAC role information (Requirement 11, 12)
     const authPayload: AuthUser = {
       userId: user.id,
@@ -481,52 +472,23 @@ router.post('/admin-login', async (req: Request, res: Response) => {
     // Check if user exists
     let user = await prisma.user.findUnique({ where: { email: cleanEmail } });
 
-    // Secure Auto-sync for authorized admin email
-    if (isAdminEmail(cleanEmail)) {
-      if (!user) {
-        const passwordHash = await bcrypt.hash(password, 10);
-        user = await prisma.user.create({
-          data: {
-            email: cleanEmail,
-            name: 'Brijesh Maurya (Admin)',
-            role: 'ADMIN',
-            passwordHash,
-            authProvider: 'local',
-          },
-        });
-      } else {
-        const updateData: any = {};
-        if (user.role !== 'ADMIN') {
-          updateData.role = 'ADMIN';
-        }
-        if (!user.passwordHash) {
-          updateData.passwordHash = await bcrypt.hash(password, 10);
-        }
-        if (Object.keys(updateData).length > 0) {
-          user = await prisma.user.update({
-            where: { id: user.id },
-            data: updateData,
-          });
-        }
-      }
-    }
-
     if (!user || !user.passwordHash) {
-      res.status(401).json({ error: 'Invalid administrative credentials.' });
+      res.status(401).json({ error: 'Invalid staff credentials.' });
       return;
     }
 
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
-      res.status(401).json({ error: 'Invalid administrative credentials.' });
+      res.status(401).json({ error: 'Invalid staff credentials.' });
       return;
     }
 
-    // STRICT RBAC CHECK: User MUST have ADMIN role
-    if (user.role !== 'ADMIN') {
+    // Roles are assigned through the protected user-management workflow only.
+    // Login must never create or promote an account.
+    if (user.role !== 'ADMIN' && user.role !== 'CONTENT_REVIEWER') {
       res.status(403).json({
         error: 'ACCESS_DENIED',
-        message: 'Forbidden. This account is registered as STUDENT. Administrator access required.',
+        message: 'Forbidden. This account is not assigned an authorized staff role. Ask an administrator to grant ADMIN or CONTENT_REVIEWER access.',
       });
       return;
     }
@@ -536,7 +498,7 @@ router.post('/admin-login', async (req: Request, res: Response) => {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: 'ADMIN',
+      role: user.role as AuthUser['role'],
       studentId: user.studentId || undefined,
       referralCode: user.referralCode || undefined,
       referralCredits: user.referralCredits || 0,
@@ -545,7 +507,7 @@ router.post('/admin-login', async (req: Request, res: Response) => {
     const token = generateToken(authPayload);
 
     res.json({
-      message: `Administrative session verified (${user.role})`,
+      message: `Staff session verified (${user.role})`,
       token,
       user: authPayload,
     });

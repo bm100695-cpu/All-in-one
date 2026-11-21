@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma';
-import { AuthUser, generateToken, isAdminEmail } from '../middleware/auth';
+import { AuthUser, generateToken } from '../middleware/auth';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'examverse_super_secret_jwt_key_2025_prod_grade_xyz';
 
@@ -37,29 +37,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const cleanEmail = String(email).trim().toLowerCase();
 
-    // Check if user exists
-    let user = await prisma.user.findUnique({ where: { email: cleanEmail } });
-
-    // Secure Auto-sync for authorized admin email
-    if (isAdminEmail(cleanEmail)) {
-      if (!user) {
-        const passwordHash = await bcrypt.hash(password, 10);
-        user = await prisma.user.create({
-          data: {
-            email: cleanEmail,
-            name: cleanEmail.split('@')[0],
-            role: 'ADMIN',
-            passwordHash,
-            authProvider: 'local',
-          },
-        });
-      } else if (user.role !== 'ADMIN') {
-        user = await prisma.user.update({
-          where: { id: user.id },
-          data: { role: 'ADMIN' },
-        });
-      }
-    }
+    // A login never creates an account or changes its role. Those actions are
+    // explicit administrator workflows, not side effects of authentication.
+    const user = await prisma.user.findUnique({ where: { email: cleanEmail } });
 
     if (!user || !user.passwordHash) {
       res.status(401).json({ error: 'Invalid email or password.' });

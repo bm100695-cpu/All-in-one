@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Mail, AlertTriangle, ArrowRight, ArrowLeft, Sparkles, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, AlertTriangle, ArrowRight, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { api } from '../api';
 import { User } from '../types';
 
@@ -9,8 +9,8 @@ interface AdminLoginProps {
 }
 
 export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => {
-  const [email, setEmail] = useState('bm100695@gmail.com');
-  const [password, setPassword] = useState('brijesh@1234');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,12 +37,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => 
     }
   };
 
-  const handleQuickAdminLogin = () => {
-    setEmail('bm100695@gmail.com');
-    setPassword('brijesh@1234');
-    performLogin('bm100695@gmail.com', 'brijesh@1234');
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 font-sans text-slate-900 select-none">
       <div className="max-w-[420px] w-full bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden p-8 space-y-6">
@@ -58,28 +52,18 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => 
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight text-slate-900">Control Center</h1>
-            <p className="text-xs text-slate-500 mt-0.5">Academic & Administrative Portal</p>
+            <p className="text-xs text-slate-500 mt-0.5">Authorized staff sign in</p>
           </div>
         </div>
 
-        {/* 1-Click Quick Access Button */}
-        <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-2">
+        <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-1.5">
           <div className="flex items-center gap-1.5 font-bold text-emerald-800">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Master Admin Quick Access</span>
+            <span>Role-protected access</span>
           </div>
           <p className="text-[11px] text-emerald-700 leading-relaxed">
-            Click below to instantly authenticate with administrative privileges.
+            Use an account already assigned ADMIN or CONTENT_REVIEWER by an authorized administrator.
           </p>
-          <button
-            type="button"
-            disabled={loading}
-            onClick={handleQuickAdminLogin}
-            className="w-full py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98 disabled:opacity-50"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{loading ? 'Authenticating...' : '⚡ Instant 1-Click Enter Control Center'}</span>
-          </button>
         </div>
 
         {error && (
@@ -100,7 +84,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess, onExit }) => 
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="bm100695@gmail.com"
+                placeholder="staff@yourdomain.com"
                 className="w-full pl-9 pr-3 py-2 rounded-md bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 text-xs transition"
               />
             </div>

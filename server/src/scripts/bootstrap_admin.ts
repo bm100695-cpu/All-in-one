@@ -1,12 +1,13 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '../prisma';
-import { isAdminEmail } from '../middleware/auth';
 
 async function main() {
   console.log('--- ExamVerse / All in One Admin Bootstrap ---');
 
-  const targetEmail = (process.env.ADMIN_BOOTSTRAP_EMAIL || process.argv[2] || 'bm100695@gmail.com').toLowerCase().trim();
-  const targetPassword = process.env.ADMIN_BOOTSTRAP_PASSWORD || process.argv[3] || 'brijesh@1234';
+  // This is an explicitly invoked recovery/bootstrap command. Never supply a
+  // default account or password that could silently become an administrator.
+  const targetEmail = (process.env.ADMIN_BOOTSTRAP_EMAIL || process.argv[2] || '').toLowerCase().trim();
+  const targetPassword = process.env.ADMIN_BOOTSTRAP_PASSWORD || process.argv[3] || '';
   const targetName = process.env.ADMIN_BOOTSTRAP_NAME || 'Brijesh Maurya (Admin)';
 
   if (!targetEmail || !targetPassword) {

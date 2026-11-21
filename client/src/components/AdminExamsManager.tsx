@@ -50,6 +50,8 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
 
   // Test Filter, Stats & Scheduling State
   const [testFilter, setTestFilter] = useState<'ALL' | 'ACTIVE' | 'PUBLISHED' | 'DRAFT' | 'ARCHIVED'>('ALL');
+  const [testSearch, setTestSearch] = useState('');
+  const [testAccessFilter, setTestAccessFilter] = useState<'ALL' | 'FREE' | 'PREMIUM'>('ALL');
   const [testStats, setTestStats] = useState<{ total: number; active: number; published: number; draft: number; inactive: number; archived: number } | null>(null);
   const [schedulingTest, setSchedulingTest] = useState<any | null>(null);
   const [scheduleAvailableFrom, setScheduleAvailableFrom] = useState('');
@@ -1066,38 +1068,35 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                 })()}
 
                 {/* Filter Tabs */}
-                <div className="flex items-center gap-1 border-b border-slate-100 pb-2 overflow-x-auto text-xs">
-                  <span className="text-[11px] font-bold text-slate-400 mr-2 uppercase tracking-wider">Filter:</span>
-                  {[
-                    { id: 'ALL', label: 'All Tests' },
-                    { id: 'ACTIVE', label: '● Active (Live)' },
-                    { id: 'PUBLISHED', label: 'Published (Inactive)' },
-                    { id: 'DRAFT', label: 'Drafts' },
-                    { id: 'ARCHIVED', label: 'Archived' },
-                  ].map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => setTestFilter(tab.id as any)}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                        testFilter === tab.id
-                          ? 'bg-tn-navy text-white shadow-xs'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                      }`}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
+                <div className="flex flex-col gap-3 border-b border-slate-100 pb-3 text-xs lg:flex-row lg:items-center">
+                  <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
+                    <span className="mr-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Status:</span>
+                    {[
+                      { id: 'ALL', label: 'All Tests' },
+                      { id: 'ACTIVE', label: '● Active (Live)' },
+                      { id: 'PUBLISHED', label: 'Published' },
+                      { id: 'DRAFT', label: 'Drafts' },
+                      { id: 'ARCHIVED', label: 'Archived' },
+                    ].map((tab) => (
+                      <button key={tab.id} onClick={() => setTestFilter(tab.id as any)} className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${testFilter === tab.id ? 'bg-tn-navy text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`}>{tab.label}</button>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input value={testSearch} onChange={(event) => setTestSearch(event.target.value)} placeholder="Search tests" className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs text-slate-800 outline-none focus:border-tn-blue" />
+                    <select value={testAccessFilter} onChange={(event) => setTestAccessFilter(event.target.value as 'ALL' | 'FREE' | 'PREMIUM')} className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-medium text-slate-700 outline-none"><option value="ALL">All access</option><option value="FREE">Free</option><option value="PREMIUM">Premium</option></select>
+                  </div>
                 </div>
 
                 {/* Filtered Tests List */}
                 {(() => {
                   const filtered = examTests.filter((t) => {
                     const isLive = t.status === 'ACTIVE' || t.isActive;
-                    if (testFilter === 'ACTIVE') return isLive;
-                    if (testFilter === 'PUBLISHED') return t.isPublished && !isLive;
-                    if (testFilter === 'DRAFT') return !t.isPublished && t.status !== 'ARCHIVED';
-                    if (testFilter === 'ARCHIVED') return t.status === 'ARCHIVED';
-                    return true;
+                    const isPremium = t.accessType === 'premium' || t.accessLevel === 'PREMIUM';
+                    const matchesStatus = testFilter === 'ACTIVE' ? isLive : testFilter === 'PUBLISHED' ? t.isPublished && !isLive : testFilter === 'DRAFT' ? !t.isPublished && t.status !== 'ARCHIVED' : testFilter === 'ARCHIVED' ? t.status === 'ARCHIVED' : true;
+                    const matchesAccess = testAccessFilter === 'ALL' || (testAccessFilter === 'PREMIUM' ? isPremium : !isPremium);
+                    const query = testSearch.trim().toLowerCase();
+                    const matchesSearch = !query || `${t.title} ${t.type || ''} ${t.description || ''}`.toLowerCase().includes(query);
+                    return matchesStatus && matchesAccess && matchesSearch;
                   });
 
                   if (filtered.length === 0) {
