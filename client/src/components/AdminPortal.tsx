@@ -266,9 +266,9 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
   const navigate = (section: AdminSection) => { setActiveTab(section); setSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-[#F7F9FC] lg:flex">
+    <div className="min-h-[calc(100vh-5rem)] w-full bg-[#F7F9FC] lg:flex">
       {sidebarOpen && <button aria-label="Close navigation" onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-40 bg-slate-950/45 lg:hidden" />}
-      <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-[#111B35] text-slate-200 transition-transform lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-72'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-[#111B35] text-slate-200 transition-transform lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-72'}`}>
         <div className="flex h-16 items-center border-b border-white/10 px-4">
           <div className={`flex min-w-0 items-center gap-3 ${sidebarCollapsed ? 'lg:justify-center' : ''}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-sm font-bold text-white">A1</span>{!sidebarCollapsed && <div className="min-w-0"><p className="truncate text-sm font-bold text-white">All in One CBT</p><p className="text-xs text-slate-400">Admin control center</p></div>}</div>
           <button onClick={() => setSidebarOpen(false)} className="ml-auto rounded p-1 text-slate-300 lg:hidden"><CloseIcon className="h-5 w-5" /></button>
@@ -283,7 +283,7 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
           <div className="flex min-w-0 items-center gap-3"><button onClick={() => setSidebarOpen(true)} className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"><Menu className="h-5 w-5" /></button><div className="min-w-0"><p className="truncate text-sm font-semibold text-[#0F172A]">{titles[activeTab]}</p><p className="hidden text-xs text-[#64748B] sm:block">All in One CBT Station</p></div></div>
           {adminExams.length > 0 && !isReviewerOnly && <label className="flex items-center gap-2 text-sm text-[#64748B]"><span className="hidden sm:inline">Active portal</span><select value={selectedExam?.id || ''} onChange={(e) => { const target = adminExams.find((exam) => exam.id === e.target.value); if (target) handleSelectExam(target); }} className="max-w-36 rounded-lg border border-[#E2E8F0] bg-white px-2 py-1.5 text-sm font-medium text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-blue-200">{adminExams.map((exam) => <option key={exam.id} value={exam.id}>{exam.shortName}</option>)}</select></label>}
         </header>
-        <main className="mx-auto w-full max-w-[1600px] p-4 sm:p-6 lg:p-8">
+        <main className="w-full min-w-0 p-4 sm:p-6 lg:p-8">
 
       {activeTab === 'OVERVIEW' && <AdminDashboardOverview currentUser={currentUser} onNavigate={navigate} />}
 
