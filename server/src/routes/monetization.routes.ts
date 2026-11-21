@@ -100,11 +100,18 @@ export function getCashfreeConfig() {
   // from a credential prefix: doing so can pair a production SDK with sandbox
   // API credentials (one common cause of an empty checkout).
   const isSandbox = rawEnv === 'TEST' || rawEnv === 'SANDBOX';
-  const isProduction = !isSandbox;
-  const baseUrl = isProduction ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
+  const isProduction = rawEnv === 'PRODUCTION' || rawEnv === 'LIVE';
+  const isEnvironmentConfigured = isSandbox || isProduction;
+
+  // Fail closed: an absent or misspelled environment must never silently
+  // create live orders. Sandbox is used as the inert default only so callers
+  // can render a safe configuration error rather than a production checkout.
+  const useProductionEndpoints = isProduction;
+  const baseUrl = useProductionEndpoints ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
   const isMasked = /x{4,}/i.test(secretKey);
   const isEnvironmentMismatch = isProduction && /^test/i.test(appId);
   const isLive = Boolean(
+    isEnvironmentConfigured &&
     appId &&
     secretKey &&
     !appId.includes('placeholder') &&
@@ -121,6 +128,7 @@ export function getCashfreeConfig() {
     mode: (isProduction ? 'production' : 'sandbox') as 'production' | 'sandbox',
     baseUrl,
     isProduction,
+    isEnvironmentConfigured,
     isLive,
     isMasked,
     isEnvironmentMismatch,
@@ -147,6 +155,11 @@ async function createCashfreeOrder(params: {
   const config = getCashfreeConfig();
 
   if (!config.isLive) {
+    if (!config.isEnvironmentConfigured) {
+      throw new Error(
+        'Cashfree environment is not configured. Set CASHFREE_ENVIRONMENT to SANDBOX for test payments or PRODUCTION for authorised live payments; no order was created.'
+      );
+    }
     if (config.isMasked) {
       throw new Error(
         'CASHFREE_SECRET_KEY in server/.env is currently masked with "xxxx". Please set your unmasked production secret key.'
@@ -304,7 +317,7 @@ router.get('/config', (_req: Request, res: Response) => {
   const webhookConfigured = Boolean(getCashfreeWebhookUrl());
   res.json({
     currency: DEFAULT_CURRENCY,
-    isGatewayConfigured: config.isLive && !config.isEnvironmentMismatch,
+    isGatewayConfigured: config.isLive && config.isEnvironmentConfigured && !config.isEnvironmentMismatch,
     supportedCurrencies: [DEFAULT_CURRENCY],
     activeGateway: 'Cashfree',
     cashfreeMode: config.mode,
