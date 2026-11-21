@@ -73,54 +73,17 @@ function getRequiredCashfreeWebhookUrl(): string {
   return webhookUrl;
 }
 
-// In-memory dynamic overrides (allows instant activation of production keys from database or admin API)
-let dynamicOverrideAppId: string | null = null;
-let dynamicOverrideSecretKey: string | null = null;
-let dynamicOverrideEnv: string | null = null;
-let lastDbSyncTime = 0;
-
-// Auto-sync credentials from Neon PostgreSQL if saved
-export async function syncCashfreeConfigFromDb(force = false): Promise<void> {
-  const now = Date.now();
-  if (!force && now - lastDbSyncTime < 30000) {
-    return;
-  }
-  lastDbSyncTime = now;
-  try {
-    const savedConfig = await prisma.pricingAuditLog.findFirst({
-      where: { targetType: 'CASHFREE_CONFIG' },
-      orderBy: { createdAt: 'desc' },
-    });
-    if (savedConfig?.notes) {
-      const parsed = JSON.parse(savedConfig.notes);
-      if (parsed.appId) dynamicOverrideAppId = parsed.appId;
-      if (parsed.secretKey) dynamicOverrideSecretKey = parsed.secretKey;
-      if (parsed.environment) dynamicOverrideEnv = parsed.environment;
-      console.log(`[Cashfree Config] Synced from database. Mode: ${parsed.environment || 'PRODUCTION'} | AppId: ${parsed.appId?.slice(0, 8)}...`);
-    }
-  } catch (err: any) {
-    console.warn('[Cashfree Config] Notice syncing DB credentials:', err.message);
-  }
-}
-
-// Initial sync on startup
-syncCashfreeConfigFromDb(true).catch(() => {});
-
-// Middleware to keep config synced
-router.use(async (_req: Request, _res: Response, next) => {
-  syncCashfreeConfigFromDb(false).catch(() => {});
-  next();
-});
-
-// Helper to dynamically read official Cashfree PG Configuration from memory/db/env on every request
+// Gateway credentials are deployment secrets. They are read only from the
+// server environment and are never accepted from the browser or stored in an
+// audit log/database record.
 export function getCashfreeConfig() {
-  const appId = String(dynamicOverrideAppId || process.env.CASHFREE_APP_ID || '')
+  const appId = String(process.env.CASHFREE_APP_ID || '')
     .replace(/^["']|["']$/g, '')
     .trim();
-  const secretKey = String(dynamicOverrideSecretKey || process.env.CASHFREE_SECRET_KEY || '')
+  const secretKey = String(process.env.CASHFREE_SECRET_KEY || '')
     .replace(/^["']|["']$/g, '')
     .trim();
-  const rawEnv = String(dynamicOverrideEnv || process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || '')
+  const rawEnv = String(process.env.CASHFREE_ENVIRONMENT || process.env.CASHFREE_ENV || '')
     .replace(/^["']|["']$/g, '')
     .trim()
     .toUpperCase();
@@ -345,46 +308,13 @@ router.get('/config', (_req: Request, res: Response) => {
   });
 });
 
-// Admin: Update Cashfree production credentials dynamically without redeploying
+// Deliberately reject browser-supplied payment keys. Configure these secrets
+// in the deployment environment (Render/hosting provider) and redeploy.
 router.post('/admin/cashfree-config', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
-  try {
-    const { appId, secretKey, environment } = req.body;
-    if (!appId || !secretKey) {
-      res.status(400).json({ error: 'App ID and Secret Key are required.' });
-      return;
-    }
-
-    dynamicOverrideAppId = String(appId).trim();
-    dynamicOverrideSecretKey = String(secretKey).trim();
-    dynamicOverrideEnv = String(environment || 'PRODUCTION').trim().toUpperCase();
-
-    // Persist securely to Neon PostgreSQL
-    await prisma.pricingAuditLog.create({
-      data: {
-        adminId: req.user!.id,
-        targetType: 'CASHFREE_CONFIG',
-        targetId: 'ACTIVE',
-        targetTitle: 'Cashfree Payment Gateway Credentials',
-        notes: JSON.stringify({
-          appId: dynamicOverrideAppId,
-          secretKey: dynamicOverrideSecretKey,
-          environment: dynamicOverrideEnv,
-          updatedAt: new Date().toISOString(),
-        }),
-      },
-    });
-
-    const config = getCashfreeConfig();
-    res.json({
-      success: true,
-      message: `Cashfree credentials updated successfully! Active mode: ${config.mode.toUpperCase()}`,
-      cashfreeAppId: config.appId,
-      cashfreeMode: config.mode,
-      isLive: config.isLive,
-    });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || 'Failed to update Cashfree configuration' });
-  }
+  void req;
+  res.status(410).json({
+    error: 'Cashfree credentials must be configured as server environment variables. They cannot be saved through the admin dashboard.',
+  });
 });
 
 // Helper to ensure default subscription plans exist in database

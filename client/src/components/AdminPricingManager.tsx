@@ -59,10 +59,10 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
 
   // Cashfree Gateway Form State
   const [gatewayForm, setGatewayForm] = useState({
-    appId: '15315740b82c51c6b0bf1f74af64751351',
+    appId: '',
     secretKey: '',
-    environment: 'PRODUCTION',
-    merchantUpiId: 'bm100695@okhdfcbank',
+    environment: '',
+    merchantUpiId: '',
   });
   const [savingGateway, setSavingGateway] = useState<boolean>(false);
   const [showSecretKey, setShowSecretKey] = useState<boolean>(false);
@@ -274,27 +274,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
   // Cashfree Gateway Settings Handler
   const handleSaveGateway = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!gatewayForm.appId.trim() || !gatewayForm.secretKey.trim()) {
-      showNotification('Cashfree App ID and Secret Key are both required.', 'error');
-      return;
-    }
-    setSavingGateway(true);
-    try {
-      const res = await api.updateCashfreeConfig(
-        gatewayForm.appId.trim(),
-        gatewayForm.secretKey.trim(),
-        gatewayForm.environment
-      );
-      if (gatewayForm.merchantUpiId.trim()) {
-        await api.updateMerchantUpi(gatewayForm.merchantUpiId.trim());
-      }
-      showNotification(res.message || 'Cashfree Production Gateway activated successfully!');
-      await loadAllData();
-    } catch (err: any) {
-      showNotification(err.message || 'Failed to update Cashfree configuration', 'error');
-    } finally {
-      setSavingGateway(false);
-    }
+    showNotification('For security, configure CASHFREE_APP_ID, CASHFREE_SECRET_KEY, CASHFREE_ENVIRONMENT, PUBLIC_APP_URL, and PUBLIC_API_URL in the server deployment environment. Dashboard entry is disabled.', 'error');
   };
 
   // Plan Management Handlers
@@ -975,9 +955,9 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 <ShieldAlert className="w-5 h-5" />
               </span>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Cashfree Production Gateway Credentials</h3>
+                <h3 className="text-base font-bold text-slate-900">Cashfree Gateway Deployment Configuration</h3>
                 <p className="text-xs text-slate-500">
-                  Update your live credentials directly. Saves instantly to persistent database and activates live payments without redeploying.
+                  Configure credentials as private server environment variables. The dashboard never receives or stores payment secrets.
                 </p>
               </div>
             </div>
@@ -1004,12 +984,12 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 type="text"
                 value={gatewayForm.appId}
                 onChange={(e) => setGatewayForm({ ...gatewayForm, appId: e.target.value })}
-                placeholder="e.g. 15315740b82c51c6b0bf1f74af64751351"
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
+                placeholder="Configured privately in the deployment environment"
+                className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-mono text-slate-500"
+                disabled
               />
               <span className="text-[11px] text-slate-500 mt-1 block">
-                Production App ID typically starts with numbers (e.g. 15315740...). Sandbox App IDs start with "TEST".
+                Set CASHFREE_APP_ID in the hosting provider's secret environment settings.
               </span>
             </div>
 
@@ -1028,12 +1008,12 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 type={showSecretKey ? 'text' : 'password'}
                 value={gatewayForm.secretKey}
                 onChange={(e) => setGatewayForm({ ...gatewayForm, secretKey: e.target.value })}
-                placeholder="Paste unmasked Secret Key from Cashfree Dashboard"
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
+                placeholder="Never entered in the browser"
+                className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-mono text-slate-500"
+                disabled
               />
               <span className="text-[11px] text-amber-600 mt-1 block font-medium">
-                Note: Do not paste masked strings containing "xxxx". Copy the fresh key right after clicking "Generate API Key" in Cashfree.
+                Set CASHFREE_SECRET_KEY privately in the deployment environment; rotate any key previously saved through this dashboard.
               </span>
             </div>
 
@@ -1069,7 +1049,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md cursor-pointer disabled:opacity-50 transition-all flex items-center gap-2"
               >
                 <Check className="w-4 h-4" />
-                <span>{savingGateway ? 'Saving Credentials...' : 'Save & Activate Live Gateway'}</span>
+                <span>{savingGateway ? 'Checking configuration...' : 'Show secure setup instructions'}</span>
               </button>
             </div>
           </form>
@@ -1172,9 +1152,9 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 <ShieldAlert className="w-5 h-5" />
               </span>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Cashfree Production Gateway Credentials</h3>
+                <h3 className="text-base font-bold text-slate-900">Cashfree Gateway Deployment Configuration</h3>
                 <p className="text-xs text-slate-500">
-                  Update your live credentials directly. Saves instantly to persistent database and activates live payments without redeploying.
+                  Configure credentials as private server environment variables. The dashboard never receives or stores payment secrets.
                 </p>
               </div>
             </div>
@@ -1201,12 +1181,12 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 type="text"
                 value={gatewayForm.appId}
                 onChange={(e) => setGatewayForm({ ...gatewayForm, appId: e.target.value })}
-                placeholder="e.g. 15315740b82c51c6b0bf1f74af64751351"
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
+                placeholder="Configured privately in the deployment environment"
+                className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-mono text-slate-500"
+                disabled
               />
               <span className="text-[11px] text-slate-500 mt-1 block">
-                Production App ID typically starts with numbers (e.g. 15315740...). Sandbox App IDs start with "TEST".
+                Set CASHFREE_APP_ID in the hosting provider's secret environment settings.
               </span>
             </div>
 
@@ -1225,12 +1205,12 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 type={showSecretKey ? 'text' : 'password'}
                 value={gatewayForm.secretKey}
                 onChange={(e) => setGatewayForm({ ...gatewayForm, secretKey: e.target.value })}
-                placeholder="Paste unmasked Secret Key from Cashfree Dashboard"
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
+                placeholder="Never entered in the browser"
+                className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-mono text-slate-500"
+                disabled
               />
               <span className="text-[11px] text-amber-600 mt-1 block font-medium">
-                Note: Do not paste masked strings containing "xxxx". Copy the fresh key right after clicking "Generate API Key" in Cashfree.
+                Set CASHFREE_SECRET_KEY privately in the deployment environment; rotate any key previously saved through this dashboard.
               </span>
             </div>
 
@@ -1266,7 +1246,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md cursor-pointer disabled:opacity-50 transition-all flex items-center gap-2"
               >
                 <Check className="w-4 h-4" />
-                <span>{savingGateway ? 'Saving Credentials...' : 'Save & Activate Live Gateway'}</span>
+                <span>{savingGateway ? 'Checking configuration...' : 'Show secure setup instructions'}</span>
               </button>
             </div>
           </form>
