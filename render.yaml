@@ -8,8 +8,8 @@ services:
     # Apply only committed, additive Prisma migrations before generating the
     # client. A migration failure stops deployment rather than letting the app
     # start against an unknown schema.
-    buildCommand: npm install && npx prisma migrate deploy && npx prisma generate
-    startCommand: npm start
+    buildCommand: yarn install --frozen-lockfile && yarn prisma:migrate:deploy && yarn prisma:generate
+    startCommand: yarn start
     envVars:
       - key: NODE_ENV
         value: production

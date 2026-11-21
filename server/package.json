@@ -1,6 +1,8 @@
 {
   "name": "examverse-server",
   "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
   "description": "ExamVerse AI - High Performance Exam Prep Backend API",
   "main": "dist/index.js",
   "scripts": {
@@ -8,6 +10,7 @@
     "build": "prisma generate",
     "start": "tsx src/index.ts",
     "prisma:generate": "prisma generate",
+    "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
     "admin:bootstrap": "tsx src/scripts/bootstrap_admin.ts",
