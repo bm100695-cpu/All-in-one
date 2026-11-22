@@ -84,11 +84,16 @@ function isNumericalResponseCorrect(numericalVal: number, q: any, correctAnswers
 }
 
 // List tests for an exam (Students see ONLY active/live tests within valid schedule)
-router.get('/exam/:examId', async (req: Request, res: Response) => {
+router.get('/exam/:examId', authenticate, async (req: Request, res: Response) => {
   try {
     const { examId } = req.params;
-    const role = getRequesterRole(req);
-    const isAdmin = role === 'ADMIN' || role === 'CONTENT_REVIEWER';
+    const exam = await prisma.exam.findUnique({ where: { id: examId }, select: { slug: true } });
+    if (!exam) {
+      res.status(404).json({ error: 'Exam not found' });
+      return;
+    }
+    const isAdmin = isStaffRole(req.user?.role);
+    if (!isAdmin && !assertPortalAccess(req, res, exam.slug)) return;
     const now = new Date();
 
     const whereClause: any = {
@@ -113,6 +118,7 @@ router.get('/exam/:examId', async (req: Request, res: Response) => {
     const tests = await prisma.test.findMany({
       where: whereClause,
       include: {
+        exam: { select: { slug: true } },
         patternVersion: {
           include: {
             sections: true,
@@ -125,10 +131,64 @@ router.get('/exam/:examId', async (req: Request, res: Response) => {
       orderBy: { createdAt: 'desc' },
     });
 
-    res.json({ tests });
+    if (isAdmin) {
+      res.json({ tests });
+      return;
+    }
+    const visibleTests = [] as typeof tests;
+    for (const test of tests) {
+      if (await canAccessMockTest(req.user!.id, req.user!.role, test)) visibleTests.push(test);
+    }
+    res.json({ tests: visibleTests });
   } catch (error) {
     console.error('Error fetching tests:', error);
     res.status(500).json({ error: 'Failed to fetch tests' });
+  }
+});
+
+// Authenticated student catalog. Unlike the public/admin listing, this never
+// returns a premium record unless the current user is entitled to that exact
+// paper. The client must use this endpoint for its dashboard.
+router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Response) => {
+  try {
+    const { examId } = req.params;
+    const exam = await prisma.exam.findUnique({ where: { id: examId }, select: { id: true, slug: true } });
+    if (!exam) {
+      res.status(404).json({ error: 'Exam not found' });
+      return;
+    }
+    if (!assertPortalAccess(req, res, exam.slug)) return;
+
+    const now = new Date();
+    const tests = await prisma.test.findMany({
+      where: {
+        examId,
+        isPublished: true,
+        isActive: true,
+        status: 'ACTIVE',
+        OR: [
+          { availableFrom: null, availableTo: null },
+          { availableFrom: { lte: now }, availableTo: null },
+          { availableFrom: null, availableTo: { gte: now } },
+          { availableFrom: { lte: now }, availableTo: { gte: now } },
+        ],
+      },
+      include: {
+        exam: { select: { slug: true } },
+        patternVersion: { include: { sections: true } },
+        _count: { select: { testQuestions: true, attempts: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const visibleTests = [] as typeof tests;
+    for (const test of tests) {
+      if (await canAccessMockTest(req.user!.id, req.user!.role, test)) visibleTests.push(test);
+    }
+    res.json({ tests: visibleTests });
+  } catch (error) {
+    console.error('Error fetching visible student tests:', error);
+    res.status(500).json({ error: 'Failed to fetch visible mock tests' });
   }
 });
 

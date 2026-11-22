@@ -190,6 +190,7 @@ export const App: React.FC = () => {
                 if (vRes.success) {
                   import('canvas-confetti').then((m) => m.default({ particleCount: 120, spread: 70, origin: { y: 0.6 } }));
                   showToast(vRes.message || 'Payment confirmed! Your plan is now active.');
+                  window.dispatchEvent(new Event('subscription-updated'));
                   const pSlug = (vRes.payment as any)?.examSlug;
                   if (pSlug) {
                     setSelectedExamSlug(pSlug);

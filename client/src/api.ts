@@ -219,6 +219,12 @@ export const api = {
     return request<{ tests: any[] }>(`/tests/exam/${examId}`);
   },
 
+  getVisibleExamTests: async (examId: string, portalSlug: string) => {
+    return request<{ tests: any[] }>(`/tests/exam/${examId}/visible`, {
+      headers: { 'X-Portal-Slug': portalSlug },
+    });
+  },
+
   startTest: async (testId: string) => {
     return request<{
       attemptId: string;

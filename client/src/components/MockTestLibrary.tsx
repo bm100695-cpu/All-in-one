@@ -8,7 +8,6 @@ import {
   Play,
   LayoutGrid,
   List,
-  Lock,
 } from 'lucide-react';
 import { User } from '../types';
 import { api } from '../api';
@@ -32,12 +31,11 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   const [examInfo, setExamInfo] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [shiftFilter, setShiftFilter] = useState<string>('ALL');
-  const [accessFilter, setAccessFilter] = useState<'ALL' | 'FREE' | 'PREMIUM'>('ALL');
+  const [accessFilter, setAccessFilter] = useState<'ALL' | 'FREE'>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<'rows' | 'grid'>('rows');
   const [visibleCount, setVisibleCount] = useState<number>(30);
   const [checkingEntitlementId, setCheckingEntitlementId] = useState<string | null>(null);
-  const [entitlementByTest, setEntitlementByTest] = useState<Record<string, any>>({});
   const [subscriptionInfo, setSubscriptionInfo] = useState<any>(null);
 
   const getAccessType = (test: any): 'free' | 'premium' => (
@@ -65,11 +63,10 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
       ]);
       if (res?.exam) {
         setExamInfo(res.exam);
-        if (res.exam.tests) {
-          setTests(res.exam.tests);
-          const entitlementResult = await api.getTestEntitlements(res.exam.tests.map((test: any) => test.id), examSlug).catch(() => null);
-          setEntitlementByTest(entitlementResult?.entitlements || {});
-        }
+        // The server intentionally returns only free papers plus the exact
+        // premium papers available to this authenticated student.
+        const visible = await api.getVisibleExamTests(res.exam.id, examSlug).catch(() => null);
+        setTests(visible?.tests || []);
       }
       setSubscriptionInfo(subscription);
     } catch (err) {
@@ -123,7 +120,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
     // Access level is managed per test by administrators.
     if (accessFilter !== 'ALL') {
       if (accessFilter === 'FREE' && !isFreeTest) return false;
-      if (accessFilter === 'PREMIUM' && isFreeTest) return false;
     }
 
     // Search query
@@ -140,8 +136,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   const displayedTests = filteredTests.slice(0, visibleCount);
 
   const freeCount = tests.filter((test) => getAccessType(test) === 'free').length;
-  const premiumCount = tests.length - freeCount;
-  const availablePremiumCount = tests.filter((test) => getAccessType(test) === 'premium' && entitlementByTest[test.id]?.entitled).length;
   const currentPortalPlan = subscriptionInfo?.activePlans?.find((item: any) => item.plan?.examSlug === examSlug)
     || subscriptionInfo?.activePlans?.find((item: any) => !item.plan?.examSlug)
     || subscriptionInfo?.subscription;
@@ -174,9 +168,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
           <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium">
             <strong className="text-emerald-900 font-bold">{freeCount} Free</strong> Tests Available
           </div>
-          <div className="px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-800 font-medium">
-            <strong className="text-blue-900 font-bold">{availablePremiumCount}</strong> Premium Included
-          </div>
         </div>
       </div>
 
@@ -184,7 +175,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
         <span className="font-semibold">Active plan: {planName}</span>
         {configuredPlanPapers > 0 && <span>• {configuredPlanPapers} of {configuredPlanPapers} Papers Unlocked</span>}
         {typeof planRemaining === 'number' && <span>• {planRemaining} open pack test{planRemaining === 1 ? '' : 's'} remaining</span>}
-        <span>• {availablePremiumCount} premium paper{availablePremiumCount === 1 ? '' : 's'} available in this portal</span>
+        <span>• {tests.length} test{tests.length === 1 ? '' : 's'} available in this portal</span>
       </div>
 
       {/* 2. Filter Bar */}
@@ -216,17 +207,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                 }`}
               >
                 <span>Free ({freeCount})</span>
-              </button>
-              <button
-                onClick={() => setAccessFilter('PREMIUM')}
-                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1 ${
-                  accessFilter === 'PREMIUM'
-                    ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
-                    : 'text-blue-700 hover:text-blue-900'
-                }`}
-              >
-                <Lock className="w-3 h-3" />
-                <span>Premium ({premiumCount})</span>
               </button>
             </div>
           </div>
@@ -332,9 +312,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
             const isFree = getAccessType(test) === 'free';
             const isComingSoon = test.accessMode === 'COMING_SOON';
             const isChecking = checkingEntitlementId === test.id;
-            const entitlement = entitlementByTest[test.id];
-            const isIncluded = !isFree && entitlement?.entitled;
-            const isLocked = !isFree && !isIncluded;
 
             return (
               <div
@@ -357,8 +334,8 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       </span>
                     ) : (
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-                        <Lock className="w-2.5 h-2.5" />
-                        {isIncluded ? 'INCLUDED IN YOUR PLAN' : 'PREMIUM'}
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        INCLUDED IN YOUR PLAN
                       </span>
                     )}
 
@@ -395,9 +372,9 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       </>
                     ) : (
                       <>
-                        {isLocked ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
+                        <Play className="w-3.5 h-3.5" />
                         <span>
-                          {isFree ? 'Start Test' : isComingSoon ? 'Coming Soon' : isIncluded ? 'Start Test' : 'Unlock with Plan'}
+                          {isComingSoon ? 'Coming Soon' : 'Start Test'}
                         </span>
                       </>
                     )}
@@ -413,9 +390,6 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
             const isFree = getAccessType(test) === 'free';
             const isComingSoon = test.accessMode === 'COMING_SOON';
             const isChecking = checkingEntitlementId === test.id;
-            const entitlement = entitlementByTest[test.id];
-            const isIncluded = !isFree && entitlement?.entitled;
-            const isLocked = !isFree && !isIncluded;
 
             return (
               <div
@@ -438,8 +412,8 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-                          <Lock className="w-2.5 h-2.5" />
-                          {isIncluded ? 'INCLUDED IN YOUR PLAN' : 'PREMIUM'}
+                          <CheckCircle2 className="w-2.5 h-2.5" />
+                          INCLUDED IN YOUR PLAN
                         </span>
                       )}
                     </div>
@@ -480,9 +454,9 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       </>
                     ) : (
                       <>
-                        {isLocked ? <Lock className="w-3.5 h-3.5 text-amber-200" /> : <Play className="w-3.5 h-3.5" />}
+                        <Play className="w-3.5 h-3.5" />
                         <span>
-                          {isFree ? 'Start Test' : isComingSoon ? 'Coming Soon' : isIncluded ? 'Start Test' : 'Unlock with Plan'}
+                          {isComingSoon ? 'Coming Soon' : 'Start Test'}
                         </span>
                       </>
                     )}
