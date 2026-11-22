@@ -126,6 +126,7 @@ router.get('/exam/:examId', authenticate, async (req: Request, res: Response) =>
       ...test,
       isEntitled: await canAccessMockTest(req.user!.id, req.user!.role, test),
     })));
+    res.set('Cache-Control', 'no-store, private');
     res.json({ tests: catalog });
   } catch (error) {
     console.error('Error fetching tests:', error);
@@ -171,6 +172,7 @@ router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Resp
       ...test,
       isEntitled: await canAccessMockTest(req.user!.id, req.user!.role, test),
     })));
+    res.set('Cache-Control', 'no-store, private');
     res.json({ tests: catalog });
   } catch (error) {
     console.error('Error fetching visible student tests:', error);

@@ -47,16 +47,9 @@ export function includedTestIds(plan: Pick<AccessPlan, 'includedMockTestsJson'>)
 /** True only when this plan's saved portal and test selection include the test. */
 export function planAppliesToTest(plan: AccessPlan, test: AccessControlledTest): boolean {
   const selectedTests = includedTestIds(plan);
-  // An explicit test selection is always the narrowest rule (Booster packs).
-  if (selectedTests.length > 0) return selectedTests.includes(test.id);
-
-  const testSlug = String(test.exam?.slug || '').toLowerCase();
-  if (!testSlug) return false;
-  if (plan.examSlug) return plan.examSlug.toLowerCase() === testSlug;
-
-  // A global plan may still be restricted to a configured list of portals.
-  const includedExams = jsonStringList(plan.includedExamsJson).map((slug) => slug.toLowerCase());
-  return includedExams.length === 0 || includedExams.includes(testSlug);
+  // Paid plan access is always an explicit allow-list. An empty assignment
+  // must fail closed; it can never be interpreted as portal-wide all-access.
+  return selectedTests.includes(test.id);
 }
 
 /** The new access_type is authoritative; old columns only preserve old records. */
@@ -121,9 +114,7 @@ export async function getMockAccessDecision(
     // Finite plans must have explicit assigned IDs. A legacy finite pack with
     // no assignment fails closed instead of accidentally becoming all-access.
     if (requiredAssignedPaperCount > 0 && assignedIds.length !== requiredAssignedPaperCount) continue;
-    if (assignedIds.length > 0 || requiredAssignedPaperCount === 0) {
-      return { allowed: true, reason: 'PLAN_INCLUDED', subscriptionId: subscription.id, planCode: plan.code, testsRemaining: subscription.testsRemaining };
-    }
+    if (assignedIds.length > 0) return { allowed: true, reason: 'PLAN_INCLUDED', subscriptionId: subscription.id, planCode: plan.code, testsRemaining: subscription.testsRemaining };
   }
   return { allowed: false, reason: 'LOCKED' };
 }

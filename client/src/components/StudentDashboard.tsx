@@ -67,8 +67,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
   useEffect(() => {
     const refreshDashboard = () => loadDashboardData();
+    const pollForAdminChanges = window.setInterval(refreshDashboard, 30_000);
     window.addEventListener('subscription-updated', refreshDashboard);
-    return () => window.removeEventListener('subscription-updated', refreshDashboard);
+    return () => {
+      window.clearInterval(pollForAdminChanges);
+      window.removeEventListener('subscription-updated', refreshDashboard);
+    };
   }, [examSlug]);
 
   const loadDashboardData = async () => {

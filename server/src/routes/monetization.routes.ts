@@ -71,7 +71,10 @@ async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | 
   return ids;
 }
 
-function assertExactPlanPaperCount(plan: { name?: string | null; code?: string | null; testAccessLimit: number }, selectedTestIds: string[]): void {
+function assertPlanPaperAssignments(plan: { name?: string | null; code?: string | null; price?: number | null; testAccessLimit: number }, selectedTestIds: string[]): void {
+  if (Number(plan.price || 0) > 0 && selectedTestIds.length === 0) {
+    throw new Error(`Plan "${plan.name || plan.code || 'unnamed'}" needs at least one explicitly assigned premium mock test before it can be published or sold.`);
+  }
   const expected = getRequiredAssignedPaperCount({ code: plan.code || '', name: plan.name, testAccessLimit: plan.testAccessLimit });
   if (expected > 0 && selectedTestIds.length !== expected) {
     throw new Error(`Plan "${plan.name || plan.code || 'unnamed'}" must have exactly ${expected} admin-assigned premium mock tests; it currently has ${selectedTestIds.length}.`);
@@ -1402,7 +1405,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
     try {
       const selected = JSON.parse(plan.includedMockTestsJson || '[]');
-      assertExactPlanPaperCount(plan, Array.isArray(selected) ? selected.filter((id: unknown) => typeof id === 'string') : []);
+      assertPlanPaperAssignments(plan, Array.isArray(selected) ? selected.filter((id: unknown) => typeof id === 'string') : []);
     } catch (error: any) {
       res.status(400).json({ error: error.message || 'This plan has an invalid mock-test assignment.' });
       return;
@@ -2696,7 +2699,7 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
       ? code.trim().toUpperCase()
       : `PLAN_${name.replace(/[^A-Za-z0-9]/g, '_').toUpperCase()}_${Date.now().toString().slice(-4)}`;
     if (Boolean(isPublished)) {
-      assertExactPlanPaperCount({ name, code: planCode, testAccessLimit: Number(testAccessLimit) || 0 }, normalizedIncludedMockTests);
+      assertPlanPaperAssignments({ name, code: planCode, price: paiseToInr(payablePaise), testAccessLimit: Number(testAccessLimit) || 0 }, normalizedIncludedMockTests);
     }
 
     const newPlan = await prisma.subscriptionPlan.create({
@@ -2808,9 +2811,10 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
       try { const parsed = JSON.parse(existingPlan.includedMockTestsJson || '[]'); return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []; } catch { return []; }
     })();
     if (isPublished !== undefined ? Boolean(isPublished) : existingPlan.isPublished) {
-      assertExactPlanPaperCount({
+      assertPlanPaperAssignments({
         name: name || existingPlan.name,
         code: existingPlan.code,
+        price: price !== undefined || pricePaiseInput !== undefined ? paiseToInr(validatedPricePaise) : existingPlan.price,
         testAccessLimit: testAccessLimit !== undefined ? Number(testAccessLimit) || 0 : existingPlan.testAccessLimit,
       }, nextSelectedTests);
     }

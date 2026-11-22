@@ -222,6 +222,7 @@ export const api = {
   getVisibleExamTests: async (examId: string, portalSlug: string) => {
     return request<{ tests: any[] }>(`/tests/exam/${examId}/visible`, {
       headers: { 'X-Portal-Slug': portalSlug },
+      cache: 'no-store',
     });
   },
 

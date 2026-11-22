@@ -51,8 +51,12 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
 
   useEffect(() => {
     const refreshEntitlements = () => loadTests();
+    const pollForAdminChanges = window.setInterval(refreshEntitlements, 30_000);
     window.addEventListener('subscription-updated', refreshEntitlements);
-    return () => window.removeEventListener('subscription-updated', refreshEntitlements);
+    return () => {
+      window.clearInterval(pollForAdminChanges);
+      window.removeEventListener('subscription-updated', refreshEntitlements);
+    };
   }, [examSlug]);
 
   const loadTests = async () => {

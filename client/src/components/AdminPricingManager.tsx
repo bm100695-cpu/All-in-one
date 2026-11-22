@@ -343,6 +343,10 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       return;
     }
     const expectedPaperCount = Math.max(0, Number(planForm.testLimit) || 0);
+    if (planForm.isActive && Number(planForm.priceINR) > 0 && planForm.includedMockTests.length === 0) {
+      showNotification('A paid plan needs at least one explicitly assigned premium paper before publishing.', 'error');
+      return;
+    }
     if (planForm.isActive && expectedPaperCount > 0 && planForm.includedMockTests.length !== expectedPaperCount) {
       showNotification(`This plan requires exactly ${expectedPaperCount} assigned premium papers. ${planForm.includedMockTests.length} selected.`, 'error');
       return;
@@ -1652,10 +1656,10 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                     onClick={() => setPlanForm({ ...planForm, includedMockTests: [] })}
                     className="text-[11px] font-semibold text-blue-700 hover:underline"
                   >
-                    All eligible tests
+                    Clear selection
                   </button>
                 </div>
-                <p className="mt-1 text-[11px] text-slate-500">For a finite plan, select exactly the configured number of PREMIUM papers. Active purchasers follow future assignment edits immediately.</p>
+                <p className="mt-1 text-[11px] text-slate-500">Every paid plan needs explicit PREMIUM paper assignments. For a finite plan, select exactly the configured count. Active purchasers follow future assignment edits immediately.</p>
                 <div className="mt-2 max-h-36 space-y-1 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-2">
                   {contentList.filter((item) => item.type === 'TEST' && item.accessMode !== 'FREE' && (!planForm.examSlug || item.examSlug === planForm.examSlug)).map((test) => {
                     const selected = planForm.includedMockTests.includes(test.id);
