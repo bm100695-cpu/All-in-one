@@ -198,7 +198,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setPlans(fetchedPlans);
       setSelectedPlanCode((current) => {
         if (fetchedPlans.some((plan: SubscriptionPlan) => plan.code === current)) return current;
-        return fetchedPlans.find((plan: SubscriptionPlan) => plan.price > 0)?.code || fetchedPlans[0]?.code || '';
+        return fetchedPlans.find((plan: SubscriptionPlan) => plan.price > 0 && plan.isPurchasable !== false)?.code
+          || fetchedPlans.find((plan: SubscriptionPlan) => plan.isPurchasable !== false)?.code
+          || fetchedPlans[0]?.code
+          || '';
       });
       if (fetchedPlans.length === 0) {
         setStatusMessage({ type: 'info', text: `No published plans are currently available for ${currentExamName}.` });
@@ -326,6 +329,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   };
 
   const handleSubscribe = async (plan: SubscriptionPlan, paymentMethod?: CheckoutMethod) => {
+    if (plan.isPurchasable === false) {
+      setStatusMessage({
+        type: 'info',
+        text: 'This plan is being configured by the administrator and cannot be purchased yet.',
+      });
+      return;
+    }
     const token = getStoredToken();
     if (!currentUser || !token) {
       setStatusMessage({
@@ -715,6 +725,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                   const isSelected = selectedPlanCode === plan.code;
                   const isPopular = Boolean(plan.badge && /popular|choice|value/i.test(plan.badge));
                   const isFree = plan.price === 0;
+                  const isPurchasable = plan.isPurchasable !== false;
                   
                   const couponEligible = !isFree && appliedCoupon && (!appliedCoupon.examSlug || !plan.examSlug || appliedCoupon.examSlug === plan.examSlug);
                   const effectivePrice = couponEligible ? Math.max(1, Math.round(plan.price * (100 - appliedCoupon!.discountPct) / 100)) : plan.price;
@@ -788,9 +799,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                             e.stopPropagation();
                             handleSubscribe(plan);
                           }}
-                          disabled={processingPlanId === plan.id}
+                          disabled={processingPlanId === plan.id || !isPurchasable}
                           className={`w-full py-2.5 px-4 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                            isPopular
+                            !isPurchasable
+                              ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                              : isPopular
                               ? 'bg-blue-600 hover:bg-blue-700 text-white'
                               : isFree
                               ? 'bg-slate-100 hover:bg-slate-200 text-slate-800'
@@ -800,6 +813,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                           <span>
                             {processingPlanId === plan.id
                               ? 'Processing...'
+                              : !isPurchasable
+                              ? 'Plan Updating'
                               : isFree
                               ? 'Activate Free Plan'
                               : `Get Started (${currencySymbol}${displayPrice})`}

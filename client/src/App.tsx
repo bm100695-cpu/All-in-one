@@ -718,12 +718,10 @@ export const App: React.FC = () => {
                   setAuthModalMode('login');
                   setIsAuthModalOpen(true);
                 }}
-                onSwitchToAdmin={() => {
-                  api.logout();
-                  setCurrentUser(null);
-                }}
                 onUserRefreshed={(refreshedUser) => {
                   setCurrentUser(refreshedUser);
+                  localStorage.setItem('examverse_user', JSON.stringify(refreshedUser));
+                  localStorage.setItem('user', JSON.stringify(refreshedUser));
                   showToast(`Admin access verified: ${refreshedUser.name}`);
                 }}
                 onRedirectToStudent={() => {

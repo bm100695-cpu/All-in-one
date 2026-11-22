@@ -36,7 +36,12 @@ function toPaise(value: unknown, field = 'price'): number {
 
 function storedPaise(record: { price?: number | null; pricePaise?: number | null }): number {
   const paise = Number(record.pricePaise);
-  return Number.isSafeInteger(paise) && paise >= 0 ? paise : toPaise(record.price || 0);
+  const priceFromInr = toPaise(record.price || 0);
+  // Legacy paid plans can have a zero pricePaise column from before paise was
+  // introduced. A zero paise value is authoritative only for a truly free
+  // record; otherwise use the saved INR price and never create a free order.
+  if (Number.isSafeInteger(paise) && paise >= 0 && !(paise === 0 && priceFromInr > 0)) return paise;
+  return priceFromInr;
 }
 
 function validatePremiumPrice(pricePaise: number, accessMode: string): number {
@@ -738,10 +743,11 @@ router.get('/plans', async (req: Request, res: Response) => {
       });
     }
 
-    // Do not let students enter checkout for a plan that an admin has not
-    // completely configured.  The exact same guard remains in create-order
-    // to protect against stale browser state or a forged request.
-    res.json({ plans: plans.map(formatSubscriptionPlan).filter((plan) => plan.isPurchasable) });
+    // Keep every published plan visible so price changes made by the admin
+    // reach students immediately. An incomplete paid plan is marked
+    // isPurchasable=false and the client disables checkout; create-order also
+    // enforces the same rule against stale or forged requests.
+    res.json({ plans: plans.map(formatSubscriptionPlan) });
   } catch (error) {
     console.error('Error fetching plans:', error);
     res.status(500).json({ error: 'Failed to fetch subscription plans' });
@@ -2788,7 +2794,9 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
     });
   } catch (error: any) {
     console.error('Create plan error:', error);
-    res.status(500).json({ error: error.message || 'Failed to create plan' });
+    const message = error.message || 'Failed to create plan';
+    const isConfigurationError = /explicitly assigned premium mock test|must have exactly .*admin-assigned premium mock tests/i.test(message);
+    res.status(isConfigurationError ? 400 : 500).json({ error: message });
   }
 });
 
@@ -2900,9 +2908,11 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
         features: JSON.parse(updated.featuresJson || '[]'),
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Update plan error:', error);
-    res.status(500).json({ error: 'Failed to update plan' });
+    const message = error.message || 'Failed to update plan';
+    const isConfigurationError = /explicitly assigned premium mock test|must have exactly .*admin-assigned premium mock tests/i.test(message);
+    res.status(isConfigurationError ? 400 : 500).json({ error: message });
   }
 });
 

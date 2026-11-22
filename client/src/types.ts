@@ -325,6 +325,8 @@ export interface SubscriptionPlan {
   badge?: string;
   isActive?: boolean;
   isPublished?: boolean;
+  isPurchasable?: boolean;
+  configurationError?: string | null;
   displayOrder?: number;
 }
 

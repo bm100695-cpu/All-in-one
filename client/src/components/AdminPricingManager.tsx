@@ -40,6 +40,8 @@ interface ContentItem {
   examTitle?: string;
   category?: string;
   accessMode: 'FREE' | 'PAID' | 'PREMIUM' | 'PRIVATE' | 'COMING_SOON' | 'DISABLED';
+  accessType?: string;
+  accessLevel?: string;
   priceINR: number;
   originalPriceINR?: number;
   discountPercent?: number;
@@ -48,6 +50,18 @@ interface ContentItem {
   offerStartAt?: string;
   offerEndAt?: string;
 }
+
+// Old Booster rows were created before testAccessLimit was persisted. Keep
+// their intended pack size visible to admins so the assignment editor and the
+// server validation use the same exact-paper rule.
+const getRequiredPlanPaperCount = (plan: { code?: string; name?: string; testAccessLimit?: number; testLimit?: number }) => {
+  const configured = Math.max(0, Number(plan.testAccessLimit ?? plan.testLimit ?? 0) || 0);
+  if (configured > 0) return configured;
+  const label = `${plan.code || ''} ${plan.name || ''}`;
+  if (/standard/i.test(label)) return 15;
+  if (/booster/i.test(label)) return 5;
+  return 0;
+};
 
 export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ initialTab = 'CONTENT_PRICING' }) => {
   const [activeTab, setActiveTab] = useState<PricingTab>(initialTab);
@@ -162,6 +176,9 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       });
 
       testsSource.forEach((t: any) => {
+        const isPremiumTest = String(t.accessType || '').toLowerCase() === 'premium'
+          || ['premium', 'paid'].includes(String(t.accessLevel || '').toLowerCase())
+          || ['premium', 'paid'].includes(String(t.accessMode || '').toLowerCase());
         merged.push({
           id: t.id,
           type: 'TEST',
@@ -169,7 +186,12 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
           examSlug: t.exam?.slug,
           examTitle: t.exam?.title,
           category: t.exam?.category?.name || 'Mock Tests',
-          accessMode: t.accessMode || (t.accessLevel === 'FREE' ? 'FREE' : 'PREMIUM'),
+          // accessType is the canonical field. Some older papers still carry
+          // accessMode=FREE, so never hide those PREMIUM papers from plan
+          // assignment merely because legacy fields disagree.
+          accessMode: isPremiumTest ? 'PREMIUM' : (t.accessMode || 'FREE'),
+          accessType: t.accessType,
+          accessLevel: t.accessLevel,
           priceINR: Number(t.priceINR ?? t.price ?? 0),
           originalPriceINR: Number(t.originalPriceINR ?? t.originalPrice ?? t.price ?? 0),
           discountPercent: Number(t.discountPercent ?? t.discountPct ?? 0),
@@ -327,7 +349,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       discountPercent: disc,
       billingInterval: plan.billingInterval || 'ONCE',
       durationDays: plan.durationDays || 365,
-      testLimit: plan.testAccessLimit ?? plan.testLimit ?? 0,
+      testLimit: getRequiredPlanPaperCount(plan),
       includedMockTests: Array.isArray(plan.includedMockTests) ? plan.includedMockTests : [],
       examSlug: plan.examSlug || '',
       features: Array.isArray(plan.features) ? plan.features : ['All Mock Tests Included', 'Full CBT Simulator'],
