@@ -1961,24 +1961,37 @@ router.post('/verify-cashfree', authenticate, async (req: Request, res: Response
       return;
     }
 
-    // 7. Verify Actual Payment Exists in Cashfree Payments List
+    // 7. Verify an actual successful payment exists in Cashfree's payment
+    // list. An order status alone is not sufficient to grant test access;
+    // fail closed if the gateway cannot provide this second proof.
     let cfPaymentId = cfOrder.cf_order_id ? String(cfOrder.cf_order_id) : cleanOrderId;
     let paymentMethod = 'UPI';
     try {
       const paymentsList = await getCashfreePayments(cleanOrderId);
       const successfulPayment = paymentsList.find((p: any) => p.payment_status === 'SUCCESS');
-      if (successfulPayment) {
-        if (successfulPayment.cf_payment_id) {
-          cfPaymentId = String(successfulPayment.cf_payment_id);
-        }
-        if (successfulPayment.payment_method) {
-          paymentMethod = typeof successfulPayment.payment_method === 'object'
-            ? Object.keys(successfulPayment.payment_method)[0]?.toUpperCase() || 'UPI'
-            : String(successfulPayment.payment_method);
-        }
+      if (!successfulPayment) {
+        res.status(400).json({
+          success: false,
+          pending: true,
+          message: 'Cashfree has not confirmed a successful payment for this order. No plan was activated.',
+        });
+        return;
+      }
+      if (successfulPayment.cf_payment_id) {
+        cfPaymentId = String(successfulPayment.cf_payment_id);
+      }
+      if (successfulPayment.payment_method) {
+        paymentMethod = typeof successfulPayment.payment_method === 'object'
+          ? Object.keys(successfulPayment.payment_method)[0]?.toUpperCase() || 'UPI'
+          : String(successfulPayment.payment_method);
       }
     } catch (pErr: any) {
-      console.warn(`[Cashfree Payments List Check] Notice for ${cleanOrderId}:`, pErr.message);
+      console.error(`[Cashfree Payments List Check] Verification failed for ${cleanOrderId}:`, pErr.message);
+      res.status(502).json({
+        success: false,
+        message: 'Cashfree payment confirmation could not be verified. No plan was activated; please retry.',
+      });
+      return;
     }
 
     // 8. Atomic Activation
