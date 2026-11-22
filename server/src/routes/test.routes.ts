@@ -1,25 +1,9 @@
 import { Router, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import { prisma } from '../prisma';
 import { authenticate } from '../middleware/auth';
 import { canAccessMockTest, consumeTestPackIfNeeded, getMockAccessType, isStaffRole } from '../test-access';
 
 const router = Router();
-
-function getRequesterRole(req: Request): string | null {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) return null;
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'examverse_super_secret_jwt_key_2025_prod_grade_xyz'
-    ) as any;
-    return decoded?.role || null;
-  } catch {
-    return null;
-  }
-}
 
 function assertPortalAccess(req: Request, res: Response, examSlug: string): boolean {
   const activePortal = String(req.header('x-portal-slug') || '').trim().toLowerCase();
@@ -193,11 +177,10 @@ router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Resp
 });
 
 // Get test info & instructions preview without starting attempt
-router.get('/:testId/info', async (req: Request, res: Response) => {
+router.get('/:testId/info', authenticate, async (req: Request, res: Response) => {
   try {
     const { testId } = req.params;
-    const role = getRequesterRole(req);
-    const isAdmin = role === 'ADMIN' || role === 'CONTENT_REVIEWER';
+    const isAdmin = isStaffRole(req.user?.role);
 
     const test = await prisma.test.findUnique({
       where: { id: testId },
@@ -245,6 +228,14 @@ router.get('/:testId/info', async (req: Request, res: Response) => {
         res.status(403).json({
           error: 'TEST_EXPIRED',
           message: `This mock test window closed at ${test.availableTo.toISOString()}.`,
+        });
+        return;
+      }
+      if (!(await canAccessMockTest(req.user!.id, req.user!.role, test))) {
+        res.status(403).json({
+          error: 'PREMIUM_LOCKED',
+          message: 'This mock test is not included in your active plan.',
+          testId: test.id,
         });
         return;
       }
@@ -903,6 +894,15 @@ router.get('/attempts/:attemptId/review', authenticate, async (req: Request, res
     // Role check: users can review their own attempts, admins/reviewers can review any
     if (attempt.userId !== userId && !['ADMIN', 'CONTENT_REVIEWER'].includes(req.user!.role)) {
       res.status(403).json({ error: 'Access denied' });
+      return;
+    }
+    if (!isStaffRole(req.user!.role) && !assertPortalAccess(req, res, attempt.test.exam.slug)) return;
+    if (!isStaffRole(req.user!.role) && !(await canAccessMockTest(userId, req.user!.role, attempt.test))) {
+      res.status(403).json({
+        error: 'PREMIUM_LOCKED',
+        message: 'This test result is not available because the paper is not included in your active plan.',
+        testId: attempt.test.id,
+      });
       return;
     }
 
