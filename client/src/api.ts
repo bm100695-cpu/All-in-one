@@ -41,6 +41,47 @@ const getApiBase = (): string => {
 
 export const API_BASE = getApiBase();
 
+const PLAN_CATALOG_SYNC_KEY = 'all_in_one_plan_catalog_updated_at';
+const PLAN_CATALOG_SYNC_CHANNEL = 'all_in_one_plan_catalog';
+
+// Saving a plan happens in an admin session, while students commonly keep a
+// second tab (or window) open.  A DOM event reaches only the current window,
+// so notify every same-origin tab as well. The pricing screens still poll as a
+// fallback for different devices/browsers.
+export function notifyPlanCatalogUpdated(): void {
+  if (typeof window === 'undefined') return;
+  const updatedAt = String(Date.now());
+  window.dispatchEvent(new Event('plans-updated'));
+  try { window.localStorage.setItem(PLAN_CATALOG_SYNC_KEY, updatedAt); } catch { /* current tab already refreshed */ }
+  try {
+    if ('BroadcastChannel' in window) {
+      const channel = new BroadcastChannel(PLAN_CATALOG_SYNC_CHANNEL);
+      channel.postMessage(updatedAt);
+      channel.close();
+    }
+  } catch { /* polling remains available when browser storage is restricted */ }
+}
+
+export function subscribeToPlanCatalogUpdates(onUpdate: () => void): () => void {
+  if (typeof window === 'undefined') return () => undefined;
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === PLAN_CATALOG_SYNC_KEY) onUpdate();
+  };
+  let channel: BroadcastChannel | null = null;
+  try {
+    channel = 'BroadcastChannel' in window
+      ? new BroadcastChannel(PLAN_CATALOG_SYNC_CHANNEL)
+      : null;
+  } catch { /* polling remains available when browser storage is restricted */ }
+  channel?.addEventListener('message', onUpdate);
+  window.addEventListener('storage', onStorage);
+  return () => {
+    channel?.removeEventListener('message', onUpdate);
+    channel?.close();
+    window.removeEventListener('storage', onStorage);
+  };
+}
+
 export function getStoredToken(): string | null {
   return localStorage.getItem('examverse_token');
 }

@@ -28,7 +28,7 @@ import {
   Check,
   X,
 } from 'lucide-react';
-import { api } from '../api';
+import { api, notifyPlanCatalogUpdated } from '../api';
 
 type PricingTab = 'OVERVIEW' | 'CONTENT_PRICING' | 'PLANS' | 'AUDIT_LOGS' | 'TRANSACTIONS' | 'GATEWAY_CONFIG';
 
@@ -264,7 +264,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       // Immediately refresh any student pricing view open in this browser.
       // Other sessions pick the persisted change up through their public-plan
       // revalidation interval.
-      window.dispatchEvent(new Event('plans-updated'));
+      notifyPlanCatalogUpdated();
       showNotification(`Updated "${plan.name}" price to ₹${newPrice}`);
       await loadAllData();
     } catch (err: any) {
@@ -428,7 +428,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
         showNotification(`New custom plan "${planForm.name}" created successfully (₹${planForm.priceINR})`);
       }
       setIsPlanModalOpen(false);
-      window.dispatchEvent(new Event('plans-updated'));
+      notifyPlanCatalogUpdated();
       await loadAllData();
     } catch (err: any) {
       showNotification(err.message || 'Failed to save plan', 'error');
@@ -443,7 +443,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
     }
     try {
       await api.deleteAdminPlan(id);
-      window.dispatchEvent(new Event('plans-updated'));
+      notifyPlanCatalogUpdated();
       showNotification(`Plan "${name}" deactivated successfully`);
       await loadAllData();
     } catch (err: any) {

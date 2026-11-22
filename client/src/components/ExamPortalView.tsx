@@ -17,7 +17,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { Exam, SubscriptionPlan, User } from '../types';
-import { api } from '../api';
+import { api, subscribeToPlanCatalogUpdates } from '../api';
 import { UptetArchiveModule } from './UptetArchiveModule';
 import { SuperTetArchiveModule } from './SuperTetArchiveModule';
 import { MockTestLibrary } from './MockTestLibrary';
@@ -85,11 +85,13 @@ export const ExamPortalView: React.FC<ExamPortalViewProps> = ({
       void loadExamPortal(true);
     };
     const intervalId = window.setInterval(refreshPortalPlans, 30_000);
+    const unsubscribePlanCatalog = subscribeToPlanCatalogUpdates(refreshPortalPlans);
     window.addEventListener('focus', refreshPortalPlans);
     window.addEventListener('plans-updated', refreshPortalPlans);
     document.addEventListener('visibilitychange', refreshPortalPlans);
     return () => {
       window.clearInterval(intervalId);
+      unsubscribePlanCatalog();
       window.removeEventListener('focus', refreshPortalPlans);
       window.removeEventListener('plans-updated', refreshPortalPlans);
       document.removeEventListener('visibilitychange', refreshPortalPlans);

@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SubscriptionPlan, User } from '../types';
-import { api, getStoredToken } from '../api';
+import { api, getStoredToken, subscribeToPlanCatalogUpdates } from '../api';
 
 type CashfreeEnvironment = 'sandbox' | 'production';
 type CheckoutMethod = 'HOSTED_CHECKOUT' | 'GOOGLE_PAY' | 'PHONEPE' | 'PAYTM' | 'OTHER_UPI' | 'UPI_QR' | 'CARD' | 'NETBANKING';
@@ -247,11 +247,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       void loadData(true);
     };
     const intervalId = window.setInterval(refreshPlans, 30_000);
+    const unsubscribePlanCatalog = subscribeToPlanCatalogUpdates(refreshPlans);
     window.addEventListener('focus', refreshPlans);
     window.addEventListener('plans-updated', refreshPlans);
     document.addEventListener('visibilitychange', refreshPlans);
     return () => {
       window.clearInterval(intervalId);
+      unsubscribePlanCatalog();
       window.removeEventListener('focus', refreshPlans);
       window.removeEventListener('plans-updated', refreshPlans);
       document.removeEventListener('visibilitychange', refreshPlans);

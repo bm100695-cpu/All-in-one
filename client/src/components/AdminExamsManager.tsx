@@ -29,7 +29,7 @@ import {
   Radio,
   ShieldCheck,
 } from 'lucide-react';
-import { api } from '../api';
+import { api, notifyPlanCatalogUpdated } from '../api';
 import { SubscriptionPlan } from '../types';
 
 export interface AdminExamsManagerProps {
@@ -269,7 +269,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
         examSlug: selectedExam?.slug,
       });
 
-      window.dispatchEvent(new Event('plans-updated'));
+      notifyPlanCatalogUpdated();
       setMsg({ type: 'success', text: `Plan "${updatedData.name}" updated successfully for ${selectedExam?.shortName}!` });
       if (selectedExam?.slug) {
         loadExamPlans(selectedExam.slug);
@@ -318,7 +318,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
         examSlug: selectedExam.slug,
       });
 
-      window.dispatchEvent(new Event('plans-updated'));
+      notifyPlanCatalogUpdated();
       setMsg({ type: 'success', text: `Created plan "${newPlanForm.name}" for ${selectedExam.shortName}!` });
       setShowAddPlanModal(false);
       setNewPlanForm({
