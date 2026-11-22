@@ -284,31 +284,68 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
   if (!isOpen) return null;
 
-  const loadCashfreeScript = (): Promise<boolean> => {
-    return new Promise((resolve) => {
-      if ((window as any).Cashfree) {
-        resolve(true);
-        return;
-      }
-      const existing = document.querySelector('script[data-cashfree-sdk="v3"]');
-      if (existing) {
+  const loadCashfreeScript = (): Promise<void> => {
+    const sdkUrl = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+    const scriptSelector = 'script[data-cashfree-sdk="v3"]';
+
+    if ((window as any).Cashfree) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      // A browser can retain a failed dynamically-inserted script element. In
+      // that case listening to it again never fires an event and every retry
+      // appears broken. Remove only a script we previously marked failed.
+      const staleScript = document.querySelector<HTMLScriptElement>(`${scriptSelector}[data-cashfree-state="error"]`);
+      staleScript?.remove();
+
+      let script = document.querySelector<HTMLScriptElement>(scriptSelector);
+      let settled = false;
+      const finish = (error?: Error) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeoutId);
+        script?.removeEventListener('load', onLoad);
+        script?.removeEventListener('error', onError);
+        if (error) reject(error);
+        else resolve();
+      };
+      const onLoad = () => {
         if ((window as any).Cashfree) {
-          resolve(true);
+          script?.setAttribute('data-cashfree-state', 'ready');
+          finish();
           return;
         }
-        existing.addEventListener('load', () => resolve(Boolean((window as any).Cashfree)));
-        existing.addEventListener('error', () => resolve(false));
-        return;
+        script?.setAttribute('data-cashfree-state', 'error');
+        finish(new Error('Cashfree checkout library loaded incorrectly. Please retry.'));
+      };
+      const onError = () => {
+        script?.setAttribute('data-cashfree-state', 'error');
+        finish(new Error('Cashfree checkout is blocked by this network or browser extension. Allow sdk.cashfree.com and retry; no payment was started.'));
+      };
+      const timeoutId = window.setTimeout(() => {
+        script?.setAttribute('data-cashfree-state', 'error');
+        finish(new Error('Cashfree checkout took too long to load. Check the internet connection or allow sdk.cashfree.com, then retry. No payment was started.'));
+      }, 15_000);
+
+      if (!script) {
+        // Cashfree's hosted SDK is the only supported way to hand a session to
+        // checkout. Do not proxy it and do not build a checkout URL ourselves.
+        script = document.createElement('script');
+        script.src = sdkUrl;
+        script.dataset.cashfreeSdk = 'v3';
+        script.dataset.cashfreeState = 'loading';
+        script.async = true;
       }
-      // Cashfree's hosted SDK is the only supported way to hand a session to
-      // checkout. Do not proxy it and do not build a checkout URL ourselves.
-      const script = document.createElement('script');
-      script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-      script.dataset.cashfreeSdk = 'v3';
-      script.async = true;
-      script.onload = () => resolve(Boolean((window as any).Cashfree));
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
+
+      script.addEventListener('load', onLoad, { once: true });
+      script.addEventListener('error', onError, { once: true });
+
+      // Attach handlers before insertion so a fast load or a blocked-network
+      // error cannot be missed.
+      if (!script.isConnected) document.body.appendChild(script);
+
+      // If another checkout already finished loading between the initial
+      // global check and the listener registration, finish immediately.
+      if ((window as any).Cashfree) onLoad();
     });
   };
 
@@ -318,10 +355,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       text: 'Opening Cashfree secure checkout. The gateway will show only the payment methods enabled for this merchant account.',
     });
 
-    const loaded = await loadCashfreeScript();
+    await loadCashfreeScript();
     const cashfreeFactory = (window as any).Cashfree;
-    if (!loaded || !cashfreeFactory) {
-      throw new Error('The secure Cashfree checkout could not be loaded. Check your connection and retry; no payment was started.');
+    if (!cashfreeFactory) {
+      throw new Error('Cashfree checkout library is unavailable. Please retry; no payment was started.');
     }
 
     // Never construct or navigate to an internal Cashfree checkout URL. The
