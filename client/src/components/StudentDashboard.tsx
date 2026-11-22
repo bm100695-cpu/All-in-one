@@ -162,7 +162,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
     'jee-main': 300,
   };
   const maxExamScore = examInfo?.patterns?.[0]?.totalMarks || defaultMaxMap[examSlug] || 100;
-  const isFreeTest = (test: any) => test.accessType !== 'premium' && test.accessLevel !== 'PREMIUM' && test.accessMode !== 'PREMIUM' && test.accessMode !== 'PAID';
+  const isFreeTest = (test: any) => {
+    const accessType = String(test.accessType || '').toLowerCase();
+    const accessLevel = String(test.accessLevel || '').toLowerCase();
+    const accessMode = String(test.accessMode || '').toLowerCase();
+    return accessType !== 'premium' && !['premium', 'paid'].includes(accessLevel) && !['premium', 'paid'].includes(accessMode);
+  };
   const displayTests = availableTests.filter((test) => test.accessMode !== 'DISABLED');
   const totalExamTests = displayTests.length;
   const freeExamTests = displayTests.filter(isFreeTest).length;

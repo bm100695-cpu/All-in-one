@@ -14,7 +14,8 @@
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
     "admin:bootstrap": "tsx src/scripts/bootstrap_admin.ts",
-    "test": "tsx test/api.test.ts"
+    "test": "tsx test/api.test.ts",
+    "test:access": "node test/test-access-policy.test.cjs"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

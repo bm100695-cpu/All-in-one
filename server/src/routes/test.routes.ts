@@ -212,7 +212,7 @@ router.get('/:testId/info', authenticate, async (req: Request, res: Response) =>
 
     // Strict visibility check for students
     if (!isAdmin) {
-      const isLive = test.isPublished && (test.status === 'ACTIVE' || test.isActive);
+      const isLive = test.isPublished && test.status === 'ACTIVE' && test.isActive;
       if (!isLive) {
         res.status(403).json({
           error: 'TEST_INACTIVE',
@@ -237,7 +237,7 @@ router.get('/:testId/info', authenticate, async (req: Request, res: Response) =>
       }
       if (!(await canAccessMockTest(req.user!.id, req.user!.role, test))) {
         res.status(403).json({
-          error: 'PREMIUM_LOCKED',
+          error: 'PLAN_REQUIRED',
           message: 'This mock test is not included in your active plan.',
           testId: test.id,
         });
@@ -341,7 +341,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
     // tries to open a test directly rather than through the library UI.
     if (!(await canAccessMockTest(userId, req.user!.role, test))) {
       res.status(403).json({
-        error: 'PREMIUM_LOCKED',
+        error: 'PLAN_REQUIRED',
         message: `"${test.title}" is a Premium Mock Test. Please upgrade your plan to unlock it.`,
         testTitle: test.title,
         testId: test.id,
@@ -364,7 +364,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
       // Validate that the test is ACTIVE/LIVE and available before starting a new attempt
       const isAdmin = isStaffRole(req.user?.role);
       if (!isAdmin) {
-        const isLive = test.isPublished && (test.status === 'ACTIVE' || test.isActive);
+        const isLive = test.isPublished && test.status === 'ACTIVE' && test.isActive;
         if (!isLive) {
           res.status(403).json({
             error: 'TEST_INACTIVE',
@@ -392,7 +392,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
       // A newly started pack-based test consumes exactly one remaining unlock.
       if (!isStaffRole(req.user?.role) && !(await consumeTestPackIfNeeded(userId, req.user?.role, test))) {
         res.status(403).json({
-          error: 'PREMIUM_LOCKED',
+          error: 'PLAN_REQUIRED',
           message: 'Your test pack no longer has an available premium test unlock.',
           testId: test.id,
           accessType: getMockAccessType(test),
@@ -514,7 +514,7 @@ router.post('/attempts/:attemptId/autosave', authenticate, async (req: Request, 
     // An autosave URL must not become a bypass after an entitlement expires or
     // an administrator changes a paper to premium.
     if (!(await canAccessMockTest(userId, req.user!.role, attempt.test))) {
-      res.status(403).json({ error: 'PREMIUM_LOCKED', message: 'Your access to this premium mock test is no longer active.' });
+      res.status(403).json({ error: 'PLAN_REQUIRED', message: 'Your access to this premium mock test is no longer active.' });
       return;
     }
 
@@ -608,7 +608,7 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
     // already-known submit URL.
     if (!(await canAccessMockTest(userId, req.user!.role, test))) {
       res.status(403).json({
-        error: 'PREMIUM_LOCKED',
+        error: 'PLAN_REQUIRED',
         message: 'This mock test now requires an active premium subscription before it can be submitted.',
         testId: test.id,
         accessType: getMockAccessType(test),
@@ -903,7 +903,7 @@ router.get('/attempts/:attemptId/review', authenticate, async (req: Request, res
     if (!isStaffRole(req.user!.role) && !assertPortalAccess(req, res, attempt.test.exam.slug)) return;
     if (!isStaffRole(req.user!.role) && !(await canAccessMockTest(userId, req.user!.role, attempt.test))) {
       res.status(403).json({
-        error: 'PREMIUM_LOCKED',
+        error: 'PLAN_REQUIRED',
         message: 'This test result is not available because the paper is not included in your active plan.',
         testId: attempt.test.id,
       });

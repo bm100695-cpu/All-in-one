@@ -39,11 +39,14 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
   const [checkingEntitlementId, setCheckingEntitlementId] = useState<string | null>(null);
   const [subscriptionInfo, setSubscriptionInfo] = useState<any>(null);
 
-  const getAccessType = (test: any): 'free' | 'premium' => (
-    test.accessType === 'premium' || test.accessLevel === 'PREMIUM' || test.accessMode === 'PREMIUM' || test.accessMode === 'PAID'
+  const getAccessType = (test: any): 'free' | 'premium' => {
+    const accessType = String(test.accessType || '').toLowerCase();
+    const accessLevel = String(test.accessLevel || '').toLowerCase();
+    const accessMode = String(test.accessMode || '').toLowerCase();
+    return accessType === 'premium' || ['premium', 'paid'].includes(accessLevel) || ['premium', 'paid'].includes(accessMode)
       ? 'premium'
-      : 'free'
-  );
+      : 'free';
+  };
 
   useEffect(() => {
     loadTests();

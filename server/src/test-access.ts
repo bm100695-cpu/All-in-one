@@ -13,6 +13,8 @@ type AccessControlledTest = {
 type AccessPlan = {
   code: string;
   name?: string | null;
+  currency?: string | null;
+  isPublished?: boolean | null;
   examSlug?: string | null;
   includedExamsJson?: string | null;
   includedMockTestsJson?: string | null;
@@ -54,9 +56,9 @@ export function planAppliesToTest(plan: AccessPlan, test: AccessControlledTest):
 
 /** The new access_type is authoritative; old columns only preserve old records. */
 export function getMockAccessType(test: AccessControlledTest): MockAccessType {
-  if (test.accessType === 'premium') return 'premium';
-  if (test.accessLevel === 'PREMIUM' || test.accessLevel === 'PAID') return 'premium';
-  if (test.accessMode === 'PREMIUM' || test.accessMode === 'PAID') return 'premium';
+  if (String(test.accessType || '').toLowerCase() === 'premium') return 'premium';
+  if (['premium', 'paid'].includes(String(test.accessLevel || '').toLowerCase())) return 'premium';
+  if (['premium', 'paid'].includes(String(test.accessMode || '').toLowerCase())) return 'premium';
   return 'free';
 }
 
@@ -93,7 +95,22 @@ export async function getMockAccessDecision(
     }),
     prisma.subscription.findMany({
       where: { userId, status: 'ACTIVE', OR: [{ endDate: null }, { endDate: { gt: now } }] },
-      include: { plan: true },
+      include: {
+        plan: true,
+        // A paid subscription is never sufficient by itself.  It must be
+        // linked to this user's verified Cashfree payment for this exact plan.
+        payment: {
+          select: {
+            userId: true,
+            planId: true,
+            status: true,
+            amount: true,
+            currency: true,
+            orderId: true,
+            paymentId: true,
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     }),
   ]);
@@ -106,7 +123,20 @@ export async function getMockAccessDecision(
 
   for (const subscription of activeSubscriptions) {
     const plan = subscription.plan;
-    if (plan.price <= 0 || plan.code.includes('FREE') || !planAppliesToTest(plan, test)) continue;
+    if (plan.price <= 0 || plan.code.includes('FREE') || !plan.isPublished || !planAppliesToTest(plan, test)) continue;
+
+    const payment = subscription.payment;
+    const isVerifiedPlanPayment = Boolean(
+      payment
+      && payment.status === 'SUCCESS'
+      && payment.userId === userId
+      && payment.planId === plan.id
+      && Number(payment.amount) > 0
+      && payment.orderId
+      && payment.paymentId
+      && String(payment.currency || '').toUpperCase() === String(plan.currency || 'INR').toUpperCase(),
+    );
+    if (!isVerifiedPlanPayment) continue;
     // Explicit assignments are available immediately. An assigned 5-test
     // Booster unlocks exactly its five selected papers, not a random five.
     const assignedIds = includedTestIds(plan);
