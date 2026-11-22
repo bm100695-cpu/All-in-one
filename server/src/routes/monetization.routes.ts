@@ -63,7 +63,16 @@ async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | 
 
   const tests = await prisma.test.findMany({
     where: { id: { in: ids } },
-    select: { id: true, accessType: true, accessLevel: true, accessMode: true, exam: { select: { slug: true } } },
+    select: {
+      id: true,
+      accessType: true,
+      accessLevel: true,
+      accessMode: true,
+      isPublished: true,
+      isActive: true,
+      status: true,
+      exam: { select: { slug: true } },
+    },
   });
   if (tests.length !== ids.length) throw new Error('One or more selected mock tests no longer exist.');
   const normalizedSlug = examSlug?.trim().toLowerCase() || null;
@@ -72,6 +81,9 @@ async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | 
   }
   if (tests.some((test) => getMockAccessType(test) !== 'premium')) {
     throw new Error('Only PREMIUM mock tests can be assigned to a paid plan. Mark the paper Premium before assigning it.');
+  }
+  if (tests.some((test) => !test.isPublished || !test.isActive || test.status !== 'ACTIVE')) {
+    throw new Error('Plans can include only live published premium mock tests. Publish and activate every selected paper first.');
   }
   return ids;
 }

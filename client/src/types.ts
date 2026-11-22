@@ -321,6 +321,7 @@ export interface SubscriptionPlan {
   durationDays: number;
   testAccessLimit?: number;
   testLimit?: number | null;
+  includedMockTests?: string[];
   features: string[];
   badge?: string;
   isActive?: boolean;

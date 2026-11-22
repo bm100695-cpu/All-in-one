@@ -37,6 +37,22 @@ export interface AdminExamsManagerProps {
   onExamSelected?: (exam: any) => void;
 }
 
+const getRequiredPlanPaperCount = (plan: { code?: string; name?: string; testAccessLimit?: number; testLimit?: number }) => {
+  const configured = Math.max(0, Number(plan.testAccessLimit ?? plan.testLimit ?? 0) || 0);
+  if (configured > 0) return configured;
+  const label = `${plan.code || ''} ${plan.name || ''}`;
+  if (/standard/i.test(label)) return 15;
+  if (/booster/i.test(label)) return 5;
+  return 0;
+};
+
+const isPremiumMock = (test: any) => {
+  const accessType = String(test.accessType || '').toLowerCase();
+  const accessLevel = String(test.accessLevel || '').toLowerCase();
+  const accessMode = String(test.accessMode || '').toLowerCase();
+  return accessType === 'premium' || ['premium', 'paid'].includes(accessLevel) || ['premium', 'paid'].includes(accessMode);
+};
+
 export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
   selectedExamId,
   onExamSelected,
@@ -135,6 +151,8 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
     durationDays: 90,
     description: '',
     featuresText: 'Full CBT Simulator Interface\nOfficial Verified Shift Papers\nDetailed Derivations & Solutions\nAIR Rank & Accuracy Audit',
+    testAccessLimit: 0,
+    includedMockTests: [] as string[],
     isPublished: true,
   });
 
@@ -245,16 +263,20 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
         durationDays: Number(updatedData.durationDays),
         description: updatedData.description,
         features: featuresArray,
+        testAccessLimit: Number(updatedData.testAccessLimit) || 0,
+        includedMockTests: Array.isArray(updatedData.includedMockTests) ? updatedData.includedMockTests : [],
         isPublished: updatedData.isPublished !== undefined ? Boolean(updatedData.isPublished) : true,
         examSlug: selectedExam?.slug,
       });
 
+      window.dispatchEvent(new Event('plans-updated'));
       setMsg({ type: 'success', text: `Plan "${updatedData.name}" updated successfully for ${selectedExam?.shortName}!` });
       if (selectedExam?.slug) {
         loadExamPlans(selectedExam.slug);
       }
     } catch (err: any) {
       setMsg({ type: 'error', text: err.message || 'Failed to update plan' });
+      throw err;
     } finally {
       setSavingPlanId(null);
     }
@@ -265,6 +287,14 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
     if (!selectedExam) return;
     setMsg(null);
     try {
+      const selectedCount = newPlanForm.includedMockTests.length;
+      const requiredCount = Math.max(0, Number(newPlanForm.testAccessLimit) || 0);
+      if (newPlanForm.isPublished && newPlanForm.priceINR > 0 && selectedCount === 0) {
+        throw new Error('Assign at least one live premium mock test before publishing this paid plan.');
+      }
+      if (newPlanForm.isPublished && requiredCount > 0 && selectedCount !== requiredCount) {
+        throw new Error(`This plan requires exactly ${requiredCount} assigned premium mock tests; ${selectedCount} selected.`);
+      }
       const featuresArray = newPlanForm.featuresText
         .split('\n')
         .map((f) => f.trim())
@@ -282,10 +312,13 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
         durationDays: Number(newPlanForm.durationDays),
         description: newPlanForm.description,
         features: featuresArray,
+        testAccessLimit: Number(newPlanForm.testAccessLimit) || 0,
+        includedMockTests: newPlanForm.includedMockTests,
         isPublished: newPlanForm.isPublished,
         examSlug: selectedExam.slug,
       });
 
+      window.dispatchEvent(new Event('plans-updated'));
       setMsg({ type: 'success', text: `Created plan "${newPlanForm.name}" for ${selectedExam.shortName}!` });
       setShowAddPlanModal(false);
       setNewPlanForm({
@@ -296,6 +329,8 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
         durationDays: 90,
         description: '',
         featuresText: 'Full CBT Simulator Interface\nOfficial Verified Shift Papers\nDetailed Derivations & Solutions\nAIR Rank & Accuracy Audit',
+        testAccessLimit: 0,
+        includedMockTests: [],
         isPublished: true,
       });
       loadExamPlans(selectedExam.slug);
@@ -992,6 +1027,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                         key={plan.id}
                         plan={plan}
                         selectedExam={selectedExam}
+                        availableTests={examTests}
                         saving={savingPlanId === plan.id}
                         onSave={(updatedData) => handleSavePlan(plan.id, updatedData)}
                       />
@@ -1645,6 +1681,55 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
                 />
               </div>
 
+              <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3 space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-800">Included Premium Mock Tests</label>
+                    <p className="text-[11px] text-slate-600">Select only live premium papers for this plan.</p>
+                  </div>
+                  <label className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-700">
+                    <span>Exact limit</span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={newPlanForm.testAccessLimit}
+                      onChange={(e) => setNewPlanForm({ ...newPlanForm, testAccessLimit: Math.max(0, Number(e.target.value) || 0) })}
+                      className="w-16 rounded border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-900"
+                    />
+                  </label>
+                </div>
+                <p className={`text-[11px] font-bold ${newPlanForm.testAccessLimit > 0 && newPlanForm.includedMockTests.length !== newPlanForm.testAccessLimit ? 'text-rose-700' : 'text-emerald-700'}`}>
+                  {newPlanForm.includedMockTests.length}{newPlanForm.testAccessLimit > 0 ? ` of ${newPlanForm.testAccessLimit}` : ''} premium papers selected
+                </p>
+                <div className="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-slate-200 bg-white p-2">
+                  {examTests.filter((test) => isPremiumMock(test) && test.isPublished && (test.status === 'ACTIVE' || test.isActive === true)).map((test) => {
+                    const selected = newPlanForm.includedMockTests.includes(test.id);
+                    const limitReached = !selected && newPlanForm.testAccessLimit > 0 && newPlanForm.includedMockTests.length >= newPlanForm.testAccessLimit;
+                    return (
+                      <label key={test.id} className={`flex items-center gap-2 rounded px-2 py-1.5 ${limitReached ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-slate-50'}`}>
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          disabled={limitReached}
+                          onChange={() => setNewPlanForm({
+                            ...newPlanForm,
+                            includedMockTests: selected
+                              ? newPlanForm.includedMockTests.filter((id) => id !== test.id)
+                              : [...newPlanForm.includedMockTests, test.id],
+                          })}
+                          className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                        />
+                        <span className="min-w-0 flex-1 truncate text-slate-800">{test.title}</span>
+                        <span className="text-[10px] text-slate-500">{test.totalQuestions || 0} Qs</span>
+                      </label>
+                    );
+                  })}
+                  {examTests.filter((test) => isPremiumMock(test) && test.isPublished && (test.status === 'ACTIVE' || test.isActive === true)).length === 0 && (
+                    <p className="px-2 py-1 text-[11px] text-amber-700">No live premium mock tests are available. Publish and activate a premium paper first.</p>
+                  )}
+                </div>
+              </div>
+
               <div className="flex items-center gap-2 pt-1">
                 <input
                   type="checkbox"
@@ -1763,6 +1848,7 @@ export const AdminExamsManager: React.FC<AdminExamsManagerProps> = ({
 interface ExamPlanEditorCardProps {
   plan: SubscriptionPlan;
   selectedExam: any;
+  availableTests: any[];
   saving: boolean;
   onSave: (data: any) => Promise<void>;
 }
@@ -1770,6 +1856,7 @@ interface ExamPlanEditorCardProps {
 const ExamPlanEditorCard: React.FC<ExamPlanEditorCardProps> = ({
   plan,
   selectedExam,
+  availableTests,
   saving,
   onSave,
 }) => {
@@ -1782,10 +1869,15 @@ const ExamPlanEditorCard: React.FC<ExamPlanEditorCardProps> = ({
   const [featuresText, setFeaturesText] = useState(
     Array.isArray(plan.features) ? plan.features.join('\n') : ''
   );
+  const [testAccessLimit, setTestAccessLimit] = useState<number>(getRequiredPlanPaperCount(plan));
+  const [includedMockTests, setIncludedMockTests] = useState<string[]>(
+    Array.isArray(plan.includedMockTests) ? plan.includedMockTests : []
+  );
   const [isPublished, setIsPublished] = useState<boolean>(
     plan.isPublished !== undefined ? plan.isPublished : true
   );
   const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     setName(plan.name || '');
@@ -1795,23 +1887,48 @@ const ExamPlanEditorCard: React.FC<ExamPlanEditorCardProps> = ({
     setDurationDays(Number(plan.durationDays ?? 0));
     setDescription(plan.description || '');
     setFeaturesText(Array.isArray(plan.features) ? plan.features.join('\n') : '');
+    setTestAccessLimit(getRequiredPlanPaperCount(plan));
+    setIncludedMockTests(Array.isArray(plan.includedMockTests) ? plan.includedMockTests : []);
     setIsPublished(plan.isPublished !== undefined ? plan.isPublished : true);
     setHasChanges(false);
+    setValidationError(null);
   }, [plan]);
 
-  const handleSave = () => {
-    onSave({
-      name,
-      badge,
-      priceINR: Number(priceINR),
-      price: Number(priceINR),
-      originalPriceINR: Number(originalPriceINR),
-      durationDays: Number(durationDays),
-      description,
-      features: featuresText.split('\n').map((f) => f.trim()).filter(Boolean),
-      isPublished,
-    });
-    setHasChanges(false);
+  const premiumTests = availableTests.filter((test) => {
+    const isLive = Boolean(test.isPublished) && (test.status === 'ACTIVE' || test.isActive === true);
+    return isPremiumMock(test) && isLive;
+  });
+  const requiredPaperCount = Math.max(0, Number(testAccessLimit) || 0);
+
+  const handleSave = async () => {
+    if (isPublished && priceINR > 0 && includedMockTests.length === 0) {
+      setValidationError('Assign at least one live premium mock test before publishing this paid plan.');
+      return;
+    }
+    if (isPublished && requiredPaperCount > 0 && includedMockTests.length !== requiredPaperCount) {
+      setValidationError(`This plan requires exactly ${requiredPaperCount} assigned premium mock tests; ${includedMockTests.length} selected.`);
+      return;
+    }
+    setValidationError(null);
+    try {
+      await onSave({
+        name,
+        badge,
+        priceINR: Number(priceINR),
+        price: Number(priceINR),
+        originalPriceINR: Number(originalPriceINR),
+        durationDays: Number(durationDays),
+        description,
+        features: featuresText.split('\n').map((f) => f.trim()).filter(Boolean),
+        testAccessLimit: requiredPaperCount,
+        includedMockTests,
+        isPublished,
+      });
+      setHasChanges(false);
+    } catch {
+      // The parent displays the safe server validation message and preserves
+      // the edited values so an admin can correct them.
+    }
   };
 
   const isFree = priceINR === 0;
@@ -2037,6 +2154,63 @@ const ExamPlanEditorCard: React.FC<ExamPlanEditorCardProps> = ({
             placeholder="5 Verified Mock Tests&#10;Detailed Step-by-Step Solutions&#10;Subject-wise Accuracy Audit"
             className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 font-mono bg-white leading-relaxed"
           />
+        </div>
+
+        <div className="sm:col-span-12 rounded-xl border border-blue-100 bg-blue-50/50 p-3 space-y-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <label className="block font-bold text-slate-800">Included Premium Mock Tests</label>
+              <p className="text-[11px] text-slate-600">Only live, published premium tests can be sold in this plan.</p>
+            </div>
+            <label className="flex items-center gap-2 text-[11px] font-semibold text-slate-700">
+              <span>Exact paper limit</span>
+              <input
+                type="number"
+                min="0"
+                value={testAccessLimit}
+                onChange={(e) => {
+                  setTestAccessLimit(Math.max(0, Number(e.target.value) || 0));
+                  setHasChanges(true);
+                }}
+                className="w-16 rounded border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-900"
+              />
+            </label>
+          </div>
+          <div className={`text-[11px] font-bold ${requiredPaperCount > 0 && includedMockTests.length !== requiredPaperCount ? 'text-rose-700' : 'text-emerald-700'}`}>
+            {includedMockTests.length}{requiredPaperCount > 0 ? ` of ${requiredPaperCount}` : ''} premium papers selected
+          </div>
+          {premiumTests.length === 0 ? (
+            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+              No live premium mock tests are available for this portal. Publish premium tests first, then assign them to the plan.
+            </p>
+          ) : (
+            <div className="max-h-36 space-y-1 overflow-y-auto rounded-lg border border-slate-200 bg-white p-2">
+              {premiumTests.map((test) => {
+                const selected = includedMockTests.includes(test.id);
+                const limitReached = !selected && requiredPaperCount > 0 && includedMockTests.length >= requiredPaperCount;
+                return (
+                  <label key={test.id} className={`flex items-center gap-2 rounded px-2 py-1.5 text-xs ${limitReached ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-slate-50'}`}>
+                    <input
+                      type="checkbox"
+                      checked={selected}
+                      disabled={limitReached}
+                      onChange={() => {
+                        setValidationError(null);
+                        setIncludedMockTests((current) => selected
+                          ? current.filter((id) => id !== test.id)
+                          : [...current, test.id]);
+                        setHasChanges(true);
+                      }}
+                      className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                    />
+                    <span className="min-w-0 flex-1 truncate text-slate-800">{test.title}</span>
+                    <span className="text-[10px] text-slate-500">{test.totalQuestions || 0} Qs</span>
+                  </label>
+                );
+              })}
+            </div>
+          )}
+          {validationError && <p className="text-[11px] font-semibold text-rose-700">{validationError}</p>}
         </div>
       </div>
     </div>
