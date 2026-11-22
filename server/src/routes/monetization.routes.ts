@@ -71,14 +71,32 @@ async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | 
   return ids;
 }
 
-function assertPlanPaperAssignments(plan: { name?: string | null; code?: string | null; price?: number | null; testAccessLimit: number }, selectedTestIds: string[]): void {
+type PlanPaperAssignment = {
+  name?: string | null;
+  code?: string | null;
+  price?: number | null;
+  testAccessLimit: number;
+};
+
+/**
+ * A public plan must be purchasable the moment a student sees it.  Returning a
+ * configuration error here lets student endpoints hide incomplete paid packs,
+ * while the admin endpoint can still show them for correction.
+ */
+function getPlanPaperAssignmentError(plan: PlanPaperAssignment, selectedTestIds: string[]): string | null {
   if (Number(plan.price || 0) > 0 && selectedTestIds.length === 0) {
-    throw new Error(`Plan "${plan.name || plan.code || 'unnamed'}" needs at least one explicitly assigned premium mock test before it can be published or sold.`);
+    return `Plan "${plan.name || plan.code || 'unnamed'}" needs at least one explicitly assigned premium mock test before it can be published or sold.`;
   }
   const expected = getRequiredAssignedPaperCount({ code: plan.code || '', name: plan.name, testAccessLimit: plan.testAccessLimit });
   if (expected > 0 && selectedTestIds.length !== expected) {
-    throw new Error(`Plan "${plan.name || plan.code || 'unnamed'}" must have exactly ${expected} admin-assigned premium mock tests; it currently has ${selectedTestIds.length}.`);
+    return `Plan "${plan.name || plan.code || 'unnamed'}" must have exactly ${expected} admin-assigned premium mock tests; it currently has ${selectedTestIds.length}.`;
   }
+  return null;
+}
+
+function assertPlanPaperAssignments(plan: PlanPaperAssignment, selectedTestIds: string[]): void {
+  const error = getPlanPaperAssignmentError(plan, selectedTestIds);
+  if (error) throw new Error(error);
 }
 
 // Cashfree Checkout remains authoritative at payment time. This optional
@@ -661,6 +679,15 @@ async function ensureExamPlansExist(examSlug: string): Promise<void> {
 
 // Format subscription plan model with parsed JSON fields
 function formatSubscriptionPlan(p: any) {
+  let includedMockTests: string[] = [];
+  try {
+    const parsed = JSON.parse(p.includedMockTestsJson || '[]');
+    includedMockTests = Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : [];
+  } catch {
+    // A malformed legacy value is not safe to sell.  Admin can repair it.
+    includedMockTests = [];
+  }
+  const configurationError = getPlanPaperAssignmentError(p, includedMockTests);
   return {
     ...p,
     priceINR: p.price,
@@ -668,7 +695,9 @@ function formatSubscriptionPlan(p: any) {
     features: JSON.parse(p.featuresJson || '[]'),
     includedExams: JSON.parse(p.includedExamsJson || '[]'),
     includedPapers: JSON.parse(p.includedPapersJson || '[]'),
-    includedMockTests: JSON.parse(p.includedMockTestsJson || '[]'),
+    includedMockTests,
+    isPurchasable: !configurationError,
+    configurationError,
   };
 }
 
@@ -709,7 +738,10 @@ router.get('/plans', async (req: Request, res: Response) => {
       });
     }
 
-    res.json({ plans: plans.map(formatSubscriptionPlan) });
+    // Do not let students enter checkout for a plan that an admin has not
+    // completely configured.  The exact same guard remains in create-order
+    // to protect against stale browser state or a forged request.
+    res.json({ plans: plans.map(formatSubscriptionPlan).filter((plan) => plan.isPurchasable) });
   } catch (error) {
     console.error('Error fetching plans:', error);
     res.status(500).json({ error: 'Failed to fetch subscription plans' });

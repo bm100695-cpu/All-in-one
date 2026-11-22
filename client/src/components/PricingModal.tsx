@@ -442,7 +442,21 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       }
     } catch (err: any) {
       console.error('Subscription error:', err);
-      setStatusMessage({ type: 'error', text: err.message || 'Failed to process payment. Please try again.' });
+      const errorMessage = String(err?.message || '');
+      // A plan may have been unpublished or corrected by an admin while this
+      // modal was open. Refresh instead of leaving the student on a broken
+      // checkout screen or showing an internal configuration error.
+      if (/explicitly assigned premium mock test|must have exactly .*admin-assigned premium mock tests/i.test(errorMessage)) {
+        setCheckoutPlan(null);
+        setSelectedCheckoutMethod(null);
+        await loadData();
+        setStatusMessage({
+          type: 'info',
+          text: 'This plan is being updated and is temporarily unavailable. Please choose another available plan.',
+        });
+      } else {
+        setStatusMessage({ type: 'error', text: errorMessage || 'Failed to process payment. Please try again.' });
+      }
     } finally {
       setProcessingPlanId(null);
     }
