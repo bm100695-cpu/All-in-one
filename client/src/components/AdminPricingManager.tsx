@@ -261,6 +261,10 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
         discountPct: disc,
         discountPercent: disc,
       });
+      // Immediately refresh any student pricing view open in this browser.
+      // Other sessions pick the persisted change up through their public-plan
+      // revalidation interval.
+      window.dispatchEvent(new Event('plans-updated'));
       showNotification(`Updated "${plan.name}" price to ₹${newPrice}`);
       await loadAllData();
     } catch (err: any) {
@@ -365,6 +369,10 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       return;
     }
     const expectedPaperCount = Math.max(0, Number(planForm.testLimit) || 0);
+    if (planForm.isActive && !planForm.examSlug.trim()) {
+      showNotification('Select an exam portal before publishing. Student pricing is always scoped to an exam portal.', 'error');
+      return;
+    }
     if (planForm.isActive && Number(planForm.priceINR) > 0 && planForm.includedMockTests.length === 0) {
       showNotification('A paid plan needs at least one explicitly assigned premium paper before publishing.', 'error');
       return;
@@ -420,6 +428,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
         showNotification(`New custom plan "${planForm.name}" created successfully (₹${planForm.priceINR})`);
       }
       setIsPlanModalOpen(false);
+      window.dispatchEvent(new Event('plans-updated'));
       await loadAllData();
     } catch (err: any) {
       showNotification(err.message || 'Failed to save plan', 'error');
@@ -434,6 +443,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
     }
     try {
       await api.deleteAdminPlan(id);
+      window.dispatchEvent(new Event('plans-updated'));
       showNotification(`Plan "${name}" deactivated successfully`);
       await loadAllData();
     } catch (err: any) {
@@ -827,6 +837,17 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {overview?.plans?.map((plan: any) => {
+              const selectedPaperCount = Array.isArray(plan.includedMockTests) ? plan.includedMockTests.length : 0;
+              const requiredPaperCount = getRequiredPlanPaperCount(plan);
+              const studentVisibility = !plan.isActive
+                ? 'Not visible: plan is inactive.'
+                : !plan.examSlug
+                  ? 'Not visible: select an exam portal before publishing.'
+                  : requiredPaperCount > 0 && selectedPaperCount !== requiredPaperCount
+                    ? `Visible in ${plan.examSlug}, but checkout stays disabled until ${requiredPaperCount} premium papers are assigned.`
+                    : plan.priceINR > 0 && selectedPaperCount === 0
+                      ? `Visible in ${plan.examSlug}, but checkout stays disabled until premium papers are assigned.`
+                      : `Visible to students in ${plan.examSlug}.`;
               return (
                 <div
                   key={plan.id}
@@ -861,6 +882,11 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                           / {plan.billingInterval === 'ONCE' ? 'One-time' : plan.billingInterval?.toLowerCase()}
                         </span>
                       </div>
+                    </div>
+
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] leading-relaxed text-slate-600">
+                      <span className="font-bold text-slate-800">Student portal: </span>
+                      {studentVisibility}
                     </div>
 
                     {/* Quick 1-Click Price Vary for Admin */}
@@ -1653,18 +1679,18 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Exam Portal Scope</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Exam Portal Scope {planForm.isActive && <span className="text-rose-600">*</span>}</label>
                 <select
                   value={planForm.examSlug}
                   onChange={(e) => setPlanForm({ ...planForm, examSlug: e.target.value, includedMockTests: [] })}
                   className="w-full p-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900 bg-white"
                 >
-                  <option value="">All exam portals</option>
+                  <option value="">Select an exam portal</option>
                   {contentList.filter((item) => item.type === 'EXAM').map((exam) => (
                     <option key={exam.id} value={exam.examSlug || ''}>{exam.title}</option>
                   ))}
                 </select>
-                <p className="mt-1 text-[11px] text-slate-500">Choose a portal for an exam-specific pack, or leave All for platform-wide access.</p>
+                <p className="mt-1 text-[11px] text-slate-500">Published plans are shown only in their selected portal. This prevents plans from appearing for unrelated exams.</p>
               </div>
 
               <div>

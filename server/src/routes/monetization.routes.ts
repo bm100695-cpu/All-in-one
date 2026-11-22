@@ -2731,6 +2731,10 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
     const payablePaise = validatePremiumPrice(pricePaise, pricePaise === 0 ? 'FREE' : 'PREMIUM');
     const originalPricePaise = originalPrice !== undefined ? toPaise(originalPrice) : payablePaise;
     const normalizedExamSlug = examSlug ? String(examSlug).trim().toLowerCase() : null;
+    if (Boolean(isPublished) && !normalizedExamSlug) {
+      res.status(400).json({ error: 'Select an exam portal before publishing a student-facing plan.' });
+      return;
+    }
     const normalizedIncludedMockTests = await normalizeIncludedMockTestIds(includedMockTests || [], normalizedExamSlug);
 
     const planCode = code
@@ -2844,13 +2848,18 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
     const normalizedExamSlug = examSlug !== undefined
       ? (examSlug ? String(examSlug).trim().toLowerCase() : null)
       : existingPlan.examSlug;
+    const willBePublished = isPublished !== undefined ? Boolean(isPublished) : existingPlan.isPublished;
+    if (willBePublished && !normalizedExamSlug) {
+      res.status(400).json({ error: 'Select an exam portal before publishing a student-facing plan.' });
+      return;
+    }
     const normalizedIncludedMockTests = includedMockTests !== undefined
       ? await normalizeIncludedMockTestIds(includedMockTests, normalizedExamSlug)
       : undefined;
     const nextSelectedTests = normalizedIncludedMockTests ?? (() => {
       try { const parsed = JSON.parse(existingPlan.includedMockTestsJson || '[]'); return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []; } catch { return []; }
     })();
-    if (isPublished !== undefined ? Boolean(isPublished) : existingPlan.isPublished) {
+    if (willBePublished) {
       assertPlanPaperAssignments({
         name: name || existingPlan.name,
         code: existingPlan.code,

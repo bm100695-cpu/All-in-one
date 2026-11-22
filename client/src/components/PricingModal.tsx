@@ -181,13 +181,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     if (isOpen) {
       setAppliedCoupon(null);
       setCouponInput('');
-      loadData();
+      void loadData();
     }
   }, [isOpen, activeExamSlug]);
 
-  const loadData = async () => {
-    setLoading(true);
-    setStatusMessage(null);
+  const loadData = async (backgroundRefresh = false) => {
+    if (!backgroundRefresh) {
+      setLoading(true);
+      setStatusMessage(null);
+    }
     try {
       const [plansResult, configResult] = await Promise.allSettled([
         api.getSubscriptionPlans(activeExamSlug),
@@ -195,18 +197,20 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       ]);
 
       if (plansResult.status === 'rejected') {
-        setPlans([]);
-        setGatewayConfig(null);
-        setStatusMessage({
-          type: 'error',
-          text: plansResult.reason?.message || 'Latest pricing plans could not be loaded. Please retry.',
-        });
+        if (!backgroundRefresh) {
+          setPlans([]);
+          setGatewayConfig(null);
+          setStatusMessage({
+            type: 'error',
+            text: plansResult.reason?.message || 'Latest pricing plans could not be loaded. Please retry.',
+          });
+        }
         return;
       }
 
       const plansRes = plansResult.value;
       const configRes = configResult.status === 'fulfilled' ? configResult.value : null;
-      if (configResult.status === 'rejected') {
+      if (configResult.status === 'rejected' && !backgroundRefresh) {
         setStatusMessage({
           type: 'error',
           text: 'Plans loaded, but secure checkout status could not be verified. Please retry before paying.',
@@ -222,16 +226,37 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           || fetchedPlans[0]?.code
           || '';
       });
-      if (fetchedPlans.length === 0) {
+      if (fetchedPlans.length === 0 && !backgroundRefresh) {
         setStatusMessage({ type: 'info', text: `No published plans are currently available for ${currentExamName}.` });
       }
-      setGatewayConfig(configRes);
+      if (configRes) setGatewayConfig(configRes);
     } catch (err) {
       console.error('Failed to load plans:', err);
     } finally {
-      setLoading(false);
+      if (!backgroundRefresh) setLoading(false);
     }
   };
+
+  // Prices and publication state are managed by admins in a separate session.
+  // Revalidate while the modal is open so a student never has to hard-refresh
+  // to see a newly published plan or an updated price.
+  useEffect(() => {
+    if (!isOpen) return;
+    const refreshPlans = () => {
+      if (document.visibilityState === 'hidden') return;
+      void loadData(true);
+    };
+    const intervalId = window.setInterval(refreshPlans, 30_000);
+    window.addEventListener('focus', refreshPlans);
+    window.addEventListener('plans-updated', refreshPlans);
+    document.addEventListener('visibilitychange', refreshPlans);
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener('focus', refreshPlans);
+      window.removeEventListener('plans-updated', refreshPlans);
+      document.removeEventListener('visibilitychange', refreshPlans);
+    };
+  }, [isOpen, activeExamSlug]);
 
   const handleApplyCoupon = async () => {
     const code = couponInput.trim().toUpperCase();

@@ -52,13 +52,15 @@ export const ExamPortalView: React.FC<ExamPortalViewProps> = ({
   const [checkingTestId, setCheckingTestId] = useState<string | null>(null);
 
   useEffect(() => {
-    loadExamPortal();
+    void loadExamPortal();
     setSubTab('OVERVIEW');
   }, [examSlug]);
 
-  const loadExamPortal = async () => {
-    setLoading(true);
-    setError(null);
+  const loadExamPortal = async (backgroundRefresh = false) => {
+    if (!backgroundRefresh) {
+      setLoading(true);
+      setError(null);
+    }
     try {
       const [profileRes, plansRes] = await Promise.all([
         api.getExamProfile(examSlug),
@@ -67,11 +69,32 @@ export const ExamPortalView: React.FC<ExamPortalViewProps> = ({
       setExam(profileRes.exam);
       setPlans(plansRes.plans || profileRes.exam?.plans || []);
     } catch (err: any) {
-      setError(err.message || `Could not load portal for "${examSlug}"`);
+      if (!backgroundRefresh) {
+        setError(err.message || `Could not load portal for "${examSlug}"`);
+      }
     } finally {
-      setLoading(false);
+      if (!backgroundRefresh) setLoading(false);
     }
   };
+
+  // Admin plan changes are stored server-side. Revalidate the public portal
+  // list in the background so students see them without a manual refresh.
+  useEffect(() => {
+    const refreshPortalPlans = () => {
+      if (document.visibilityState === 'hidden') return;
+      void loadExamPortal(true);
+    };
+    const intervalId = window.setInterval(refreshPortalPlans, 30_000);
+    window.addEventListener('focus', refreshPortalPlans);
+    window.addEventListener('plans-updated', refreshPortalPlans);
+    document.addEventListener('visibilitychange', refreshPortalPlans);
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener('focus', refreshPortalPlans);
+      window.removeEventListener('plans-updated', refreshPortalPlans);
+      document.removeEventListener('visibilitychange', refreshPortalPlans);
+    };
+  }, [examSlug]);
 
   const handleLaunchTest = async (test: any) => {
     const isTeachingCbt = examSlug === 'uptet' || examSlug === 'super-tet';
