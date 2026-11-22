@@ -74,6 +74,20 @@ export const App: React.FC = () => {
   const [isReferralModalOpen, setIsReferralModalOpen] = useState<boolean>(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'privacy' | 'refund' | 'support' | null>(null);
 
+  const openLoginForExam = (examSlug?: string) => {
+    if (examSlug) setSelectedExamSlug(examSlug.trim().toLowerCase());
+    setActiveTestId(null);
+    setSubmittedAttemptId(null);
+    setActiveTab('landing');
+    setAuthModalMode('login');
+    setIsAuthModalOpen(true);
+    // Keep the URL honest as well: a shared/direct portal link must not
+    // render the portal while there is no authenticated session.
+    if (window.location.hash.toLowerCase() !== '#/login') {
+      window.location.hash = '/login';
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem('student_sidebar_collapsed', String(studentSidebarCollapsed));
   }, [studentSidebarCollapsed]);
@@ -107,6 +121,10 @@ export const App: React.FC = () => {
         const raw = hash.startsWith('#/exams/') ? hash.replace('#/exams/', '') : path.replace('/exams/', '');
         const slug = raw.split(/[?#]/)[0].trim().toLowerCase();
         if (slug) {
+          if (!getStoredToken()) {
+            openLoginForExam(slug);
+            return;
+          }
           setSelectedExamSlug(slug);
           setActiveTab('exam-portal');
         }
@@ -224,7 +242,10 @@ export const App: React.FC = () => {
         } catch {
           api.logout();
           setCurrentUser(null);
-          if (isControlRoute) {
+          if (hash.startsWith('#/exams/') || path.startsWith('/exams/')) {
+            const raw = hash.startsWith('#/exams/') ? hash.replace('#/exams/', '') : path.replace('/exams/', '');
+            openLoginForExam(raw.split(/[?#]/)[0]);
+          } else if (isControlRoute) {
             setActiveTab('control-center');
           } else if (hash === '#/live-tests' || hash === '#live-tests' || path === '/live-tests') {
             setActiveTab('live-tests');
@@ -405,6 +426,10 @@ export const App: React.FC = () => {
 
   const openExamPortal = (slug: string) => {
     const cleanSlug = slug.trim().toLowerCase();
+    if (!currentUser) {
+      openLoginForExam(cleanSlug);
+      return;
+    }
     setSelectedExamSlug(cleanSlug);
     setActiveTestId(null);
     setSubmittedAttemptId(null);
