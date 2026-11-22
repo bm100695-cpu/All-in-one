@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { prisma } from '../prisma';
-import { canAccessMockTest, getMockAccessDecision, getMockAccessType, isStaffRole } from '../test-access';
+import { canAccessMockTest, getMockAccessDecision, getMockAccessType, getRequiredAssignedPaperCount, isStaffRole } from '../test-access';
 import { authenticate, requireRole } from '../middleware/auth';
 
 dotenv.config();
@@ -58,19 +58,23 @@ async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | 
 
   const tests = await prisma.test.findMany({
     where: { id: { in: ids } },
-    select: { id: true, exam: { select: { slug: true } } },
+    select: { id: true, accessType: true, accessLevel: true, accessMode: true, exam: { select: { slug: true } } },
   });
   if (tests.length !== ids.length) throw new Error('One or more selected mock tests no longer exist.');
   const normalizedSlug = examSlug?.trim().toLowerCase() || null;
   if (normalizedSlug && tests.some((test) => test.exam.slug !== normalizedSlug)) {
     throw new Error('Selected mock tests must belong to the selected exam portal.');
   }
+  if (tests.some((test) => getMockAccessType(test) !== 'premium')) {
+    throw new Error('Only PREMIUM mock tests can be assigned to a paid plan. Mark the paper Premium before assigning it.');
+  }
   return ids;
 }
 
-function assertBoosterSelection(codeOrName: string, selectedTestIds: string[]): void {
-  if (/BOOSTER/i.test(codeOrName) && selectedTestIds.length !== 5) {
-    throw new Error('A Booster Pack must have exactly 5 admin-assigned mock tests before it can be saved or sold.');
+function assertExactPlanPaperCount(plan: { name?: string | null; code?: string | null; testAccessLimit: number }, selectedTestIds: string[]): void {
+  const expected = getRequiredAssignedPaperCount({ code: plan.code || '', name: plan.name, testAccessLimit: plan.testAccessLimit });
+  if (expected > 0 && selectedTestIds.length !== expected) {
+    throw new Error(`Plan "${plan.name || plan.code || 'unnamed'}" must have exactly ${expected} admin-assigned premium mock tests; it currently has ${selectedTestIds.length}.`);
   }
 }
 
@@ -426,6 +430,7 @@ async function ensureDefaultPlansExist(): Promise<void> {
         currency: 'INR',
         durationDays: 90,
         billingInterval: 'ONCE',
+        testAccessLimit: 5,
         badge: 'Top Choice',
         featuresJson: JSON.stringify([
           '5 Verified Mock Tests',
@@ -433,8 +438,32 @@ async function ensureDefaultPlansExist(): Promise<void> {
           'Subject-wise Accuracy Audit',
           'Personal Mistake Journal Tagging',
         ]),
-        isPublished: true,
+        // An exact pack is deliberately hidden until the admin selects all
+        // required premium papers in the Pricing dashboard.
+        isPublished: false,
         displayOrder: 2,
+      },
+      {
+        name: '15-Test Standard Plan',
+        code: 'PLAN_STANDARD_49',
+        description: 'Unlock exactly 15 admin-assigned premium mock papers for your exam portal.',
+        price: 49,
+        originalPrice: 99,
+        discountPct: 51,
+        currency: 'INR',
+        durationDays: 90,
+        billingInterval: 'ONCE',
+        testAccessLimit: 15,
+        badge: 'More Practice',
+        featuresJson: JSON.stringify([
+          '15 assigned Premium Mock Tests',
+          'Detailed solutions and scorecards',
+          'Subject-wise analytics',
+        ]),
+        // An exact pack is deliberately hidden until the admin selects all
+        // required premium papers in the Pricing dashboard.
+        isPublished: false,
+        displayOrder: 3,
       },
       {
         name: 'Premium All-Access',
@@ -454,7 +483,7 @@ async function ensureDefaultPlansExist(): Promise<void> {
           'Priority Reviewer Q&A Support',
         ]),
         isPublished: true,
-        displayOrder: 3,
+        displayOrder: 4,
       },
       {
         name: 'All-Access 1-Year Super Pass',
@@ -474,7 +503,7 @@ async function ensureDefaultPlansExist(): Promise<void> {
           'Priority Live All-India Mock Tests with Rank',
         ]),
         isPublished: true,
-        displayOrder: 4,
+        displayOrder: 5,
       },
       {
         name: 'Lifetime Master VIP Pass',
@@ -494,7 +523,7 @@ async function ensureDefaultPlansExist(): Promise<void> {
           'VIP Support & Early Access to New Features',
         ]),
         isPublished: true,
-        displayOrder: 5,
+        displayOrder: 6,
       },
     ];
 
@@ -516,14 +545,6 @@ async function ensureDefaultPlansExist(): Promise<void> {
 async function ensureExamPlansExist(examSlug: string): Promise<void> {
   try {
     const cleanSlug = examSlug.trim().toLowerCase();
-    const existing = await prisma.subscriptionPlan.findFirst({
-      where: { examSlug: cleanSlug },
-    });
-
-    if (existing) {
-      return; // Already initialized, keep admin custom edits completely intact
-    }
-
     const exam = await prisma.exam.findUnique({
       where: { slug: cleanSlug },
       select: { title: true, shortName: true },
@@ -563,6 +584,7 @@ async function ensureExamPlansExist(examSlug: string): Promise<void> {
         currency: 'INR',
         durationDays: 90,
         billingInterval: 'ONCE',
+        testAccessLimit: 5,
         badge: 'Top Choice',
         examSlug: cleanSlug,
         featuresJson: JSON.stringify([
@@ -571,8 +593,33 @@ async function ensureExamPlansExist(examSlug: string): Promise<void> {
           'Subject-wise Accuracy Audit',
           'Personal Mistake Journal Tagging',
         ]),
-        isPublished: true,
+        // An exact pack is deliberately hidden until the admin selects all
+        // required premium papers in the Pricing dashboard.
+        isPublished: false,
         displayOrder: 2,
+      },
+      {
+        name: '15-Test Standard Plan',
+        code: `PLAN_${prefix}_STANDARD_49`,
+        description: `Unlock exactly 15 admin-assigned premium mock papers for ${examName}.`,
+        price: 49,
+        originalPrice: 99,
+        discountPct: 51,
+        currency: 'INR',
+        durationDays: 90,
+        billingInterval: 'ONCE',
+        testAccessLimit: 15,
+        badge: 'More Practice',
+        examSlug: cleanSlug,
+        featuresJson: JSON.stringify([
+          '15 assigned Premium Mock Tests',
+          'Detailed solutions and scorecards',
+          'Subject-wise analytics',
+        ]),
+        // An exact pack is deliberately hidden until the admin selects all
+        // required premium papers in the Pricing dashboard.
+        isPublished: false,
+        displayOrder: 3,
       },
       {
         name: 'Premium All-Access',
@@ -593,7 +640,7 @@ async function ensureExamPlansExist(examSlug: string): Promise<void> {
           'Priority Reviewer Q&A Support',
         ]),
         isPublished: true,
-        displayOrder: 3,
+        displayOrder: 4,
       },
     ];
 
@@ -1355,7 +1402,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
 
     try {
       const selected = JSON.parse(plan.includedMockTestsJson || '[]');
-      assertBoosterSelection(`${plan.code} ${plan.name}`, Array.isArray(selected) ? selected.filter((id: unknown) => typeof id === 'string') : []);
+      assertExactPlanPaperCount(plan, Array.isArray(selected) ? selected.filter((id: unknown) => typeof id === 'string') : []);
     } catch (error: any) {
       res.status(400).json({ error: error.message || 'This plan has an invalid mock-test assignment.' });
       return;
@@ -1675,17 +1722,10 @@ async function activatePaidOrder(params: {
         endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
       }
 
-      // Keep purchases for unrelated portals active. A later purchase only
-      // replaces an existing plan in the same portal scope (a global plan is
-      // intentionally allowed to replace earlier global access).
-      await tx.subscription.updateMany({
-        where: {
-          userId: currentPayment.userId,
-          status: 'ACTIVE',
-          ...(plan.examSlug ? { plan: { examSlug: plan.examSlug } } : { plan: { examSlug: null } }),
-        },
-        data: { status: 'CANCELLED' },
-      });
+      // Plans stack. A Standard purchase must preserve an active Starter
+      // purchase so the student's effective access is the deduplicated union
+      // of every active plan's explicitly assigned tests. Payment-level
+      // idempotency above prevents webhook retries from creating duplicates.
 
       // Explicit selected tests are evaluated live from the plan config. This
       // makes admin changes immediately visible while keeping open packs as a
@@ -1695,7 +1735,9 @@ async function activatePaidOrder(params: {
         const parsed = JSON.parse(plan.includedMockTestsJson || '[]');
         selectedTestCount = Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string').length : 0;
       } catch { /* invalid legacy JSON means no fixed selection */ }
-      const testsRemaining = selectedTestCount === 0 && plan.testAccessLimit > 0 ? plan.testAccessLimit : null;
+      const testsRemaining = selectedTestCount === 0 && getRequiredAssignedPaperCount(plan) === 0 && plan.testAccessLimit > 0
+        ? plan.testAccessLimit
+        : null;
 
       createdSubscription = await tx.subscription.create({
         data: {
@@ -2653,7 +2695,9 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
     const planCode = code
       ? code.trim().toUpperCase()
       : `PLAN_${name.replace(/[^A-Za-z0-9]/g, '_').toUpperCase()}_${Date.now().toString().slice(-4)}`;
-    assertBoosterSelection(`${planCode} ${name}`, normalizedIncludedMockTests);
+    if (Boolean(isPublished)) {
+      assertExactPlanPaperCount({ name, code: planCode, testAccessLimit: Number(testAccessLimit) || 0 }, normalizedIncludedMockTests);
+    }
 
     const newPlan = await prisma.subscriptionPlan.create({
       data: {
@@ -2763,7 +2807,13 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
     const nextSelectedTests = normalizedIncludedMockTests ?? (() => {
       try { const parsed = JSON.parse(existingPlan.includedMockTestsJson || '[]'); return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []; } catch { return []; }
     })();
-    assertBoosterSelection(`${existingPlan.code} ${name || existingPlan.name}`, nextSelectedTests);
+    if (isPublished !== undefined ? Boolean(isPublished) : existingPlan.isPublished) {
+      assertExactPlanPaperCount({
+        name: name || existingPlan.name,
+        code: existingPlan.code,
+        testAccessLimit: testAccessLimit !== undefined ? Number(testAccessLimit) || 0 : existingPlan.testAccessLimit,
+      }, nextSelectedTests);
+    }
 
     const updated = await prisma.subscriptionPlan.update({
       where: { id },

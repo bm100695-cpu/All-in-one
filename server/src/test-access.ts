@@ -12,11 +12,22 @@ type AccessControlledTest = {
 
 type AccessPlan = {
   code: string;
+  name?: string | null;
   examSlug?: string | null;
   includedExamsJson?: string | null;
   includedMockTestsJson?: string | null;
   testAccessLimit: number;
 };
+
+/** Compatibility guard for legacy named packs created before testAccessLimit. */
+export function getRequiredAssignedPaperCount(plan: Pick<AccessPlan, 'code' | 'name' | 'testAccessLimit'>): number {
+  const configured = Math.max(0, Number(plan.testAccessLimit) || 0);
+  if (configured > 0) return configured;
+  const label = `${plan.code || ''} ${plan.name || ''}`;
+  if (/STANDARD/i.test(label)) return 15;
+  if (/BOOSTER/i.test(label)) return 5;
+  return 0;
+}
 
 function jsonStringList(value?: string | null): string[] {
   try {
@@ -105,11 +116,13 @@ export async function getMockAccessDecision(
     if (plan.price <= 0 || plan.code.includes('FREE') || !planAppliesToTest(plan, test)) continue;
     // Explicit assignments are available immediately. An assigned 5-test
     // Booster unlocks exactly its five selected papers, not a random five.
-    if (includedTestIds(plan).length > 0 || plan.testAccessLimit <= 0) {
+    const assignedIds = includedTestIds(plan);
+    const requiredAssignedPaperCount = getRequiredAssignedPaperCount(plan);
+    // Finite plans must have explicit assigned IDs. A legacy finite pack with
+    // no assignment fails closed instead of accidentally becoming all-access.
+    if (requiredAssignedPaperCount > 0 && assignedIds.length !== requiredAssignedPaperCount) continue;
+    if (assignedIds.length > 0 || requiredAssignedPaperCount === 0) {
       return { allowed: true, reason: 'PLAN_INCLUDED', subscriptionId: subscription.id, planCode: plan.code, testsRemaining: subscription.testsRemaining };
-    }
-    if ((subscription.testsRemaining ?? 0) > 0) {
-      return { allowed: true, reason: 'PLAN_LIMIT_AVAILABLE', subscriptionId: subscription.id, planCode: plan.code, testsRemaining: subscription.testsRemaining };
     }
   }
   return { allowed: false, reason: 'LOCKED' };

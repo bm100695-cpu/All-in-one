@@ -50,6 +50,12 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
     loadTests();
   }, [examSlug]);
 
+  useEffect(() => {
+    const refreshEntitlements = () => loadTests();
+    window.addEventListener('subscription-updated', refreshEntitlements);
+    return () => window.removeEventListener('subscription-updated', refreshEntitlements);
+  }, [examSlug]);
+
   const loadTests = async () => {
     setLoading(true);
     try {
@@ -141,6 +147,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
     || subscriptionInfo?.subscription;
   const planName = currentPortalPlan?.plan?.name || 'Free Starter Plan';
   const planRemaining = currentPortalPlan?.testsRemaining;
+  const configuredPlanPapers = Number(currentPortalPlan?.includedMockTestCount ?? currentPortalPlan?.plan?.testAccessLimit ?? 0);
 
   return (
     <div className="space-y-6 pb-16">
@@ -175,6 +182,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3 text-xs text-blue-900">
         <span className="font-semibold">Active plan: {planName}</span>
+        {configuredPlanPapers > 0 && <span>• {configuredPlanPapers} of {configuredPlanPapers} Papers Unlocked</span>}
         {typeof planRemaining === 'number' && <span>• {planRemaining} open pack test{planRemaining === 1 ? '' : 's'} remaining</span>}
         <span>• {availablePremiumCount} premium paper{availablePremiumCount === 1 ? '' : 's'} available in this portal</span>
       </div>

@@ -342,6 +342,11 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       alert('Plan Name is required');
       return;
     }
+    const expectedPaperCount = Math.max(0, Number(planForm.testLimit) || 0);
+    if (planForm.isActive && expectedPaperCount > 0 && planForm.includedMockTests.length !== expectedPaperCount) {
+      showNotification(`This plan requires exactly ${expectedPaperCount} assigned premium papers. ${planForm.includedMockTests.length} selected.`, 'error');
+      return;
+    }
     setSavingPlan(true);
     try {
       if (editingPlan) {
@@ -838,7 +843,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                         ⚡ Quick Vary Price (कीमत तुरंत बदलें):
                       </span>
                       <div className="flex flex-wrap gap-1">
-                        {[0, 19, 29, 49, 99, 149, 199, 299, 499, 999].map((pVal) => (
+                        {[0, 1, 19, 29, 49, 99, 149, 199, 299, 499, 999].map((pVal) => (
                           <button
                             key={pVal}
                             type="button"
@@ -1609,13 +1614,13 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Test Attempt Limit</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Exact Assigned Premium Papers</label>
                   <input
                     type="number"
                     min="0"
                     value={planForm.testLimit}
                     onChange={(e) => setPlanForm({ ...planForm, testLimit: Number(e.target.value) })}
-                    placeholder="0 = Unlimited"
+                    placeholder="0 = plan's configured all-access rules"
                     className="w-full p-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900"
                   />
                 </div>
@@ -1639,6 +1644,9 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
               <div>
                 <div className="flex items-center justify-between gap-3">
                   <label className="block text-xs font-bold text-slate-700">Included Mock Tests</label>
+                  <span className={`text-[11px] font-bold ${planForm.testLimit > 0 && planForm.includedMockTests.length !== planForm.testLimit ? 'text-rose-600' : 'text-emerald-700'}`}>
+                    {planForm.includedMockTests.length} of {planForm.testLimit || 'all-access'} selected
+                  </span>
                   <button
                     type="button"
                     onClick={() => setPlanForm({ ...planForm, includedMockTests: [] })}
@@ -1647,9 +1655,9 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                     All eligible tests
                   </button>
                 </div>
-                <p className="mt-1 text-[11px] text-slate-500">Select tests for a fixed pack. Leave empty for all tests within the selected portal scope.</p>
+                <p className="mt-1 text-[11px] text-slate-500">For a finite plan, select exactly the configured number of PREMIUM papers. Active purchasers follow future assignment edits immediately.</p>
                 <div className="mt-2 max-h-36 space-y-1 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-2">
-                  {contentList.filter((item) => item.type === 'TEST' && (!planForm.examSlug || item.examSlug === planForm.examSlug)).map((test) => {
+                  {contentList.filter((item) => item.type === 'TEST' && item.accessMode !== 'FREE' && (!planForm.examSlug || item.examSlug === planForm.examSlug)).map((test) => {
                     const selected = planForm.includedMockTests.includes(test.id);
                     return (
                       <label key={test.id} className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-xs hover:bg-white">

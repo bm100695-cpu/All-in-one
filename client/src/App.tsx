@@ -441,6 +441,9 @@ export const App: React.FC = () => {
     } catch {
       // ignore
     }
+    // Mounted student pages refresh their server-authoritative entitlement map
+    // immediately after Cashfree confirms PAID status.
+    window.dispatchEvent(new Event('subscription-updated'));
   };
 
   const isExamRunning = activeTab === 'test' && activeTestId;
