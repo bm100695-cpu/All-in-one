@@ -119,20 +119,22 @@ router.get('/exam/:examId', authenticate, async (req: Request, res: Response) =>
       res.json({ tests });
       return;
     }
-    const visibleTests = [] as typeof tests;
-    for (const test of tests) {
-      if (await canAccessMockTest(req.user!.id, req.user!.role, test)) visibleTests.push(test);
-    }
-    res.json({ tests: visibleTests });
+    // PW-style catalog: every live paper can be displayed, but only the
+    // server-calculated entitled papers are startable. Question delivery and
+    // all attempt APIs independently repeat this check.
+    const catalog = await Promise.all(tests.map(async (test) => ({
+      ...test,
+      isEntitled: await canAccessMockTest(req.user!.id, req.user!.role, test),
+    })));
+    res.json({ tests: catalog });
   } catch (error) {
     console.error('Error fetching tests:', error);
     res.status(500).json({ error: 'Failed to fetch tests' });
   }
 });
 
-// Authenticated student catalog. Unlike the public/admin listing, this never
-// returns a premium record unless the current user is entitled to that exact
-// paper. The client must use this endpoint for its dashboard.
+// Authenticated student catalog. It exposes locked cards for PW-style plan
+// upsell, but marks entitlement from the backend; it never delivers questions.
 router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Response) => {
   try {
     const { examId } = req.params;
@@ -165,11 +167,11 @@ router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Resp
       orderBy: { createdAt: 'desc' },
     });
 
-    const visibleTests = [] as typeof tests;
-    for (const test of tests) {
-      if (await canAccessMockTest(req.user!.id, req.user!.role, test)) visibleTests.push(test);
-    }
-    res.json({ tests: visibleTests });
+    const catalog = await Promise.all(tests.map(async (test) => ({
+      ...test,
+      isEntitled: await canAccessMockTest(req.user!.id, req.user!.role, test),
+    })));
+    res.json({ tests: catalog });
   } catch (error) {
     console.error('Error fetching visible student tests:', error);
     res.status(500).json({ error: 'Failed to fetch visible mock tests' });

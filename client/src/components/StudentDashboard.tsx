@@ -14,6 +14,7 @@ import {
   Target,
   Sparkles,
   Gift,
+  Lock,
   Zap,
   ShieldCheck,
 } from 'lucide-react';
@@ -88,9 +89,8 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           visiblePortalTests = visibleTests?.tests || [];
           setAvailableTests(visiblePortalTests);
         } catch {
-          // Never fall back to the public profile's full catalog: a failed
-          // entitlement request must not reveal premium paper cards.
-          visiblePortalTests = (profileRes.exam.tests || []).filter((test: any) => test.accessType !== 'premium' && test.accessLevel !== 'PREMIUM' && test.accessLevel !== 'PAID' && test.accessMode !== 'PREMIUM' && test.accessMode !== 'PAID');
+          // Fail closed if the secure catalog cannot be loaded.
+          visiblePortalTests = [];
           setAvailableTests(visiblePortalTests);
         }
       }
@@ -162,6 +162,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const displayTests = availableTests.filter((test) => test.accessMode !== 'DISABLED');
   const totalExamTests = displayTests.length;
   const freeExamTests = displayTests.filter(isFreeTest).length;
+  const paidExamTests = Math.max(0, totalExamTests - freeExamTests);
   const isPremium = subInfo?.isPremium || false;
   const planName = subInfo?.subscription?.plan?.name || subInfo?.effectivePlan?.name || 'Free Starter Plan';
   const referralCredits = subInfo?.referralCredits ?? currentUser?.referralCredits ?? 0;
@@ -344,7 +345,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       <div className="grid grid-cols-1 gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs sm:grid-cols-3">
         <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4"><span className="text-tn-muted">Time in tests</span><span className="font-semibold tabular-nums text-tn-navy">{totalHours} hrs</span></div>
         <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:px-4"><span className="text-tn-muted">Free tests</span><span className="font-semibold tabular-nums text-emerald-700">{freeExamTests}</span></div>
-        <div className="flex items-center justify-between gap-3 sm:pl-4"><span className="text-tn-muted">Visible tests</span><span className="font-semibold tabular-nums text-tn-blue">{totalExamTests}</span></div>
+        <div className="flex items-center justify-between gap-3 sm:pl-4"><span className="text-tn-muted">Premium tests</span><span className="font-semibold tabular-nums text-violet-700">{paidExamTests}</span></div>
       </div>
 
       <section className="space-y-3">
@@ -373,15 +374,17 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             {displayTests.slice(0, 6).map((test) => {
               const attempt = attemptsByTestId.get(test.id);
               const isPremiumTest = !isFreeTest(test);
+              const isIncluded = isPremiumTest && Boolean(test.isEntitled);
+              const isLocked = isPremiumTest && !isIncluded;
               const isComingSoon = test.accessMode === 'COMING_SOON';
               const isChecking = checkingDashboardTestId === test.id;
-              const actionLabel = attempt?.status === 'IN_PROGRESS' ? 'Resume' : attempt?.status === 'COMPLETED' ? 'View Result' : 'Start Test';
+              const actionLabel = attempt?.status === 'IN_PROGRESS' ? 'Resume' : attempt?.status === 'COMPLETED' ? 'View Result' : isLocked ? 'Unlock with Plan' : 'Start Test';
               return (
                 <article key={test.id} className="flex min-h-44 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
                   <div className="flex items-start justify-between gap-3">
                     <span className="rounded-md border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-tn-blue">{examInfo?.shortName || examSlug.toUpperCase()}</span>
-                    <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold ${isPremiumTest ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
-                      <CheckCircle2 className="h-3 w-3" />{isPremiumTest ? 'Included in plan' : 'Free'}
+                    <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold ${isPremiumTest ? 'border-violet-200 bg-violet-50 text-violet-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+                      {isLocked ? <Lock className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}{isPremiumTest ? (isIncluded ? 'Included in plan' : 'Locked') : 'Free'}
                     </span>
                   </div>
                   <h3 className="mt-3 line-clamp-2 text-sm font-bold leading-snug text-tn-navy">{test.title}</h3>
