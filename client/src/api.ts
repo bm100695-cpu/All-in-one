@@ -392,7 +392,7 @@ export const api = {
 
   getSubscriptionPlans: async (examSlug?: string) => {
     const q = examSlug ? `?examSlug=${encodeURIComponent(examSlug)}` : '';
-    return request<{ plans: SubscriptionPlan[] }>(`/monetization/plans${q}`);
+    return request<{ plans: SubscriptionPlan[] }>(`/monetization/plans${q}`, { cache: 'no-store' });
   },
 
   getAdminExamPlans: async (examSlug: string) => {

@@ -189,10 +189,29 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     setLoading(true);
     setStatusMessage(null);
     try {
-      const [plansRes, configRes] = await Promise.all([
-        api.getSubscriptionPlans(activeExamSlug).catch(() => ({ plans: [] })),
-        api.getMonetizationConfig().catch(() => null),
+      const [plansResult, configResult] = await Promise.allSettled([
+        api.getSubscriptionPlans(activeExamSlug),
+        api.getMonetizationConfig(),
       ]);
+
+      if (plansResult.status === 'rejected') {
+        setPlans([]);
+        setGatewayConfig(null);
+        setStatusMessage({
+          type: 'error',
+          text: plansResult.reason?.message || 'Latest pricing plans could not be loaded. Please retry.',
+        });
+        return;
+      }
+
+      const plansRes = plansResult.value;
+      const configRes = configResult.status === 'fulfilled' ? configResult.value : null;
+      if (configResult.status === 'rejected') {
+        setStatusMessage({
+          type: 'error',
+          text: 'Plans loaded, but secure checkout status could not be verified. Please retry before paying.',
+        });
+      }
       
       const fetchedPlans = plansRes.plans || [];
       setPlans(fetchedPlans);
@@ -333,6 +352,13 @@ export const PricingModal: React.FC<PricingModalProps> = ({
       setStatusMessage({
         type: 'info',
         text: 'This plan is being configured by the administrator and cannot be purchased yet.',
+      });
+      return;
+    }
+    if (plan.price > 0 && (!gatewayConfig?.isGatewayConfigured || !gatewayConfig?.webhookConfigured)) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Secure checkout is not ready. Please retry after the gateway status loads.',
       });
       return;
     }
@@ -568,6 +594,15 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                 </button>
               </div>
             )}
+            {statusMessage.type === 'error' && !checkoutPlan && (
+              <button
+                type="button"
+                onClick={() => void loadData()}
+                className="shrink-0 rounded-md bg-rose-700 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-800"
+              >
+                Retry
+              </button>
+            )}
           </div>
         )}
 
@@ -726,6 +761,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                   const isPopular = Boolean(plan.badge && /popular|choice|value/i.test(plan.badge));
                   const isFree = plan.price === 0;
                   const isPurchasable = plan.isPurchasable !== false;
+                  const isCheckoutReady = isFree || Boolean(gatewayConfig?.isGatewayConfigured && gatewayConfig?.webhookConfigured);
+                  const canBuy = isPurchasable && isCheckoutReady;
                   
                   const couponEligible = !isFree && appliedCoupon && (!appliedCoupon.examSlug || !plan.examSlug || appliedCoupon.examSlug === plan.examSlug);
                   const effectivePrice = couponEligible ? Math.max(1, Math.round(plan.price * (100 - appliedCoupon!.discountPct) / 100)) : plan.price;
@@ -790,6 +827,16 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                             </li>
                           ))}
                         </ul>
+                        {!isPurchasable && (
+                          <p className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-2 text-[11px] leading-relaxed text-amber-800">
+                            This plan will be available after the administrator assigns its included premium papers.
+                          </p>
+                        )}
+                        {isPurchasable && !isCheckoutReady && !isFree && (
+                          <p className="rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-2 text-[11px] leading-relaxed text-rose-800">
+                            Secure checkout is temporarily unavailable. Please refresh and retry.
+                          </p>
+                        )}
                       </div>
 
                       <div className="pt-5 mt-4 border-t border-slate-100 space-y-2">
@@ -799,9 +846,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                             e.stopPropagation();
                             handleSubscribe(plan);
                           }}
-                          disabled={processingPlanId === plan.id || !isPurchasable}
+                          disabled={processingPlanId === plan.id || !canBuy}
                           className={`w-full py-2.5 px-4 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                            !isPurchasable
+                            !canBuy
                               ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                               : isPopular
                               ? 'bg-blue-600 hover:bg-blue-700 text-white'
@@ -814,7 +861,9 @@ export const PricingModal: React.FC<PricingModalProps> = ({
                             {processingPlanId === plan.id
                               ? 'Processing...'
                               : !isPurchasable
-                              ? 'Plan Updating'
+                              ? 'Plan Not Ready'
+                              : !isCheckoutReady
+                              ? 'Checkout Unavailable'
                               : isFree
                               ? 'Activate Free Plan'
                               : `Get Started (${currencySymbol}${displayPrice})`}
