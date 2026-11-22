@@ -460,11 +460,11 @@ async function ensureDefaultPlansExist(): Promise<void> {
       },
       {
         name: '5-Test Booster Pack',
-        code: 'PLAN_BOOSTER_49', // legacy code retained; default price is ₹1
+        code: 'PLAN_BOOSTER_49', // legacy code retained; default price is ₹5
         description: 'Unlock 5 verified shift papers for your target exam with detailed solutions.',
-        price: 1,
+        price: 5,
         originalPrice: 49,
-        discountPct: 98,
+        discountPct: 90,
         currency: 'INR',
         durationDays: 90,
         billingInterval: 'ONCE',
@@ -614,11 +614,11 @@ async function ensureExamPlansExist(examSlug: string): Promise<void> {
       },
       {
         name: '5-Test Booster Pack',
-        code: `PLAN_${prefix}_BOOSTER_49`, // legacy code retained; default price is ₹1
+        code: `PLAN_${prefix}_BOOSTER_49`, // legacy code retained; default price is ₹5
         description: `Unlock 5 verified shift papers for ${examName} with detailed solutions.`,
-        price: 1,
+        price: 5,
         originalPrice: 49,
-        discountPct: 98,
+        discountPct: 90,
         currency: 'INR',
         durationDays: 90,
         billingInterval: 'ONCE',
@@ -1479,7 +1479,11 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
       return;
     }
 
-    // Backend price & coupon validation + originalPrice snapshot
+    // The configured plan price is the server-authoritative payable amount.
+    // `originalPrice` / `discountPct` are catalog display metadata (for example
+    // a struck-through list price). Applying that percentage to `price` again
+    // changed a ₹5 plan into Cashfree's minimum ₹1 order. Only a separately
+    // verified coupon may reduce the configured checkout price.
     const basePricePaise = storedPaise(plan);
     const originalPricePaise = plan.originalPrice && plan.originalPrice > plan.price
       ? toPaise(plan.originalPrice)
@@ -1487,13 +1491,6 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     let finalAmountPaise = basePricePaise;
     let discountAmountPaise = 0;
     let verifiedCouponCode: string | null = null;
-
-    // Apply plan promotional discount if active
-    const isOfferActive = plan.offerExpiresAt ? new Date(plan.offerExpiresAt) > new Date() : true;
-    if (plan.discountPct > 0 && isOfferActive) {
-      discountAmountPaise = Math.round((basePricePaise * plan.discountPct) / 100);
-      finalAmountPaise = Math.max(MIN_CASHFREE_AMOUNT_PAISE, basePricePaise - discountAmountPaise);
-    }
 
     if (couponCode && typeof couponCode === 'string' && couponCode.trim()) {
       const coupon = await prisma.coupon.findUnique({
