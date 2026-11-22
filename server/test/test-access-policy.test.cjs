@@ -76,6 +76,7 @@ async function main() {
   assert.equal(getMockAccessType({ accessLevel: 'paid' }), 'premium');
 
   assert.equal((await decisionFor(premiumTest)).allowed, false, 'new student cannot open premium test');
+  assert.equal((await decisionFor(premiumTest, [subscription(paidPlan({ id: 'free-plan', code: 'PLAN_JEE_FREE_0', price: 0 }), verifiedPayment({ planId: 'free-plan', amount: 0 }))])).allowed, false, 'Free Starter subscription cannot unlock premium papers');
   assert.equal((await decisionFor(premiumTest, [subscription(paidPlan(), verifiedPayment({ status: 'PENDING' }))])).allowed, false, 'pending payment cannot unlock');
   assert.equal((await decisionFor(premiumTest, [subscription(paidPlan(), verifiedPayment({ status: 'FAILED' }))])).allowed, false, 'failed payment cannot unlock');
   assert.equal((await decisionFor(premiumTest, [subscription(paidPlan(), verifiedPayment({ planId: 'other-plan' }))])).allowed, false, 'payment must belong to the purchased plan');

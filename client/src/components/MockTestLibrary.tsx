@@ -114,7 +114,23 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
     }
   };
 
-  const filteredTests = tests.filter((t) => {
+  // The server already omits non-entitled premium papers. Keep the same rule
+  // on the client as defence in depth so a stale response can never make a
+  // Free Starter dashboard display premium cards or premium counts.
+  const activePlans = Array.isArray(subscriptionInfo?.activePlans) ? subscriptionInfo.activePlans : [];
+  const isPlanForPortal = (item: any) => !item?.plan?.examSlug || item.plan.examSlug === examSlug;
+  const paidPortalPlan = activePlans.find((item: any) => (
+    isPlanForPortal(item) && Number(item?.plan?.price || 0) > 0
+  ));
+  const currentPortalPlan = paidPortalPlan
+    || activePlans.find((item: any) => isPlanForPortal(item))
+    || subscriptionInfo?.subscription;
+  const hasPaidPortalPlan = Number(currentPortalPlan?.plan?.price || 0) > 0;
+  const catalogTests = tests.filter((test) => (
+    getAccessType(test) === 'free' || (hasPaidPortalPlan && Boolean(test.isEntitled))
+  ));
+
+  const filteredTests = catalogTests.filter((t) => {
     if (t.accessMode === 'DISABLED') return false;
     const isFreeTest = getAccessType(t) === 'free';
 
@@ -144,15 +160,18 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
 
   const displayedTests = filteredTests.slice(0, visibleCount);
 
-  const freeCount = tests.filter((test) => getAccessType(test) === 'free').length;
-  const premiumCount = tests.length - freeCount;
-  const availablePremiumCount = tests.filter((test) => getAccessType(test) === 'premium' && test.isEntitled).length;
-  const currentPortalPlan = subscriptionInfo?.activePlans?.find((item: any) => item.plan?.examSlug === examSlug)
-    || subscriptionInfo?.activePlans?.find((item: any) => !item.plan?.examSlug)
-    || subscriptionInfo?.subscription;
+  const freeCount = catalogTests.filter((test) => getAccessType(test) === 'free').length;
+  const premiumCount = catalogTests.length - freeCount;
+  const availablePremiumCount = catalogTests.filter((test) => getAccessType(test) === 'premium' && test.isEntitled).length;
   const planName = currentPortalPlan?.plan?.name || 'Free Starter Plan';
-  const planRemaining = currentPortalPlan?.testsRemaining;
-  const configuredPlanPapers = Number(currentPortalPlan?.includedMockTestCount ?? currentPortalPlan?.plan?.testAccessLimit ?? 0);
+  const planRemaining = hasPaidPortalPlan ? currentPortalPlan?.testsRemaining : null;
+  const configuredPlanPapers = hasPaidPortalPlan
+    ? Number(currentPortalPlan?.includedMockTestCount ?? currentPortalPlan?.plan?.testAccessLimit ?? 0)
+    : 0;
+
+  useEffect(() => {
+    if (!hasPaidPortalPlan && accessFilter === 'PREMIUM') setAccessFilter('ALL');
+  }, [accessFilter, hasPaidPortalPlan]);
 
   return (
     <div className="space-y-6 pb-16">
@@ -174,22 +193,24 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
         {/* Metric Badges */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="px-3 py-1.5 rounded-lg bg-white border border-tn-border text-xs text-slate-700 font-medium shadow-xs">
-            <strong className="text-tn-navy font-bold">{tests.length}</strong> Total Mock Tests
+            <strong className="text-tn-navy font-bold">{catalogTests.length}</strong> Total Mock Tests
           </div>
           <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium">
             <strong className="text-emerald-900 font-bold">{freeCount} Free</strong> Tests Available
           </div>
-          <div className="px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-800 font-medium">
-            <strong className="text-blue-900 font-bold">{availablePremiumCount}</strong> Premium Included
-          </div>
+          {hasPaidPortalPlan && (
+            <div className="px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-800 font-medium">
+              <strong className="text-blue-900 font-bold">{availablePremiumCount}</strong> Premium Included
+            </div>
+          )}
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3 text-xs text-blue-900">
         <span className="font-semibold">Active plan: {planName}</span>
-        {configuredPlanPapers > 0 && <span>• {configuredPlanPapers} of {configuredPlanPapers} Papers Unlocked</span>}
-        {typeof planRemaining === 'number' && <span>• {planRemaining} open pack test{planRemaining === 1 ? '' : 's'} remaining</span>}
-        <span>• {availablePremiumCount} premium paper{availablePremiumCount === 1 ? '' : 's'} available in this portal</span>
+        {hasPaidPortalPlan && configuredPlanPapers > 0 && <span>• {availablePremiumCount} of {configuredPlanPapers} Papers Unlocked</span>}
+        {hasPaidPortalPlan && typeof planRemaining === 'number' && <span>• {planRemaining} open pack test{planRemaining === 1 ? '' : 's'} remaining</span>}
+        {hasPaidPortalPlan && <span>• {availablePremiumCount} premium paper{availablePremiumCount === 1 ? '' : 's'} available in this portal</span>}
       </div>
 
       {/* 2. Filter Bar */}
@@ -210,7 +231,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                All ({tests.length})
+                All ({catalogTests.length})
               </button>
               <button
                 onClick={() => setAccessFilter('FREE')}
@@ -222,17 +243,19 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
               >
                 <span>Free ({freeCount})</span>
               </button>
-              <button
-                onClick={() => setAccessFilter('PREMIUM')}
-                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1 ${
-                  accessFilter === 'PREMIUM'
-                    ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
-                    : 'text-blue-700 hover:text-blue-900'
-                }`}
-              >
-                <Lock className="w-3 h-3" />
-                <span>Premium ({premiumCount})</span>
-              </button>
+              {hasPaidPortalPlan && premiumCount > 0 && (
+                <button
+                  onClick={() => setAccessFilter('PREMIUM')}
+                  className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1 ${
+                    accessFilter === 'PREMIUM'
+                      ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
+                      : 'text-blue-700 hover:text-blue-900'
+                  }`}
+                >
+                  <Lock className="w-3 h-3" />
+                  <span>Premium ({premiumCount})</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -309,7 +332,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
           <Clock className="w-6 h-6 text-slate-400 mx-auto animate-spin" />
           <p className="text-xs text-slate-500">Loading mock test library...</p>
         </div>
-      ) : tests.length === 0 ? (
+      ) : catalogTests.length === 0 ? (
         <div className="p-12 text-center bg-white rounded-xl border border-dashed border-slate-300 space-y-3">
           <FileCheck2 className="w-8 h-8 text-slate-300 mx-auto" />
           <h4 className="text-sm font-bold text-slate-800">No Active Mock Tests Live</h4>

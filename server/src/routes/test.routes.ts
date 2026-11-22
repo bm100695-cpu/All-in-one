@@ -134,8 +134,9 @@ router.get('/exam/:examId', authenticate, async (req: Request, res: Response) =>
   }
 });
 
-// Authenticated student catalog. It exposes locked cards for PW-style plan
-// upsell, but marks entitlement from the backend; it never delivers questions.
+// Authenticated student catalog. Free students receive only free papers. A
+// premium paper is returned only after server-side entitlement verification,
+// so hidden cards cannot be recovered through a direct catalog request.
 router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Response) => {
   try {
     const { examId } = req.params;
@@ -172,8 +173,11 @@ router.get('/exam/:examId/visible', authenticate, async (req: Request, res: Resp
       ...test,
       isEntitled: await canAccessMockTest(req.user!.id, req.user!.role, test),
     })));
+    const visibleCatalog = catalog.filter((test) => (
+      getMockAccessType(test) === 'free' || Boolean(test.isEntitled)
+    ));
     res.set('Cache-Control', 'no-store, private');
-    res.json({ tests: catalog });
+    res.json({ tests: visibleCatalog });
   } catch (error) {
     console.error('Error fetching visible student tests:', error);
     res.status(500).json({ error: 'Failed to fetch visible mock tests' });
