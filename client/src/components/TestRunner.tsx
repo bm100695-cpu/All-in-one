@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Clock,
   AlertCircle,
@@ -65,6 +65,25 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
   const [numericalWarning, setNumericalWarning] = useState<string | null>(null);
 
   const timerRef = useRef<any>(null);
+  // The exam clock updates once per second. Keep the latest values in refs so
+  // the 25-second autosave timer stays stable instead of being torn down and
+  // recreated on every clock tick.
+  const responsesRef = useRef(responses);
+  const testDataRef = useRef(testData);
+  const timeLeftRef = useRef(timeLeftSeconds);
+  const autosaveInFlightRef = useRef(false);
+
+  useEffect(() => {
+    responsesRef.current = responses;
+  }, [responses]);
+
+  useEffect(() => {
+    testDataRef.current = testData;
+  }, [testData]);
+
+  useEffect(() => {
+    timeLeftRef.current = timeLeftSeconds;
+  }, [timeLeftSeconds]);
 
   // Candidate Details (never hardcoded)
   const storedUser = (() => {
@@ -110,8 +129,9 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
       setQuestions(data.questions);
 
       const durationSecs = (data.test.durationMinutes || 180) * 60;
-      const initialTime = durationSecs - (data.timeSpentSeconds || 0);
-      setTimeLeftSeconds(Math.max(10, initialTime));
+      const initialTime = Math.max(10, durationSecs - (data.timeSpentSeconds || 0));
+      timeLeftRef.current = initialTime;
+      setTimeLeftSeconds(initialTime);
 
       // Build saved responses map
       const resMap: Record<string, UserResponse> = {};
@@ -182,10 +202,13 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
       setTimeLeftSeconds((prev) => {
         if (prev <= 1) {
           clearInterval(timerRef.current!);
+          timeLeftRef.current = 0;
           handleAutoSubmitOnTimeout();
           return 0;
         }
-        return prev - 1;
+        const next = prev - 1;
+        timeLeftRef.current = next;
+        return next;
       });
     }, 1000);
   };
@@ -193,22 +216,31 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
   // Heartbeat autosave every 25 seconds
   useEffect(() => {
     const autosaveInterval = setInterval(async () => {
-      if (attemptId && viewState === 'EXAM' && Object.keys(responses).length > 0) {
+      const latestResponses = responsesRef.current;
+      const latestTestData = testDataRef.current;
+      if (
+        attemptId
+        && viewState === 'EXAM'
+        && Object.keys(latestResponses).length > 0
+        && !autosaveInFlightRef.current
+      ) {
+        autosaveInFlightRef.current = true;
         setSavingHeartbeat(true);
         try {
-          const respArray = Object.values(responses);
-          const totalSpent = (testData?.durationMinutes || 180) * 60 - timeLeftSeconds;
+          const respArray = Object.values(latestResponses);
+          const totalSpent = (latestTestData?.durationMinutes || 180) * 60 - timeLeftRef.current;
           await api.autosaveTest(attemptId, respArray, Math.max(0, totalSpent));
         } catch (e) {
           console.warn('Autosave heartbeat skipped');
         } finally {
+          autosaveInFlightRef.current = false;
           setTimeout(() => setSavingHeartbeat(false), 1200);
         }
       }
     }, 25000);
 
     return () => clearInterval(autosaveInterval);
-  }, [attemptId, responses, timeLeftSeconds, testData, viewState]);
+  }, [attemptId, viewState]);
 
   // Sync numerical input value when current question changes
   const currentQ = questions[currentQuestionIndex];
@@ -471,7 +503,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
     setSubmitting(true);
     try {
       const respArray = Object.values(responses);
-      const totalSpent = (testData?.durationMinutes || 180) * 60 - timeLeftSeconds;
+      const totalSpent = (testData?.durationMinutes || 180) * 60 - timeLeftRef.current;
       await api.submitTest(attemptId, respArray, Math.max(0, totalSpent));
       onFinishTest(attemptId);
     } catch (err) {
@@ -505,32 +537,75 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
     return resp.status || 'NOT_ANSWERED';
   };
 
-  // Dynamic distinct sections
-  const distinctSections = Array.from(new Set(questions.map((q) => q.sectionName).filter(Boolean)));
-  const subjectList: string[] = isJeeMain
-    ? ['Physics', 'Chemistry', 'Mathematics']
-    : distinctSections.length > 0
-    ? (distinctSections as string[])
-    : ['General Section'];
-
-  const subjectQuestions = questions.filter((q) => normalizeSubject(q.sectionName) === currentSubject);
-  const hasNumerical = questions.some((q) => q.questionType === 'NUMERICAL');
-
-  const sectionAQuestions = subjectQuestions.filter((q) => q.questionType !== 'NUMERICAL');
-  const sectionBQuestions = subjectQuestions.filter((q) => q.questionType === 'NUMERICAL');
-
+  // Index and group question data once per content/answer change. These values
+  // are also used by the palette, which avoids repeated O(n) scans during each
+  // one-second clock repaint and keeps click/input interactions responsive.
+  const questionIndexById = useMemo(
+    () => new Map(questions.map((question, index) => [question.questionId, index])),
+    [questions],
+  );
+  const questionsBySubject = useMemo(() => {
+    const grouped = new Map<string, TestQuestion[]>();
+    questions.forEach((question) => {
+      const subject = normalizeSubject(question.sectionName);
+      const existing = grouped.get(subject);
+      if (existing) existing.push(question);
+      else grouped.set(subject, [question]);
+    });
+    return grouped;
+  }, [questions, isJeeMain]);
+  const distinctSections = useMemo(
+    () => Array.from(new Set(questions.map((question) => question.sectionName).filter(Boolean))) as string[],
+    [questions],
+  );
+  const subjectList: string[] = useMemo(
+    () => isJeeMain
+      ? ['Physics', 'Chemistry', 'Mathematics']
+      : distinctSections.length > 0
+        ? distinctSections
+        : ['General Section'],
+    [distinctSections, isJeeMain],
+  );
+  const subjectQuestions = questionsBySubject.get(currentSubject) || [];
+  const hasNumerical = useMemo(
+    () => questions.some((question) => question.questionType === 'NUMERICAL'),
+    [questions],
+  );
+  const sectionAQuestions = useMemo(
+    () => subjectQuestions.filter((question) => question.questionType !== 'NUMERICAL'),
+    [subjectQuestions],
+  );
+  const sectionBQuestions = useMemo(
+    () => subjectQuestions.filter((question) => question.questionType === 'NUMERICAL'),
+    [subjectQuestions],
+  );
   const displayedQuestions = hasNumerical
     ? (currentSectionType === 'SECTION_A' ? sectionAQuestions : sectionBQuestions)
     : subjectQuestions;
-
-  // Counts for live legend
-  const allAnswered = Object.values(responses).filter((r) => r.status === 'ANSWERED').length;
-  const allAnsweredAndMarked = Object.values(responses).filter((r) => r.status === 'ANSWERED_AND_MARKED').length;
-  const allMarked = Object.values(responses).filter((r) => r.status === 'MARKED_FOR_REVIEW').length;
-  const allNotAnswered = Object.values(responses).filter(
-    (r) => r.status === 'NOT_ANSWERED' && visitedQuestions.has(r.questionId)
-  ).length;
-  const allNotVisited = questions.length - visitedQuestions.size;
+  const paletteCounts = useMemo(() => {
+    let answered = 0;
+    let answeredAndMarked = 0;
+    let marked = 0;
+    let notAnswered = 0;
+    Object.values(responses).forEach((response) => {
+      if (response.status === 'ANSWERED') answered += 1;
+      else if (response.status === 'ANSWERED_AND_MARKED') answeredAndMarked += 1;
+      else if (response.status === 'MARKED_FOR_REVIEW') marked += 1;
+      else if (response.status === 'NOT_ANSWERED' && visitedQuestions.has(response.questionId)) notAnswered += 1;
+    });
+    return {
+      answered,
+      answeredAndMarked,
+      marked,
+      notAnswered,
+      notVisited: Math.max(0, questions.length - visitedQuestions.size),
+    };
+  }, [questions.length, responses, visitedQuestions]);
+  const allAnswered = paletteCounts.answered;
+  const allAnsweredAndMarked = paletteCounts.answeredAndMarked;
+  const allMarked = paletteCounts.marked;
+  const allNotAnswered = paletteCounts.notAnswered;
+  const allNotVisited = paletteCounts.notVisited;
 
   // Time calculations
   const hours = Math.floor(timeLeftSeconds / 3600);
@@ -952,7 +1027,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
           </span>
           {subjectList.map((subj) => {
             const isSubjActive = currentSubject === subj;
-            const subjQs = questions.filter((q) => normalizeSubject(q.sectionName) === subj);
+            const subjQs = questionsBySubject.get(subj) || [];
             const answeredInSubj = subjQs.filter((q) => responses[q.questionId]?.status === 'ANSWERED').length;
 
             return (
@@ -962,8 +1037,9 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                 onClick={() => {
                   setCurrentSubject(subj);
                   // Find first question in this subject
-                  const firstIdx = questions.findIndex((q) => normalizeSubject(q.sectionName) === subj);
-                  if (firstIdx !== -1) selectQuestion(firstIdx);
+                  const firstQuestion = subjQs[0];
+                  const firstIdx = firstQuestion ? questionIndexById.get(firstQuestion.questionId) : undefined;
+                  if (firstIdx !== undefined) selectQuestion(firstIdx);
                 }}
                 className={`px-3 py-1 rounded text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
                   isSubjActive
@@ -994,8 +1070,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                 setCurrentSectionType('SECTION_A');
                 const firstSecA = subjectQuestions.find((q) => q.questionType !== 'NUMERICAL');
                 if (firstSecA) {
-                  const idx = questions.findIndex((q) => q.questionId === firstSecA.questionId);
-                  if (idx !== -1) selectQuestion(idx);
+                  const idx = questionIndexById.get(firstSecA.questionId);
+                  if (idx !== undefined) selectQuestion(idx);
                 }
               }}
               className={`px-2.5 py-1 rounded font-bold transition cursor-pointer ${
@@ -1012,8 +1088,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                 setCurrentSectionType('SECTION_B');
                 const firstSecB = subjectQuestions.find((q) => q.questionType === 'NUMERICAL');
                 if (firstSecB) {
-                  const idx = questions.findIndex((q) => q.questionId === firstSecB.questionId);
-                  if (idx !== -1) selectQuestion(idx);
+                  const idx = questionIndexById.get(firstSecB.questionId);
+                  if (idx !== undefined) selectQuestion(idx);
                 }
               }}
               className={`px-2.5 py-1 rounded font-bold transition cursor-pointer ${
@@ -1075,7 +1151,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                     {sectionBQuestions
                       .filter((q) => isNumericalSelected(q.questionId))
                       .map((sq) => {
-                        const gIdx = questions.findIndex((g) => g.questionId === sq.questionId);
+                        const gIdx = questionIndexById.get(sq.questionId);
+                        if (gIdx === undefined) return null;
                         return (
                           <button
                             key={sq.questionId}
@@ -1354,7 +1431,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
             <div className="p-4 max-h-[360px] overflow-y-auto">
               <div className="grid grid-cols-5 gap-2">
                 {displayedQuestions.map((q) => {
-                  const globalIdx = questions.findIndex((gq) => gq.questionId === q.questionId);
+                  const globalIdx = questionIndexById.get(q.questionId);
+                  if (globalIdx === undefined) return null;
                   const isCurrent = globalIdx === currentQuestionIndex;
                   const status = getQuestionPaletteStatus(q.questionId);
                   const isNumSelected = q.questionType === 'NUMERICAL' && isNumericalSelected(q.questionId);
