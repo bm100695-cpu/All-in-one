@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { prisma } from '../prisma';
-import { canAccessMockTest, getMockAccessType, isStaffRole } from '../test-access';
+import { canAccessMockTest, getMockAccessDecision, getMockAccessType, isStaffRole } from '../test-access';
 import { authenticate, requireRole } from '../middleware/auth';
 
 dotenv.config();
@@ -66,6 +66,12 @@ async function normalizeIncludedMockTestIds(value: unknown, examSlug?: string | 
     throw new Error('Selected mock tests must belong to the selected exam portal.');
   }
   return ids;
+}
+
+function assertBoosterSelection(codeOrName: string, selectedTestIds: string[]): void {
+  if (/BOOSTER/i.test(codeOrName) && selectedTestIds.length !== 5) {
+    throw new Error('A Booster Pack must have exactly 5 admin-assigned mock tests before it can be saved or sold.');
+  }
 }
 
 // Cashfree Checkout remains authoritative at payment time. This optional
@@ -412,11 +418,11 @@ async function ensureDefaultPlansExist(): Promise<void> {
       },
       {
         name: '5-Test Booster Pack',
-        code: 'PLAN_BOOSTER_49',
+        code: 'PLAN_BOOSTER_49', // legacy code retained; default price is ₹1
         description: 'Unlock 5 verified shift papers for your target exam with detailed solutions.',
-        price: 49,
-        originalPrice: 149,
-        discountPct: 67,
+        price: 1,
+        originalPrice: 49,
+        discountPct: 98,
         currency: 'INR',
         durationDays: 90,
         billingInterval: 'ONCE',
@@ -495,12 +501,9 @@ async function ensureDefaultPlansExist(): Promise<void> {
     for (const p of defaultPlans) {
       await prisma.subscriptionPlan.upsert({
         where: { code: p.code },
-        update: {
-          isPublished: true,
-          price: p.price,
-          name: p.name,
-          badge: p.badge,
-        },
+        // Existing settings belong to administrators; defaults only seed new
+        // databases and never overwrite a saved plan price or scope.
+        update: {},
         create: p,
       });
     }
@@ -552,11 +555,11 @@ async function ensureExamPlansExist(examSlug: string): Promise<void> {
       },
       {
         name: '5-Test Booster Pack',
-        code: `PLAN_${prefix}_BOOSTER_49`,
+        code: `PLAN_${prefix}_BOOSTER_49`, // legacy code retained; default price is ₹1
         description: `Unlock 5 verified shift papers for ${examName} with detailed solutions.`,
-        price: 49,
-        originalPrice: 149,
-        discountPct: 67,
+        price: 1,
+        originalPrice: 49,
+        discountPct: 98,
         currency: 'INR',
         durationDays: 90,
         billingInterval: 'ONCE',
@@ -765,7 +768,7 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
   try {
     const userId = req.user!.id;
 
-    const [user, activeSub, entitlements, recentPayments] = await Promise.all([
+    const [user, activeSub, activeSubscriptions, entitlements, recentPayments] = await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
         select: {
@@ -782,6 +785,11 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
           status: 'ACTIVE',
           OR: [{ endDate: null }, { endDate: { gt: new Date() } }],
         },
+        include: { plan: true },
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.subscription.findMany({
+        where: { userId, status: 'ACTIVE', OR: [{ endDate: null }, { endDate: { gt: new Date() } }] },
         include: { plan: true },
         orderBy: { createdAt: 'desc' },
       }),
@@ -808,7 +816,7 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
     let effectivePlan = activeSub?.plan;
     if (!effectivePlan) {
       effectivePlan = (await prisma.subscriptionPlan.findUnique({
-        where: { code: 'FREE' },
+        where: { code: 'PLAN_FREE_0' },
       })) || undefined;
     }
 
@@ -841,6 +849,13 @@ router.get('/my-subscription', authenticate, async (req: Request, res: Response)
           features: JSON.parse(effectivePlan.featuresJson || '[]'),
         }
         : null,
+      activePlans: activeSubscriptions.map((sub) => ({
+        ...sub,
+        plan: { ...sub.plan, features: JSON.parse(sub.plan.featuresJson || '[]') },
+        includedMockTestCount: (() => {
+          try { const selected = JSON.parse(sub.plan.includedMockTestsJson || '[]'); return Array.isArray(selected) ? selected.length : 0; } catch { return 0; }
+        })(),
+      })),
       entitlements,
       recentPayments,
       isPremium: Boolean(activeSub && activeSub.plan?.price > 0),
@@ -914,13 +929,16 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
     }
 
     // Keep this endpoint aligned with the enforcement used by start/submit.
-    if (await canAccessMockTest(userId, req.user!.role, test)) {
+    const accessDecision = await getMockAccessDecision(userId, req.user!.role, test);
+    if (accessDecision.allowed) {
       res.json({
         entitled: true,
         accessMode: 'PREMIUM',
         accessLevel: 'PREMIUM',
         accessType,
-        reason: 'Active premium subscription or test entitlement',
+        reason: accessDecision.reason === 'PLAN_INCLUDED' ? 'Included in Your Plan' : 'Active premium subscription or test entitlement',
+        planCode: accessDecision.planCode,
+        testsRemainingInPack: accessDecision.testsRemaining ?? null,
       });
       return;
     }
@@ -986,6 +1004,46 @@ router.get('/test-entitlement/:testId', authenticate, async (req: Request, res: 
   } catch (error) {
     console.error('Entitlement check error:', error);
     res.status(500).json({ error: 'Failed to check test entitlement' });
+  }
+});
+
+// Student library status for a complete portal. The UI uses this only for
+// labels; /tests/:id/start repeats the same authorization before questions are
+// ever returned.
+router.post('/test-entitlements', authenticate, async (req: Request, res: Response) => {
+  try {
+    const testIds = Array.isArray(req.body?.testIds) ? [...new Set(req.body.testIds.filter((id: unknown) => typeof id === 'string'))] : [];
+    if (testIds.length > 200) {
+      res.status(400).json({ error: 'At most 200 mock tests can be checked at once.' });
+      return;
+    }
+    const requestedPortal = String(req.header('x-portal-slug') || '').trim().toLowerCase();
+    if (!requestedPortal) {
+      res.status(400).json({ error: 'X-Portal-Slug is required for mock-test entitlement checks.' });
+      return;
+    }
+    if (req.user!.role === 'STUDENT' && req.user!.targetExamId && req.user!.targetExamId.toLowerCase() !== requestedPortal) {
+      res.status(403).json({ error: 'Your account is not authorized for this examination portal.' });
+      return;
+    }
+    const tests = await prisma.test.findMany({
+      where: { id: { in: testIds }, exam: { slug: requestedPortal } },
+      include: { exam: { select: { slug: true } } },
+    });
+    const decisions = await Promise.all(tests.map(async (test) => {
+      const decision = await getMockAccessDecision(req.user!.id, req.user!.role, test);
+      return [test.id, {
+        entitled: decision.allowed,
+        accessType: getMockAccessType(test),
+        label: decision.reason === 'PLAN_INCLUDED' ? 'Included in Your Plan' : decision.allowed ? 'Start Test' : 'Unlock with Plan',
+        planCode: decision.planCode || null,
+        testsRemainingInPack: decision.testsRemaining ?? null,
+      }];
+    }));
+    res.json({ entitlements: Object.fromEntries(decisions) });
+  } catch (error) {
+    console.error('Batch entitlement check error:', error);
+    res.status(500).json({ error: 'Failed to check test entitlements' });
   }
 });
 
@@ -1264,7 +1322,7 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     if (!plan && lookupKey) {
       const lower = lookupKey.toLowerCase();
       if (lower.includes('booster') || lower.includes('49')) {
-        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_BOOSTER_49' }, { price: 49 }] } });
+        plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_BOOSTER_1' }, { code: 'PLAN_BOOSTER_49' }, { price: 1 }, { price: 49 }] } });
       } else if (lower.includes('pro') || lower.includes('99') || lower.includes('premium')) {
         plan = await prisma.subscriptionPlan.findFirst({ where: { OR: [{ code: 'PLAN_PRO_99' }, { price: 99 }] } });
       } else if (lower.includes('free') || lower.includes('starter') || lower.includes('0')) {
@@ -1292,6 +1350,14 @@ router.post('/create-order', authenticate, async (req: Request, res: Response) =
     // client still has its identifier. Only an administrator can publish it.
     if (!plan.isPublished) {
       res.status(400).json({ error: 'This plan is not currently available for purchase.' });
+      return;
+    }
+
+    try {
+      const selected = JSON.parse(plan.includedMockTestsJson || '[]');
+      assertBoosterSelection(`${plan.code} ${plan.name}`, Array.isArray(selected) ? selected.filter((id: unknown) => typeof id === 'string') : []);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || 'This plan has an invalid mock-test assignment.' });
       return;
     }
 
@@ -1609,32 +1675,27 @@ async function activatePaidOrder(params: {
         endDate = new Date(Date.now() + plan.durationDays * 24 * 60 * 60 * 1000);
       }
 
-      let includedTestIds: string[] = [];
-      try {
-        const parsed = JSON.parse(plan.includedMockTestsJson || '[]');
-        includedTestIds = Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
-      } catch {
-        includedTestIds = [];
-      }
-      if (includedTestIds.length === 0 && plan.examSlug && plan.testAccessLimit <= 0) {
-        const scopedTests = await tx.test.findMany({
-          where: { exam: { slug: plan.examSlug } },
-          select: { id: true },
-        });
-        includedTestIds = scopedTests.map((test) => test.id);
-      }
-
-      // Deactivate previous active subscriptions for this user
+      // Keep purchases for unrelated portals active. A later purchase only
+      // replaces an existing plan in the same portal scope (a global plan is
+      // intentionally allowed to replace earlier global access).
       await tx.subscription.updateMany({
-        where: { userId: currentPayment.userId, status: 'ACTIVE' },
+        where: {
+          userId: currentPayment.userId,
+          status: 'ACTIVE',
+          ...(plan.examSlug ? { plan: { examSlug: plan.examSlug } } : { plan: { examSlug: null } }),
+        },
         data: { status: 'CANCELLED' },
       });
 
-      // A named selected-test pack grants every selected test for its duration.
-      // The optional limit is only used for an open-ended scoped pack.
-      const testsRemaining = includedTestIds.length === 0 && plan.testAccessLimit > 0
-        ? plan.testAccessLimit
-        : null;
+      // Explicit selected tests are evaluated live from the plan config. This
+      // makes admin changes immediately visible while keeping open packs as a
+      // controlled remaining-slot counter.
+      let selectedTestCount = 0;
+      try {
+        const parsed = JSON.parse(plan.includedMockTestsJson || '[]');
+        selectedTestCount = Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string').length : 0;
+      } catch { /* invalid legacy JSON means no fixed selection */ }
+      const testsRemaining = selectedTestCount === 0 && plan.testAccessLimit > 0 ? plan.testAccessLimit : null;
 
       createdSubscription = await tx.subscription.create({
         data: {
@@ -1649,39 +1710,8 @@ async function activatePaidOrder(params: {
         include: { plan: true },
       });
 
-      // A selected-test plan grants only those tests. An exam-scoped plan is
-      // snapshotted into direct entitlements so a later admin price/scope edit
-      // cannot revoke a student's completed purchase. All-access plans keep a
-      // global entitlement, matching the historic entitlement behaviour.
-      if (includedTestIds.length > 0) {
-        for (const testId of [...new Set(includedTestIds)]) {
-          await tx.entitlement.upsert({
-            where: { id: `plan_${currentPayment.id}_${testId}` },
-            update: { isActive: true, expiresAt: endDate },
-            create: {
-              id: `plan_${currentPayment.id}_${testId}`,
-              userId: currentPayment.userId,
-              testId,
-              planCode: plan.code,
-              source,
-              expiresAt: endDate,
-            },
-          });
-        }
-      } else if (!plan.examSlug && plan.testAccessLimit <= 0) {
-        await tx.entitlement.upsert({
-          where: { id: `plan_${currentPayment.id}_all` },
-          update: { isActive: true, expiresAt: endDate },
-          create: {
-            id: `plan_${currentPayment.id}_all`,
-            userId: currentPayment.userId,
-            testId: null,
-            planCode: plan.code,
-            source,
-            expiresAt: endDate,
-          },
-        });
-      }
+      // Do not create broad plan entitlements here. The active subscription,
+      // expiry, portal scope and selected tests are checked at every start.
     }
 
     return {
@@ -2623,6 +2653,7 @@ router.post('/admin/plans', authenticate, requireRole(['ADMIN']), async (req: Re
     const planCode = code
       ? code.trim().toUpperCase()
       : `PLAN_${name.replace(/[^A-Za-z0-9]/g, '_').toUpperCase()}_${Date.now().toString().slice(-4)}`;
+    assertBoosterSelection(`${planCode} ${name}`, normalizedIncludedMockTests);
 
     const newPlan = await prisma.subscriptionPlan.create({
       data: {
@@ -2729,6 +2760,10 @@ router.put('/admin/plans/:id', authenticate, requireRole(['ADMIN']), async (req:
     const normalizedIncludedMockTests = includedMockTests !== undefined
       ? await normalizeIncludedMockTestIds(includedMockTests, normalizedExamSlug)
       : undefined;
+    const nextSelectedTests = normalizedIncludedMockTests ?? (() => {
+      try { const parsed = JSON.parse(existingPlan.includedMockTestsJson || '[]'); return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []; } catch { return []; }
+    })();
+    assertBoosterSelection(`${existingPlan.code} ${name || existingPlan.name}`, nextSelectedTests);
 
     const updated = await prisma.subscriptionPlan.update({
       where: { id },

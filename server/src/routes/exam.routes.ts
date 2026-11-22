@@ -146,6 +146,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
             pyqReference: true,
             accessType: true,
             accessLevel: true,
+            accessMode: true,
             isFeatured: true,
             status: true,
             isActive: true,

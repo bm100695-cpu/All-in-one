@@ -335,7 +335,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
       }
 
       // A newly started pack-based test consumes exactly one remaining unlock.
-      if (!isStaffRole(req.user?.role) && !(await consumeTestPackIfNeeded(userId, test))) {
+      if (!isStaffRole(req.user?.role) && !(await consumeTestPackIfNeeded(userId, req.user?.role, test))) {
         res.status(403).json({
           error: 'PREMIUM_LOCKED',
           message: 'Your test pack no longer has an available premium test unlock.',
@@ -455,6 +455,13 @@ router.post('/attempts/:attemptId/autosave', authenticate, async (req: Request, 
     }
 
     if (!assertPortalAccess(req, res, attempt.test.exam.slug)) return;
+
+    // An autosave URL must not become a bypass after an entitlement expires or
+    // an administrator changes a paper to premium.
+    if (!(await canAccessMockTest(userId, req.user!.role, attempt.test))) {
+      res.status(403).json({ error: 'PREMIUM_LOCKED', message: 'Your access to this premium mock test is no longer active.' });
+      return;
+    }
 
     // Backend enforcement: check numerical limit per subject (e.g., max 5 out of 10)
     const respArr = Array.isArray(responses) ? responses : [];

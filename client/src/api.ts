@@ -74,7 +74,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}, retryCoun
   // The backend treats this as an assertion and validates it against both the
   // requested record and the student's target examination.
   const activePortal = localStorage.getItem('selected_exam_slug')?.trim().toLowerCase();
-  if (activePortal && !isAuthEndpoint) {
+  if (activePortal && !isAuthEndpoint && !headers['X-Portal-Slug']) {
     headers['X-Portal-Slug'] = activePortal;
   }
 
@@ -419,7 +419,16 @@ export const api = {
       testsRemaining: number;
       referralCredits: number;
       referralCode: string;
+      activePlans?: Array<any>;
     }>('/monetization/my-subscription');
+  },
+
+  getTestEntitlements: async (testIds: string[], portalSlug?: string) => {
+    return request<{ entitlements: Record<string, { entitled: boolean; accessType: 'free' | 'premium'; label: string; planCode?: string | null; testsRemainingInPack?: number | null }> }>('/monetization/test-entitlements', {
+      method: 'POST',
+      headers: portalSlug ? { 'X-Portal-Slug': portalSlug } : undefined,
+      body: JSON.stringify({ testIds }),
+    });
   },
 
   checkTestEntitlement: async (testId: string) => {
