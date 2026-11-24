@@ -54,6 +54,7 @@ export const AdminStudentActivity: React.FC = () => {
   const [selectedAttemptId, setSelectedAttemptId] = useState<string | null>(null);
   const [attemptDetail, setAttemptDetail] = useState<AdminAttemptDetailResponse | null>(null);
   const [loadingAttempt, setLoadingAttempt] = useState<boolean>(false);
+  const [isStudentDirectoryOpen, setIsStudentDirectoryOpen] = useState(false);
 
   // Initial load & when filters change
   useEffect(() => {
@@ -239,7 +240,12 @@ export const AdminStudentActivity: React.FC = () => {
         </div>
 
         {/* Card 2: Total Registered Students */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+        <button
+          type="button"
+          onClick={() => setIsStudentDirectoryOpen(true)}
+          className="rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-xs transition-colors hover:border-blue-300 hover:bg-blue-50/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Open registered student list"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Students</span>
             <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
@@ -253,7 +259,8 @@ export const AdminStudentActivity: React.FC = () => {
           <div className="mt-2 text-xs text-slate-500">
             {data?.summary.loggedInStudents ?? 0} signed in at least once
           </div>
-        </div>
+          <div className="mt-2 text-xs font-semibold text-blue-700">View student names →</div>
+        </button>
 
         {/* Card 3: Total Completed Attempts */}
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
@@ -707,6 +714,47 @@ export const AdminStudentActivity: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* MODAL: REGISTERED STUDENT DIRECTORY */}
+      {isStudentDirectoryOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-xs">
+          <div className="flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Registered Students & Recent Visits</h3>
+                <p className="mt-0.5 text-xs text-slate-500">Name, email, sign-in and latest authenticated visit are visible only to authorised admins.</p>
+              </div>
+              <button onClick={() => setIsStudentDirectoryOpen(false)} className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600" aria-label="Close student list">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-auto">
+              <table className="w-full min-w-[800px] text-left text-xs">
+                <thead className="sticky top-0 border-b border-slate-200 bg-white text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th className="px-4 py-3">Candidate</th><th className="px-4 py-3">Student ID</th><th className="px-4 py-3">Target Exam</th><th className="px-4 py-3">Last Sign-in</th><th className="px-4 py-3">Last Visit</th><th className="px-4 py-3 text-right">Profile</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {data?.students?.entries?.length ? data.students.entries.map((student: AdminStudentDirectoryEntry) => {
+                    const exam = data.availableExams.find((item) => item.slug === student.targetExamId || item.id === student.targetExamId);
+                    return (
+                      <tr key={student.id} className="hover:bg-slate-50">
+                        <td className="px-4 py-3"><div className="font-semibold text-slate-900">{student.name}</div><div className="mt-0.5 text-[11px] text-slate-500">{student.email}</div></td>
+                        <td className="px-4 py-3 font-mono text-slate-700">{student.studentId || '—'}</td>
+                        <td className="px-4 py-3 text-slate-700">{exam?.shortName || (student.targetExamId ? student.targetExamId.toUpperCase() : 'Not selected')}</td>
+                        <td className="px-4 py-3 text-slate-600">{formatIST(student.lastLoginAt)}</td>
+                        <td className="px-4 py-3 text-slate-600">{student.lastSeenAt ? formatIST(student.lastSeenAt) : 'Not signed in yet'}</td>
+                        <td className="px-4 py-3 text-right"><button onClick={() => { setIsStudentDirectoryOpen(false); openStudentHistory(student.id); }} className="rounded-lg bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-100">Open</button></td>
+                      </tr>
+                    );
+                  }) : <tr><td colSpan={6} className="px-4 py-10 text-center text-slate-400">No registered students are available yet.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MODAL 1: STUDENT PROFILE & COMPLETE HISTORY MODAL */}
       {selectedStudentId && (
