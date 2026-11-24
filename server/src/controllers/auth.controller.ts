@@ -39,7 +39,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     // A login never creates an account or changes its role. Those actions are
     // explicit administrator workflows, not side effects of authentication.
-    const user = await prisma.user.findUnique({ where: { email: cleanEmail } });
+    let user = await prisma.user.findUnique({ where: { email: cleanEmail } });
 
     if (!user || !user.passwordHash) {
       res.status(401).json({ error: 'Invalid email or password.' });
@@ -56,11 +56,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     let sId = user.studentId;
     if (!sId && user.role === 'STUDENT') {
       sId = await generateUniqueStudentId();
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { studentId: sId },
-      });
     }
+
+    // A successful credential check is the authoritative login event. Only
+    // timestamps are recorded; no token, password, or client device data is stored.
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        ...(sId !== user.studentId ? { studentId: sId } : {}),
+        lastLoginAt: new Date(),
+        lastSeenAt: new Date(),
+      },
+    });
 
     const authPayload: AuthUser = {
       userId: user.id,

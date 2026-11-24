@@ -663,6 +663,7 @@ export interface SuperTetImportReport {
 
 export interface AdminStudentSummary {
   totalStudents: number;
+  loggedInStudents: number;
   activeInTest: number;
   completedAttempts: number;
   targetExamDistribution: Array<{
@@ -678,6 +679,17 @@ export interface AdminStudentSummary {
     count: number;
     accentColor: string;
   }>;
+}
+
+export interface AdminStudentDirectoryEntry {
+  id: string;
+  name: string;
+  email: string;
+  studentId?: string | null;
+  targetExamId?: string | null;
+  createdAt: string;
+  lastLoginAt?: string | null;
+  lastSeenAt?: string | null;
 }
 
 export interface AdminLiveAttempt {
@@ -753,6 +765,11 @@ export interface AdminHistoricalAttempt {
 export interface AdminStudentActivityResponse {
   summary: AdminStudentSummary;
   liveAttempts: AdminLiveAttempt[];
+  students: {
+    total: number;
+    limit: number;
+    entries: AdminStudentDirectoryEntry[];
+  };
   history: {
     total: number;
     page: number;

@@ -99,6 +99,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const authenticatedAt = new Date();
     const firstName = name.trim().split(' ')[0].replace(/[^A-Za-z]/g, '').toUpperCase() || 'USER';
     const myReferralCode = `TN-${firstName}-${Math.floor(1000 + Math.random() * 9000)}`;
     const studentId = await generateUniqueStudentId();
@@ -115,6 +116,8 @@ router.post('/register', async (req: Request, res: Response) => {
         referralCode: myReferralCode,
         referredById: referrer ? referrer.id : null,
         referralCredits: 1, // Welcome bonus: 1 free test credit
+        lastLoginAt: authenticatedAt,
+        lastSeenAt: authenticatedAt,
       },
     });
 
@@ -291,6 +294,7 @@ router.post('/google', async (req: Request, res: Response) => {
 
     // Normalized email to prevent duplicate accounts (Requirement 10)
     const normalizedEmail = verifiedEmail.toLowerCase().trim();
+    const authenticatedAt = new Date();
 
     // 1. Check if user exists in database by googleId or normalized email (Requirement 7)
     let user = await prisma.user.findFirst({
@@ -320,6 +324,11 @@ router.post('/google', async (req: Request, res: Response) => {
         updateData.studentId = await generateUniqueStudentId();
       }
 
+      // Google identity verification succeeded: record the login without
+      // storing credentials, tokens, or device information.
+      updateData.lastLoginAt = authenticatedAt;
+      updateData.lastSeenAt = authenticatedAt;
+
       if (Object.keys(updateData).length > 0) {
         user = await prisma.user.update({
           where: { id: user.id },
@@ -348,6 +357,8 @@ router.post('/google', async (req: Request, res: Response) => {
           examSelectedAt: null,
           referralCode: myReferralCode,
           referralCredits: 1, // Welcome bonus credit
+          lastLoginAt: authenticatedAt,
+          lastSeenAt: authenticatedAt,
         },
       });
 
@@ -584,6 +595,16 @@ router.put('/target-exam', authenticate, async (req: Request, res: Response) => 
 // ----------------------------------------------------------------------------
 router.get('/me', authenticate, async (req: Request, res: Response) => {
   try {
+    // A restored authenticated session represents a visit even when the
+    // student does not re-enter credentials. This is intentionally limited to
+    // a timestamp; no browsing history or device data is collected.
+    if (req.user!.role === 'STUDENT') {
+      await prisma.user.update({
+        where: { id: req.user!.id },
+        data: { lastSeenAt: new Date() },
+      });
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: req.user!.id },
       select: {
@@ -598,6 +619,8 @@ router.get('/me', authenticate, async (req: Request, res: Response) => {
         authProvider: true,
         referralCode: true,
         referralCredits: true,
+        lastLoginAt: true,
+        lastSeenAt: true,
         createdAt: true,
       },
     });

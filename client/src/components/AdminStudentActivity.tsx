@@ -30,6 +30,7 @@ import {
   AdminHistoricalAttempt,
   AdminStudentDetailResponse,
   AdminAttemptDetailResponse,
+  AdminStudentDirectoryEntry,
 } from '../types';
 
 export const AdminStudentActivity: React.FC = () => {
@@ -249,7 +250,9 @@ export const AdminStudentActivity: React.FC = () => {
             <span className="text-3xl font-extrabold text-slate-900">{data?.summary.totalStudents ?? 0}</span>
             <span className="text-xs font-medium text-slate-500">registered candidates</span>
           </div>
-          <div className="mt-2 text-xs text-slate-500">Across all supported government & entrance exams</div>
+          <div className="mt-2 text-xs text-slate-500">
+            {data?.summary.loggedInStudents ?? 0} signed in at least once
+          </div>
         </div>
 
         {/* Card 3: Total Completed Attempts */}
@@ -291,6 +294,61 @@ export const AdminStudentActivity: React.FC = () => {
               <span className="text-xs text-slate-400">No student target distribution recorded yet</span>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Registered students are visible even before they begin their first test. */}
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
+        <div className="flex flex-col gap-2 border-b border-slate-200 bg-slate-50/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-slate-900">Registered Students & Recent Visits</h3>
+            <p className="mt-0.5 text-xs text-slate-500">Shows student name, email, sign-in time, and latest authenticated website visit.</p>
+          </div>
+          <span className="w-fit rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-blue-700">
+            {data?.students?.total ?? 0} student{(data?.students?.total ?? 0) === 1 ? '' : 's'}
+          </span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[860px] text-left text-xs">
+            <thead className="border-b border-slate-200 bg-white text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-4 py-3">Candidate</th>
+                <th className="px-4 py-3">Student ID</th>
+                <th className="px-4 py-3">Target Exam</th>
+                <th className="px-4 py-3">Last Sign-in</th>
+                <th className="px-4 py-3">Last Visit</th>
+                <th className="px-4 py-3">Registered</th>
+                <th className="px-4 py-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {loading ? (
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-slate-400">Loading registered students…</td></tr>
+              ) : data?.students?.entries?.length ? (
+                data.students.entries.map((student: AdminStudentDirectoryEntry) => {
+                  const exam = data.availableExams.find((item) => item.slug === student.targetExamId || item.id === student.targetExamId);
+                  return (
+                    <tr key={student.id} className="hover:bg-slate-50/70">
+                      <td className="px-4 py-3">
+                        <div className="font-semibold text-slate-900">{student.name}</div>
+                        <div className="mt-0.5 text-[11px] text-slate-500">{student.email}</div>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-slate-700">{student.studentId || '—'}</td>
+                      <td className="px-4 py-3 text-slate-700">{exam?.shortName || (student.targetExamId ? student.targetExamId.toUpperCase() : 'Not selected')}</td>
+                      <td className="px-4 py-3 text-slate-600">{formatIST(student.lastLoginAt)}</td>
+                      <td className="px-4 py-3 text-slate-600">{student.lastSeenAt ? formatIST(student.lastSeenAt) : 'Not signed in yet'}</td>
+                      <td className="px-4 py-3 text-slate-600">{formatIST(student.createdAt)}</td>
+                      <td className="px-4 py-3 text-right">
+                        <button onClick={() => openStudentHistory(student.id)} className="rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-200">Profile</button>
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-slate-400">No registered students match the current search.</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 

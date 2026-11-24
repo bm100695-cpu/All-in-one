@@ -1142,12 +1142,42 @@ router.get('/students/activity', authenticate, requireRole(['ADMIN', 'CONTENT_RE
     const skip = (pageNum - 1) * take;
 
     // 1. Summary counts & exams
-    const [totalStudents, inProgressCount, completedCount, allExams] = await Promise.all([
+    const studentDirectoryWhere: any = { role: 'STUDENT' };
+    if (search && search.trim()) {
+      const studentSearch = search.trim();
+      studentDirectoryWhere.OR = [
+        { name: { contains: studentSearch } },
+        { email: { contains: studentSearch } },
+        { studentId: { contains: studentSearch } },
+      ];
+    }
+
+    const [totalStudents, loggedInStudents, inProgressCount, completedCount, allExams, studentDirectoryTotal, recentStudents] = await Promise.all([
       prisma.user.count({ where: { role: 'STUDENT' } }),
+      prisma.user.count({ where: { role: 'STUDENT', lastLoginAt: { not: null } } }),
       prisma.testAttempt.count({ where: { status: 'IN_PROGRESS' } }),
       prisma.testAttempt.count({ where: { status: 'COMPLETED' } }),
       prisma.exam.findMany({
         select: { id: true, slug: true, title: true, shortName: true, accentColor: true },
+      }),
+      prisma.user.count({ where: studentDirectoryWhere }),
+      prisma.user.findMany({
+        where: studentDirectoryWhere,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          studentId: true,
+          targetExamId: true,
+          createdAt: true,
+          lastLoginAt: true,
+          lastSeenAt: true,
+        },
+        orderBy: [
+          { lastSeenAt: 'desc' },
+          { createdAt: 'desc' },
+        ],
+        take: 50,
       }),
     ]);
 
@@ -1294,12 +1324,18 @@ router.get('/students/activity', authenticate, requireRole(['ADMIN', 'CONTENT_RE
     res.json({
       summary: {
         totalStudents,
+        loggedInStudents,
         activeInTest: inProgressCount,
         completedAttempts: completedCount,
         targetExamDistribution,
         liveExamsDistribution: Object.values(liveExamsCount),
       },
       liveAttempts: formattedLiveAttempts,
+      students: {
+        total: studentDirectoryTotal,
+        limit: 50,
+        entries: recentStudents,
+      },
       history: {
         total: totalHistoryCount,
         page: pageNum,
