@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { prisma } from '../prisma';
 import { authenticate, requireRole } from '../middleware/auth';
 import { getMockAccessType, MockAccessType } from '../test-access';
+import { SSC_CGL_SLUG, validateSscCglPaper } from '../ssc-cgl/validation';
 
 const router = Router();
 
@@ -903,6 +904,18 @@ router.put('/tests/:id', authenticate, requireRole(['ADMIN']), async (req: Reque
 router.patch('/tests/:id/publish', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
     const { isPublished } = req.body;
+    const existingTest: any = await prisma.test.findUnique({ where: { id: String(req.params.id) }, include: { exam: { select: { slug: true } } } });
+    if (!existingTest) {
+      res.status(404).json({ error: 'Test not found.' });
+      return;
+    }
+    if (isPublished && existingTest.exam.slug === SSC_CGL_SLUG) {
+      const validation = await validateSscCglPaper(existingTest.id);
+      if (!validation.valid) {
+        res.status(400).json({ error: 'SSC CGL paper cannot be published until source validation passes.', validation });
+        return;
+      }
+    }
     const count = await prisma.testQuestion.count({ where: { testId: req.params.id } });
     if (isPublished && count === 0) {
       res.status(400).json({ error: 'Cannot publish a mock test with 0 questions.' });
@@ -949,6 +962,14 @@ router.patch('/tests/:id/status', authenticate, requireRole(['ADMIN']), async (r
       if (qCount === 0) {
         res.status(400).json({ error: 'Cannot activate a mock test with 0 questions. Please add questions first.' });
         return;
+      }
+      const exam = await prisma.exam.findUnique({ where: { id: existingTest.examId }, select: { slug: true } });
+      if (exam?.slug === SSC_CGL_SLUG) {
+        const validation = await validateSscCglPaper(existingTest.id);
+        if (!validation.valid) {
+          res.status(400).json({ error: 'SSC CGL paper cannot be activated until source validation passes.', validation });
+          return;
+        }
       }
     }
 

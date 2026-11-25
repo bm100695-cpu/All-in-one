@@ -267,6 +267,13 @@ model Test {
   instructionsEn   String
   instructionsHi   String?
   pyqReference     String?
+  // SSC CGL (and other future verified archives) use this immutable source
+  // identity to prevent the same date/shift paper being imported twice.
+  sourcePaperKey   String?             @unique
+  examShift        String?
+  sourceReference  String?
+  sourceVerifiedAt DateTime?
+  isSourceVerified Boolean             @default(false)
   accessLevel      String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
   accessMode       String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
   // Canonical student access policy for full mock tests. Legacy accessLevel/accessMode
@@ -328,6 +335,12 @@ model TestAttempt {
   testId           String
   examId           String
   startedAt        DateTime              @default(now())
+  // SSC CGL sessions are armed only after the candidate accepts the
+  // declaration.  expiresAt is calculated by the server and is never derived
+  // from a browser clock.
+  confirmedAt      DateTime?
+  expiresAt        DateTime?
+  tabSwitchCount   Int                   @default(0)
   submittedAt      DateTime?
   status           String                @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, TIMED_OUT, ABANDONED
   totalScore       Float                 @default(0.0)

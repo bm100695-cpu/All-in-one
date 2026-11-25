@@ -14,6 +14,7 @@ import monetizationRoutes from './routes/monetization.routes';
 import uptetRoutes from './routes/uptet.routes';
 import supertetRoutes from './routes/supertet.routes';
 import liveTestRoutes from './routes/live_test.routes';
+import sscCglRoutes from './routes/ssc-cgl.routes';
 import { prisma } from './prisma';
 
 const app = express();
@@ -66,6 +67,8 @@ app.use('/api/monetization', monetizationRoutes);
 app.use('/api/uptet', uptetRoutes);
 app.use('/api/super-tet', supertetRoutes);
 app.use('/api/live-tests', liveTestRoutes);
+// Isolated SSC CGL archive APIs. No other exam portal is routed through this module.
+app.use('/api/ssc-cgl', sscCglRoutes);
 
 // 404 Handler
 app.use((_req: Request, res: Response) => {

@@ -60,6 +60,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
   const [showInstructionsModal, setShowInstructionsModal] = useState<boolean>(false);
   const [showQuestionPaperModal, setShowQuestionPaperModal] = useState<boolean>(false);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  // Keep existing portals unchanged; SSC CGL explicitly requires this
+  // declaration before its server-timed session can begin.
   const [instructionsRead, setInstructionsRead] = useState<boolean>(true);
   const [numericInputValue, setNumericInputValue] = useState<string>('');
   const [numericalWarning, setNumericalWarning] = useState<string | null>(null);
@@ -129,7 +131,12 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
       setQuestions(data.questions);
 
       const durationSecs = (data.test.durationMinutes || 180) * 60;
-      const initialTime = Math.max(10, durationSecs - (data.timeSpentSeconds || 0));
+      const isSscCglSession = data.test?.exam?.slug === 'ssc-cgl-tier1';
+      setInstructionsRead(!isSscCglSession);
+      const serverRemaining = data.expiresAt ? Math.max(0, Math.ceil((new Date(data.expiresAt).getTime() - Date.now()) / 1000)) : null;
+      const initialTime = isSscCglSession && serverRemaining !== null
+        ? serverRemaining
+        : Math.max(10, durationSecs - (data.timeSpentSeconds || 0));
       timeLeftRef.current = initialTime;
       setTimeLeftSeconds(initialTime);
 
@@ -149,7 +156,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
       });
 
       // If user had already started this attempt before reload, resume directly to EXAM
-      if (data.timeSpentSeconds && data.timeSpentSeconds > 5) {
+      if ((isSscCglSession && data.confirmedAt) || (!isSscCglSession && data.timeSpentSeconds && data.timeSpentSeconds > 5)) {
         setViewState('EXAM');
         startTimer();
       }
@@ -169,7 +176,18 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
     }
   };
 
-  const startTestFromInstructions = () => {
+  const startTestFromInstructions = async () => {
+    if (testData?.exam?.slug === 'ssc-cgl-tier1' && !instructionsRead) return;
+    if (testData?.exam?.slug === 'ssc-cgl-tier1') {
+      try {
+        const serverSession = await api.beginSscCglAttempt(attemptId);
+        timeLeftRef.current = serverSession.remainingSeconds;
+        setTimeLeftSeconds(serverSession.remainingSeconds);
+      } catch (error: any) {
+        setInitError(error?.message || 'The SSC CGL examination session could not be started.');
+        return;
+      }
+    }
     setInstructionsRead(true);
     setViewState('EXAM');
 
@@ -257,6 +275,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
 
   const isJeeMain = !testData?.title?.includes('UPTET') && (testData?.exam?.slug === 'jee-main' || testData?.title?.toLowerCase().includes('jee'));
   const isUptet = testData?.title?.includes('UPTET') || testData?.exam?.slug === 'uptet';
+  const isSscCgl = testData?.exam?.slug === 'ssc-cgl-tier1';
 
   const normalizeSubject = (secName?: string): string => {
     if (!secName) return isJeeMain ? 'Physics' : 'General';
@@ -699,7 +718,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
             <button
               type="button"
               onClick={startTestFromInstructions}
-              className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider shadow-sm transition active:scale-95 cursor-pointer flex items-center gap-1.5"
+              disabled={isSscCgl && !instructionsRead}
+              className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-500 disabled:cursor-not-allowed text-white font-extrabold text-xs uppercase tracking-wider shadow-sm transition active:scale-95 cursor-pointer flex items-center gap-1.5"
             >
               <span>Start Exam Now</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -898,7 +918,8 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
               <button
                 type="button"
                 onClick={startTestFromInstructions}
-                className="px-10 py-3.5 rounded-lg font-extrabold text-sm uppercase tracking-wider transition-all shadow-md bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer active:scale-98 flex items-center justify-center gap-2 mx-auto"
+                disabled={isSscCgl && !instructionsRead}
+                className="px-10 py-3.5 rounded-lg font-extrabold text-sm uppercase tracking-wider transition-all shadow-md bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-500 disabled:cursor-not-allowed text-white cursor-pointer active:scale-98 flex items-center justify-center gap-2 mx-auto"
               >
                 <span>I am ready to begin — Start Test</span>
                 <ChevronRight className="w-4 h-4" />
