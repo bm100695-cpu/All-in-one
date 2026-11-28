@@ -56,6 +56,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const [examInfo, setExamInfo] = useState<any>(null);
   const [availableTests, setAvailableTests] = useState<any[]>([]);
   const [checkingDashboardTestId, setCheckingDashboardTestId] = useState<string | null>(null);
+  const [hasDataIssue, setHasDataIssue] = useState(false);
 
   const examSlug = (currentUser?.targetExamId || 'jee-main').toLowerCase();
   const isSuperTet = examSlug === 'super-tet';
@@ -86,10 +87,11 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
   const loadDashboardData = async () => {
     setLoading(true);
+    setHasDataIssue(false);
     setAvailableTests([]);
     try {
       const [attemptsRes, profileRes, subRes] = await Promise.all([
-        api.getMyAttempts().catch(() => ({ attempts: [] })),
+        api.getMyAttempts().catch(() => ({ attempts: [], unavailable: true })),
         api.getExamProfile(examSlug).catch(() => null),
         api.getMySubscription().catch(() => null),
       ]);
@@ -109,6 +111,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       }
 
       const myAttempts = attemptsRes?.attempts || [];
+      setHasDataIssue(Boolean((attemptsRes as any)?.unavailable || !profileRes || !subRes));
       const filteredAttempts = myAttempts.filter((a: any) => {
         if (a.test?.exam?.slug) return a.test.exam.slug === examSlug;
         if (a.test?.examId && profileRes?.exam?.id) return a.test.examId === profileRes.exam.id;
@@ -147,6 +150,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       }
     } catch (err) {
       console.error('Error loading dashboard data:', err);
+      setHasDataIssue(true);
     } finally {
       setLoading(false);
     }
@@ -257,6 +261,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
         </div>
       </section>
 
+      {!loading && hasDataIssue && (
+        <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+          Some preparation data is temporarily unavailable. Values marked with a dash will update when the connection is restored.
+        </div>
+      )}
+
       {/* 2. Subscription Status & Referral Balance Banner */}
       <section className="p-4 sm:p-5 rounded-2xl border border-slate-700 border-l-4 border-l-blue-400 bg-tn-navy shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
@@ -337,26 +347,26 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Available Mock Tests</p><FileCheck2 className="h-4 w-4 text-tn-blue" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : totalExamTests}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading availability…' : `For ${displayExamName}`}</p>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : totalExamTests}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading availability…' : hasDataIssue ? 'Availability unavailable' : `For ${displayExamName}`}</p>
         </div>
 
         <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Attempted</p><RotateCcw className="h-4 w-4 text-tn-blue" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : attempts.length}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading attempts…' : `${completedAttempts.length} completed submission${completedAttempts.length === 1 ? '' : 's'}`}</p>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : attempts.length}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading attempts…' : hasDataIssue ? 'Attempt history unavailable' : `${completedAttempts.length} completed submission${completedAttempts.length === 1 ? '' : 's'}`}</p>
         </div>
 
         <div className="min-h-[142px] rounded-xl border border-emerald-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score / Accuracy</p><TrendingUp className="h-4 w-4 text-emerald-600" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : `${avgAccuracy}%`}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Calculating score…' : `${avgScore} / ${maxExamScore} average score`}</p>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : `${avgAccuracy}%`}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Calculating score…' : hasDataIssue ? 'Score data unavailable' : `${avgScore} / ${maxExamScore} average score`}</p>
         </div>
 
         <div className="min-h-[142px] rounded-xl border border-violet-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Current Subscription</p><ShieldCheck className="h-4 w-4 text-violet-600" /></div>
-          <p className="mt-5 truncate text-lg font-bold text-tn-navy" title={loading ? 'Loading subscription' : planName}>{loading ? 'Loading…' : planName}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Checking access…' : subscriptionDetail}</p>
+          <p className="mt-5 truncate text-lg font-bold text-tn-navy" title={loading || hasDataIssue ? 'Subscription unavailable' : planName}>{loading ? 'Loading…' : hasDataIssue ? 'Unavailable' : planName}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Checking access…' : hasDataIssue ? 'Try refreshing the page' : subscriptionDetail}</p>
         </div>
       </section>
 
