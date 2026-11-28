@@ -251,6 +251,23 @@ export const api = {
     return request<any>(`/exams/${slug}/syllabus-tree`);
   },
 
+  // SSC CGL has a separate source-verified catalogue. This endpoint is
+  // intentionally scoped to the SSC CGL portal on both client and server.
+  getSscCglCatalog: async (params = new URLSearchParams()) => {
+    const query = params.toString();
+    return request<{ papers: any[]; page: number; pageSize: number; total: number; totalPages: number }>(`/ssc-cgl/catalog${query ? `?${query}` : ''}`, {
+      headers: { 'X-Portal-Slug': 'ssc-cgl-tier1' },
+      cache: 'no-store',
+    });
+  },
+
+  getSscCglAvailabilityReport: async () => {
+    return request<any>('/ssc-cgl/availability-report', {
+      headers: { 'X-Portal-Slug': 'ssc-cgl-tier1' },
+      cache: 'no-store',
+    });
+  },
+
   // Tests
   getTestInfo: async (testId: string) => {
     return request<{ test: any; actualQuestionsCount: number }>(`/tests/${testId}/info`);
@@ -271,11 +288,19 @@ export const api = {
     return request<{
       attemptId: string;
       startedAt: string;
+      confirmedAt?: string | null;
+      expiresAt?: string | null;
       timeSpentSeconds: number;
       test: any;
       questions: any[];
       savedResponses: any[];
     }>(`/tests/${testId}/start`, {
+      method: 'POST',
+    });
+  },
+
+  beginSscCglAttempt: async (attemptId: string) => {
+    return request<{ confirmedAt: string; expiresAt: string; remainingSeconds: number }>(`/tests/attempts/${attemptId}/begin`, {
       method: 'POST',
     });
   },
@@ -600,6 +625,25 @@ export const api = {
 
   getAdminMonetizationOverview: async () => {
     return request<any>('/monetization/admin/overview');
+  },
+
+  getAdminDashboardSummary: async (params?: { range?: string; start?: string; end?: string; examId?: string }) => {
+    const q = new URLSearchParams();
+    if (params?.range) q.append('range', params.range);
+    if (params?.start) q.append('start', params.start);
+    if (params?.end) q.append('end', params.end);
+    if (params?.examId && params.examId !== 'ALL') q.append('examId', params.examId);
+    const suffix = q.toString() ? `?${q.toString()}` : '';
+    return request<any>(`/admin/dashboard-summary${suffix}`, { cache: 'no-store' });
+  },
+
+  getAdminTransactions: async (params?: { page?: number; limit?: number; status?: string; examSlug?: string; planId?: string; method?: string; from?: string; to?: string }) => {
+    const q = new URLSearchParams();
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== '' && value !== 'ALL') q.append(key, String(value));
+    });
+    const suffix = q.toString() ? `?${q.toString()}` : '';
+    return request<any>(`/monetization/admin/transactions${suffix}`, { cache: 'no-store' });
   },
 
   getContentPricing: async (params?: { type?: string; search?: string; accessMode?: string }) => {

@@ -3028,57 +3028,69 @@ router.get('/admin/audit-logs', authenticate, requireRole(['ADMIN']), async (_re
   }
 });
 
-// Admin manual refund processing
-router.post('/admin/refund', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+// Read-only, paginated reconciliation view. It deliberately does not infer
+// gateway verification from a browser action or expose payment credentials.
+router.get('/admin/transactions', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
-    const { paymentId, reason } = req.body;
-
-    const payment = await prisma.payment.findUnique({
-      where: { id: paymentId },
-      include: { user: true, plan: true },
-    });
-
-    if (!payment) {
-      res.status(404).json({ error: 'Payment record not found' });
-      return;
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 25));
+    const status = String(req.query.status || 'ALL').toUpperCase();
+    const examSlug = String(req.query.examSlug || '').trim().toLowerCase();
+    const planId = String(req.query.planId || '').trim();
+    const method = String(req.query.method || '').trim().toLowerCase();
+    const from = req.query.from ? new Date(String(req.query.from)) : null;
+    const to = req.query.to ? new Date(String(req.query.to)) : null;
+    const where: any = {};
+    if (['SUCCESS', 'PENDING', 'FAILED', 'REFUNDED'].includes(status)) where.status = status;
+    if (examSlug) where.examSlug = examSlug;
+    if (planId) where.planId = planId;
+    if (method) where.method = method;
+    if (from && !Number.isNaN(from.getTime())) where.createdAt = { ...(where.createdAt || {}), gte: from };
+    if (to && !Number.isNaN(to.getTime())) {
+      const inclusiveEnd = new Date(to);
+      inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
+      where.createdAt = { ...(where.createdAt || {}), lt: inclusiveEnd };
     }
 
-    if (payment.status !== 'SUCCESS') {
-      res.status(400).json({ error: 'Only successful payments can be refunded' });
-      return;
-    }
-
-    const refundRef = `ref_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
-    await prisma.$transaction([
-      prisma.payment.update({
-        where: { id: payment.id },
-        data: {
-          status: 'REFUNDED',
-          refundId: refundRef,
-          refundAmount: payment.amount,
-          refundReason: reason || 'Customer requested refund via admin review',
-          refundStatus: 'COMPLETED',
-          refundedAt: new Date(),
+    const [total, payments] = await Promise.all([
+      prisma.payment.count({ where }),
+      prisma.payment.findMany({
+        where, skip: (page - 1) * limit, take: limit, orderBy: { createdAt: 'desc' },
+        include: {
+          user: { select: { id: true, name: true, email: true, studentId: true } },
+          plan: { select: { id: true, name: true, code: true } },
+          test: { select: { id: true, title: true } },
         },
-      }),
-      prisma.subscription.updateMany({
-        where: { paymentId: payment.id },
-        data: { status: 'CANCELLED' },
-      }),
-      prisma.entitlement.deleteMany({
-        where: { userId: payment.userId, planCode: payment.plan?.code || '' },
       }),
     ]);
 
     res.json({
-      success: true,
-      message: `Refund of ₹${payment.amount} recorded for ${payment.user.name}. Access revoked.`,
-      refundId: refundRef,
+      page, limit, total, totalPages: Math.max(1, Math.ceil(total / limit)),
+      transactions: payments.map((payment) => ({
+        id: payment.id, orderId: payment.orderId, gatewayPaymentId: payment.paymentId,
+        amountPaise: payment.amountPaise > 0 ? payment.amountPaise : Math.round(payment.amount * 100),
+        currency: payment.currency, status: payment.status, method: payment.method,
+        examSlug: payment.examSlug, createdAt: payment.createdAt,
+        verificationStatus: payment.status === 'SUCCESS' ? 'VERIFIED_PAYMENT' : payment.status,
+        refundStatus: payment.refundStatus || (payment.status === 'REFUNDED' ? 'UNVERIFIED_LEGACY_RECORD' : null),
+        student: payment.user, plan: payment.plan, test: payment.test,
+      })),
     });
   } catch (error) {
-    console.error('Refund processing error:', error);
-    res.status(500).json({ error: 'Failed to process refund' });
+    console.error('Admin transaction reconciliation error:', error);
+    res.status(500).json({ error: 'Failed to fetch transaction history' });
   }
+});
+
+// Refund initiation is intentionally disabled until the backend performs and
+// verifies a real gateway refund. The legacy implementation only changed local
+// rows and revoked access, which could misrepresent the customer's money state.
+router.post('/admin/refund', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  void req;
+  res.status(409).json({
+    error: 'Refund execution is disabled until Cashfree refund initiation and webhook confirmation are integrated.',
+    code: 'GATEWAY_REFUND_NOT_CONFIGURED',
+  });
 });
 
 export default router;

@@ -2,8 +2,150 @@ import { Router, Request, Response } from 'express';
 import { prisma } from '../prisma';
 import { authenticate, requireRole } from '../middleware/auth';
 import { getMockAccessType, MockAccessType } from '../test-access';
+import { SSC_CGL_SLUG, validateSscCglPaper } from '../ssc-cgl/validation';
 
 const router = Router();
+
+type DashboardRange = 'TODAY' | 'YESTERDAY' | 'LAST_7_DAYS' | 'LAST_30_DAYS' | 'THIS_MONTH' | 'CUSTOM';
+
+function dashboardDateRange(query: Record<string, unknown>) {
+  const requested = String(query.range || 'LAST_7_DAYS').toUpperCase() as DashboardRange;
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let start = new Date(startOfToday);
+  let end = new Date(now);
+
+  if (requested === 'TODAY') {
+    start = startOfToday;
+    end = new Date(startOfToday);
+    end.setDate(end.getDate() + 1);
+  } else if (requested === 'YESTERDAY') {
+    end = startOfToday;
+    start = new Date(startOfToday);
+    start.setDate(start.getDate() - 1);
+  } else if (requested === 'LAST_30_DAYS') {
+    start.setDate(start.getDate() - 29);
+    end = new Date(now);
+  } else if (requested === 'THIS_MONTH') {
+    start = new Date(now.getFullYear(), now.getMonth(), 1);
+    end = new Date(now);
+  } else if (requested === 'CUSTOM') {
+    const customStart = new Date(String(query.start || ''));
+    const customEnd = new Date(String(query.end || ''));
+    if (!Number.isNaN(customStart.getTime()) && !Number.isNaN(customEnd.getTime()) && customEnd >= customStart) {
+      start = customStart;
+      end = new Date(customEnd);
+      end.setDate(end.getDate() + 1);
+    }
+  } else {
+    start.setDate(start.getDate() - 6);
+    end = new Date(now);
+  }
+
+  return { range: requested, start, end };
+}
+
+/**
+ * Read-only dashboard aggregation. Keep its definitions here so every card is
+ * derived from the same database snapshot instead of independently failing UI
+ * requests. Refunds deliberately remain "unverified" until gateway-backed
+ * refund confirmation is implemented.
+ */
+router.get('/dashboard-summary', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
+  try {
+    const { range, start, end } = dashboardDateRange(req.query as Record<string, unknown>);
+    const examId = String(req.query.examId || '').trim();
+    const examFilter = examId && examId !== 'ALL' ? { examId } : {};
+    const period = { gte: start, lt: end };
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - 6);
+
+    const [
+      totalStudents, periodRegistrations, weeklyRegistrations, activeStudents,
+      exams, tests, completedAttempts, ongoingAttempts, activeLiveExams,
+      successfulPayments, allPayingStudents, pendingPayments, failedPayments, paidSubscriptions,
+      pendingQuestions, recentActivity,
+    ] = await Promise.all([
+      prisma.user.count({ where: { role: 'STUDENT' } }),
+      prisma.user.count({ where: { role: 'STUDENT', createdAt: period } }),
+      prisma.user.count({ where: { role: 'STUDENT', createdAt: { gte: weekStart } } }),
+      prisma.user.count({ where: { role: 'STUDENT', lastSeenAt: { gte: start, lt: end } } }),
+      prisma.exam.count(),
+      prisma.test.findMany({
+        where: examFilter,
+        select: { id: true, isPublished: true, status: true, accessType: true, accessLevel: true, accessMode: true },
+      }),
+      prisma.testAttempt.count({ where: { ...examFilter, status: 'COMPLETED', createdAt: period } }),
+      prisma.testAttempt.count({ where: { ...examFilter, status: 'IN_PROGRESS' } }),
+      prisma.liveTestSchedule.count({ where: { ...examFilter, status: 'LIVE_NOW' } }),
+      prisma.payment.findMany({
+        where: { status: 'SUCCESS', createdAt: period, OR: [{ amountPaise: { gt: 0 } }, { amount: { gt: 0 } }] },
+        select: { userId: true, amount: true, amountPaise: true, examSlug: true, createdAt: true },
+      }),
+      prisma.payment.groupBy({ where: { status: 'SUCCESS', OR: [{ amountPaise: { gt: 0 } }, { amount: { gt: 0 } }] }, by: ['userId'] }),
+      prisma.payment.count({ where: { status: 'PENDING', createdAt: period } }),
+      prisma.payment.count({ where: { status: 'FAILED', createdAt: period } }),
+      prisma.subscription.count({
+        where: {
+          status: 'ACTIVE',
+          OR: [{ endDate: null }, { endDate: { gt: new Date() } }],
+          plan: { price: { gt: 0 }, code: { not: { contains: 'FREE' } } },
+        },
+      }),
+      prisma.question.count({ where: { verificationStatus: { in: ['UNDER_REVIEW', 'DRAFT'] } } }),
+      prisma.pricingAuditLog.findMany({
+        orderBy: { createdAt: 'desc' }, take: 6,
+        select: { id: true, targetTitle: true, targetType: true, notes: true, createdAt: true },
+      }),
+    ]);
+
+    const premiumTests = tests.filter((test) => getMockAccessType(test) === 'premium');
+    const publishedTests = tests.filter((test) => test.isPublished && ['PUBLISHED', 'ACTIVE'].includes(String(test.status).toUpperCase()));
+    const draftTests = tests.filter((test) => !test.isPublished || String(test.status).toUpperCase() === 'DRAFT');
+    const revenuePaise = successfulPayments.reduce((sum, payment) => sum + (payment.amountPaise > 0 ? payment.amountPaise : Math.round(payment.amount * 100)), 0);
+    const uniquePayingStudents = allPayingStudents.length;
+    const days = Array.from({ length: Math.max(1, Math.min(31, Math.ceil((end.getTime() - start.getTime()) / 86400000))) }, (_, index) => {
+      const day = new Date(start);
+      day.setDate(day.getDate() + index);
+      return day;
+    });
+    const revenueByDay = days.map((day) => {
+      const nextDay = new Date(day);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const paise = successfulPayments
+        .filter((payment) => payment.createdAt >= day && payment.createdAt < nextDay)
+        .reduce((sum, payment) => sum + (payment.amountPaise > 0 ? payment.amountPaise : Math.round(payment.amount * 100)), 0);
+      return { date: day.toISOString().slice(0, 10), paise };
+    });
+
+    res.json({
+      filters: { range, start: start.toISOString(), end: end.toISOString(), examId: examId || 'ALL' },
+      generatedAt: new Date().toISOString(),
+      metrics: {
+        totalStudents, periodRegistrations, weeklyRegistrations, activeStudents,
+        uniquePayingStudents, freeStudents: Math.max(0, totalStudents - uniquePayingStudents),
+        activePaidSubscriptions: paidSubscriptions, totalExamPortals: exams,
+        totalMockTests: tests.length, publishedMockTests: publishedTests.length,
+        draftMockTests: draftTests.length, freeMockTests: tests.length - premiumTests.length,
+        premiumMockTests: premiumTests.length, completedAttempts, ongoingAttempts,
+        activeLiveExams, verifiedRevenuePaise: revenuePaise,
+        successfulPayments: successfulPayments.length, pendingPayments, failedPayments,
+        confirmedRefunds: null,
+      },
+      revenue: { byDay: revenueByDay, refundVerification: 'NOT_CONFIGURED' },
+      activities: recentActivity.map((entry) => ({
+        id: entry.id, title: entry.targetTitle || entry.targetType, detail: entry.notes || 'Administrative change', createdAt: entry.createdAt,
+      })),
+      availability: {
+        growthAnalytics: 'UNAVAILABLE_HISTORICAL_EVENTS_NOT_RECORDED',
+        gatewayRefundConfirmation: 'NOT_CONFIGURED',
+      },
+    });
+  } catch (error) {
+    console.error('Error building admin dashboard summary:', error);
+    res.status(500).json({ error: 'Failed to load the dashboard summary. No metrics were substituted.' });
+  }
+});
 
 // Get questions pending review (Reviewers and Admins)
 router.get('/review-queue', authenticate, requireRole(['ADMIN', 'CONTENT_REVIEWER']), async (_req: Request, res: Response) => {
@@ -903,6 +1045,18 @@ router.put('/tests/:id', authenticate, requireRole(['ADMIN']), async (req: Reque
 router.patch('/tests/:id/publish', authenticate, requireRole(['ADMIN']), async (req: Request, res: Response) => {
   try {
     const { isPublished } = req.body;
+    const existingTest: any = await prisma.test.findUnique({ where: { id: String(req.params.id) }, include: { exam: { select: { slug: true } } } });
+    if (!existingTest) {
+      res.status(404).json({ error: 'Test not found.' });
+      return;
+    }
+    if (isPublished && existingTest.exam.slug === SSC_CGL_SLUG) {
+      const validation = await validateSscCglPaper(existingTest.id);
+      if (!validation.valid) {
+        res.status(400).json({ error: 'SSC CGL paper cannot be published until source validation passes.', validation });
+        return;
+      }
+    }
     const count = await prisma.testQuestion.count({ where: { testId: req.params.id } });
     if (isPublished && count === 0) {
       res.status(400).json({ error: 'Cannot publish a mock test with 0 questions.' });
@@ -949,6 +1103,14 @@ router.patch('/tests/:id/status', authenticate, requireRole(['ADMIN']), async (r
       if (qCount === 0) {
         res.status(400).json({ error: 'Cannot activate a mock test with 0 questions. Please add questions first.' });
         return;
+      }
+      const exam = await prisma.exam.findUnique({ where: { id: existingTest.examId }, select: { slug: true } });
+      if (exam?.slug === SSC_CGL_SLUG) {
+        const validation = await validateSscCglPaper(existingTest.id);
+        if (!validation.valid) {
+          res.status(400).json({ error: 'SSC CGL paper cannot be activated until source validation passes.', validation });
+          return;
+        }
       }
     }
 

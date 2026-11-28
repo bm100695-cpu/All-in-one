@@ -60,6 +60,15 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const examSlug = (currentUser?.targetExamId || 'jee-main').toLowerCase();
   const isSuperTet = examSlug === 'super-tet';
   const isUptet = examSlug === 'uptet';
+  const displayExamName = examInfo?.shortName || examInfo?.title || ({
+    'jee-main': 'JEE Main',
+    'neet-ug': 'NEET UG',
+    'upsc-prelims': 'UPSC CSE Prelims',
+    'ssc-cgl-tier1': 'SSC CGL Tier 1',
+    'gate-cs': 'GATE CS',
+    uptet: 'UPTET',
+    'super-tet': 'SUPER TET',
+  }[examSlug] || 'your selected examination');
 
   useEffect(() => {
     loadDashboardData();
@@ -218,7 +227,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             <p className="mt-1 text-sm text-tn-muted">Continue your preparation and track your exam progress.</p>
             <div className="mt-3 inline-flex max-w-full items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600">
               <Target className="h-3.5 w-3.5 shrink-0 text-tn-blue" />
-              <span className="truncate">Preparing for <strong className="font-semibold text-tn-navy">{examInfo?.name || examSlug.toUpperCase()}</strong>{examInfo?.conductingBody ? ` · ${examInfo.conductingBody}` : ''}</span>
+              <span className="truncate">Preparing for <strong className="font-semibold text-tn-navy">{displayExamName}</strong>{examInfo?.conductingBody ? ` · ${examInfo.conductingBody}` : ''}</span>
             </div>
           </div>
 
@@ -270,8 +279,8 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               {subInfo?.subscription?.testsRemaining != null
                 ? `${subInfo.subscription.testsRemaining} test unlock${subInfo.subscription.testsRemaining !== 1 ? 's' : ''} remaining in pack`
                 : isPremium
-                  ? `Unlimited access to all available ${examInfo?.shortName || examSlug} tests & verified solutions`
-                  : `${freeExamTests} free paper${freeExamTests !== 1 ? 's' : ''} available in ${examInfo?.shortName || examSlug}. Upgrade for full exam series.`}
+                  ? `Unlimited access to all available ${displayExamName} tests & verified solutions`
+                  : `${freeExamTests} free paper${freeExamTests !== 1 ? 's' : ''} available in ${displayExamName}. Upgrade for full exam series.`}
             </p>
           </div>
         </div>
@@ -328,26 +337,26 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Available Mock Tests</p><FileCheck2 className="h-4 w-4 text-tn-blue" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{totalExamTests}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">For {examInfo?.shortName || examSlug.toUpperCase()}</p>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : totalExamTests}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading availability…' : `For ${displayExamName}`}</p>
         </div>
 
         <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Attempted</p><RotateCcw className="h-4 w-4 text-tn-blue" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{attempts.length}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{completedAttempts.length} completed submission{completedAttempts.length === 1 ? '' : 's'}</p>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : attempts.length}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading attempts…' : `${completedAttempts.length} completed submission${completedAttempts.length === 1 ? '' : 's'}`}</p>
         </div>
 
         <div className="min-h-[142px] rounded-xl border border-emerald-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score / Accuracy</p><TrendingUp className="h-4 w-4 text-emerald-600" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{avgAccuracy}%</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{avgScore} / {maxExamScore} average score</p>
+          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : `${avgAccuracy}%`}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Calculating score…' : `${avgScore} / ${maxExamScore} average score`}</p>
         </div>
 
         <div className="min-h-[142px] rounded-xl border border-violet-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Current Subscription</p><ShieldCheck className="h-4 w-4 text-violet-600" /></div>
-          <p className="mt-5 truncate text-lg font-bold text-tn-navy" title={planName}>{planName}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{subscriptionDetail}</p>
+          <p className="mt-5 truncate text-lg font-bold text-tn-navy" title={loading ? 'Loading subscription' : planName}>{loading ? 'Loading…' : planName}</p>
+          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Checking access…' : subscriptionDetail}</p>
         </div>
       </section>
 
@@ -391,7 +400,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               return (
                 <article key={test.id} className="flex min-h-44 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
                   <div className="flex items-start justify-between gap-3">
-                    <span className="rounded-md border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-tn-blue">{examInfo?.shortName || examSlug.toUpperCase()}</span>
+                    <span className="rounded-md border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-tn-blue">{displayExamName}</span>
                     <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold ${isPremiumTest ? 'border-violet-200 bg-violet-50 text-violet-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
                       {isLocked ? <Lock className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}{isPremiumTest ? (isIncluded ? 'Included in plan' : 'Locked') : 'Free'}
                     </span>
@@ -545,7 +554,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           <div className="p-5 sm:p-6 rounded-2xl border border-tn-border bg-white shadow-card space-y-4 relative overflow-hidden">
             <div className="flex items-center justify-between">
               <span className="relative px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-tn-blue border border-blue-100">
-                {examInfo?.shortName || examSlug.toUpperCase()} • {flagshipTest?.accessLevel === 'FREE' ? 'Free Starter Test' : 'Mock Simulation'}
+                {displayExamName} • {flagshipTest?.accessLevel === 'FREE' ? 'Free Starter Test' : 'Mock Simulation'}
               </span>
               <span className="relative text-[11px] font-mono text-slate-500">
                 {flagshipTest?.durationMinutes || examInfo?.patterns?.[0]?.durationMinutes || 180} Mins • {maxExamScore} Marks

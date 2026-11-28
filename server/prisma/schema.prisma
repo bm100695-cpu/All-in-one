@@ -44,6 +44,8 @@ model User {
   referralsMade Referral[]   @relation("Referrer")
   referralReceived Referral? @relation("ReferredUser")
   superTetBookmarks SuperTetBookmark[]
+  superTetCoreBookmarks SuperTetCoreBookmark[]
+  superTetQuestionReports SuperTetQuestionReport[]
   liveRegistrations LiveTestRegistration[]
   liveAttempts      LiveTestAttempt[]
 }
@@ -210,6 +212,11 @@ model Question {
   sourceReference    String?
   isTranslation      Boolean          @default(false)
   translationLabel   String?          // e.g. "TutorNove English Translation"
+  chapter            String?
+  formulaHi          String?
+  formulaEn          String?
+  grammarRuleHi      String?
+  referenceDate      String?
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 
@@ -220,6 +227,8 @@ model Question {
   mistakeEntries     MistakeJournalEntry[]
   reviews            QuestionReview[]
   auditLogs          QuestionAuditLog[]
+  superTetReports    SuperTetQuestionReport[]
+  superTetCoreBookmarks SuperTetCoreBookmark[]
 }
 
 model QuestionAuditLog {
@@ -267,6 +276,13 @@ model Test {
   instructionsEn   String
   instructionsHi   String?
   pyqReference     String?
+  // SSC CGL (and other future verified archives) use this immutable source
+  // identity to prevent the same date/shift paper being imported twice.
+  sourcePaperKey   String?             @unique
+  examShift        String?
+  sourceReference  String?
+  sourceVerifiedAt DateTime?
+  isSourceVerified Boolean             @default(false)
   accessLevel      String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
   accessMode       String              @default("FREE") // FREE, PAID, PREMIUM, PRIVATE, COMING_SOON, DISABLED
   // Canonical student access policy for full mock tests. Legacy accessLevel/accessMode
@@ -297,6 +313,9 @@ model Test {
   answerKeyStatus  String?             // "OFFICIAL_KEY_VERIFIED", "TUTORNOVE_VERIFIED", "NOT_INDEPENDENTLY_VERIFIED"
   isBilingual      Boolean             @default(true)
   totalAvailableQuestions Int?
+  mockNumber       Int?
+  difficultyTier   String?             // FOUNDATION, MODERATE, EXAM_STANDARD, ADVANCED, GRAND_MOCK
+  premiumLabel     String?
   createdAt        DateTime            @default(now())
 
   exam             Exam                @relation(fields: [examId], references: [id], onDelete: Cascade)
@@ -307,6 +326,8 @@ model Test {
   entitlements     Entitlement[]
   payments         Payment[]
   liveSchedules    LiveTestSchedule[]
+
+  @@index([examId, mockNumber])
 }
 
 model TestQuestion {
@@ -328,6 +349,13 @@ model TestAttempt {
   testId           String
   examId           String
   startedAt        DateTime              @default(now())
+  // SSC CGL sessions are armed only after the candidate accepts the
+  // declaration.  expiresAt is calculated by the server and is never derived
+  // from a browser clock.
+  confirmedAt      DateTime?
+  expiresAt        DateTime?
+  tabSwitchCount   Int                   @default(0)
+  fullscreenExitCount Int                @default(0)
   submittedAt      DateTime?
   status           String                @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, TIMED_OUT, ABANDONED
   totalScore       Float                 @default(0.0)
@@ -603,6 +631,45 @@ model SuperTetBookmark {
   question    SuperTetQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@unique([userId, questionId])
+}
+
+model SuperTetCoreBookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  testId     String?
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId])
+  @@index([questionId])
+}
+
+model SuperTetQuestionReport {
+  id          String    @id @default(cuid())
+  userId      String
+  questionId  String
+  testId      String?
+  attemptId   String?
+  issueType   String    // WRONG_ANSWER, TYPO, AMBIGUOUS, WRONG_EXPLANATION, SYLLABUS_MISMATCH, OTHER
+  description String
+  status      String    @default("OPEN") // OPEN, UNDER_REVIEW, RESOLVED, DISMISSED
+  adminNotes  String?
+  resolvedBy  String?
+  resolvedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@index([status])
+  @@index([userId])
 }
 
 // ============================================================================

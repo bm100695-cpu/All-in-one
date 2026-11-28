@@ -15,6 +15,7 @@ import {
   Sparkles,
   Gift,
   Shield,
+  HelpCircle,
   Zap,
 } from 'lucide-react';
 import { User, UserRole } from '../types';
@@ -49,6 +50,7 @@ interface HeaderProps {
   onOpenProfileSettings?: (tab: 'profile' | 'settings') => void;
   onOpenPricingModal?: () => void;
   onOpenReferralModal?: () => void;
+  onOpenLegal?: (type: 'terms' | 'privacy' | 'refund' | 'support') => void;
   onLogout?: () => void;
   sidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
@@ -68,33 +70,36 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfileSettings,
   onOpenPricingModal,
   onOpenReferralModal,
+  onOpenLegal,
   onLogout,
   sidebarCollapsed = false,
   onToggleSidebar,
 }) => {
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [legalMenuOpen, setLegalMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const legalMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setRoleMenuOpen(false);
-      }
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setRoleMenuOpen(false);
+      if (legalMenuRef.current && !legalMenuRef.current.contains(event.target as Node)) setLegalMenuOpen(false);
     };
-    if (roleMenuOpen) {
+    if (roleMenuOpen || legalMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [roleMenuOpen]);
+  }, [roleMenuOpen, legalMenuOpen]);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMobileMenuOpen(false);
         setRoleMenuOpen(false);
+        setLegalMenuOpen(false);
       }
     };
     document.addEventListener('keydown', handleEscape);
@@ -328,6 +333,31 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>Plans</span>
                 </button>
               </>
+            )}
+
+            {onOpenLegal && (
+              <div className="relative" ref={legalMenuRef}>
+                <button
+                  onClick={() => setLegalMenuOpen((open) => !open)}
+                  aria-expanded={legalMenuOpen}
+                  aria-label="Open legal and support links"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  title="Legal & support"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                </button>
+                {legalMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg z-50">
+                    {([
+                      ['privacy', 'Privacy Policy'], ['terms', 'Terms & Conditions'], ['refund', 'Refund Policy'], ['support', 'Help & Support'],
+                    ] as const).map(([type, label]) => (
+                      <button key={type} onClick={() => { setLegalMenuOpen(false); onOpenLegal(type); }} className="w-full rounded-md px-3 py-2 text-left text-xs font-medium text-slate-700 hover:bg-slate-100">
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Language Selector */}

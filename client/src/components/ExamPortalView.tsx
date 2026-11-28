@@ -24,6 +24,7 @@ import { MockTestLibrary } from './MockTestLibrary';
 import { PYQPapersArchive } from './PYQPapersArchive';
 import { PracticeHub } from './PracticeHub';
 import { ReadinessAnalytics } from './ReadinessAnalytics';
+import { SscCglPortal } from './SscCglPortal';
 
 interface ExamPortalViewProps {
   examSlug: string;
@@ -144,6 +145,22 @@ export const ExamPortalView: React.FC<ExamPortalViewProps> = ({
           </button>
         </div>
       </div>
+    );
+  }
+
+  // The SSC CGL archive is isolated from the generic portal so its source
+  // verification, year filters and availability report cannot leak into any
+  // other examination experience.
+  if (examSlug === 'ssc-cgl-tier1') {
+    return (
+      <SscCglPortal
+        exam={exam}
+        currentUser={currentUser}
+        language={language}
+        onStartExam={(id) => onStartExam(id)}
+        onOpenPricingModal={onOpenPricingModal}
+        onBackToAllExams={onBackToAllExams}
+      />
     );
   }
 

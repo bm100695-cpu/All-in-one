@@ -390,7 +390,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                     )}
 
                     <span className="text-[11px] font-mono text-slate-400">
-                      {test.totalQuestions || 75} Qs • {test.durationMinutes || 180}m • 300 Marks
+                      {test.totalQuestions || 0} Qs • {test.durationMinutes || 0} min • {test.totalMarks || 0} Marks
                     </span>
                   </div>
 
@@ -435,7 +435,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
           })}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {displayedTests.map((test, index) => {
             const isFree = getAccessType(test) === 'free';
             const isComingSoon = test.accessMode === 'COMING_SOON';
@@ -470,7 +470,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                       )}
                     </div>
                     <span className="text-[11px] font-mono text-slate-500 font-medium">
-                      {test.totalQuestions || 75} Qs • 180m
+                      {test.totalQuestions || 0} Qs • {test.durationMinutes || 0} min
                     </span>
                   </div>
 
@@ -479,7 +479,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
                   </h3>
 
                   <p className="text-[11px] text-slate-500 leading-relaxed">
-                    Timed computer-based test environment with instant scorecard.
+                    {test.totalMarks || 0} marks • Timed computer-based test environment with instant scorecard.
                   </p>
                 </div>
 

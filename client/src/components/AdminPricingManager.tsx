@@ -70,6 +70,9 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
   const [contentList, setContentList] = useState<ContentItem[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [actionMessage, setActionMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [transactions, setTransactions] = useState<any>({ transactions: [], page: 1, totalPages: 1, total: 0 });
+  const [transactionStatus, setTransactionStatus] = useState('ALL');
+  const [transactionPage, setTransactionPage] = useState(1);
 
   // Cashfree Gateway Form State
   const [gatewayForm, setGatewayForm] = useState({
@@ -121,12 +124,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
   });
   const [savingPlan, setSavingPlan] = useState<boolean>(false);
 
-  // Refund Action State
-  const [refundingId, setRefundingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadAllData();
-  }, []);
+  useEffect(() => { void loadAllData(); }, [transactionStatus, transactionPage]);
 
   const showNotification = (text: string, type: 'success' | 'error' = 'success') => {
     setActionMessage({ text, type });
@@ -136,10 +134,11 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [ovData, cpData, logsData] = await Promise.all([
+      const [ovData, cpData, logsData, transactionData] = await Promise.all([
         api.getAdminMonetizationOverview().catch(() => null),
         api.getContentPricing().catch(() => ({ exams: [], tests: [] })),
         api.getAdminAuditLogs({ limit: 50 }).catch(() => ({ auditLogs: [], total: 0 })),
+        api.getAdminTransactions({ page: transactionPage, limit: 25, status: transactionStatus }).catch(() => ({ transactions: [], page: 1, totalPages: 1, total: 0 })),
       ]);
 
       if (ovData) {
@@ -202,6 +201,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
 
       setContentList(merged);
       if (logsData?.auditLogs) setAuditLogs(logsData.auditLogs);
+      setTransactions(transactionData);
     } catch (err: any) {
       console.error('Failed to load pricing manager data:', err);
       showNotification('Error loading data: ' + err.message, 'error');
@@ -448,20 +448,6 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
       await loadAllData();
     } catch (err: any) {
       showNotification(err.message || 'Failed to archive plan', 'error');
-    }
-  };
-
-  const handleProcessRefund = async (paymentId: string) => {
-    if (!confirm('Are you sure you want to process a 100% refund for this transaction?')) return;
-    setRefundingId(paymentId);
-    try {
-      await api.processAdminRefund(paymentId, 'Admin initiated refund from Pricing Manager');
-      showNotification('100% Refund processed and verified successfully');
-      await loadAllData();
-    } catch (err: any) {
-      showNotification(err.message || 'Failed to process refund', 'error');
-    } finally {
-      setRefundingId(null);
     }
   };
 
@@ -1142,14 +1128,15 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
           <div>
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <Receipt className="w-4 h-4 text-slate-500" />
-              <span>Cashfree Verified Payment Transactions & Refunds</span>
+              <span>Payment transaction reconciliation</span>
             </h3>
             <p className="text-xs text-slate-500">
-              Official backend signature verified transactions. Includes automated one-click 7-day refund processing.
+              Read-only reconciliation view. Refund execution is disabled until Cashfree initiation and webhook confirmation are integrated.
             </p>
+            <div className="mt-3 flex items-center gap-2"><label className="text-xs font-semibold text-slate-600" htmlFor="transaction-status">Status</label><select id="transaction-status" value={transactionStatus} onChange={(event) => { setTransactionStatus(event.target.value); setTransactionPage(1); }} className="rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs"><option value="ALL">All</option><option value="SUCCESS">Success</option><option value="PENDING">Pending</option><option value="FAILED">Failed</option><option value="REFUNDED">Refunded</option></select><span className="text-xs text-slate-400">{transactions.total} matching records</span></div>
           </div>
 
-          {overview?.recentPayments?.length === 0 ? (
+          {transactions.transactions?.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl">
               No transactions recorded yet. Student purchases will automatically stream here.
             </div>
@@ -1168,21 +1155,20 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {overview?.recentPayments?.map((p: any) => {
+                  {transactions.transactions?.map((p: any) => {
                     const isRefunded = p.status === 'REFUNDED';
-                    const isRefunding = refundingId === p.id;
 
                     return (
                       <tr key={p.id} className="hover:bg-slate-50/70 transition-colors">
                         <td className="p-3 font-mono text-[11px]">
                           <div className="font-bold text-slate-900">{p.orderId}</div>
-                          <div className="text-[10px] text-slate-400">{p.paymentId || 'Pending'}</div>
+                          <div className="text-[10px] text-slate-400">{p.gatewayPaymentId || 'Pending'}</div>
                         </td>
                         <td className="p-3">
                           <div className="font-bold text-slate-900">{p.user?.name || 'Aspirant'}</div>
                           <div className="text-[11px] text-slate-400">{p.user?.email}</div>
                         </td>
-                        <td className="p-3 font-extrabold text-slate-900">₹{p.amount}</td>
+                        <td className="p-3 font-extrabold text-slate-900">₹{(Number(p.amountPaise || 0) / 100).toLocaleString('en-IN')}</td>
                         <td className="p-3 uppercase font-mono text-[11px]">{p.method || 'Cashfree'}</td>
                         <td className="p-3">
                           <span
@@ -1201,17 +1187,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
                           })}
                         </td>
                         <td className="p-3 text-right whitespace-nowrap">
-                          {isRefunded ? (
-                            <span className="text-[11px] text-slate-400">100% Refunded</span>
-                          ) : (
-                            <button
-                              disabled={isRefunding}
-                              onClick={() => handleProcessRefund(p.id)}
-                              className="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold cursor-pointer disabled:opacity-50"
-                            >
-                              {isRefunding ? 'Refunding...' : 'Process Refund'}
-                            </button>
-                          )}
+                          <span className="text-[11px] text-slate-400">{isRefunded ? 'Refund status requires gateway verification' : 'Refund execution not configured'}</span>
                         </td>
                       </tr>
                     );
@@ -1220,6 +1196,7 @@ export const AdminPricingManager: React.FC<{ initialTab?: PricingTab }> = ({ ini
               </table>
             </div>
           )}
+          {transactions.totalPages > 1 && <div className="flex items-center justify-end gap-2 text-xs text-slate-600"><button disabled={transactions.page <= 1 || loading} onClick={() => setTransactionPage((page) => Math.max(1, page - 1))} className="rounded border border-slate-200 px-2 py-1 disabled:opacity-50">Previous</button><span>Page {transactions.page} of {transactions.totalPages}</span><button disabled={transactions.page >= transactions.totalPages || loading} onClick={() => setTransactionPage((page) => page + 1)} className="rounded border border-slate-200 px-2 py-1 disabled:opacity-50">Next</button></div>}
         </div>
       )}
 

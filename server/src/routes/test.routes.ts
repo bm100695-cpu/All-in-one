@@ -461,6 +461,8 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
     res.json({
       attemptId: attempt.id,
       startedAt: attempt.startedAt,
+      confirmedAt: attempt.confirmedAt,
+      expiresAt: attempt.expiresAt,
       timeSpentSeconds: attempt.timeSpentSeconds,
       test: {
         id: test.id,
@@ -476,6 +478,7 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
           id: test.exam.id,
           title: test.exam.title,
           shortName: test.exam.shortName,
+          slug: test.exam.slug,
         },
         patternVersion: test.patternVersion,
       },
@@ -485,6 +488,35 @@ router.post('/:testId/start', authenticate, async (req: Request, res: Response) 
   } catch (error) {
     console.error('Error starting test:', error);
     res.status(500).json({ error: 'Failed to initialize test session' });
+  }
+});
+
+// SSC CGL is the only portal currently using a server-armed CBT clock. The
+// attempt may be created while instructions are read, but it receives an
+// expiry time only after the candidate accepts the declaration.
+router.post('/attempts/:attemptId/begin', authenticate, async (req: Request, res: Response) => {
+  try {
+    const attempt = await prisma.testAttempt.findFirst({
+      where: { id: req.params.attemptId, userId: req.user!.id, status: 'IN_PROGRESS' },
+      include: { test: { include: { exam: { select: { slug: true } } } } },
+    });
+    if (!attempt) return void res.status(404).json({ error: 'Active test attempt not found.' });
+    if (!assertPortalAccess(req, res, attempt.test.exam.slug)) return;
+    if (attempt.test.exam.slug !== 'ssc-cgl-tier1') return void res.status(400).json({ error: 'Server-armed sessions are available only for SSC CGL.' });
+
+    const now = new Date();
+    let confirmedAt = attempt.confirmedAt;
+    let expiresAt = attempt.expiresAt;
+    if (!confirmedAt || !expiresAt) {
+      confirmedAt = now;
+      expiresAt = new Date(now.getTime() + attempt.test.durationMinutes * 60_000);
+      await prisma.testAttempt.update({ where: { id: attempt.id }, data: { confirmedAt, expiresAt } });
+    }
+    const remainingSeconds = Math.max(0, Math.ceil((expiresAt.getTime() - Date.now()) / 1000));
+    res.json({ confirmedAt, expiresAt, remainingSeconds });
+  } catch (error) {
+    console.error('SSC CGL attempt start error:', error);
+    res.status(500).json({ error: 'Unable to begin SSC CGL examination.' });
   }
 });
 
@@ -514,6 +546,17 @@ router.post('/attempts/:attemptId/autosave', authenticate, async (req: Request, 
     }
 
     if (!assertPortalAccess(req, res, attempt.test.exam.slug)) return;
+
+    if (attempt.test.exam.slug === 'ssc-cgl-tier1') {
+      if (!attempt.confirmedAt || !attempt.expiresAt) {
+        res.status(409).json({ error: 'EXAM_NOT_BEGUN', message: 'Accept the SSC CGL examination declaration before saving responses.' });
+        return;
+      }
+      if (Date.now() >= attempt.expiresAt.getTime()) {
+        res.status(409).json({ error: 'EXAM_TIME_EXPIRED', message: 'The server examination time has expired. Submit to view the result.' });
+        return;
+      }
+    }
 
     // An autosave URL must not become a bypass after an entitlement expires or
     // an administrator changes a paper to premium.
@@ -607,6 +650,10 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
     }
 
     const test = attempt.test;
+    if (test.exam.slug === 'ssc-cgl-tier1' && (!attempt.confirmedAt || !attempt.expiresAt)) {
+      res.status(409).json({ error: 'EXAM_NOT_BEGUN', message: 'Accept the SSC CGL examination declaration before submitting.' });
+      return;
+    }
     // Re-check the live database policy before grading. An admin changing a
     // test to premium takes effect immediately and cannot be bypassed with an
     // already-known submit URL.
@@ -789,10 +836,14 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
     }
 
     // Save attempt record
+    const serverTimedOut = test.exam.slug === 'ssc-cgl-tier1' && !!attempt.expiresAt && Date.now() >= attempt.expiresAt.getTime();
+    const serverTimeSpentSeconds = test.exam.slug === 'ssc-cgl-tier1' && attempt.confirmedAt
+      ? Math.min(test.durationMinutes * 60, Math.max(0, Math.floor((Date.now() - attempt.confirmedAt.getTime()) / 1000)))
+      : timeSpentSeconds;
     const updatedAttempt = await prisma.testAttempt.update({
       where: { id: attempt.id },
       data: {
-        status: 'COMPLETED',
+        status: serverTimedOut ? 'TIMED_OUT' : 'COMPLETED',
         submittedAt: new Date(),
         totalScore: Math.round(totalScore * 100) / 100,
         totalAttempted,
@@ -801,7 +852,7 @@ router.post('/attempts/:attemptId/submit', authenticate, async (req: Request, re
         totalUnattempted,
         accuracyPct: Math.round(accuracyPct * 10) / 10,
         percentile,
-        timeSpentSeconds,
+        timeSpentSeconds: serverTimeSpentSeconds,
         sectionScoresJson: JSON.stringify(sectionBreakdown),
         responsesJson: JSON.stringify(processedResponses),
       },
