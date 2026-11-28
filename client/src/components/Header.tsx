@@ -552,7 +552,7 @@ export const Header: React.FC<HeaderProps> = ({
             role="dialog"
             aria-modal="true"
             aria-label="Student navigation"
-            className="student-mobile-sidebar-root relative flex h-[100dvh] min-h-[100dvh] w-[min(20rem,92vw)] flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
+            className="student-mobile-sidebar-root relative flex h-[100dvh] min-h-[100dvh] w-[min(17.5rem,85vw)] flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
           >
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3">

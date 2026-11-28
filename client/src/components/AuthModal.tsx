@@ -274,7 +274,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       </aside>
 
       <section className="flex min-h-[100dvh] w-full flex-1 overflow-y-auto bg-white">
-        <div className="mx-auto flex w-full max-w-[468px] flex-col px-5 py-5 sm:px-6 sm:py-8 lg:justify-center lg:py-10">
+        <div className="mx-auto flex w-full max-w-[488px] flex-col px-5 py-5 sm:px-6 sm:py-8 lg:justify-center lg:py-10">
           <div className="mb-7 flex items-center justify-between lg:mb-8">
             <button type="button" onClick={onClose} className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900">
               <ArrowLeft className="h-4 w-4" /> Back to Website
@@ -286,7 +286,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           <div className="mb-6">
-            <h2 className="text-2xl font-extrabold tracking-tight text-[#0F172A]">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h2>
+            <h2 className="text-[26px] font-extrabold tracking-tight text-[#0F172A]">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h2>
             <p className="mt-2 text-sm leading-6 text-[#64748B]">{mode === 'login' ? 'Sign in to continue your preparation.' : 'Start preparing with your dedicated CBT workspace.'}</p>
           </div>
 
@@ -294,14 +294,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="button"
               onClick={() => { setMode('login'); setError(null); onModeChange?.('login'); }}
-              className={`min-h-10 rounded-md px-3 text-sm font-semibold transition-colors ${mode === 'login' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              className={`min-h-12 rounded-md px-3 text-sm font-semibold transition-colors ${mode === 'login' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             >
               Sign In
             </button>
             <button
               type="button"
               onClick={() => { setMode('register'); setError(null); onModeChange?.('register'); }}
-              className={`min-h-10 rounded-md px-3 text-sm font-semibold transition-colors ${mode === 'register' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              className={`min-h-12 rounded-md px-3 text-sm font-semibold transition-colors ${mode === 'register' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             >
               Register
             </button>
@@ -321,7 +321,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={handleGoogleClick}
               disabled={googleLoading || loading}
-              className="w-full min-h-11 py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
+              className="w-full min-h-12 py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
             >
               {googleLoading ? (
                 <>
@@ -351,14 +351,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <div>
                 <label className="block font-medium text-slate-700 mb-1">Full Name</label>
                 <div className="relative">
-                  <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Candidate Name"
-                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-12 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                   />
                 </div>
               </div>
@@ -367,14 +367,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <div>
               <label className="block font-medium text-slate-700 mb-1">Email Address</label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your.email@example.com"
-                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-12 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
@@ -382,14 +382,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <div>
               <label className="block font-medium text-slate-700 mb-1">Password</label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === 'register' ? 'Minimum 6 characters' : 'Enter your password'}
-                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-12 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
@@ -399,14 +399,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div>
                   <label className="block font-medium text-slate-700 mb-1">Confirm Password</label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                     <input
                       type="password"
                       required
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Re-enter your password"
-                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-12 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                     />
                   </div>
                 </div>
@@ -414,11 +414,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div>
                   <label className="block font-medium text-slate-700 mb-1">Primary Target Examination</label>
                   <div className="relative">
-                    <GraduationCap className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <GraduationCap className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                     <select
                       value={targetExam}
                       onChange={(e) => setTargetExam(e.target.value)}
-                      className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
+                      className="w-full min-h-12 overflow-hidden text-ellipsis whitespace-nowrap pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
                     >
                       <option value="uptet">UPTET — Uttar Pradesh Teacher Eligibility Test</option>
                       <option value="super-tet">SUPER TET — UP Assistant Teacher Recruitment</option>
@@ -435,7 +435,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full min-h-11 py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full min-h-12 py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
