@@ -83,18 +83,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <ShieldCheck className="h-3 w-3 shrink-0" />
             <span>India's trusted CBT preparation platform</span>
           </div>
-          <h1 className="mx-auto mt-3 max-w-[340px] text-[25px] font-extrabold leading-[1.12] text-slate-900">
+          <h1 className="mx-auto mt-3 max-w-[355px] text-[27px] font-extrabold leading-[1.12] text-slate-900">
             Practice for Your Target Exam in a Real CBT Environment.
           </h1>
-          <p className="mx-auto mt-2 max-w-[350px] text-xs leading-5 text-slate-600">
+          <p className="mx-auto mt-2 max-w-[360px] text-[13px] leading-5 text-slate-600">
             Attempt exam-like mock tests, analyse your performance, and improve with focused practice tools.
           </p>
           <div className="mt-4 grid grid-cols-3 gap-1.5">
-            <a href="#exam-selector" className="flex min-h-11 items-center justify-center gap-1 rounded-lg bg-[#2563EB] px-1 text-[10px] font-semibold text-white">
+            <a href="#exam-selector" className="flex min-h-12 items-center justify-center gap-1 rounded-lg bg-[#2563EB] px-1 text-[11px] font-semibold text-white">
               Browse Exams <ArrowRight className="h-3.5 w-3.5" />
             </a>
-            <button type="button" onClick={onStartPractising} className="min-h-11 rounded-lg bg-emerald-700 px-1 text-[10px] font-semibold text-white">Explore Tests</button>
-            <button type="button" onClick={() => onOpenAuth?.('login')} className="min-h-11 rounded-lg border border-slate-200 bg-white px-1 text-[10px] font-semibold text-slate-700">My Results</button>
+            <button type="button" onClick={onStartPractising} className="min-h-12 rounded-lg bg-emerald-700 px-1 text-[11px] font-semibold text-white">Explore Tests</button>
+            <button type="button" onClick={() => onOpenAuth?.('login')} className="min-h-12 rounded-lg border border-slate-200 bg-white px-1 text-[11px] font-semibold text-slate-700">My Results</button>
           </div>
         </section>
 
@@ -106,8 +106,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             [loading || directoryError ? '—' : categories.length, 'Categories', 'text-blue-600'],
           ].map(([value, label, colour], index) => (
             <div key={String(label)} className={`px-1 py-2.5 text-center ${index < 3 ? 'border-r border-slate-100' : ''}`}>
-              <p className={`text-[15px] font-extrabold tabular-nums ${colour}`}>{value}</p>
-              <p className="mt-0.5 text-[9px] font-medium leading-3 text-slate-500">{label}</p>
+              <p className={`text-[17px] font-extrabold tabular-nums ${colour}`}>{value}</p>
+              <p className="mt-0.5 text-[10px] font-medium leading-3 text-slate-500">{label}</p>
             </div>
           ))}
         </section>
@@ -115,16 +115,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <section id="exam-selector" className="space-y-3">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-slate-900">Select Your Target Examination</h2>
-              <p className="mt-0.5 text-[11px] text-slate-500">Choose an exam and begin real CBT practice.</p>
+              <h2 className="text-[17px] font-bold text-slate-900">Select Your Target Examination</h2>
+              <p className="mt-0.5 text-xs text-slate-500">Choose an exam and begin real CBT practice.</p>
             </div>
-            <a href="#all-mobile-exams" className="shrink-0 text-[11px] font-semibold text-blue-600">View all <span aria-hidden="true">›</span></a>
+            <a href="#all-mobile-exams" className="shrink-0 text-xs font-semibold text-blue-600">View all <span aria-hidden="true">›</span></a>
           </div>
 
           <div className="flex max-w-full gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-            <button onClick={() => setSelectedCategory('ALL')} className={`min-h-9 shrink-0 rounded-md px-3 text-[11px] font-semibold ${selectedCategory === 'ALL' ? 'bg-slate-900 text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>All Exams</button>
+            <button onClick={() => setSelectedCategory('ALL')} className={`min-h-10 shrink-0 rounded-md px-3 text-xs font-semibold ${selectedCategory === 'ALL' ? 'bg-slate-900 text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>All Exams</button>
             {categories.slice(0, 5).map((category) => (
-              <button key={category.id} onClick={() => setSelectedCategory(category.code)} className={`min-h-9 shrink-0 rounded-md px-3 text-[11px] font-semibold ${selectedCategory === category.code ? 'bg-slate-900 text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>{category.name}</button>
+              <button key={category.id} onClick={() => setSelectedCategory(category.code)} className={`min-h-10 shrink-0 rounded-md px-3 text-xs font-semibold ${selectedCategory === category.code ? 'bg-slate-900 text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>{category.name}</button>
             ))}
           </div>
 
@@ -132,14 +132,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             {loading ? (
               [1, 2, 3, 4].map((item) => <div key={item} className="h-[72px] animate-pulse rounded-lg border border-slate-200 bg-white" />)
             ) : filteredExams.slice(0, 6).map((exam) => (
-              <button key={exam.id} type="button" onClick={() => onOpenExamPortal(exam.slug)} className="flex min-h-[72px] w-full items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm transition-colors hover:border-blue-200">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-sm font-extrabold text-blue-700">{exam.shortName.slice(0, 2)}</span>
+              <button key={exam.id} type="button" onClick={() => onOpenExamPortal(exam.slug)} className="flex min-h-[76px] w-full items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm transition-colors hover:border-blue-200">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-base font-extrabold text-blue-700">{exam.shortName.slice(0, 2)}</span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-bold text-slate-900">{exam.shortName}</span>
-                  <span className="mt-0.5 block truncate text-[10px] text-slate-500">{exam.conductingBody}</span>
+                  <span className="block truncate text-[15px] font-bold text-slate-900">{exam.shortName}</span>
+                  <span className="mt-0.5 block truncate text-[11px] text-slate-500">{exam.conductingBody}</span>
                 </span>
                 <span className="shrink-0 text-right">
-                  <span className="block rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-700">{exam.isComingSoon ? 'COMING SOON' : 'ACTIVE'}</span>
+                  <span className="block rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">{exam.isComingSoon ? 'COMING SOON' : 'ACTIVE'}</span>
                   <ArrowRight className="ml-auto mt-1.5 h-3.5 w-3.5 text-slate-400" />
                 </span>
               </button>
