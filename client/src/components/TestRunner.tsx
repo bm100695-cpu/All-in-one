@@ -937,9 +937,9 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
   return (
     <div className="w-full min-w-0 bg-slate-100 min-h-[100dvh] flex flex-col select-none">
       {/* 1. TOP HEADER (Dark-Navy National CBT Standard) */}
-      <div className="bg-tn-navy border-b border-slate-800 text-white px-3 sm:px-6 py-2.5 flex flex-wrap items-start sm:items-center justify-between gap-3 shadow-md">
+      <div className="bg-tn-navy border-b border-slate-800 text-white px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5 shadow-md">
         {/* Left: Branding & Paper Info */}
-        <div className="min-w-0 flex items-center gap-3">
+        <div className="min-w-0 flex flex-1 items-center gap-3 sm:flex-none">
           <div className="w-8 h-8 rounded bg-tn-blue text-white flex items-center justify-center font-bold text-xs shadow">
             TN
           </div>
@@ -965,7 +965,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
         </div>
 
         {/* Center: Language & Fullscreen Toggle */}
-        <div className="order-3 flex w-full items-center justify-between gap-2 sm:order-none sm:w-auto sm:justify-start">
+        <div className="order-3 hidden w-full items-center justify-between gap-2 sm:order-none sm:flex sm:w-auto sm:justify-start">
           {/* Question Language Switch */}
           <div className="flex items-center bg-slate-800 p-0.5 rounded border border-slate-700 text-[11px]">
             <span className="text-slate-400 px-1.5 flex items-center gap-1">
@@ -1000,7 +1000,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
         </div>
 
         {/* Right: Candidate Card & Digital Countdown Timer */}
-        <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:justify-end">
+        <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
           {/* Candidate Badge */}
           <div className="hidden md:flex items-center gap-2 text-right border-r border-slate-700 pr-3">
             <div>
@@ -1032,9 +1032,10 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
           {/* Submit Button */}
           <button
             onClick={() => setShowSubmitModal(true)}
-            className="min-h-11 px-4 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider shadow transition active:scale-95 cursor-pointer"
+            className="min-h-10 px-3.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider shadow transition active:scale-95 cursor-pointer sm:min-h-11 sm:px-4"
           >
-            Submit Test
+            <span className="sm:hidden">Submit</span>
+            <span className="hidden sm:inline">Submit Test</span>
           </button>
         </div>
       </div>
@@ -1042,7 +1043,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
       {/* 2. SUBJECT & SECTION NAVIGATION TABS */}
       <div className="bg-slate-200 border-b border-slate-300 px-3 sm:px-4 py-2 flex flex-col items-stretch gap-2 shadow-2xs sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         {/* Subject Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:items-center sm:gap-1.5 sm:overflow-x-auto sm:pb-1 scrollbar-none">
           <span className="text-xs font-extrabold text-slate-600 uppercase tracking-wider mr-1 hidden sm:inline">
             Subjects:
           </span>
@@ -1062,7 +1063,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                   const firstIdx = firstQuestion ? questionIndexById.get(firstQuestion.questionId) : undefined;
                   if (firstIdx !== undefined) selectQuestion(firstIdx);
                 }}
-                className={`min-h-10 whitespace-nowrap px-3 py-1 rounded text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`min-h-10 min-w-0 justify-center whitespace-nowrap px-2 py-1 rounded text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 sm:px-3 ${
                   isSubjActive
                     ? 'bg-indigo-900 text-white shadow'
                     : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-300'
@@ -1070,7 +1071,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
               >
                 <span>{subj}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  className={`hidden text-[10px] px-1.5 py-0.2 rounded-full font-bold sm:inline ${
                     isSubjActive ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
                   }`}
                 >
@@ -1138,24 +1139,24 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                     Question {currentQuestionIndex + 1}
                   </span>
                   {subjectQuestions.length > 0 && currentQ && (
-                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                  <span className="hidden text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 sm:inline">
                       {currentSubject} Q{subjectQuestions.findIndex((q) => q.questionId === currentQ.questionId) + 1}
                     </span>
                   )}
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900 border border-indigo-200">
+                  <span className="hidden text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900 border border-indigo-200 sm:inline">
                     {currentSubject} — {currentQ.questionType === 'NUMERICAL' ? 'Section B' : 'Section A'}
                   </span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700">
+                  <span className="hidden text-xs font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 sm:inline">
                     Type: {currentQ.questionType === 'NUMERICAL' ? 'Numerical Value' : 'MCQ'}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs font-mono font-bold">
                   <span className="text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-200">
-                    Marks: +{currentQ.marks}.00
+                    <span className="hidden sm:inline">Marks: </span>+{currentQ.marks}.00
                   </span>
                   <span className="text-rose-700 bg-rose-50 px-2 py-1 rounded border border-rose-200">
-                    Negative: {currentQ.negativeMarks > 0 ? `-${currentQ.negativeMarks}.00` : '0.00'}
+                    <span className="hidden sm:inline">Negative: </span>{currentQ.negativeMarks > 0 ? `-${currentQ.negativeMarks}.00` : '0.00'}
                   </span>
                 </div>
               </div>
@@ -1233,7 +1234,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                           >
                             {isSelected ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : optLabel}
                           </div>
-                          <div className="text-xs sm:text-sm font-medium text-slate-800 leading-relaxed pt-0.5">
+                          <div className="text-sm font-medium text-slate-800 leading-relaxed pt-0.5">
                             {optText}
                           </div>
                         </button>

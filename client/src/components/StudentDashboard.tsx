@@ -218,17 +218,17 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1180px] space-y-5 pb-8">
+    <div className="mx-auto w-full max-w-[1180px] space-y-5 pb-8 sm:space-y-5">
       {/* A compact, action-led starting point for the authenticated workspace. */}
       <section className="rounded-xl border border-blue-200 bg-[#EDF4FF] px-5 py-4 sm:px-6 sm:py-5">
         <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <h1 className="text-xl font-bold tracking-tight text-tn-navy sm:text-2xl">Welcome to your preparation workspace</h1>
-            <p className="mt-1 text-sm text-slate-500">Continue preparing for {displayExamName}.</p>
+            <h1 className="text-2xl font-bold tracking-tight text-tn-navy sm:text-2xl">Welcome back!</h1>
+            <p className="mt-1 text-base text-slate-500">{displayExamName} preparation</p>
           </div>
           <button
             onClick={() => onOpenExamPortal ? onOpenExamPortal(examSlug) : isSuperTet ? onNavigateToSuperTet?.() : isUptet ? onNavigateToUptet?.() : onNavigateToMockTests()}
-            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-md bg-tn-blue px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-tn-blue-hover"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-md bg-tn-blue px-4 py-2 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-tn-blue-hover sm:w-auto"
           >
             <Play className="h-3.5 w-3.5" />
             <span>Explore Mock Tests</span>
@@ -321,12 +321,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       {/* 4. Student Overview — values are derived from the existing portal, attempt and subscription APIs. */}
       <section className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-3 shadow-subtle sm:p-4">
-          <p className="text-sm font-medium text-slate-500">Available tests</p>
+          <p className="text-sm font-medium text-slate-500">Mock tests</p>
           <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : totalExamTests}</p>
         </div>
 
         <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-3 shadow-subtle sm:p-4">
-          <p className="text-sm font-medium text-slate-500">Completed tests</p>
+          <p className="text-sm font-medium text-slate-500">Completed</p>
           <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : completedAttempts.length}</p>
         </div>
 
@@ -380,10 +380,10 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                       {isLocked ? <Lock className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}{isPremiumTest ? (isIncluded ? 'Included in plan' : 'Locked') : 'Free'}
                     </span>
                   </div>
-                  <h3 className="mt-3 line-clamp-1 text-sm font-bold leading-snug text-tn-navy">{test.title}</h3>
+                  <h3 className="mt-3 line-clamp-1 text-lg font-bold leading-snug text-tn-navy">{test.title}</h3>
                   <p className="mt-1 text-[11px] text-tn-muted">{test._count?.testQuestions ?? test.totalQuestions ?? 0} questions <span aria-hidden="true">·</span> {test.durationMinutes || 0} min <span aria-hidden="true">·</span> {test.totalMarks || 0} marks</p>
                   <div className="mt-auto pt-3">
-                    <button type="button" disabled={isChecking || isComingSoon} onClick={() => handleDashboardTestAction(test)} className="inline-flex min-h-8 w-full items-center justify-center gap-1 rounded-md bg-blue-50 px-3 py-1.5 text-xs font-semibold text-tn-blue transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-60">
+                    <button type="button" disabled={isChecking || isComingSoon} onClick={() => handleDashboardTestAction(test)} className="inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-md bg-tn-blue px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-tn-blue-hover disabled:cursor-not-allowed disabled:opacity-60">
                       {isChecking ? 'Checking…' : <><Play className="h-3 w-3" />{isComingSoon ? 'Coming Soon' : actionLabel}</>}
                     </button>
                   </div>
