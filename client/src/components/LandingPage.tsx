@@ -6,6 +6,11 @@ import {
   Laptop,
   ShieldCheck,
   Search,
+  Home,
+  LayoutGrid,
+  ListChecks,
+  BarChart3,
+  MoreHorizontal,
 } from 'lucide-react';
 import { Exam, ExamCategory } from '../types';
 import { api } from '../api';
@@ -70,9 +75,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const totalVerifiedPyqs = exams.reduce((sum, e) => sum + (e.totalVerifiedPYQs || 0), 0);
 
   return (
-    <div className="pb-12 sm:pb-16">
+    <div className="pb-20 sm:pb-16">
       {/* Mobile-only CBT home: compact, action-led and powered by the same live directory data. */}
-      <div className="space-y-5 md:hidden">
+      <div className="space-y-4 md:hidden">
         <section className="px-1 pt-1 text-center">
           <div className="mx-auto inline-flex max-w-full items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-800">
             <ShieldCheck className="h-3 w-3 shrink-0" />
@@ -84,27 +89,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <p className="mx-auto mt-2 max-w-[350px] text-xs leading-5 text-slate-600">
             Attempt exam-like mock tests, analyse your performance, and improve with focused practice tools.
           </p>
-          <div className="mt-4 grid grid-cols-1 gap-2">
-            <a href="#exam-selector" className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[#2563EB] px-4 text-sm font-semibold text-white">
+          <div className="mt-4 grid grid-cols-3 gap-1.5">
+            <a href="#exam-selector" className="flex min-h-11 items-center justify-center gap-1 rounded-lg bg-[#2563EB] px-1 text-[10px] font-semibold text-white">
               Browse Exams <ArrowRight className="h-3.5 w-3.5" />
             </a>
-            <div className="grid grid-cols-2 gap-2">
-              <button type="button" onClick={onStartPractising} className="min-h-11 rounded-lg bg-emerald-700 px-3 text-xs font-semibold text-white">Explore Tests</button>
-              <button type="button" onClick={() => onOpenAuth?.('register')} className="min-h-11 rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700">Create Account</button>
-            </div>
+            <button type="button" onClick={onStartPractising} className="min-h-11 rounded-lg bg-emerald-700 px-1 text-[10px] font-semibold text-white">Explore Tests</button>
+            <button type="button" onClick={() => onOpenAuth?.('login')} className="min-h-11 rounded-lg border border-slate-200 bg-white px-1 text-[10px] font-semibold text-slate-700">My Results</button>
           </div>
         </section>
 
-        <section className="grid grid-cols-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <section className="grid grid-cols-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           {[
             [loading || directoryError ? '—' : exams.length, 'Target Exams', 'text-slate-900'],
             [loading || directoryError ? '—' : totalTestsAvailable, 'Mock Tests', 'text-slate-900'],
-            [loading || directoryError ? '—' : totalVerifiedPyqs.toLocaleString(), 'Verified Questions', 'text-emerald-700'],
-            [loading || directoryError ? '—' : categories.length, 'Study Categories', 'text-blue-600'],
+            [loading || directoryError ? '—' : totalVerifiedPyqs.toLocaleString(), 'Questions', 'text-emerald-700'],
+            [loading || directoryError ? '—' : categories.length, 'Categories', 'text-blue-600'],
           ].map(([value, label, colour], index) => (
-            <div key={String(label)} className={`px-3 py-3 text-center ${index < 2 ? 'border-b border-slate-100' : ''} ${index % 2 === 0 ? 'border-r border-slate-100' : ''}`}>
-              <p className={`text-lg font-extrabold tabular-nums ${colour}`}>{value}</p>
-              <p className="mt-0.5 text-[10px] font-medium text-slate-500">{label}</p>
+            <div key={String(label)} className={`px-1 py-2.5 text-center ${index < 3 ? 'border-r border-slate-100' : ''}`}>
+              <p className={`text-[15px] font-extrabold tabular-nums ${colour}`}>{value}</p>
+              <p className="mt-0.5 text-[9px] font-medium leading-3 text-slate-500">{label}</p>
             </div>
           ))}
         </section>
@@ -149,6 +152,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <p className="mt-1 text-xs font-bold text-slate-900">Developed for Real Exam Practice</p>
           <p className="mt-0.5 text-[10px] text-slate-600">CBT-like interface · Real exam patterns · Performance analysis</p>
         </section>
+
+        <nav aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-slate-200 bg-white px-2 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-1 shadow-[0_-4px_14px_rgba(15,23,42,0.06)]">
+          <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex min-h-12 flex-col items-center justify-center gap-0.5 text-[9px] font-semibold text-blue-600"><Home className="h-4 w-4" />Home</button>
+          <a href="#exam-selector" className="flex min-h-12 flex-col items-center justify-center gap-0.5 text-[9px] font-medium text-slate-500"><LayoutGrid className="h-4 w-4" />Exams</a>
+          <button type="button" onClick={onStartPractising} className="flex min-h-12 flex-col items-center justify-center gap-0.5 text-[9px] font-medium text-slate-500"><ListChecks className="h-4 w-4" />Tests</button>
+          <button type="button" onClick={() => onOpenAuth?.('login')} className="flex min-h-12 flex-col items-center justify-center gap-0.5 text-[9px] font-medium text-slate-500"><BarChart3 className="h-4 w-4" />Results</button>
+          <button type="button" onClick={() => onOpenAuth?.('register')} className="flex min-h-12 flex-col items-center justify-center gap-0.5 text-[9px] font-medium text-slate-500"><MoreHorizontal className="h-4 w-4" />More</button>
+        </nav>
       </div>
 
       <div className="hidden space-y-10 md:block sm:space-y-14">
