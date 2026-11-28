@@ -133,19 +133,34 @@ export const Header: React.FC<HeaderProps> = ({
     'gate-cs': 'GATE CS',
   };
   const examBadge = examLabels[targetExam] || targetExam.toUpperCase();
+  const studentPageLabels: Partial<Record<NavTab, string>> = {
+    dashboard: 'Student Dashboard',
+    'mock-tests': 'Mock Tests',
+    'pyq-papers': 'PYQ Papers',
+    'live-tests': 'Live Exams',
+    practice: 'Practice',
+    performance: 'Performance',
+    'exam-portal': `${examBadge} Portal`,
+  };
+  const studentPageLabel = studentPageLabels[activeTab] || 'Student Dashboard';
 
   // Navigation items: include Live Tests with pulsing live indicator
   const navItems = currentUser && !isAdminPage
     ? [
-        { id: 'dashboard' as NavTab, label: `${examBadge} Dashboard`, icon: LayoutDashboard },
+        { id: 'dashboard' as const, label: 'Dashboard', icon: LayoutDashboard },
         {
           id: (isSuperTet ? 'super-tet' : isUptet ? 'uptet' : 'mock-tests') as NavTab,
           label: 'Mock Tests',
           icon: FileCheck2,
         },
-        { id: 'live-tests' as NavTab, label: 'Live Tests', icon: Zap, isLive: true },
-        { id: 'practice' as NavTab, label: 'Practice', icon: BookOpen },
-        { id: 'performance' as NavTab, label: 'Performance', icon: BarChart2 },
+        { id: 'pyq-papers' as const, label: 'PYQ Papers', icon: BookOpen },
+        { id: 'live-tests' as const, label: 'Live Exams', icon: Zap, isLive: true },
+        { id: 'practice' as const, label: 'Practice', icon: BookOpen },
+        { id: 'performance' as const, label: 'My Results', icon: BarChart2 },
+        { id: 'practice' as const, label: 'Mistake Journal', icon: BookOpen },
+        { id: 'performance' as const, label: 'Analytics', icon: BarChart2 },
+        { id: 'pricing' as const, label: 'Subscription', icon: Sparkles },
+        { id: 'support' as const, label: 'Help & Support', icon: HelpCircle },
       ]
     : !isAdminPage
     ? [
@@ -166,6 +181,20 @@ export const Header: React.FC<HeaderProps> = ({
     } else if (destination === 'control-center') {
       window.location.hash = '/control-center';
     }
+  };
+
+  const handleStudentNavClick = (item: (typeof navItems)[number]) => {
+    if (item.id === 'pricing') {
+      onOpenPricingModal?.();
+      setMobileMenuOpen(false);
+      return;
+    }
+    if (item.id === 'support') {
+      onOpenLegal?.('support');
+      setMobileMenuOpen(false);
+      return;
+    }
+    handleNavClick(item.id);
   };
 
   return (
@@ -197,10 +226,10 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <button
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
+                  onClick={() => handleStudentNavClick(item)}
                   className={`w-full flex items-center rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'} ${
                     isActive
-                      ? 'bg-[#2563EB] text-white shadow-sm shadow-blue-950/30'
+                      ? 'bg-[#304C7C] text-white shadow-sm shadow-blue-950/30'
                       : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
                   }`}
                   aria-label={item.label.replace(`${examBadge} `, '')}
@@ -243,6 +272,11 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
             {showStudentSidebar && (
+              <div className="hidden lg:block">
+                <p className="text-lg font-bold tracking-tight text-tn-navy">{studentPageLabel}</p>
+              </div>
+            )}
+            {showStudentSidebar && (
               <button
                 onClick={onToggleSidebar}
                 className="hidden lg:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
@@ -282,7 +316,7 @@ export const Header: React.FC<HeaderProps> = ({
                   return (
                     <button
                       key={item.id}
-                      onClick={() => handleNavClick(item.id)}
+                    onClick={() => handleStudentNavClick(item)}
                       className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                         isActive
                           ? 'text-blue-600 bg-blue-50 font-semibold shadow-xs'
@@ -326,11 +360,10 @@ export const Header: React.FC<HeaderProps> = ({
             {!isAdminPage && (
               <>
                 <button
-                  onClick={onOpenPricingModal}
-                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-colors cursor-pointer"
+                  onClick={() => showStudentSidebar ? onOpenExamPortal?.(targetExam) : onOpenPricingModal?.()}
+                  className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${showStudentSidebar ? 'border border-slate-100 bg-slate-50 text-slate-600 hover:bg-slate-100' : 'border border-amber-200 bg-amber-50 text-slate-800 hover:bg-amber-100 font-semibold'}`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Plans</span>
+                  {showStudentSidebar ? <span>{examBadge}</span> : <><Sparkles className="w-3.5 h-3.5 text-amber-600" /><span>Plans</span></>}
                 </button>
               </>
             )}
@@ -386,12 +419,12 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="relative" ref={menuRef}>
                   <button
                     onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-                    className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg border border-tn-border bg-white hover:bg-slate-50 transition-colors text-left cursor-pointer shadow-xs"
+                    className={`flex items-center gap-2 rounded-lg border border-tn-border bg-white hover:bg-slate-50 transition-colors text-left cursor-pointer shadow-xs ${showStudentSidebar ? 'h-9 w-9 justify-center p-0 rounded-full border-blue-100 bg-blue-50' : 'pl-2 pr-2.5 py-1.5'}`}
                   >
                     <div className="w-6 h-6 rounded-md bg-tn-blue text-white flex items-center justify-center font-bold text-[11px]">
                       {currentUser?.name?.charAt(0) || 'U'}
                     </div>
-                    <div className="hidden sm:block">
+                    <div className={showStudentSidebar ? 'hidden' : 'hidden sm:block'}>
                       <div className="text-xs font-semibold text-zinc-900 leading-none">
                         {currentUser?.name || 'Candidate'}
                       </div>
@@ -399,7 +432,7 @@ export const Header: React.FC<HeaderProps> = ({
                         {examBadge} Portal
                       </div>
                     </div>
-                    <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 ${roleMenuOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 ${showStudentSidebar ? 'hidden' : ''} ${roleMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {roleMenuOpen && (
@@ -532,10 +565,10 @@ export const Header: React.FC<HeaderProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                  onClick={() => handleStudentNavClick(item)}
                 className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
                   isActive
-                    ? 'text-white bg-[#2563EB] shadow-sm shadow-blue-950/30'
+                    ? 'text-white bg-[#304C7C] shadow-sm shadow-blue-950/30'
                     : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
                 }`}
               >
