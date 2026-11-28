@@ -609,7 +609,7 @@ export const App: React.FC = () => {
         onClose={() => setLegalModalType(null)}
       />
 
-      <main className={`${isAuthPage ? 'hidden' : 'flex'} flex-1 min-h-0 min-w-0 transition-[padding] duration-200 ${isExamRunning || isAdminCenter ? 'w-full p-0 max-w-full' : useStudentSidebar ? `w-full px-4 py-6 sm:px-6 sm:py-8 lg:pr-8 ${studentSidebarCollapsed ? 'lg:pl-[104px]' : 'lg:pl-[272px]'}` : 'w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8'}`}>
+      <main className={`${isAuthPage ? 'hidden' : 'block'} flex-1 min-h-0 min-w-0 transition-[padding] duration-200 ${isExamRunning || isAdminCenter ? 'w-full p-0 max-w-full' : useStudentSidebar ? `w-full px-4 py-6 sm:px-6 sm:py-8 lg:pr-8 ${studentSidebarCollapsed ? 'lg:pl-[104px]' : 'lg:pl-[272px]'}` : 'w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8'}`}>
         {initializing ? (
           <div className="h-[60vh] flex flex-col items-center justify-center space-y-3">
             <div className="w-10 h-10 rounded-full border-3 border-tn-border border-t-tn-blue animate-spin" />
