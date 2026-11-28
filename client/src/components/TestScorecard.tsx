@@ -530,7 +530,7 @@ export const TestScorecard: React.FC<TestScorecardProps> = ({
 
                     {/* AI Pedagogical Drawer if active */}
                     {aiData && (
-                      <div className="p-4 rounded-xl bg-gradient-to-tr from-brand-50 to-indigo-50 border border-brand-200 space-y-3 animate-in fade-in">
+                      <div className="p-4 rounded-xl bg-brand-50 border border-brand-200 space-y-3 animate-in fade-in">
                         <div className="flex items-center gap-2 text-xs font-bold text-brand-900">
                           <Sparkles className="w-4 h-4 text-brand-600" />
                           <span>All in One Masterclass Note ({aiData.topic})</span>

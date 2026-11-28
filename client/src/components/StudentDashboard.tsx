@@ -56,6 +56,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const [examInfo, setExamInfo] = useState<any>(null);
   const [availableTests, setAvailableTests] = useState<any[]>([]);
   const [checkingDashboardTestId, setCheckingDashboardTestId] = useState<string | null>(null);
+  const [hasDataIssue, setHasDataIssue] = useState(false);
 
   const examSlug = (currentUser?.targetExamId || 'jee-main').toLowerCase();
   const isSuperTet = examSlug === 'super-tet';
@@ -86,10 +87,11 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
   const loadDashboardData = async () => {
     setLoading(true);
+    setHasDataIssue(false);
     setAvailableTests([]);
     try {
       const [attemptsRes, profileRes, subRes] = await Promise.all([
-        api.getMyAttempts().catch(() => ({ attempts: [] })),
+        api.getMyAttempts().catch(() => ({ attempts: [], unavailable: true })),
         api.getExamProfile(examSlug).catch(() => null),
         api.getMySubscription().catch(() => null),
       ]);
@@ -109,6 +111,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       }
 
       const myAttempts = attemptsRes?.attempts || [];
+      setHasDataIssue(Boolean((attemptsRes as any)?.unavailable || !profileRes || !subRes));
       const filteredAttempts = myAttempts.filter((a: any) => {
         if (a.test?.exam?.slug) return a.test.exam.slug === examSlug;
         if (a.test?.examId && profileRes?.exam?.id) return a.test.examId === profileRes.exam.id;
@@ -147,6 +150,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       }
     } catch (err) {
       console.error('Error loading dashboard data:', err);
+      setHasDataIssue(true);
     } finally {
       setLoading(false);
     }
@@ -214,51 +218,32 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1440px] space-y-6 pb-8">
-      {/* 1. Welcome & Summary Bar */}
-      <section className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white px-5 py-6 shadow-card sm:px-7 sm:py-7">
-        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-blue-50" aria-hidden="true" />
-        <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+    <div className="mx-auto w-full max-w-[1180px] space-y-5 pb-8">
+      {/* A compact, action-led starting point for the authenticated workspace. */}
+      <section className="rounded-xl border border-blue-200 bg-[#EDF4FF] px-5 py-4 sm:px-6 sm:py-5">
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-tn-blue">Student dashboard</p>
-            <h1 className="text-2xl font-bold tracking-tight text-tn-navy sm:text-[28px]">
-            Welcome back, {currentUser?.name?.split(' ')[0] || 'Candidate'}
-            </h1>
-            <p className="mt-1 text-sm text-tn-muted">Continue your preparation and track your exam progress.</p>
-            <div className="mt-3 inline-flex max-w-full items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600">
-              <Target className="h-3.5 w-3.5 shrink-0 text-tn-blue" />
-              <span className="truncate">Preparing for <strong className="font-semibold text-tn-navy">{displayExamName}</strong>{examInfo?.conductingBody ? ` · ${examInfo.conductingBody}` : ''}</span>
-            </div>
+            <h1 className="text-xl font-bold tracking-tight text-tn-navy sm:text-2xl">Welcome to your preparation workspace</h1>
+            <p className="mt-1 text-sm text-slate-500">Continue preparing for {displayExamName}.</p>
           </div>
-
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap xl:justify-end">
-            <button
-              onClick={() => activeAttempt?.testId ? onStartExam(activeAttempt.testId) : flagshipTest?.id ? handleDashboardTestAction(flagshipTest) : onNavigateToMockTests()}
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-tn-blue px-3.5 py-2.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-tn-blue-hover"
-            >
-              <Play className="w-3.5 h-3.5" />
-              <span>Continue Preparation</span>
-            </button>
-            <button
-              onClick={() => onOpenExamPortal ? onOpenExamPortal(examSlug) : isSuperTet ? onNavigateToSuperTet?.() : isUptet ? onNavigateToUptet?.() : onNavigateToMockTests()}
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-tn-border bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-700 shadow-xs transition-colors hover:bg-slate-50"
-            >
-              <FileCheck2 className="w-3.5 h-3.5 text-tn-blue" />
-              <span>Explore Mock Tests</span>
-            </button>
-            <button
-              onClick={onNavigateToPerformance}
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100"
-            >
-              <BarChart2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>View Results</span>
-            </button>
-          </div>
+          <button
+            onClick={() => onOpenExamPortal ? onOpenExamPortal(examSlug) : isSuperTet ? onNavigateToSuperTet?.() : isUptet ? onNavigateToUptet?.() : onNavigateToMockTests()}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-md bg-tn-blue px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-tn-blue-hover"
+          >
+            <Play className="h-3.5 w-3.5" />
+            <span>Explore Mock Tests</span>
+          </button>
         </div>
       </section>
 
+      {!loading && hasDataIssue && (
+        <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+          Some preparation data is temporarily unavailable. Values marked with a dash will update when the connection is restored.
+        </div>
+      )}
+
       {/* 2. Subscription Status & Referral Balance Banner */}
-      <section className="p-4 sm:p-5 rounded-2xl border border-slate-700 border-l-4 border-l-blue-400 bg-tn-navy shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <section className="hidden p-4 sm:p-5 rounded-2xl border border-slate-700 border-l-4 border-l-blue-400 bg-tn-navy shadow-card flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
           <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-500/15 border border-blue-400/30 text-blue-200 flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
@@ -335,61 +320,52 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
       {/* 4. Student Overview — values are derived from the existing portal, attempt and subscription APIs. */}
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Available Mock Tests</p><FileCheck2 className="h-4 w-4 text-tn-blue" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : totalExamTests}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading availability…' : `For ${displayExamName}`}</p>
+        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 shadow-subtle">
+          <p className="text-sm font-medium text-slate-500">Available tests</p>
+          <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : totalExamTests}</p>
         </div>
 
-        <div className="min-h-[142px] rounded-xl border border-blue-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Tests Attempted</p><RotateCcw className="h-4 w-4 text-tn-blue" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : attempts.length}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Loading attempts…' : `${completedAttempts.length} completed submission${completedAttempts.length === 1 ? '' : 's'}`}</p>
+        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 shadow-subtle">
+          <p className="text-sm font-medium text-slate-500">Completed tests</p>
+          <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : completedAttempts.length}</p>
         </div>
 
-        <div className="min-h-[142px] rounded-xl border border-emerald-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Average Score / Accuracy</p><TrendingUp className="h-4 w-4 text-emerald-600" /></div>
-          <p className="mt-5 text-2xl font-bold tabular-nums text-tn-navy">{loading ? '—' : `${avgAccuracy}%`}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Calculating score…' : `${avgScore} / ${maxExamScore} average score`}</p>
+        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 shadow-subtle">
+          <p className="text-sm font-medium text-slate-500">Accuracy</p>
+          <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : `${avgAccuracy}%`}</p>
         </div>
 
-        <div className="min-h-[142px] rounded-xl border border-violet-100 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
-          <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-tn-muted">Current Subscription</p><ShieldCheck className="h-4 w-4 text-violet-600" /></div>
-          <p className="mt-5 truncate text-lg font-bold text-tn-navy" title={loading ? 'Loading subscription' : planName}>{loading ? 'Loading…' : planName}</p>
-          <p className="mt-1 text-[10px] text-tn-muted">{loading ? 'Checking access…' : subscriptionDetail}</p>
-        </div>
+        <button onClick={() => onOpenPricingModal?.()} className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 text-left shadow-subtle transition hover:border-blue-200 hover:shadow-card">
+          <p className="text-sm font-medium text-slate-500">Current plan</p>
+          <p className="mt-2 truncate text-2xl font-bold text-tn-navy" title={loading || hasDataIssue ? 'Subscription unavailable' : planName}>{loading ? '—' : hasDataIssue ? 'Unavailable' : planName.replace(' Starter Plan', '')}</p>
+        </button>
       </section>
 
-      <div className="grid grid-cols-1 gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs sm:grid-cols-3">
+      <div className="hidden grid-cols-1 gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs sm:grid-cols-3">
         <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4"><span className="text-tn-muted">Time in tests</span><span className="font-semibold tabular-nums text-tn-navy">{totalHours} hrs</span></div>
         <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:px-4"><span className="text-tn-muted">Free tests</span><span className="font-semibold tabular-nums text-emerald-700">{freeExamTests}</span></div>
         <div className="flex items-center justify-between gap-3 sm:pl-4"><span className="text-tn-muted">Premium tests</span><span className="font-semibold tabular-nums text-violet-700">{paidExamTests}</span></div>
       </div>
 
       <section className="space-y-3">
-        <div className="flex items-center justify-between gap-4 px-1">
-          <div>
-            <h2 className="text-sm font-bold text-tn-navy">Available Mock Tests</h2>
-            <p className="mt-0.5 text-xs text-tn-muted">Live papers available for your selected exam portal.</p>
-          </div>
-          <button onClick={onNavigateToMockTests} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-tn-blue hover:underline">
-            View all <ChevronRight className="h-3.5 w-3.5" />
-          </button>
+        <div className="flex items-center justify-between gap-4 px-0.5">
+          <h2 className="text-lg font-bold text-tn-navy">Available Mock Tests</h2>
+          <button onClick={onNavigateToMockTests} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-tn-blue hover:underline">View all <ChevronRight className="h-3.5 w-3.5" /></button>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {[0, 1, 2].map((item) => <div key={item} className="h-44 animate-pulse rounded-xl border border-slate-200 bg-white" />)}
+            {[0, 1, 2].map((item) => <div key={item} className="h-36 animate-pulse rounded-lg border border-slate-200 bg-white" />)}
           </div>
         ) : displayTests.length === 0 ? (
-          <div className="rounded-xl border border-slate-200 bg-white px-5 py-8 text-center shadow-subtle">
+          <div className="rounded-lg border border-slate-200 bg-white px-5 py-7 text-center shadow-subtle">
             <FileCheck2 className="mx-auto h-5 w-5 text-tn-blue" />
             <p className="mt-2 text-sm font-semibold text-tn-navy">No live mock tests are available for this portal.</p>
-            <p className="mt-1 text-xs text-tn-muted">A paper appears here after it is published and activated by the administrator.</p>
+            <p className="mt-1 text-xs text-tn-muted">New papers appear here after they are published by the administrator.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {displayTests.slice(0, 6).map((test) => {
+            {displayTests.slice(0, 3).map((test) => {
               const attempt = attemptsByTestId.get(test.id);
               const isPremiumTest = !isFreeTest(test);
               const isIncluded = isPremiumTest && Boolean(test.isEntitled);
@@ -398,18 +374,16 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
               const isChecking = checkingDashboardTestId === test.id;
               const actionLabel = attempt?.status === 'IN_PROGRESS' ? 'Resume' : attempt?.status === 'COMPLETED' ? 'View Result' : isLocked ? 'Unlock with Plan' : 'Start Test';
               return (
-                <article key={test.id} className="flex min-h-44 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
+                <article key={test.id} className="flex min-h-36 flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-subtle transition-shadow hover:shadow-card">
                   <div className="flex items-start justify-between gap-3">
-                    <span className="rounded-md border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-tn-blue">{displayExamName}</span>
-                    <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold ${isPremiumTest ? 'border-violet-200 bg-violet-50 text-violet-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+                    <span className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-bold ${isPremiumTest ? 'border-violet-200 bg-violet-50 text-violet-700' : 'border-emerald-100 bg-emerald-50 text-emerald-700'}`}>
                       {isLocked ? <Lock className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}{isPremiumTest ? (isIncluded ? 'Included in plan' : 'Locked') : 'Free'}
                     </span>
                   </div>
-                  <h3 className="mt-3 line-clamp-2 text-sm font-bold leading-snug text-tn-navy">{test.title}</h3>
+                  <h3 className="mt-3 line-clamp-1 text-sm font-bold leading-snug text-tn-navy">{test.title}</h3>
                   <p className="mt-1 text-[11px] text-tn-muted">{test._count?.testQuestions ?? test.totalQuestions ?? 0} questions <span aria-hidden="true">·</span> {test.durationMinutes || 0} min <span aria-hidden="true">·</span> {test.totalMarks || 0} marks</p>
-                  <div className="mt-auto flex items-center justify-between gap-3 pt-4">
-                    <span className="text-[11px] font-medium text-slate-500">{isComingSoon ? 'Releases soon' : attempt?.status === 'COMPLETED' ? 'Completed' : attempt?.status === 'IN_PROGRESS' ? 'In progress' : 'Ready to attempt'}</span>
-                    <button type="button" disabled={isChecking || isComingSoon} onClick={() => handleDashboardTestAction(test)} className="inline-flex min-h-8 shrink-0 items-center gap-1 rounded-lg bg-tn-blue px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-tn-blue-hover disabled:cursor-not-allowed disabled:opacity-60">
+                  <div className="mt-auto pt-3">
+                    <button type="button" disabled={isChecking || isComingSoon} onClick={() => handleDashboardTestAction(test)} className="inline-flex min-h-8 w-full items-center justify-center gap-1 rounded-md bg-blue-50 px-3 py-1.5 text-xs font-semibold text-tn-blue transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-60">
                       {isChecking ? 'Checking…' : <><Play className="h-3 w-3" />{isComingSoon ? 'Coming Soon' : actionLabel}</>}
                     </button>
                   </div>
@@ -420,14 +394,11 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
         )}
       </section>
 
-      {/* 5. Main Dashboard Grid (2 Columns: Recent Attempts & Study Navigation) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Recent Attempts (7 Cols) */}
-        <div className="lg:col-span-7 space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <h2 className="text-sm font-bold text-tn-navy">
-              Recent Test Attempts
-            </h2>
+      {/* Recent activity stays directly below the test library for a single, scannable workspace. */}
+      <div className="space-y-3">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-0.5">
+            <h2 className="text-lg font-bold text-tn-navy">Recent Test Attempts</h2>
             <button
               onClick={onNavigateToPerformance}
               className="text-xs font-semibold text-tn-blue hover:underline flex items-center gap-1 cursor-pointer"
@@ -437,22 +408,11 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             </button>
           </div>
 
-          <div className="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-card">
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-subtle">
             {attempts.length === 0 ? (
-              <div className="p-8 sm:p-10 text-center space-y-3">
-                <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto">
-                  <FileCheck2 className="w-5 h-5 text-tn-blue" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-semibold text-tn-navy">Your attempt history will appear here</p>
-                  <p className="text-xs text-tn-muted">Take your first timed mock to begin building a performance record.</p>
-                </div>
-                <button
-                  onClick={onNavigateToMockTests}
-                  className="px-4 py-2 rounded-lg bg-tn-blue text-white text-xs font-semibold hover:bg-tn-blue-hover transition-colors cursor-pointer"
-                >
-                  Attempt First Mock Paper
-                </button>
+              <div className="px-5 py-6">
+                <p className="text-sm font-semibold text-tn-navy">Your exam history appears here.</p>
+                <p className="mt-1 text-xs text-tn-muted">Start a mock test to build your performance record.</p>
               </div>
             ) : (
               <>
@@ -544,8 +504,8 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           </div>
         </div>
 
-        {/* Right Column: Quick Practice & Upgrade Banner (5 Cols) */}
-        <div className="lg:col-span-5 space-y-4">
+        {/* These flows remain accessible from the sidebar and profile menu; the dashboard stays focused. */}
+        <div className="hidden">
           <h2 className="px-1 text-sm font-bold text-tn-navy">
             Flagship Examination
           </h2>

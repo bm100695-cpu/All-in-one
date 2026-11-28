@@ -28,6 +28,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [directoryError, setDirectoryError] = useState<boolean>(false);
 
   useEffect(() => {
     loadDirectory();
@@ -35,6 +36,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   const loadDirectory = async () => {
     setLoading(true);
+    setDirectoryError(false);
     try {
       const [dirRes, catRes] = await Promise.all([
         api.getExamDirectory(),
@@ -44,6 +46,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       setCategories(catRes.categories || []);
     } catch (err) {
       console.error('Failed to load exam directory:', err);
+      setDirectoryError(true);
     } finally {
       setLoading(false);
     }
@@ -94,7 +97,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
             <a
               href="#exam-selector"
-              className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 rounded-lg bg-[#2563EB] hover:bg-blue-700 text-white text-xs font-semibold transition-colors flex items-center gap-2"
             >
               <span>Browse Examination Portals</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -123,22 +126,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section className="border-y border-slate-200 bg-white py-5">
         <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div>
-            <p className="text-2xl font-extrabold text-slate-900 tabular-nums">{exams.length}</p>
+            <p className="text-2xl font-extrabold text-slate-900 tabular-nums">{loading || directoryError ? '—' : exams.length}</p>
             <p className="text-xs text-slate-500 font-medium mt-0.5">Active Exam Portals</p>
           </div>
           <div>
-            <p className="text-2xl font-extrabold text-slate-900 tabular-nums">{totalTestsAvailable}</p>
+            <p className="text-2xl font-extrabold text-slate-900 tabular-nums">{loading || directoryError ? '—' : totalTestsAvailable}</p>
             <p className="text-xs text-slate-500 font-medium mt-0.5">Mock & PYQ Papers</p>
           </div>
           <div>
             <p className="text-2xl font-extrabold text-emerald-700 tabular-nums">
-              {totalVerifiedPyqs.toLocaleString()}
+              {loading || directoryError ? '—' : totalVerifiedPyqs.toLocaleString()}
             </p>
             <p className="text-xs text-slate-500 font-medium mt-0.5">Verified Questions</p>
           </div>
           <div>
-            <p className="text-2xl font-extrabold text-blue-600">100%</p>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">Official Exam Patterns</p>
+            <p className="text-2xl font-extrabold text-blue-600 tabular-nums">{loading || directoryError ? '—' : categories.length}</p>
+            <p className="text-xs text-slate-500 font-medium mt-0.5">Exam Categories</p>
           </div>
         </div>
       </section>
@@ -164,6 +167,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             />
           </div>
         </div>
+
+        {directoryError && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+            Examination availability is temporarily unavailable. Please refresh the page and try again.
+          </div>
+        )}
 
         {/* Category Filter Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1">

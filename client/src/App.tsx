@@ -477,7 +477,7 @@ export const App: React.FC = () => {
   const useStudentSidebar = Boolean(currentUser && currentUser.role === 'STUDENT' && !isExamRunning && activeTab !== 'admin' && activeTab !== 'control-center');
   // The marketing footer belongs to public discovery pages only. Authenticated
   // LMS workspaces use their own full-height layout and persistent navigation.
-  const showPublicFooter = activeTab === 'landing' || (!currentUser && activeTab === 'live-tests');
+  const showPublicFooter = !initializing && (activeTab === 'landing' || (!currentUser && activeTab === 'live-tests'));
 
   return (
     <div className="min-h-screen bg-tn-bg flex flex-col text-tn-text font-sans">
