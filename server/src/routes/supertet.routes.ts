@@ -1,8 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { prisma } from '../prisma';
 import { authenticate, requireRole } from '../middleware/auth';
+import superTetPortalRouter from '../supertet/portal.routes';
 
 const router = Router();
+router.use('/', superTetPortalRouter);
 
 function formatQuestion(q: any) {
   let options: any[] = [];

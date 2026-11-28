@@ -15,6 +15,7 @@ import {
   Sparkles,
   Gift,
   Shield,
+  HelpCircle,
   Zap,
 } from 'lucide-react';
 import { User, UserRole } from '../types';
@@ -49,6 +50,7 @@ interface HeaderProps {
   onOpenProfileSettings?: (tab: 'profile' | 'settings') => void;
   onOpenPricingModal?: () => void;
   onOpenReferralModal?: () => void;
+  onOpenLegal?: (type: 'terms' | 'privacy' | 'refund' | 'support') => void;
   onLogout?: () => void;
   sidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
@@ -68,38 +70,50 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfileSettings,
   onOpenPricingModal,
   onOpenReferralModal,
+  onOpenLegal,
   onLogout,
   sidebarCollapsed = false,
   onToggleSidebar,
 }) => {
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [legalMenuOpen, setLegalMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const legalMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setRoleMenuOpen(false);
-      }
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setRoleMenuOpen(false);
+      if (legalMenuRef.current && !legalMenuRef.current.contains(event.target as Node)) setLegalMenuOpen(false);
     };
-    if (roleMenuOpen) {
+    if (roleMenuOpen || legalMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [roleMenuOpen]);
+  }, [roleMenuOpen, legalMenuOpen]);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMobileMenuOpen(false);
         setRoleMenuOpen(false);
+        setLegalMenuOpen(false);
       }
     };
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileMenuOpen]);
 
   // Yeh pata lagane ke liye ki abhi admin page par hain ya nahi
   const isAdminPage = activeTab === 'admin' || activeTab === 'control-center';
@@ -128,19 +142,34 @@ export const Header: React.FC<HeaderProps> = ({
     'gate-cs': 'GATE CS',
   };
   const examBadge = examLabels[targetExam] || targetExam.toUpperCase();
+  const studentPageLabels: Partial<Record<NavTab, string>> = {
+    dashboard: 'Student Dashboard',
+    'mock-tests': 'Mock Tests',
+    'pyq-papers': 'PYQ Papers',
+    'live-tests': 'Live Exams',
+    practice: 'Practice',
+    performance: 'Performance',
+    'exam-portal': `${examBadge} Portal`,
+  };
+  const studentPageLabel = studentPageLabels[activeTab] || 'Student Dashboard';
 
   // Navigation items: include Live Tests with pulsing live indicator
   const navItems = currentUser && !isAdminPage
     ? [
-        { id: 'dashboard' as NavTab, label: `${examBadge} Dashboard`, icon: LayoutDashboard },
+        { id: 'dashboard' as const, label: 'Dashboard', icon: LayoutDashboard },
         {
           id: (isSuperTet ? 'super-tet' : isUptet ? 'uptet' : 'mock-tests') as NavTab,
           label: 'Mock Tests',
           icon: FileCheck2,
         },
-        { id: 'live-tests' as NavTab, label: 'Live Tests', icon: Zap, isLive: true },
-        { id: 'practice' as NavTab, label: 'Practice', icon: BookOpen },
-        { id: 'performance' as NavTab, label: 'Performance', icon: BarChart2 },
+        { id: 'pyq-papers' as const, label: 'PYQ Papers', icon: BookOpen },
+        { id: 'live-tests' as const, label: 'Live Exams', icon: Zap, isLive: true },
+        { id: 'practice' as const, label: 'Practice', icon: BookOpen },
+        { id: 'performance' as const, label: 'My Results', icon: BarChart2 },
+        { id: 'practice' as const, label: 'Mistake Journal', icon: BookOpen },
+        { id: 'performance' as const, label: 'Analytics', icon: BarChart2 },
+        { id: 'pricing' as const, label: 'Subscription', icon: Sparkles },
+        { id: 'support' as const, label: 'Help & Support', icon: HelpCircle },
       ]
     : !isAdminPage
     ? [
@@ -161,6 +190,20 @@ export const Header: React.FC<HeaderProps> = ({
     } else if (destination === 'control-center') {
       window.location.hash = '/control-center';
     }
+  };
+
+  const handleStudentNavClick = (item: (typeof navItems)[number]) => {
+    if (item.id === 'pricing') {
+      onOpenPricingModal?.();
+      setMobileMenuOpen(false);
+      return;
+    }
+    if (item.id === 'support') {
+      onOpenLegal?.('support');
+      setMobileMenuOpen(false);
+      return;
+    }
+    handleNavClick(item.id);
   };
 
   return (
@@ -192,10 +235,10 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <button
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
+                  onClick={() => handleStudentNavClick(item)}
                   className={`w-full flex items-center rounded-xl px-3 py-3 text-left text-xs font-semibold transition-colors cursor-pointer ${sidebarCollapsed ? 'justify-center' : 'gap-3'} ${
                     isActive
-                      ? 'bg-[#2563EB] text-white shadow-sm shadow-blue-950/30'
+                      ? 'bg-[#304C7C] text-white shadow-sm shadow-blue-950/30'
                       : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
                   }`}
                   aria-label={item.label.replace(`${examBadge} `, '')}
@@ -238,6 +281,11 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
             {showStudentSidebar && (
+              <div className="hidden lg:block">
+                <p className="text-lg font-bold tracking-tight text-tn-navy">{studentPageLabel}</p>
+              </div>
+            )}
+            {showStudentSidebar && (
               <button
                 onClick={onToggleSidebar}
                 className="hidden lg:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
@@ -277,7 +325,7 @@ export const Header: React.FC<HeaderProps> = ({
                   return (
                     <button
                       key={item.id}
-                      onClick={() => handleNavClick(item.id)}
+                    onClick={() => handleStudentNavClick(item)}
                       className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                         isActive
                           ? 'text-blue-600 bg-blue-50 font-semibold shadow-xs'
@@ -321,17 +369,41 @@ export const Header: React.FC<HeaderProps> = ({
             {!isAdminPage && (
               <>
                 <button
-                  onClick={onOpenPricingModal}
-                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-colors cursor-pointer"
+                  onClick={() => showStudentSidebar ? onOpenExamPortal?.(targetExam) : onOpenPricingModal?.()}
+                  className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${showStudentSidebar ? 'border border-slate-100 bg-slate-50 text-slate-600 hover:bg-slate-100' : 'border border-amber-200 bg-amber-50 text-slate-800 hover:bg-amber-100 font-semibold'}`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Plans</span>
+                  {showStudentSidebar ? <span>{examBadge}</span> : <><Sparkles className="w-3.5 h-3.5 text-amber-600" /><span>Plans</span></>}
                 </button>
               </>
             )}
 
+            {onOpenLegal && (
+              <div className="relative hidden sm:block" ref={legalMenuRef}>
+                <button
+                  onClick={() => setLegalMenuOpen((open) => !open)}
+                  aria-expanded={legalMenuOpen}
+                  aria-label="Open legal and support links"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  title="Legal & support"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                </button>
+                {legalMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg z-50">
+                    {([
+                      ['privacy', 'Privacy Policy'], ['terms', 'Terms & Conditions'], ['refund', 'Refund Policy'], ['support', 'Help & Support'],
+                    ] as const).map(([type, label]) => (
+                      <button key={type} onClick={() => { setLegalMenuOpen(false); onOpenLegal(type); }} className="w-full rounded-md px-3 py-2 text-left text-xs font-medium text-slate-700 hover:bg-slate-100">
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Language Selector */}
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-medium">
+            <div className="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-medium">
               <button
                 onClick={() => setLanguage('en')}
                 className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
@@ -356,12 +428,12 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="relative" ref={menuRef}>
                   <button
                     onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-                    className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg border border-tn-border bg-white hover:bg-slate-50 transition-colors text-left cursor-pointer shadow-xs"
+                    className={`flex items-center gap-2 rounded-lg border border-tn-border bg-white hover:bg-slate-50 transition-colors text-left cursor-pointer shadow-xs ${showStudentSidebar ? 'h-9 w-9 justify-center p-0 rounded-full border-blue-100 bg-blue-50' : 'pl-2 pr-2.5 py-1.5'}`}
                   >
                     <div className="w-6 h-6 rounded-md bg-tn-blue text-white flex items-center justify-center font-bold text-[11px]">
                       {currentUser?.name?.charAt(0) || 'U'}
                     </div>
-                    <div className="hidden sm:block">
+                    <div className={showStudentSidebar ? 'hidden' : 'hidden sm:block'}>
                       <div className="text-xs font-semibold text-zinc-900 leading-none">
                         {currentUser?.name || 'Candidate'}
                       </div>
@@ -369,7 +441,7 @@ export const Header: React.FC<HeaderProps> = ({
                         {examBadge} Portal
                       </div>
                     </div>
-                    <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 ${roleMenuOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 ${showStudentSidebar ? 'hidden' : ''} ${roleMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {roleMenuOpen && (
@@ -433,7 +505,7 @@ export const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2">
                   <button
                     onClick={() => onOpenAuthModal?.('login')}
                     className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer flex items-center gap-1.5"
@@ -456,7 +528,7 @@ export const Header: React.FC<HeaderProps> = ({
             {!isAdminPage && !showStudentSidebar && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+                className="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -480,7 +552,7 @@ export const Header: React.FC<HeaderProps> = ({
             role="dialog"
             aria-modal="true"
             aria-label="Student navigation"
-            className="student-mobile-sidebar-root relative flex h-full min-h-screen w-[min(19rem,86vw)] flex-col overflow-y-auto px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
+            className="student-mobile-sidebar-root relative flex h-[100dvh] min-h-[100dvh] w-[min(20rem,92vw)] flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
           >
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -490,7 +562,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">CBT Station</p>
                 </div>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 hover:bg-[#1E3055] hover:text-white transition-colors" aria-label="Close navigation menu">
+              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-300 hover:bg-[#1E3055] hover:text-white transition-colors" aria-label="Close navigation menu">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -502,10 +574,10 @@ export const Header: React.FC<HeaderProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
+                  onClick={() => handleStudentNavClick(item)}
+                className={`w-full flex min-h-12 items-center justify-between px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer transition-colors ${
                   isActive
-                    ? 'text-white bg-[#2563EB] shadow-sm shadow-blue-950/30'
+                    ? 'text-white bg-[#304C7C] shadow-sm shadow-blue-950/30'
                     : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
                 }`}
               >
@@ -530,7 +602,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenPricingModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+              className="w-full flex min-h-12 items-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-blue-200" />
               <span>Plans & Pricing</span>
@@ -540,10 +612,22 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenReferralModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+              className="w-full flex min-h-12 items-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
             >
               <Gift className="w-4 h-4 text-amber-300" />
               <span>Refer Friends & Earn Free Tests</span>
+            </button>
+
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => setLanguage('en')} className={`min-h-11 rounded-lg text-sm font-semibold transition-colors ${language === 'en' ? 'bg-white text-slate-900' : 'bg-[#1E3055] text-slate-200'}`}>English</button>
+              <button onClick={() => setLanguage('hi')} className={`min-h-11 rounded-lg text-sm font-semibold transition-colors ${language === 'hi' ? 'bg-white text-slate-900' : 'bg-[#1E3055] text-slate-200'}`}>हिंदी</button>
+            </div>
+            <button
+              onClick={() => { setMobileMenuOpen(false); onOpenLegal?.('support'); }}
+              className="w-full flex min-h-12 items-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+            >
+              <HelpCircle className="w-4 h-4 text-blue-200" />
+              <span>Help & Support</span>
             </button>
 
             {currentUser ? (
@@ -553,7 +637,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('profile');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
                 >
                   <UserIcon className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>Candidate Profile</span>
@@ -564,7 +648,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('settings');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
                 >
                   <Settings className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>CBT Simulator Settings</span>
@@ -577,7 +661,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onLogout?.();
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-semibold text-rose-300 hover:bg-rose-500/15 rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-semibold text-rose-300 hover:bg-rose-500/15 rounded-xl transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
                   <span>Sign Out</span>
@@ -591,7 +675,7 @@ export const Header: React.FC<HeaderProps> = ({
                       setMobileMenuOpen(false);
                       onOpenAuthModal?.('login');
                     }}
-                    className="py-2 text-center text-xs font-semibold border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    className="min-h-11 py-2 text-center text-sm font-semibold border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 cursor-pointer"
                   >
                     Sign In
                   </button>
@@ -600,7 +684,7 @@ export const Header: React.FC<HeaderProps> = ({
                       setMobileMenuOpen(false);
                       onOpenAuthModal?.('register');
                     }}
-                    className="py-2 text-center text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer"
+                    className="min-h-11 py-2 text-center text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer"
                   >
                     Register
                   </button>

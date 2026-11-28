@@ -935,16 +935,16 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
   // VIEW 2: REAL CBT EXAMINATION WORKSPACE
   // =========================================================================
   return (
-    <div className="bg-slate-100 min-h-[calc(100vh-4rem)] flex flex-col -mx-4 sm:-mx-6 lg:-mx-8 select-none">
+    <div className="w-full min-w-0 bg-slate-100 min-h-[100dvh] flex flex-col select-none">
       {/* 1. TOP HEADER (Dark-Navy National CBT Standard) */}
-      <div className="bg-tn-navy border-b border-slate-800 text-white px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-md">
+      <div className="bg-tn-navy border-b border-slate-800 text-white px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5 shadow-md">
         {/* Left: Branding & Paper Info */}
-        <div className="flex items-center gap-3">
+        <div className="min-w-0 flex flex-1 items-center gap-3 sm:flex-none">
           <div className="w-8 h-8 rounded bg-tn-blue text-white flex items-center justify-center font-bold text-xs shadow">
             TN
           </div>
           <div>
-            <h1 className="text-xs sm:text-sm font-bold tracking-tight leading-tight">
+            <h1 className="truncate text-sm sm:text-sm font-bold tracking-tight leading-tight">
               {testData?.title || 'JEE Main Examination'}
             </h1>
             <div className="flex items-center gap-2 text-[11px] text-slate-400">
@@ -965,7 +965,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
         </div>
 
         {/* Center: Language & Fullscreen Toggle */}
-        <div className="flex items-center gap-2">
+        <div className="order-3 hidden w-full items-center justify-between gap-2 sm:order-none sm:flex sm:w-auto sm:justify-start">
           {/* Question Language Switch */}
           <div className="flex items-center bg-slate-800 p-0.5 rounded border border-slate-700 text-[11px]">
             <span className="text-slate-400 px-1.5 flex items-center gap-1">
@@ -993,14 +993,14 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
           <button
             onClick={toggleFullscreen}
             title="Toggle Fullscreen"
-            className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 hover:text-white border border-slate-700 transition"
+            className="inline-flex min-h-10 min-w-10 items-center justify-center bg-slate-800 hover:bg-slate-700 rounded text-slate-300 hover:text-white border border-slate-700 transition"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
 
         {/* Right: Candidate Card & Digital Countdown Timer */}
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
           {/* Candidate Badge */}
           <div className="hidden md:flex items-center gap-2 text-right border-r border-slate-700 pr-3">
             <div>
@@ -1032,17 +1032,18 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
           {/* Submit Button */}
           <button
             onClick={() => setShowSubmitModal(true)}
-            className="px-4 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider shadow transition active:scale-95 cursor-pointer"
+            className="min-h-10 px-3.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider shadow transition active:scale-95 cursor-pointer sm:min-h-11 sm:px-4"
           >
-            Submit Test
+            <span className="sm:hidden">Submit</span>
+            <span className="hidden sm:inline">Submit Test</span>
           </button>
         </div>
       </div>
 
       {/* 2. SUBJECT & SECTION NAVIGATION TABS */}
-      <div className="bg-slate-200 border-b border-slate-300 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+      <div className="bg-slate-200 border-b border-slate-300 px-3 sm:px-4 py-2 flex flex-col items-stretch gap-2 shadow-2xs sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         {/* Subject Tabs */}
-        <div className="flex items-center gap-1.5">
+        <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:items-center sm:gap-1.5 sm:overflow-x-auto sm:pb-1 scrollbar-none">
           <span className="text-xs font-extrabold text-slate-600 uppercase tracking-wider mr-1 hidden sm:inline">
             Subjects:
           </span>
@@ -1062,7 +1063,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                   const firstIdx = firstQuestion ? questionIndexById.get(firstQuestion.questionId) : undefined;
                   if (firstIdx !== undefined) selectQuestion(firstIdx);
                 }}
-                className={`px-3 py-1 rounded text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`min-h-10 min-w-0 justify-center whitespace-nowrap px-2 py-1 rounded text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 sm:px-3 ${
                   isSubjActive
                     ? 'bg-indigo-900 text-white shadow'
                     : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-300'
@@ -1070,7 +1071,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
               >
                 <span>{subj}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  className={`hidden text-[10px] px-1.5 py-0.2 rounded-full font-bold sm:inline ${
                     isSubjActive ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
                   }`}
                 >
@@ -1083,7 +1084,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
 
         {/* Section A vs Section B Sub-tabs (Only for exams with Numerical sections like JEE Main) */}
         {hasNumerical && (
-          <div className="flex items-center gap-1 text-xs">
+          <div className="flex items-center gap-1 overflow-x-auto pb-1 text-xs scrollbar-none">
             <span className="text-[11px] font-bold text-slate-500 mr-1 hidden md:inline">Sections:</span>
             <button
               type="button"
@@ -1128,7 +1129,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
       {/* 3. MAIN WORKSPACE: LEFT QUESTION AREA, RIGHT QUESTION PALETTE */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Left Column: Active Question Workspace */}
-        <div className="flex-1 flex flex-col justify-between p-4 sm:p-6 overflow-y-auto bg-slate-50">
+        <div className="min-w-0 flex-1 flex flex-col justify-between p-3 sm:p-6 overflow-y-auto bg-slate-50">
           {currentQ ? (
             <div className="max-w-4xl w-full mx-auto space-y-5">
               {/* Question Header Bar */}
@@ -1138,24 +1139,24 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                     Question {currentQuestionIndex + 1}
                   </span>
                   {subjectQuestions.length > 0 && currentQ && (
-                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                  <span className="hidden text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 sm:inline">
                       {currentSubject} Q{subjectQuestions.findIndex((q) => q.questionId === currentQ.questionId) + 1}
                     </span>
                   )}
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900 border border-indigo-200">
+                  <span className="hidden text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900 border border-indigo-200 sm:inline">
                     {currentSubject} — {currentQ.questionType === 'NUMERICAL' ? 'Section B' : 'Section A'}
                   </span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700">
+                  <span className="hidden text-xs font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 sm:inline">
                     Type: {currentQ.questionType === 'NUMERICAL' ? 'Numerical Value' : 'MCQ'}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs font-mono font-bold">
                   <span className="text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-200">
-                    Marks: +{currentQ.marks}.00
+                    <span className="hidden sm:inline">Marks: </span>+{currentQ.marks}.00
                   </span>
                   <span className="text-rose-700 bg-rose-50 px-2 py-1 rounded border border-rose-200">
-                    Negative: {currentQ.negativeMarks > 0 ? `-${currentQ.negativeMarks}.00` : '0.00'}
+                    <span className="hidden sm:inline">Negative: </span>{currentQ.negativeMarks > 0 ? `-${currentQ.negativeMarks}.00` : '0.00'}
                   </span>
                 </div>
               </div>
@@ -1190,7 +1191,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
               )}
 
               {/* Question Content Box */}
-              <div className="p-6 rounded-xl bg-white border border-slate-300 shadow-sm space-y-5">
+              <div className="p-4 sm:p-6 rounded-xl bg-white border border-slate-300 shadow-sm space-y-5">
                 {currentQ.diagramUrl && (
                   <div className="rounded-lg border border-slate-200 bg-white p-2 overflow-x-auto">
                     <img
@@ -1218,7 +1219,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                           key={opt.id}
                           type="button"
                           onClick={() => handleOptionSelect(opt.id)}
-                          className={`w-full text-left p-3.5 rounded-lg border transition-all flex items-start gap-3 cursor-pointer ${
+                          className={`w-full min-h-12 text-left p-3.5 rounded-lg border transition-all flex items-start gap-3 cursor-pointer ${
                             isSelected
                               ? 'bg-indigo-50/90 border-indigo-600 shadow-xs ring-1 ring-indigo-600'
                               : 'bg-white border-slate-300 hover:border-slate-400 hover:bg-slate-50'
@@ -1233,7 +1234,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
                           >
                             {isSelected ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : optLabel}
                           </div>
-                          <div className="text-xs sm:text-sm font-medium text-slate-800 leading-relaxed pt-0.5">
+                          <div className="text-sm font-medium text-slate-800 leading-relaxed pt-0.5">
                             {optText}
                           </div>
                         </button>
@@ -1337,13 +1338,13 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
           )}
 
           {/* Bottom Action Toolbar */}
-          <div className="max-w-4xl w-full mx-auto pt-4 border-t border-slate-300 flex flex-wrap items-center justify-between gap-2.5 bg-slate-50">
+            <div className="max-w-4xl w-full mx-auto pt-4 border-t border-slate-300 flex flex-col items-stretch justify-between gap-2.5 bg-slate-50 sm:flex-row sm:items-center">
             {/* Left Actions */}
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:flex sm:items-center">
               <button
                 type="button"
                 onClick={handleMarkForReviewAndNext}
-                className="px-3.5 py-2 rounded border border-purple-400 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                className="min-h-11 px-3.5 py-2 rounded border border-purple-400 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
               >
                 <Flag className="w-3.5 h-3.5 text-purple-700" />
                 <span>Mark for Review & Next</span>
@@ -1352,7 +1353,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
               <button
                 type="button"
                 onClick={handleClearResponse}
-                className="px-3.5 py-2 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                className="min-h-11 px-3.5 py-2 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
                 <span>Clear Response</span>
@@ -1360,12 +1361,12 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
             </div>
 
             {/* Right Actions */}
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
               <button
                 type="button"
                 disabled={currentQuestionIndex === 0}
                 onClick={() => selectQuestion(currentQuestionIndex - 1)}
-                className={`px-4 py-2 rounded border border-slate-300 text-xs font-bold transition flex items-center gap-1 ${
+                className={`min-h-11 px-4 py-2 rounded border border-slate-300 text-xs font-bold transition flex items-center justify-center gap-1 ${
                   currentQuestionIndex === 0
                     ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                     : 'bg-white hover:bg-slate-100 text-slate-800 cursor-pointer shadow-2xs'
@@ -1378,7 +1379,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
               <button
                 type="button"
                 onClick={handleSaveAndNext}
-                className="px-5 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition cursor-pointer flex items-center gap-1 shadow-sm active:scale-98"
+                className="min-h-11 px-5 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1 shadow-sm active:scale-98"
               >
                 <span>Save & Next</span>
                 <ChevronRight className="w-4 h-4" />
@@ -1388,7 +1389,7 @@ export const TestRunner: React.FC<TestRunnerProps> = ({
         </div>
 
         {/* Right Column: Question Palette */}
-        <div className="w-full lg:w-80 bg-white border-l border-slate-300 flex flex-col justify-between shrink-0 shadow-sm">
+        <div className="w-full max-h-[70dvh] overflow-y-auto lg:max-h-none lg:w-80 bg-white border-l border-slate-300 flex flex-col justify-between shrink-0 shadow-sm">
           {/* Palette Top: Candidate Info Card */}
           <div>
             <div className="p-3.5 bg-slate-100 border-b border-slate-300 flex items-center gap-3">

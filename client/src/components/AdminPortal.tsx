@@ -88,8 +88,6 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
 
   // Monetization State
   const [monetizationOverview, setMonetizationOverview] = useState<any>(null);
-  const [refundingId, setRefundingId] = useState<string | null>(null);
-  const [refundReason, setRefundReason] = useState<string>('Student request within 7-day guarantee window');
   const [editingPlan, setEditingPlan] = useState<any | null>(null);
   const [planEditPrice, setPlanEditPrice] = useState<number>(0);
   const [monetizationMsg, setMonetizationMsg] = useState<string | null>(null);
@@ -149,24 +147,6 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
       setTimeout(() => setMonetizationMsg(null), 3000);
     } catch (err: any) {
       alert('Failed to update plan: ' + (err.message || 'Error'));
-    }
-  };
-
-  const handleProcessRefund = async (paymentId: string) => {
-    if (!confirm('Are you sure you want to process a 100% refund for this transaction? This will automatically revoke the student subscription/credits.')) {
-      return;
-    }
-    setRefundingId(paymentId);
-    try {
-      await api.processAdminRefund(paymentId, refundReason);
-      setMonetizationMsg('100% refund processed successfully.');
-      const res = await api.getAdminMonetizationOverview();
-      setMonetizationOverview(res);
-      setTimeout(() => setMonetizationMsg(null), 3500);
-    } catch (err: any) {
-      alert('Refund processing error: ' + (err.message || 'Error'));
-    } finally {
-      setRefundingId(null);
     }
   };
 
@@ -266,9 +246,9 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
   const navigate = (section: AdminSection) => { setActiveTab(section); setSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] w-full bg-[#F7F9FC] lg:flex">
+    <div className="min-h-[calc(100dvh-68px)] w-full bg-[#F7F9FC] lg:flex">
       {sidebarOpen && <button aria-label="Close navigation" onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-40 bg-slate-950/45 lg:hidden" />}
-      <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-[#111B35] text-slate-200 transition-transform lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-72'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-[#111B35] text-slate-200 transition-transform lg:sticky lg:top-0 lg:h-[calc(100dvh-68px)] lg:shrink-0 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarCollapsed ? 'lg:w-20' : 'lg:w-72'}`}>
         <div className="flex h-16 items-center border-b border-white/10 px-4">
           <div className={`flex min-w-0 items-center gap-3 ${sidebarCollapsed ? 'lg:justify-center' : ''}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-sm font-bold text-white">A1</span>{!sidebarCollapsed && <div className="min-w-0"><p className="truncate text-sm font-bold text-white">All in One CBT</p><p className="text-xs text-slate-400">Admin control center</p></div>}</div>
           <button onClick={() => setSidebarOpen(false)} className="ml-auto rounded p-1 text-slate-300 lg:hidden"><CloseIcon className="h-5 w-5" /></button>

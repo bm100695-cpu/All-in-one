@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  X,
   Mail,
   Lock,
   User as UserIcon,
   CheckCircle2,
   AlertCircle,
+  ArrowLeft,
   ArrowRight,
   GraduationCap,
-  Sparkles,
 } from 'lucide-react';
 import { api } from '../api';
 import { User } from '../types';
@@ -22,6 +21,7 @@ interface AuthModalProps {
   initialMode?: 'login' | 'register';
   onClose: () => void;
   onSuccess: (user: User, requiresExamSelection?: boolean) => void;
+  onModeChange?: (mode: 'login' | 'register') => void;
 }
 
 // Authentic Google Multi-Color G Icon
@@ -51,6 +51,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   initialMode = 'login',
   onClose,
   onSuccess,
+  onModeChange,
 }) => {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [email, setEmail] = useState('');
@@ -61,6 +62,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setMode(initialMode);
+    setError(null);
+  }, [initialMode, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
 
   // Initialize official Google Identity Services when modal opens
   useEffect(() => {
@@ -217,62 +233,81 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
-      <div className="bg-white rounded-xl max-w-md w-full shadow-modal border border-tn-border overflow-hidden relative">
-        {/* Header */}
-        <div className="px-6 py-4 bg-slate-50 border-b border-tn-border flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img
-              src="/logo.jpg"
-              alt="All in One"
-              className="h-8 w-auto rounded object-contain bg-white border border-slate-200 p-0.5"
-            />
-            <span className="text-sm font-bold text-tn-navy">
-              All in <span className="text-emerald-700">One</span> — {mode === 'login' ? 'Sign In' : 'Register'}
-            </span>
+    <div className="fixed inset-0 z-[100] flex min-h-[100dvh] bg-white text-slate-900">
+      <aside className="hidden w-2/5 min-h-[100dvh] flex-col justify-between bg-[#111B35] p-10 text-white lg:flex xl:p-14">
+        <div className="flex items-center gap-3">
+          <img src="/logo.jpg" alt="All in One CBT Station" className="h-11 w-11 rounded-xl border border-white/20 bg-white p-0.5 object-contain" />
+          <div>
+            <p className="text-base font-extrabold tracking-tight">All in One</p>
+            <p className="text-xs font-medium text-slate-300">CBT Station</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
         </div>
 
-        {/* Mode Switcher Tabs */}
-        <div className="flex border-b border-slate-100 bg-slate-50/50">
-          <button
-            type="button"
-            onClick={() => {
-              setMode('login');
-              setError(null);
-            }}
-            className={`flex-1 py-2.5 text-xs font-semibold border-b-2 transition-colors cursor-pointer ${
-              mode === 'login'
-                ? 'border-tn-blue text-tn-blue bg-white'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode('register');
-              setError(null);
-            }}
-            className={`flex-1 py-2.5 text-xs font-semibold border-b-2 transition-colors cursor-pointer ${
-              mode === 'register'
-                ? 'border-tn-blue text-tn-blue bg-white'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
-            }`}
-          >
-            Register
-          </button>
+        <div className="max-w-sm space-y-8">
+          <div>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-blue-300">Your learning workspace</p>
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight">Prepare with confidence.</h1>
+            <p className="mt-4 text-base leading-7 text-slate-300">A focused platform for practice, revision and examination readiness.</p>
+          </div>
+          <div className="rounded-xl border border-slate-600 bg-[#172544] p-5 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="text-sm font-bold">CBT practice workspace</span>
+              <span className="rounded bg-emerald-500/15 px-2 py-1 text-[10px] font-bold text-emerald-300">READY</span>
+            </div>
+            <div className="space-y-2.5">
+              <div className="h-2 w-4/5 rounded bg-slate-500" />
+              <div className="h-2 w-full rounded bg-slate-600" />
+              <div className="h-2 w-3/5 rounded bg-slate-600" />
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-2">
+              <div className="h-9 rounded bg-blue-600" />
+              <div className="h-9 rounded border border-slate-500" />
+            </div>
+          </div>
+          <ul className="space-y-3 text-sm text-slate-200">
+            {['Real CBT examination experience', 'Previous year question papers', 'Detailed performance analysis'].map((benefit) => (
+              <li key={benefit} className="flex items-center gap-3"><CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />{benefit}</li>
+            ))}
+          </ul>
         </div>
+        <p className="text-xs text-slate-400">Secure student access for your preparation.</p>
+      </aside>
 
-        {/* Content Body */}
-        <div className="p-6 space-y-4">
+      <section className="flex min-h-[100dvh] w-full flex-1 overflow-y-auto bg-white">
+        <div className="mx-auto flex w-full max-w-[468px] flex-col px-5 py-5 sm:px-6 sm:py-8 lg:justify-center lg:py-10">
+          <div className="mb-7 flex items-center justify-between lg:mb-8">
+            <button type="button" onClick={onClose} className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900">
+              <ArrowLeft className="h-4 w-4" /> Back to Website
+            </button>
+            <div className="flex items-center gap-2 lg:hidden">
+              <img src="/logo.jpg" alt="All in One CBT Station" className="h-9 w-9 rounded-lg border border-slate-200 bg-white p-0.5 object-contain" />
+              <span className="text-sm font-extrabold text-[#111B35]">All in One CBT</span>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#0F172A]">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h2>
+            <p className="mt-2 text-sm leading-6 text-[#64748B]">{mode === 'login' ? 'Sign in to continue your preparation.' : 'Start preparing with your dedicated CBT workspace.'}</p>
+          </div>
+
+          <div className="mb-6 grid grid-cols-2 rounded-lg border border-[#E2E8F0] bg-slate-50 p-1">
+            <button
+              type="button"
+              onClick={() => { setMode('login'); setError(null); onModeChange?.('login'); }}
+              className={`min-h-10 rounded-md px-3 text-sm font-semibold transition-colors ${mode === 'login' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={() => { setMode('register'); setError(null); onModeChange?.('register'); }}
+              className={`min-h-10 rounded-md px-3 text-sm font-semibold transition-colors ${mode === 'register' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Register
+            </button>
+          </div>
+
+          <div className="space-y-4">
           {error && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
@@ -286,7 +321,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={handleGoogleClick}
               disabled={googleLoading || loading}
-              className="w-full py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
+              className="w-full min-h-11 py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
             >
               {googleLoading ? (
                 <>
@@ -305,13 +340,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* Divider */}
           <div className="relative flex items-center justify-center">
             <div className="border-t border-slate-200 w-full" />
-            <span className="bg-white px-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
+            <span className="bg-white px-3 text-xs font-medium text-slate-400 uppercase tracking-wider shrink-0">
               or continue with email
             </span>
             <div className="border-t border-slate-200 w-full" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3 text-xs">
+          <form onSubmit={handleSubmit} className="space-y-3 text-sm">
             {mode === 'register' && (
               <div>
                 <label className="block font-medium text-slate-700 mb-1">Full Name</label>
@@ -323,7 +358,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Candidate Name"
-                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                   />
                 </div>
               </div>
@@ -339,7 +374,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your.email@example.com"
-                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
@@ -354,7 +389,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === 'register' ? 'Minimum 6 characters' : 'Enter your password'}
-                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
@@ -371,7 +406,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Re-enter your password"
-                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                     />
                   </div>
                 </div>
@@ -383,7 +418,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <select
                       value={targetExam}
                       onChange={(e) => setTargetExam(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
+                      className="w-full min-h-11 pl-9 pr-3 py-2 text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
                     >
                       <option value="uptet">UPTET — Uttar Pradesh Teacher Eligibility Test</option>
                       <option value="super-tet">SUPER TET — UP Assistant Teacher Recruitment</option>
@@ -400,7 +435,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full min-h-11 py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -414,6 +449,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </form>
         </div>
       </div>
+      </section>
     </div>
   );
 };

@@ -74,18 +74,31 @@ export const App: React.FC = () => {
   const [isReferralModalOpen, setIsReferralModalOpen] = useState<boolean>(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'privacy' | 'refund' | 'support' | null>(null);
 
+  const openAuthPage = (mode: 'login' | 'register') => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+    const authHash = `/${mode === 'login' ? 'login' : 'register'}`;
+    if (window.location.hash.toLowerCase() !== `#${authHash}`) {
+      window.location.hash = authHash;
+    }
+  };
+
+  const closeAuthPage = () => {
+    setIsAuthModalOpen(false);
+    const hash = window.location.hash.toLowerCase();
+    if (hash === '#/login' || hash === '#login' || hash === '#/register' || hash === '#register') {
+      window.location.hash = '';
+    }
+  };
+
   const openLoginForExam = (examSlug?: string) => {
     if (examSlug) setSelectedExamSlug(examSlug.trim().toLowerCase());
     setActiveTestId(null);
     setSubmittedAttemptId(null);
     setActiveTab('landing');
-    setAuthModalMode('login');
-    setIsAuthModalOpen(true);
+    openAuthPage('login');
     // Keep the URL honest as well: a shared/direct portal link must not
     // render the portal while there is no authenticated session.
-    if (window.location.hash.toLowerCase() !== '#/login') {
-      window.location.hash = '/login';
-    }
   };
 
   useEffect(() => {
@@ -98,6 +111,8 @@ export const App: React.FC = () => {
     const checkAppRoutes = () => {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
+      const isLoginRoute = hash === '#/login' || hash === '#login' || path === '/login';
+      const isRegisterRoute = hash === '#/register' || hash === '#register' || path === '/register';
       const isControlRoute =
         hash.includes('admin-secure-dashboard') ||
         hash.includes('control-center') ||
@@ -106,18 +121,26 @@ export const App: React.FC = () => {
         path.includes('control-center') ||
         path.includes('admin');
 
-      if (hash === '#/login' || hash === '#login' || path === '/login') {
+      if (isLoginRoute) {
         setAuthModalMode('login');
         setIsAuthModalOpen(true);
+      } else if (isRegisterRoute) {
+        setAuthModalMode('register');
+        setIsAuthModalOpen(true);
       } else if (isControlRoute) {
+        setIsAuthModalOpen(false);
         setActiveTab('control-center');
       } else if (hash === '#/dashboard' || hash === '#dashboard' || path === '/dashboard') {
+        setIsAuthModalOpen(false);
         setActiveTab('dashboard');
       } else if (hash === '#/live-tests' || hash === '#live-tests' || path === '/live-tests') {
+        setIsAuthModalOpen(false);
         setActiveTab('live-tests');
       } else if (hash === '#/select-exam' || hash === '#select-exam' || path === '/select-exam') {
+        setIsAuthModalOpen(false);
         setActiveTab('select-exam');
       } else if (hash.startsWith('#/exams/') || path.startsWith('/exams/')) {
+        setIsAuthModalOpen(false);
         const raw = hash.startsWith('#/exams/') ? hash.replace('#/exams/', '') : path.replace('/exams/', '');
         const slug = raw.split(/[?#]/)[0].trim().toLowerCase();
         if (slug) {
@@ -129,6 +152,7 @@ export const App: React.FC = () => {
           setActiveTab('exam-portal');
         }
       } else if (hash.startsWith('#/student/')) {
+        setIsAuthModalOpen(false);
         const parts = hash.replace('#/student/', '').split('/');
         const routeExam = parts[0]?.toLowerCase();
         const storedUser = (() => {
@@ -156,6 +180,9 @@ export const App: React.FC = () => {
           setSelectedExamSlug(routeExam);
           setActiveTab('dashboard');
         }
+      } else {
+        setIsAuthModalOpen(false);
+        setActiveTab('landing');
       }
     };
     checkAppRoutes();
@@ -442,8 +469,7 @@ export const App: React.FC = () => {
   const handleOpenPricing = (lockedTest?: { id: string; title: string } | null, examSlug?: string) => {
     if (!currentUser) {
       showToast('Please sign in or register to view exam-specific subscription plans.');
-      setAuthModalMode('login');
-      setIsAuthModalOpen(true);
+      openAuthPage('login');
       return;
     }
     setPricingLockedTest(lockedTest || null);
@@ -474,7 +500,11 @@ export const App: React.FC = () => {
 
   const isExamRunning = activeTab === 'test' && activeTestId;
   const isAdminCenter = activeTab === 'admin' || activeTab === 'control-center';
+  const isAuthPage = isAuthModalOpen;
   const useStudentSidebar = Boolean(currentUser && currentUser.role === 'STUDENT' && !isExamRunning && activeTab !== 'admin' && activeTab !== 'control-center');
+  // The marketing footer belongs to public discovery pages only. Authenticated
+  // LMS workspaces use their own full-height layout and persistent navigation.
+  const showPublicFooter = !initializing && (activeTab === 'landing' || (!currentUser && activeTab === 'live-tests'));
 
   return (
     <div className="min-h-screen bg-tn-bg flex flex-col text-tn-text font-sans">
@@ -485,7 +515,7 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {!isExamRunning && (
+      {!isExamRunning && !isAuthPage && (
         <Header
           activeTab={activeTab}
           setActiveTab={(tab) => {
@@ -501,16 +531,14 @@ export const App: React.FC = () => {
           activeTestTitle={activeTestId ? 'CBT Test in Progress' : undefined}
           activeExamSlug={currentUser?.targetExamId || selectedExamSlug || 'jee-main'}
           onOpenExamPortal={openExamPortal}
-          onOpenAuthModal={(mode) => {
-            setAuthModalMode(mode);
-            setIsAuthModalOpen(true);
-          }}
+          onOpenAuthModal={openAuthPage}
           onOpenProfileSettings={(tab) => {
             setProfileModalTab(tab);
             setIsProfileModalOpen(true);
           }}
           onOpenPricingModal={() => handleOpenPricing()}
           onOpenReferralModal={handleOpenReferral}
+          onOpenLegal={handleOpenLegal}
           onLogout={handleLogout}
           sidebarCollapsed={studentSidebarCollapsed}
           onToggleSidebar={() => setStudentSidebarCollapsed((collapsed) => !collapsed)}
@@ -520,7 +548,8 @@ export const App: React.FC = () => {
       <AuthModal
         isOpen={isAuthModalOpen}
         initialMode={authModalMode}
-        onClose={() => setIsAuthModalOpen(false)}
+        onClose={closeAuthPage}
+        onModeChange={openAuthPage}
         onSuccess={handleAuthSuccess}
       />
 
@@ -560,7 +589,7 @@ export const App: React.FC = () => {
         onOpenReferral={handleOpenReferral}
         onOpenAuth={() => {
           setIsPricingModalOpen(false);
-          setIsAuthModalOpen(true);
+          openAuthPage('login');
         }}
       />
 
@@ -580,7 +609,7 @@ export const App: React.FC = () => {
         onClose={() => setLegalModalType(null)}
       />
 
-      <main className={`flex-1 min-w-0 transition-[padding] duration-200 ${isExamRunning || isAdminCenter ? 'w-full p-0 max-w-full' : useStudentSidebar ? `w-full px-4 py-6 sm:px-6 sm:py-8 lg:pr-8 ${studentSidebarCollapsed ? 'lg:pl-[104px]' : 'lg:pl-[272px]'}` : 'w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8'}`}>
+      <main className={`${isAuthPage ? 'hidden' : 'flex'} flex-1 min-h-0 min-w-0 transition-[padding] duration-200 ${isExamRunning || isAdminCenter ? 'w-full p-0 max-w-full' : useStudentSidebar ? `w-full px-4 py-6 sm:px-6 sm:py-8 lg:pr-8 ${studentSidebarCollapsed ? 'lg:pl-[104px]' : 'lg:pl-[272px]'}` : 'w-full max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8'}`}>
         {initializing ? (
           <div className="h-[60vh] flex flex-col items-center justify-center space-y-3">
             <div className="w-10 h-10 rounded-full border-3 border-tn-border border-t-tn-blue animate-spin" />
@@ -728,10 +757,7 @@ export const App: React.FC = () => {
               <StudentLiveTests
                 currentUser={currentUser}
                 portalSlug={selectedExamSlug}
-                onOpenAuthModal={(mode) => {
-                  setAuthModalMode(mode);
-                  setIsAuthModalOpen(true);
-                }}
+                onOpenAuthModal={openAuthPage}
                 onStartLiveExam={handleStartLiveExam}
               />
             )}
@@ -740,8 +766,7 @@ export const App: React.FC = () => {
               <AdminRoute
                 currentUser={currentUser}
                 onRedirectToLogin={() => {
-                  setAuthModalMode('login');
-                  setIsAuthModalOpen(true);
+                  openAuthPage('login');
                 }}
                 onUserRefreshed={(refreshedUser) => {
                   setCurrentUser(refreshedUser);
@@ -772,24 +797,20 @@ export const App: React.FC = () => {
                 onOpenPricing={() => {
                   if (!currentUser) {
                     showToast('Please sign in to explore exam-specific pricing plans.');
-                    setAuthModalMode('login');
-                    setIsAuthModalOpen(true);
+                    openAuthPage('login');
                   } else {
                     handleOpenPricing();
                   }
                 }}
-                onOpenAuth={(mode) => {
-                  setAuthModalMode(mode);
-                  setIsAuthModalOpen(true);
-                }}
+                onOpenAuth={openAuthPage}
               />
             )}
           </>
         )}
       </main>
 
-      {!isExamRunning && (
-        <div className={useStudentSidebar ? `w-full transition-[padding] duration-200 ${studentSidebarCollapsed ? 'lg:pl-[72px]' : 'lg:pl-60'}` : ''}>
+      {showPublicFooter && !isAuthPage && (
+        <div>
           <Footer
             onNavigate={(tab) => setActiveTab(tab)}
             onOpenExamPortal={openExamPortal}
