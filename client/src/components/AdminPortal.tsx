@@ -88,8 +88,6 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
 
   // Monetization State
   const [monetizationOverview, setMonetizationOverview] = useState<any>(null);
-  const [refundingId, setRefundingId] = useState<string | null>(null);
-  const [refundReason, setRefundReason] = useState<string>('Student request within 7-day guarantee window');
   const [editingPlan, setEditingPlan] = useState<any | null>(null);
   const [planEditPrice, setPlanEditPrice] = useState<number>(0);
   const [monetizationMsg, setMonetizationMsg] = useState<string | null>(null);
@@ -149,24 +147,6 @@ export const AdminPortal: React.FC<{ currentUser?: User | null }> = ({ currentUs
       setTimeout(() => setMonetizationMsg(null), 3000);
     } catch (err: any) {
       alert('Failed to update plan: ' + (err.message || 'Error'));
-    }
-  };
-
-  const handleProcessRefund = async (paymentId: string) => {
-    if (!confirm('Are you sure you want to process a 100% refund for this transaction? This will automatically revoke the student subscription/credits.')) {
-      return;
-    }
-    setRefundingId(paymentId);
-    try {
-      await api.processAdminRefund(paymentId, refundReason);
-      setMonetizationMsg('100% refund processed successfully.');
-      const res = await api.getAdminMonetizationOverview();
-      setMonetizationOverview(res);
-      setTimeout(() => setMonetizationMsg(null), 3500);
-    } catch (err: any) {
-      alert('Refund processing error: ' + (err.message || 'Error'));
-    } finally {
-      setRefundingId(null);
     }
   };
 

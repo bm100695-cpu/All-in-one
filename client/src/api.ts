@@ -627,6 +627,25 @@ export const api = {
     return request<any>('/monetization/admin/overview');
   },
 
+  getAdminDashboardSummary: async (params?: { range?: string; start?: string; end?: string; examId?: string }) => {
+    const q = new URLSearchParams();
+    if (params?.range) q.append('range', params.range);
+    if (params?.start) q.append('start', params.start);
+    if (params?.end) q.append('end', params.end);
+    if (params?.examId && params.examId !== 'ALL') q.append('examId', params.examId);
+    const suffix = q.toString() ? `?${q.toString()}` : '';
+    return request<any>(`/admin/dashboard-summary${suffix}`, { cache: 'no-store' });
+  },
+
+  getAdminTransactions: async (params?: { page?: number; limit?: number; status?: string; examSlug?: string; planId?: string; method?: string; from?: string; to?: string }) => {
+    const q = new URLSearchParams();
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== '' && value !== 'ALL') q.append(key, String(value));
+    });
+    const suffix = q.toString() ? `?${q.toString()}` : '';
+    return request<any>(`/monetization/admin/transactions${suffix}`, { cache: 'no-store' });
+  },
+
   getContentPricing: async (params?: { type?: string; search?: string; accessMode?: string }) => {
     const q = new URLSearchParams();
     if (params?.type) q.append('type', params.type);
