@@ -69,10 +69,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const totalVerifiedPyqs = exams.reduce((sum, e) => sum + (e.totalVerifiedPYQs || 0), 0);
 
   return (
-    <div className="space-y-14 pb-16">
+    <div className="space-y-10 pb-12 sm:space-y-14 sm:pb-16">
       {/* 1. Central Hero Section (Clean & Natural) */}
       <section className="pt-6 sm:pt-10">
-        <div className="max-w-4xl mx-auto text-center space-y-5">
+        <div className="max-w-4xl mx-auto px-4 text-center space-y-5 sm:px-0">
           <div className="flex justify-center">
             <img
               src="/logo.jpg"
@@ -81,12 +81,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             />
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+          <div className="inline-flex max-w-full items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
             <span>Smart CBT Simulator & Previous Year Question Library</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
+          <h1 className="text-[26px] sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
             Practice for Your Target Exam in a Real CBT Environment.
           </h1>
 
@@ -94,10 +94,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             Choose your examination to access official pattern tests, verified previous year question papers, and structured practice tools designed for serious aspirants.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+          <div className="flex flex-col items-stretch justify-center gap-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center">
             <a
               href="#exam-selector"
-              className="px-5 py-2.5 rounded-lg bg-[#2563EB] hover:bg-blue-700 text-white text-xs font-semibold transition-colors flex items-center gap-2"
+              className="min-h-11 justify-center px-5 py-2.5 rounded-lg bg-[#2563EB] hover:bg-blue-700 text-white text-sm font-semibold transition-colors flex items-center gap-2"
             >
               <span>Browse Examination Portals</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -105,7 +105,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             {onOpenAuth && (
               <button
                 onClick={() => onOpenAuth('register')}
-                className="px-5 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="min-h-11 px-5 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold transition-colors cursor-pointer"
               >
                 Create Student Account
               </button>
@@ -113,7 +113,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             {onOpenPricing && (
               <button
                 onClick={onOpenPricing}
-                className="px-5 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                className="min-h-11 px-5 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 text-sm font-semibold transition-colors cursor-pointer"
               >
                 View Exam Plans
               </button>
@@ -124,7 +124,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
       {/* 2. Live Database Summary Strip (Cleaned Up) */}
       <section className="border-y border-slate-200 bg-white py-5">
-        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 text-center">
           <div>
             <p className="text-2xl font-extrabold text-slate-900 tabular-nums">{loading || directoryError ? '—' : exams.length}</p>
             <p className="text-xs text-slate-500 font-medium mt-0.5">Active Exam Portals</p>
@@ -163,7 +163,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search JEE, UPTET, NEET..."
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="w-full min-h-11 pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
           </div>
         </div>

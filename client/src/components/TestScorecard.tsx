@@ -105,9 +105,9 @@ export const TestScorecard: React.FC<TestScorecardProps> = ({
   });
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-12 sm:space-y-8 sm:pb-16">
       {/* Top Banner Card */}
-      <div className="rounded-xl bg-tn-navy text-white p-6 sm:p-8 shadow-card border border-slate-800">
+      <div className="rounded-xl bg-tn-navy text-white p-4 sm:p-8 shadow-card border border-slate-800">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
@@ -121,17 +121,17 @@ export const TestScorecard: React.FC<TestScorecardProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:items-center sm:gap-3">
             <button
               onClick={onOpenMistakeJournal}
-              className="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-xs transition-colors flex items-center gap-2 cursor-pointer"
+              className="min-h-11 px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm sm:text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <BookMarked className="w-3.5 h-3.5" />
               <span>Mistake Journal</span>
             </button>
             <button
               onClick={onRetake}
-              className="px-4 py-2 rounded-lg border border-slate-700 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
+              className="min-h-11 px-4 py-2 rounded-lg border border-slate-700 hover:bg-white/10 text-white text-sm sm:text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <RotateCcw className="w-4 h-4" />
               <span>All Exams</span>
@@ -140,22 +140,22 @@ export const TestScorecard: React.FC<TestScorecardProps> = ({
         </div>
 
         {/* Core Metric Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-white/10">
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/10">
+          <div className="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10">
             <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Score</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
               {attempt.totalScore} <span className="text-sm font-normal text-slate-400">/ {attempt.totalMarks}</span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+          <div className="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10">
             <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Accuracy</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1">
               {attempt.accuracyPct}%
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+          <div className="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10">
             <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Cohort Percentile</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-blue-400 mt-1">
               {attempt.percentile !== null ? `${attempt.percentile}%ile` : 'Calibrating'}
@@ -165,7 +165,7 @@ export const TestScorecard: React.FC<TestScorecardProps> = ({
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+          <div className="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10">
             <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Negative Marks</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-rose-400 mt-1">
               -{attempt.totalIncorrect * 1.0}

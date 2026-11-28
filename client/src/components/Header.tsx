@@ -106,6 +106,15 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileMenuOpen]);
+
   // Yeh pata lagane ke liye ki abhi admin page par hain ya nahi
   const isAdminPage = activeTab === 'admin' || activeTab === 'control-center';
   const showStudentSidebar = currentUser?.role === 'STUDENT' && !isAdminPage;
@@ -369,7 +378,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
 
             {onOpenLegal && (
-              <div className="relative" ref={legalMenuRef}>
+              <div className="relative hidden sm:block" ref={legalMenuRef}>
                 <button
                   onClick={() => setLegalMenuOpen((open) => !open)}
                   aria-expanded={legalMenuOpen}
@@ -394,7 +403,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
 
             {/* Language Selector */}
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-medium">
+            <div className="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-medium">
               <button
                 onClick={() => setLanguage('en')}
                 className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
@@ -496,7 +505,7 @@ export const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2">
                   <button
                     onClick={() => onOpenAuthModal?.('login')}
                     className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer flex items-center gap-1.5"
@@ -519,7 +528,7 @@ export const Header: React.FC<HeaderProps> = ({
             {!isAdminPage && !showStudentSidebar && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+                className="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -543,7 +552,7 @@ export const Header: React.FC<HeaderProps> = ({
             role="dialog"
             aria-modal="true"
             aria-label="Student navigation"
-            className="student-mobile-sidebar-root relative flex h-full min-h-screen w-[min(19rem,86vw)] flex-col overflow-y-auto px-4 pb-6 pt-5 text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
+            className="student-mobile-sidebar-root relative flex h-[100dvh] min-h-[100dvh] w-[min(20rem,92vw)] flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] text-slate-200 shadow-xl animate-in slide-in-from-left duration-200"
           >
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -553,7 +562,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">CBT Station</p>
                 </div>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 hover:bg-[#1E3055] hover:text-white transition-colors" aria-label="Close navigation menu">
+              <button onClick={() => setMobileMenuOpen(false)} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-300 hover:bg-[#1E3055] hover:text-white transition-colors" aria-label="Close navigation menu">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -566,7 +575,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 key={item.id}
                   onClick={() => handleStudentNavClick(item)}
-                className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${
+                className={`w-full flex min-h-12 items-center justify-between px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer transition-colors ${
                   isActive
                     ? 'text-white bg-[#304C7C] shadow-sm shadow-blue-950/30'
                     : 'text-slate-300 hover:bg-[#1E3055] hover:text-white'
@@ -593,7 +602,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenPricingModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+              className="w-full flex min-h-12 items-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-blue-200" />
               <span>Plans & Pricing</span>
@@ -603,10 +612,22 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenReferralModal?.();
               }}
-              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+              className="w-full flex min-h-12 items-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
             >
               <Gift className="w-4 h-4 text-amber-300" />
               <span>Refer Friends & Earn Free Tests</span>
+            </button>
+
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => setLanguage('en')} className={`min-h-11 rounded-lg text-sm font-semibold transition-colors ${language === 'en' ? 'bg-white text-slate-900' : 'bg-[#1E3055] text-slate-200'}`}>English</button>
+              <button onClick={() => setLanguage('hi')} className={`min-h-11 rounded-lg text-sm font-semibold transition-colors ${language === 'hi' ? 'bg-white text-slate-900' : 'bg-[#1E3055] text-slate-200'}`}>हिंदी</button>
+            </div>
+            <button
+              onClick={() => { setMobileMenuOpen(false); onOpenLegal?.('support'); }}
+              className="w-full flex min-h-12 items-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+            >
+              <HelpCircle className="w-4 h-4 text-blue-200" />
+              <span>Help & Support</span>
             </button>
 
             {currentUser ? (
@@ -616,7 +637,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('profile');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
                 >
                   <UserIcon className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>Candidate Profile</span>
@@ -627,7 +648,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenProfileSettings?.('settings');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-[#1E3055] hover:text-white rounded-xl transition-colors cursor-pointer"
                 >
                   <Settings className="w-4 h-4 text-slate-400 shrink-0" />
                   <span>CBT Simulator Settings</span>
@@ -640,7 +661,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileMenuOpen(false);
                     onLogout?.();
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-semibold text-rose-300 hover:bg-rose-500/15 rounded-xl transition-colors cursor-pointer"
+                  className="w-full flex min-h-12 items-center gap-3 px-3 py-2.5 text-sm font-semibold text-rose-300 hover:bg-rose-500/15 rounded-xl transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
                   <span>Sign Out</span>
@@ -654,7 +675,7 @@ export const Header: React.FC<HeaderProps> = ({
                       setMobileMenuOpen(false);
                       onOpenAuthModal?.('login');
                     }}
-                    className="py-2 text-center text-xs font-semibold border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    className="min-h-11 py-2 text-center text-sm font-semibold border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 cursor-pointer"
                   >
                     Sign In
                   </button>
@@ -663,7 +684,7 @@ export const Header: React.FC<HeaderProps> = ({
                       setMobileMenuOpen(false);
                       onOpenAuthModal?.('register');
                     }}
-                    className="py-2 text-center text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer"
+                    className="min-h-11 py-2 text-center text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer"
                   >
                     Register
                   </button>

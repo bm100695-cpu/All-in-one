@@ -38,6 +38,11 @@ class MainActivity : AppCompatActivity(), CFCheckoutResponseCallback {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.javaScriptCanOpenWindowsAutomatically = true
+            // Render the React app against its own mobile viewport meta tag.
+            // Do not opt into WebView's desktop overview scaling: it makes a
+            // responsive LMS look like a shrunken desktop site on phones.
+            settings.useWideViewPort = false
+            settings.loadWithOverviewMode = false
             webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView, url: String, favicon: android.graphics.Bitmap?) {
                     super.onPageStarted(view, url, favicon)

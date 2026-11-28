@@ -217,10 +217,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
-      <div className="bg-white rounded-xl max-w-md w-full shadow-modal border border-tn-border overflow-hidden relative">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in">
+      <div className="bg-white rounded-xl max-w-md w-full max-h-[calc(100dvh-1.5rem)] overflow-y-auto shadow-modal border border-tn-border relative">
         {/* Header */}
-        <div className="px-6 py-4 bg-slate-50 border-b border-tn-border flex items-center justify-between">
+        <div className="sticky top-0 z-10 px-4 py-3 sm:px-6 sm:py-4 bg-slate-50 border-b border-tn-border flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <img
               src="/logo.jpg"
@@ -233,7 +233,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -247,7 +247,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               setMode('login');
               setError(null);
             }}
-            className={`flex-1 py-2.5 text-xs font-semibold border-b-2 transition-colors cursor-pointer ${
+            className={`flex-1 min-h-11 py-2.5 text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
               mode === 'login'
                 ? 'border-tn-blue text-tn-blue bg-white'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
@@ -261,7 +261,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               setMode('register');
               setError(null);
             }}
-            className={`flex-1 py-2.5 text-xs font-semibold border-b-2 transition-colors cursor-pointer ${
+            className={`flex-1 min-h-11 py-2.5 text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
               mode === 'register'
                 ? 'border-tn-blue text-tn-blue bg-white'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
@@ -272,7 +272,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4">
           {error && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
@@ -286,7 +286,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={handleGoogleClick}
               disabled={googleLoading || loading}
-              className="w-full py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
+              className="w-full min-h-11 py-2.5 px-4 rounded-lg border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-colors shadow-xs flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60"
             >
               {googleLoading ? (
                 <>
@@ -305,13 +305,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* Divider */}
           <div className="relative flex items-center justify-center">
             <div className="border-t border-slate-200 w-full" />
-            <span className="bg-white px-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider shrink-0">
+            <span className="bg-white px-3 text-xs font-medium text-slate-400 uppercase tracking-wider shrink-0">
               or continue with email
             </span>
             <div className="border-t border-slate-200 w-full" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3 text-xs">
+          <form onSubmit={handleSubmit} className="space-y-3 text-sm">
             {mode === 'register' && (
               <div>
                 <label className="block font-medium text-slate-700 mb-1">Full Name</label>
@@ -323,7 +323,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Candidate Name"
-                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                   />
                 </div>
               </div>
@@ -339,7 +339,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your.email@example.com"
-                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
@@ -354,7 +354,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === 'register' ? 'Minimum 6 characters' : 'Enter your password'}
-                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                 />
               </div>
             </div>
@@ -371,7 +371,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Re-enter your password"
-                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
+                    className="w-full min-h-11 pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue"
                     />
                   </div>
                 </div>
@@ -383,7 +383,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <select
                       value={targetExam}
                       onChange={(e) => setTargetExam(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
+                      className="w-full min-h-11 pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-tn-blue bg-white"
                     >
                       <option value="uptet">UPTET — Uttar Pradesh Teacher Eligibility Test</option>
                       <option value="super-tet">SUPER TET — UP Assistant Teacher Recruitment</option>
@@ -400,7 +400,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full min-h-11 py-2.5 mt-2 bg-tn-blue hover:bg-tn-navy text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

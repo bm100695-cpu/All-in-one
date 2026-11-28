@@ -587,11 +587,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
-      <div className="bg-white rounded-2xl max-w-4xl w-full shadow-modal border border-slate-200 overflow-hidden my-6">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[calc(100dvh-1.5rem)] overflow-y-auto shadow-modal border border-slate-200 my-0 sm:my-6">
         
         {/* Header */}
-        <div className="px-6 py-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+        <div className="sticky top-0 z-10 px-4 py-4 sm:px-6 sm:py-5 bg-slate-900 text-white flex items-start sm:items-center justify-between gap-3 border-b border-slate-800">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/30">
               <Sparkles className="w-3 h-3 text-amber-400" />
@@ -610,11 +610,11 @@ export const PricingModal: React.FC<PricingModalProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 text-[11px] font-semibold text-slate-200">Secure INR checkout</span>
+            <span className="hidden sm:inline rounded-md border border-slate-700 bg-slate-800 px-2.5 py-1 text-[11px] font-semibold text-slate-200">Secure INR checkout</span>
 
             <button
               onClick={onClose}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -693,7 +693,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
             { id: 'NETBANKING', title: 'Net Banking', detail: 'Secure bank payment through Cashfree', visible: isMerchantEnabled('NETBANKING'), icon: <Landmark className="h-4 w-4" />, tone: 'border-slate-200 bg-white hover:bg-slate-50' },
           ];
           return (
-          <section className="mx-6 my-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <section className="mx-4 my-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:mx-6">
             <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <p className="text-sm font-bold text-slate-900">Complete your purchase</p>
@@ -749,7 +749,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
 
 
         {/* Coupon Code Bar */}
-        <div className="px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+        <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-sm sm:px-6 sm:text-xs">
           <div className="text-slate-600 font-medium">
             Have a discount code? Apply it before starting secure checkout.
           </div>

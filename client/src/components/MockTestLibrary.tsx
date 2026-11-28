@@ -191,7 +191,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
         </div>
 
         {/* Metric Badges */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <div className="px-3 py-1.5 rounded-lg bg-white border border-tn-border text-xs text-slate-700 font-medium shadow-xs">
             <strong className="text-tn-navy font-bold">{catalogTests.length}</strong> Total Mock Tests
           </div>
@@ -218,7 +218,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           
           {/* Access Filter Pills */}
-          <div className="flex items-center gap-2">
+          <div className="flex max-w-full items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
               Filter:
             </span>
@@ -291,7 +291,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search mock tests by title..."
-              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="w-full min-h-11 pl-9 pr-8 py-2 rounded-lg bg-white border border-slate-200 text-sm sm:text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
             {searchQuery && (
               <button
@@ -306,7 +306,7 @@ export const MockTestLibrary: React.FC<MockTestLibraryProps> = ({
           <select
             value={shiftFilter}
             onChange={(e) => setShiftFilter(e.target.value)}
-            className="w-full sm:w-auto px-3 py-2 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer"
+            className="w-full min-h-11 sm:w-auto px-3 py-2 rounded-lg bg-white border border-slate-200 text-sm sm:text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer"
           >
             <option value="ALL">All Shifts</option>
             <option value="Shift 1">Shift 1 (Morning)</option>

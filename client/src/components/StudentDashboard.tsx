@@ -319,23 +319,23 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       )}
 
       {/* 4. Student Overview — values are derived from the existing portal, attempt and subscription APIs. */}
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 shadow-subtle">
+      <section className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-3 shadow-subtle sm:p-4">
           <p className="text-sm font-medium text-slate-500">Available tests</p>
           <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : totalExamTests}</p>
         </div>
 
-        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 shadow-subtle">
+        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-3 shadow-subtle sm:p-4">
           <p className="text-sm font-medium text-slate-500">Completed tests</p>
           <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : completedAttempts.length}</p>
         </div>
 
-        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 shadow-subtle">
+        <div className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-3 shadow-subtle sm:p-4">
           <p className="text-sm font-medium text-slate-500">Accuracy</p>
           <p className="mt-3 text-2xl font-bold tabular-nums text-tn-navy">{loading || hasDataIssue ? '—' : `${avgAccuracy}%`}</p>
         </div>
 
-        <button onClick={() => onOpenPricingModal?.()} className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-4 text-left shadow-subtle transition hover:border-blue-200 hover:shadow-card">
+        <button onClick={() => onOpenPricingModal?.()} className="min-h-[96px] rounded-lg border border-slate-200 bg-white p-3 text-left shadow-subtle transition hover:border-blue-200 hover:shadow-card sm:p-4">
           <p className="text-sm font-medium text-slate-500">Current plan</p>
           <p className="mt-2 truncate text-2xl font-bold text-tn-navy" title={loading || hasDataIssue ? 'Subscription unavailable' : planName}>{loading ? '—' : hasDataIssue ? 'Unavailable' : planName.replace(' Starter Plan', '')}</p>
         </button>
